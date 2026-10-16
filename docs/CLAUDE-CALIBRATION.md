@@ -124,3 +124,9 @@ Pirma iš anksto deklaruotos atrankos pora `2026-10-16T21-35-20-039Z-c5935626266
 Antra deklaruotos atrankos pora `2026-10-16T21-42-43-288Z-2ba66e43d179`: abu variantai PASS. Bazinis high prieš lean medium: trial 221318 → 94171 ms (−57,45 %), coding 200267 → 70902 ms (−64,60 %), grading 21037 → 23225 ms, tokenai 628921 → 88474 (−85,93 %), API kainos ekvivalentas 0,5096114 → 0,1742964 USD (−65,80 %). Faktinis prenumeratos mokestis nežinomas. Tai viena **atrankos** pora, 50 % tikslo patvirtinimo dar nėra.
 
 Peržiūrėtos medium desktop/mobile ekrano kopijos ir statinis UI kodas: paieškos, filtrų, edit/delete, santraukos bei eksporto valdikliai yra. Papildomi UI srautai atskirai nepaleisti; automatinis PASS apima deklaruotą API/SQLite/create/move/reload kontraktą, ne subjektyvią dizaino kokybę. Skiriasi sisteminis promptas, įrankiai ir effort, todėl poveikis nepriskiriamas Jev ar vien bibliotekų pernaudojimui.
+
+## Lean atranka: low ir pasirinkimas
+
+Trečia deklaruotos atrankos pora `2026-10-16T21-48-36-889Z-4f289e7c4739`: abu variantai PASS. High baseline prieš lean low: trial 197065 → 79736 ms (−59,54 %), coding 174732 → 58020 ms (−66,79 %), grading 22318 → 21701 ms, tokenai 512074 → 35562 (−93,06 %), CLI API kainos ekvivalentas 0,4625044 → 0,1390162 USD (−69,94 %). Faktinis prenumeratos mokestis nežinomas.
+
+Visi trys atrankos kandidatai praėjo deklaruotas patikras. Pagal iš anksto užfiksuotą mažiausio kandidato API kainos ekvivalento taisyklę pasirinktas **low** (high 0,4543876; medium 0,1742964; low 0,1390162 USD). Low šioje atrankoje taip pat turėjo trumpiausią trial. Pradėta atskira trijų naujų kaitaliojamų porų low patvirtinimo kohorta. Atrankos poros į jos statistiką neįtraukiamos; galutinio ar bendro produkto laimėtojo dar nėra.
