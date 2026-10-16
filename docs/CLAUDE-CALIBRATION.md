@@ -77,6 +77,16 @@ Kohorta `2026-10-16T19-50-47-560Z-19b0c778f0c4`, tas pats Sonnet 5.5 / high, pro
 | CLI API kainos ekvivalentas |1,263594 USD|1,3747174 USD|tik estimate|
 | Faktinė prenumeratos kaina |nežinoma|nežinoma|nevertinta|
 
-Atskirų porų kūrimo deltos: +32,21 %, −9,69 %, −7,33 %. Ši variacija nepatvirtina ankstesnės vienos poros pagreitėjimo kaip bendros sistemos savybės. Katalogo kontekstas šioje kohortoje 50 % ekonomijos ar greičio tikslo nepasiekė. Toliau atskirai tikrinamas `compact`, o Jev ir tikras bendrų bibliotekų pernaudojimas reikalauja savo naujo profilio ir visų paruošimo sąnaudų apskaitos.
+Atskirų porų kūrimo deltos: +32,21 %, −9,69 %, −7,33 %. Ši variacija nepatvirtina ankstesnės vienos poros pagreitėjimo kaip bendros sistemos savybės. Katalogo kontekstas šioje kohortoje 50 % ekonomijos ar greičio tikslo nepasiekė. Atskiras `compact` etapas baigtas su viena kokybės nesėkme (žemiau), o Jev ir tikras bendrų bibliotekų pernaudojimas reikalauja savo naujo profilio ir visų paruošimo sąnaudų apskaitos.
 
 Aktyvi kryptis — Claude prenumerata. Codex auth ir OpenRouter lenktynės atidėtos. [Vietinis paleidimas](LOCAL-LAB.md), [kalibravimo metodas](CALIBRATION.md), [Zero Lab modulis](ZERO-LAB.md).
+
+## Trumpesnio katalogo kohorta
+
+Kohorta `2026-10-16T20-12-56-653Z-01cd50ba05f8` baigė visas tris kaitaliojamas poras. Pradinis Zero: **3/3 PASS**, compact: **2/3 PASS**. Pirmos poros compact programa praėjo API ir SQLite, bet nepraėjo `desktop_runtime_errors` patikros. Programa, promptas ir tikrintuvas nepataisyti kohortos viduryje; nesėkmė išsaugota.
+
+Visi tokenai: 1745005 → 1546847 (−11,36 %). Cache read: 1550961 → 1357330; cache creation: 106441 → 105210; output: 87499 → 84215. CLI API kainos ekvivalentai: 1,6111542 → 1,53464 USD; faktinis prenumeratos mokestis nežinomas. Tai visų bandymų apskaita, **ne pergalė esant vienodai kokybei**. Kohortos performance measurements lieka null.
+
+Trečioje poroje nustatyta vykdymo pauzė: baseline CLI laikrodžio laikas 2313828 ms, monotonic coding laikas 355851 ms (skirtumas 1957977 ms). Laiko pranašumo neskelbiame. Vėlesniems bandymams vykdymo metu laikinai stabdomas automatinis host užmigimas.
+
+Papildomas repeat agregatų patikslinimas: visų trijų coding laikų sumos 500444 → 523171 ms; trial sumos 565219 → 592750 ms. Nedidelis medianos sumažėjimas nereiškia mažesnio bendro darbo laiko. [Pilni abiejų kohortų sanitizuoti matavimai](../catalog/claude-cohort-results-2026-10-16.json).
