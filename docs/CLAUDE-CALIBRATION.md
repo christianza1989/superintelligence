@@ -1,4 +1,6 @@
-# Claude prenumeratos kalibravimas: pirmas patikrintas A/B
+# Claude prenumeratos kalibravimas
+
+Naujausia trijų porų kohorta: **6/6 automatinių patikrų PASS**, Zero kūrimo mediana trumpesnė tik **0,69 %**, visi tokenai **10,09 % didesni**. 50 % tikslas nepasiektas. Tai pakartojimai su fiksuotu katalogo kontekstu; Jev juose nedalyvavo. [Visi nauji reportai ir cache apskaita](../catalog/claude-cohort-results-2026-10-16.json).
 
 2026-10-16. **Importuotas vietinis Claude CLI bandymas, perskaičiuotas palyginimas ir pakartotinai patikrintos abi sugeneruotos programos.** Tai to paties Claude CLI su statiniu Zero katalogo kontekstu ir be jo palyginimas. Pilnas RepositoryZero runtime, Jev ir Auto šiame bandyme nedalyvavo.
 
@@ -37,9 +39,9 @@ Importuotas archyvas, originalūs reportai, programos ir screenshotai išlaikyti
 - [x] Įgyvendintas `lab:cohort`:1–3poros, kaitaliojama eilė, source/prompt freeze, atskiri coding/grading laikai, baigtiniai limitai ir nesėkmių išlaikymas. Offline bei realus dry-run patikrinti; naujų modelių kvietimų nėra.
 - [x] Atskiras `zero-compact-claude-v1` kandidatas; senasis profilis išlaikytas.3614→2234payload baitai apima ir6→5kandidatų pokytį; tas pats retained rinkinys3202→2234. Tai nėra tokenų ar kokybės naudos matavimas.
 
-- [ ] Su ta pačia nauja source/grader versija atlikti3papildomas v2 poras: baseline→Zero, Zero→baseline, baseline→Zero. Daugiausia6naujos coding sesijos; kiekvienai15minučių ir60stebimų tool veiksmų slenkstis. Šis planas modelių pats nepaleidžia.
+- [x] Su ta pačia source/grader versija atliktos 3 papildomos v2 poros: baseline→Zero, Zero→baseline, baseline→Zero. Visos 6 programos praėjo automatinį kontraktą; promptas ir tikrintuvas tarp bandymų nekeisti.
 - [x] Prieš pirmą naujos kohortos sesiją užfiksuoti source/prompt/profile hash; visi 23 source hash patikrinti ir po abiejų žemiau aprašytų etapų. Promptas ir tikrintuvas nepakeisti, nesėkmės išsaugotos. Naujo CLI parserio hardening naudos senieji skaičiai nematuoja.
-- [ ] Kodavimo, tikrinimo ir viso trial laikus, cache read/write bei faktinės kainos nežinomybę analizuoti atskirai. Naujo adapterio/grader hash nesutampančių kohortų nelyginti apeinant comparator vartus.
+- [x] Pakartojimų kodavimo, tikrinimo ir viso trial laikai, cache read/write bei faktinės kainos nežinomybė išanalizuoti atskirai. Naujo adapterio/grader hash nesutampančios kohortos nesujungtos.
 - [ ] Parengti kitą užduotį: vietinis CSV importas, validacija, dublių aptikimas, SQLite išlikimas ir export. Pirma patvirtinti užduoties tekstą, nepriklausomą graderį ir jo negative control, tik tada generuoti abi programas.
 - [ ] Kelių užduočių validavimas ir atskiras holdout prieš bendresnį kokybės/greičio teiginį.
 
@@ -56,6 +58,25 @@ Abu runneriai sustojo po pirmos nesėkmingos sesijos su `stopped_shared_prerequi
 
 Abiejų kohortų originalūs reportai, promptai ir nesėkmės išsaugoti atskiruose ignoruojamuose `.artifacts/zero-lab/cohorts/` aplankuose. Vieša [gyvų bandymų santrauka](../catalog/claude-cohort-live-2026-10-16.json) turi reportų SHA256, visas 23 source digest ir abiejų etapų būsenas be vietinių paskyrų duomenų. Ankstesni artefaktai išsaugoti; sėkminga istorinė pora su naujais bandymais nesujungta.
 
-Trys poros kiekvienam etapui lieka **neužbaigtos**. Tęsti naujomis kohortomis galima atkūrus prieigą prie tikslaus modelio arba aiškiai pasirinkus kitą modelį. Ankstesnio cloud preflight ir konteksto baitų patikros išlieka [paruošimo įrodymais](../catalog/claude-cohort-checks.json), ne nauju modelio našumo rezultatu. [Paleidimo komandos](LOCAL-LAB.md#trys-poros-viena-komanda).
+Šie du ankstesni paleidimai lieka neužbaigti ir nepakeisti. Vėliau tas pats Sonnet 5.5 atsakė sėkmingai; nauja atskira pakartojimų kohorta užbaigė visas tris poras. Ankstesnio cloud preflight ir konteksto baitų patikros išlieka [paruošimo įrodymais](../catalog/claude-cohort-checks.json), ne nauju modelio našumo rezultatu. [Paleidimo komandos](LOCAL-LAB.md#trys-poros-viena-komanda).
+
+## Trys naujos poros: katalogo kontekstas
+
+Kohorta `2026-10-16T19-50-47-560Z-19b0c778f0c4`, tas pats Sonnet 5.5 / high, promptas v2 ir 23 nekintantys source hash. Visos šešios programos praėjo API, SQLite restart, desktop/mobile klaviatūros ir cleanup patikras. Šios kohortos nemaišome su pradine viena sėkminga pora ar dviem modelio neprieinamumo ataskaitomis.
+
+| Metrika | Baseline | Zero katalogas | Pokytis |
+|---|---:|---:|---:|
+| Kūrimo laiko mediana |164304 ms|163166 ms|−0,69 %|
+| Tikrinimo laiko mediana |20243 ms|24400 ms|+20,54 %|
+| Viso trial mediana |184711 ms|183632 ms|−0,58 %|
+| Visi trijų bandymų tokenai |1188297|1308255|+10,09 %|
+| Cache read tokenai |1030050|1135027|atskirai nuo kainos|
+| Cache creation tokenai |87369|97316|atskirai nuo kainos|
+| Nekache input tokenai |84|84|0 %|
+| Output tokenai |70794|75828|+7,11 %|
+| CLI API kainos ekvivalentas |1,263594 USD|1,3747174 USD|tik estimate|
+| Faktinė prenumeratos kaina |nežinoma|nežinoma|nevertinta|
+
+Atskirų porų kūrimo deltos: +32,21 %, −9,69 %, −7,33 %. Ši variacija nepatvirtina ankstesnės vienos poros pagreitėjimo kaip bendros sistemos savybės. Katalogo kontekstas šioje kohortoje 50 % ekonomijos ar greičio tikslo nepasiekė. Toliau atskirai tikrinamas `compact`, o Jev ir tikras bendrų bibliotekų pernaudojimas reikalauja savo naujo profilio ir visų paruošimo sąnaudų apskaitos.
 
 Aktyvi kryptis — Claude prenumerata. Codex auth ir OpenRouter lenktynės atidėtos. [Vietinis paleidimas](LOCAL-LAB.md), [kalibravimo metodas](CALIBRATION.md), [Zero Lab modulis](ZERO-LAB.md).
