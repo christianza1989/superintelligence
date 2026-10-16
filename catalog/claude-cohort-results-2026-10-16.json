@@ -4888,6 +4888,7 @@
     "uniqueJevReportedActualCostUsd": 0.000576954,
     "subscriptionChargeUsd": null,
     "allFailuresRetained": true,
-    "unknownCostWasNotConvertedToZero": true
+    "unknownCostWasNotConvertedToZero": true,
+    "cliEstimateScope": "recorded cohorts only; separate CLI diagnostics are not pooled into performance results"
   }
 }
