@@ -80,7 +80,7 @@ npm run lab:cohort -- --mode compact --live
 
 Čia abu variantai gauna tą patį Claude modelį ir užduotį: `zero-retrieval-claude-v1` prieš `zero-compact-claude-v1`. Senasis profilis ir prompto baitai nepakeisti. Kandidatas naudoja tas pačias tris paieškas, bet riboja rinkinį iki5kandidatų ir3000baitų; išsaugo SHA, licencijas, būsenas, šaltinių kilmę ir originalias instrukcijas. Tai deterministinė atranka/formatas; Jev nedalyvauja.
 
-Dabartinis katalogo payload3614→2234baitai (−38,18%), kandidatai6→5. Tiems patiems likusiems kandidatams formatas3202→2234baitai (−30,23%). Tai baitai, **ne išmatuotas modelio tokenų ar laiko sutaupymas**. Pakeistas ir rinkinio dydis, ir formatas, todėl jų atskiros naudos iš šio A/B neišvesime. Atskiras gyvas `compact` etapas paleistas, bet sustojo su `model_unavailable` prieš pirmą užbaigtą programą; kokybės ir tokenų poveikis neišmatuotas. Niekas automatiškai nepakeičia numatyto profilio.
+Dabartinis katalogo payload3614→2234baitai (−38,18%), kandidatai6→5. Tiems patiems likusiems kandidatams formatas3202→2234baitai (−30,23%). Tai baitai, **ne išmatuotas modelio tokenų ar laiko sutaupymas**. Pakeistas ir rinkinio dydis, ir formatas, todėl jų atskiros naudos iš šio A/B neišvesime. Ankstesnis `compact` bandymas sustojo su `model_unavailable`. Nauja atskira trijų porų kohorta užbaigta: pradinis Zero 3/3 PASS, compact 2/3 PASS, todėl našumo pergalės nėra. Visų tokenų suma mažesnė 11,36 %, tačiau kokybės nesėkmė ir vykdymo pauzė neleidžia skelbti pagreitėjimo. Niekas automatiškai nepakeičia numatyto profilio.
 
 ## Ataskaitos ir palyginimas
 

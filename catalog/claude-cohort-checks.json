@@ -80,8 +80,8 @@
       "shortlist_limit"
     ],
     "legacy_prompt_unchanged": true,
-    "live_quality": "BLOCKED_MODEL_UNAVAILABLE",
-    "live_token_savings": "NOT_MEASURED"
+    "live_quality": "2_OF_3_CANDIDATES_ACCEPTED",
+    "live_token_savings": "DESCRIPTIVE_TOTAL_MINUS_11_36_PERCENT_NOT_QUALITY_MATCHED_VICTORY"
   },
   "limits": [
     "Byte reduction is not token savings or quality evidence",
@@ -113,7 +113,14 @@
       "modelDispatchAttempts": null
     },
     "compact": {
-      "status": "pending_new_cohort"
+      "status": "completed_with_quality_failure",
+      "completedPairs": 3,
+      "baselineAccepted": 3,
+      "candidateAccepted": 2,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null,
+      "performanceMeasured": false,
+      "timingDisturbed": true
     }
   }
 }
