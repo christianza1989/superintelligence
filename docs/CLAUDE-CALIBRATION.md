@@ -1,6 +1,6 @@
 # Claude prenumeratos kalibravimas
 
-Naujausia Jev ir tikros HTTP bibliotekos trijų porų kohorta: **6/6 automatinių patikrų PASS**. Bendra trial laikų suma su paruošimu mažesnė **8,35 %**, CLI API kainos ekvivalentas **18,47 %**, tokenų suma **25,56 %**. 50 % tikslas nepasiektas; faktinė prenumeratos kaina nežinoma. Ankstesnis vien katalogo kontekstas tokios ekonomijos nepatvirtino. [Visi nauji reportai ir cache apskaita](../catalog/claude-cohort-results-2026-10-16.json).
+Geriausias patvirtintas šios užduoties opt-in profilis: **Sonnet 5.5 / low, lean-v1 sisteminės instrukcijos ir keturi vietiniai įrankiai**. Trys naujos kaitaliojamos poros: **6/6 automatinių patikrų PASS**. Visų trial laikų suma −61,61 %, CLI API kainos ekvivalentas −68,69 %, visi tokenai −87,74 %. Trial mediana −48,95 %; vienos ilgesnės baseline sesijos įtaka nepaslėpta. Tai vienos užduoties visos konfigūracijos rezultatas, ne bendras Jev, runtime ar prenumeratos mokesčio pranašumas. [Visi rezultatai](../catalog/claude-cohort-results-2026-10-16.json).
 
 2026-10-16. **Importuotas vietinis Claude CLI bandymas, perskaičiuotas palyginimas ir pakartotinai patikrintos abi sugeneruotos programos.** Tai to paties Claude CLI su statiniu Zero katalogo kontekstu ir be jo palyginimas. Pilnas RepositoryZero runtime, Jev ir Auto šiame bandyme nedalyvavo.
 
@@ -130,3 +130,31 @@ Peržiūrėtos medium desktop/mobile ekrano kopijos ir statinis UI kodas: paieš
 Trečia deklaruotos atrankos pora `2026-10-16T21-48-36-889Z-4f289e7c4739`: abu variantai PASS. High baseline prieš lean low: trial 197065 → 79736 ms (−59,54 %), coding 174732 → 58020 ms (−66,79 %), grading 22318 → 21701 ms, tokenai 512074 → 35562 (−93,06 %), CLI API kainos ekvivalentas 0,4625044 → 0,1390162 USD (−69,94 %). Faktinis prenumeratos mokestis nežinomas.
 
 Visi trys atrankos kandidatai praėjo deklaruotas patikras. Pagal iš anksto užfiksuotą mažiausio kandidato API kainos ekvivalento taisyklę pasirinktas **low** (high 0,4543876; medium 0,1742964; low 0,1390162 USD). Low šioje atrankoje taip pat turėjo trumpiausią trial. Pradėta atskira trijų naujų kaitaliojamų porų low patvirtinimo kohorta. Atrankos poros į jos statistiką neįtraukiamos; galutinio ar bendro produkto laimėtojo dar nėra.
+
+## Low patvirtinimas: trys naujos poros
+
+Kohorta `2026-10-16T21-54-33-518Z-087c20f06f63`, source commit `ee3d5be64e42ff84315e715d13b4821c91953436`: trys poros AB/BA/AB, 26 nekintantys source hash, šeši patikrinti promptų digest. **6/6 PASS**, įskaitant API, SQLite restart, desktop/mobile klaviatūros create/move/reload ir cleanup. Visi laikrodžių integrity vartai PASS. Atrankos poros į šią statistiką nepridėtos.
+
+| Metrika | Claude high baseline | Zero lean low | Pokytis |
+|---|---:|---:|---:|
+| Visų trial laikų suma |818560 ms|314249 ms|−61,61 %|
+| Trial mediana |235774 ms|120365 ms|−48,95 %|
+| Coding mediana |186431 ms|70448 ms|−62,21 %|
+| Grading mediana |49292 ms|47911 ms|−2,80 %|
+| Visi tokenai |1205576|147769|−87,74 %|
+| Cache read |1045133|91923|normalizuoti po vieną kartą|
+| Cache creation |85605|28320|atskirai|
+| Nekache input |82|24|atskirai|
+| Output |74756|27502|atskirai|
+| CLI API kainos ekvivalentas |1,2991706 USD|0,4067326 USD|−68,69 %, estimate|
+| Faktinis prenumeratos mokestis |nežinomas|nežinomas|nevertinta|
+
+Coding laikai poromis: baseline 186431 / 331740 / 164559 ms; low 72422 / 70448 / 51591 ms. Antros poros baseline buvo gerokai ilgesnis; todėl rodoma ir suma, ir mediana. 50 % kriterijus pagal iš anksto deklaruotą visų workflow laikų sumą ir API kainos ekvivalentą šiai kohortai pasiektas. **50 % trumpesnės trial medianos nėra**. Provider cache ir apkrova nekontroliuoti.
+
+Šis profilis nenaudoja Jev ar šaltinių bibliotekos; skiriasi sisteminės instrukcijos, įrankiai ir effort. Iš jo negalima išvesti individualios Jev/reuse naudos ar kitų užduočių kokybės. Tai geriausias iki šiol patvirtintas SprintDesk opt-in variantas. Numatytasis profilis automatiškai nepakeistas:
+
+```bash
+npm run lab:cohort -- --mode lean-low --live
+```
+
+Po patvirtinimo atskirai pradėta viena `jev-http-lean-low` atrankos pora su nauju frozen paruošimu (4894 ms, 0,00013356 USD). Kol ji ir būtini kartojimai neužbaigti, kombinuotas variantas nepaskelbtas geresniu. Atskirai, tarp kohortų, vien tik naršyklės assetų paruošimas be modelio pamatuotas 6278 ms (tas pats 461392285 baitų digest); tikrintuvas ar jo kontraktas dėl šio profiliavimo nepakeisti.
