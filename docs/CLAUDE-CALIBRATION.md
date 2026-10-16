@@ -118,3 +118,9 @@ Toliau atskirai tikrinami [lean profiliai](LEAN-CALIBRATION.md); jų sisteminės
 ## Lean atranka: high
 
 Pirma iš anksto deklaruotos atrankos pora `2026-10-16T21-35-20-039Z-c59356262667`: abu variantai PASS, nepakitęs user task ir graderis, Sonnet 5.5/high. Trumpa sisteminė instrukcija ir keturi vietiniai įrankiai šioje poroje nepagerino darbo eigos: trial 175060 → 220672 ms (+26,06 %), coding 153433 → 198115 ms (+29,12 %), tokenai 450147 → 400135 (−11,11 %), CLI API kainos ekvivalentas 0,43813 → 0,4543876 USD (+3,71 %). Output padidėjo 22847 → 24475; vien mažesnė tokenų suma nėra pigesnio darbo įrodymas. Tai viena atrankos pora, ne patvirtinimo kohorta ir ne Jev/reuse poveikio matavimas. Toliau to paties protokolo medium ir low atrankos.
+
+## Lean atranka: medium
+
+Antra deklaruotos atrankos pora `2026-10-16T21-42-43-288Z-2ba66e43d179`: abu variantai PASS. Bazinis high prieš lean medium: trial 221318 → 94171 ms (−57,45 %), coding 200267 → 70902 ms (−64,60 %), grading 21037 → 23225 ms, tokenai 628921 → 88474 (−85,93 %), API kainos ekvivalentas 0,5096114 → 0,1742964 USD (−65,80 %). Faktinis prenumeratos mokestis nežinomas. Tai viena **atrankos** pora, 50 % tikslo patvirtinimo dar nėra.
+
+Peržiūrėtos medium desktop/mobile ekrano kopijos ir statinis UI kodas: paieškos, filtrų, edit/delete, santraukos bei eksporto valdikliai yra. Papildomi UI srautai atskirai nepaleisti; automatinis PASS apima deklaruotą API/SQLite/create/move/reload kontraktą, ne subjektyvią dizaino kokybę. Skiriasi sisteminis promptas, įrankiai ir effort, todėl poveikis nepriskiriamas Jev ar vien bibliotekų pernaudojimui.
