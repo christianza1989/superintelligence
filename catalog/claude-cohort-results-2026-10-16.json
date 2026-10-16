@@ -1,0 +1,597 @@
+{
+  "version": 1,
+  "kind": "claude_repeated_live_calibration_not_general_product_performance",
+  "updatedAtUtc": "2026-10-16T20:11:40.234Z",
+  "model": "claude-sonnet-5-5",
+  "reasoning": "high",
+  "promptVersion": 2,
+  "target": {
+    "reductionPercent": 50,
+    "qualityRequired": "all_planned_trials_accepted",
+    "actualSubscriptionSavings": null
+  },
+  "cohorts": [
+    {
+      "cohortId": "2026-10-16T19-50-47-560Z-19b0c778f0c4",
+      "mode": "repeat",
+      "sourceCommit": "76eeceb58d8082fbde10e65fc41c8ffd9cef8a22",
+      "startedAtUtc": "2026-10-16T19:50:47.562Z",
+      "finishedAtUtc": "2026-10-16T20:10:10.411Z",
+      "status": "completed",
+      "plannedPairs": 3,
+      "recordedPairs": 3,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null,
+      "cohortReport": ".artifacts/zero-lab/cohorts/2026-10-16T19-50-47-560Z-19b0c778f0c4/cohort.json",
+      "cohortReportSha256": "64e89d98dcf254552110575afa780b77d856f41ba37497bf0d420ab37dea244b",
+      "sourceDigests": {
+        "benchmarks/zero-lab.v1.json": "b9f59f1bfa007d8a0ca2caa4f731f6216f9dd512274603136d7ebd61f999b564",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-claude-cli.mjs": "417fef3c4602a6289ec7eeb222d045cc1192954c27fbed31ce241729f3939216",
+        "platform/scripts/zero-lab-config.mjs": "992b475126bd10962849ce880ec4f3b20f28f01407e418aa502f406337d198bc",
+        "platform/scripts/zero-lab-run.mjs": "fa1f21ed84ea935aa3664c0aca28fee249f41dd5167a0ab80a64751a65d23a1b",
+        "platform/scripts/zero-lab-cohort.mjs": "9cc21d1bcb02a948b26ed6d686a4e5ea85ad54749de29bc540de1b3e9af79d7c",
+        "platform/scripts/zero-lab-compare.mjs": "953add1f190bd9564e31bad5343704e3f86a531e7b4ecc5d62d42cd9bd7ebbd4",
+        "platform/scripts/zero-lab-context.mjs": "615de70d3a74867cefab78690df699aee6dfb89c2747ab397f873ef024f06bbc",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-evaluate.mjs": "ad5157a91a98841f82afefe5178ae63b01dd8829ff80ae73d4f4ea9c0d0ef5c4",
+        "platform/scripts/zero-lab-acceptance.mjs": "c4b0e65b952b8fef9af50811777204faae5f3ed4af4962c7a2029ad0670e6ab7",
+        "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+        "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-model-selector.ts": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "benchmarks/sprintdesk-v1/PROMPT.md": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+        "benchmarks/sprintdesk-v1/acceptance.mjs": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/testkit/src/evals/report.ts": "c612ccf0dd62a3cad72e237a04c713557d30adfaa70e330f32d2d3316db38f4b",
+        "platform/packages/testkit/src/evals/measurement.ts": "0ffd0c08d9e7473eb8aeab39470a7adabdc5ae1975390693a83825d4ab6d6c03",
+        "benchmarks/sprintdesk-v1/PROMPT.v2.md": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb"
+      },
+      "sourceDigestsVerified": true,
+      "promptDigestsVerified": 6,
+      "summary": {
+        "status": "comparable",
+        "reasons": [],
+        "plannedPairs": 3,
+        "recordedPairs": 3,
+        "baselineProfile": "claude-fixed-v1",
+        "candidateProfile": "zero-retrieval-claude-v1",
+        "pairs": [
+          {
+            "number": 1,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 184711,
+                "candidate": 236287,
+                "delta": 51576,
+                "relativeChangePercent": 27.92253845196009
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 160067,
+                "candidate": 211619,
+                "delta": 51552,
+                "relativeChangePercent": 32.206513522462465
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 24627,
+                "candidate": 24645,
+                "delta": 18,
+                "relativeChangePercent": 0.07309051041539773
+              },
+              "inputTokens": {
+                "baseline": 354582,
+                "candidate": 484460,
+                "delta": 129878,
+                "relativeChangePercent": 36.62848085915247
+              },
+              "outputTokens": {
+                "baseline": 23579,
+                "candidate": 28595,
+                "delta": 5016,
+                "relativeChangePercent": 21.273166800966962
+              },
+              "totalTokens": {
+                "baseline": 378161,
+                "candidate": 513055,
+                "delta": 134894,
+                "relativeChangePercent": 35.67105016117474
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-retrieval-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 184568,
+                "candidate": 172831,
+                "delta": -11737,
+                "relativeChangePercent": -6.359173854622687
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 164304,
+                "candidate": 148386,
+                "delta": -15918,
+                "relativeChangePercent": -9.688139059304703
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 20243,
+                "candidate": 24400,
+                "delta": 4157,
+                "relativeChangePercent": 20.535493750926246
+              },
+              "inputTokens": {
+                "baseline": 306922,
+                "candidate": 342711,
+                "delta": 35789,
+                "relativeChangePercent": 11.660617355549618
+              },
+              "outputTokens": {
+                "baseline": 22382,
+                "candidate": 22651,
+                "delta": 269,
+                "relativeChangePercent": 1.2018586364042534
+              },
+              "totalTokens": {
+                "baseline": 329304,
+                "candidate": 365362,
+                "delta": 36058,
+                "relativeChangePercent": 10.94976070743143
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-retrieval-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 195940,
+                "candidate": 183632,
+                "delta": -12308,
+                "relativeChangePercent": -6.281514749413086
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 176073,
+                "candidate": 163166,
+                "delta": -12907,
+                "relativeChangePercent": -7.330482243160508
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 19853,
+                "candidate": 20450,
+                "delta": 597,
+                "relativeChangePercent": 3.0071022011786632
+              },
+              "inputTokens": {
+                "baseline": 455999,
+                "candidate": 405256,
+                "delta": -50743,
+                "relativeChangePercent": -11.127875280428247
+              },
+              "outputTokens": {
+                "baseline": 24833,
+                "candidate": 24582,
+                "delta": -251,
+                "relativeChangePercent": -1.0107518221721097
+              },
+              "totalTokens": {
+                "baseline": 480832,
+                "candidate": 429838,
+                "delta": -50994,
+                "relativeChangePercent": -10.605367363237056
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-retrieval-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          }
+        ],
+        "measurements": {
+          "trialMedianMs": {
+            "baseline": 184711,
+            "candidate": 183632,
+            "delta": -1079,
+            "relativeChangePercent": -0.5841557893141177
+          },
+          "codingMedianMs": {
+            "baseline": 164304,
+            "candidate": 163166,
+            "delta": -1138,
+            "relativeChangePercent": -0.6926185607167202
+          },
+          "gradingMedianMs": {
+            "baseline": 20243,
+            "candidate": 24400,
+            "delta": 4157,
+            "relativeChangePercent": 20.535493750926246
+          },
+          "allAttemptTotalTokens": {
+            "baseline": 1188297,
+            "candidate": 1308255,
+            "delta": 119958,
+            "relativeChangePercent": 10.094951009722317
+          }
+        },
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "evidenceLevel": "same_task_calibration_not_general_advantage",
+        "limitations": [
+          "Order alternates but provider cache and service load remain uncontrolled",
+          "Coding, grading and total trial time are separate measurements",
+          "Unknown subscription price remains null",
+          "All failures remain visible; no selective successful-pair speed claim"
+        ],
+        "usage": {
+          "baselineTokens": 1188297,
+          "candidateTokens": 1308255,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "totals": {
+        "claude-fixed-v1": {
+          "accepted": 3,
+          "inputTokens": 1117503,
+          "outputTokens": 70794,
+          "totalTokens": 1188297,
+          "cacheReadTokens": 1030050,
+          "cacheCreationTokens": 87369,
+          "uncachedInputTokens": 84,
+          "toolActions": 42,
+          "apiEquivalentCostEstimateUsd": 1.2635939999999999,
+          "actualSubscriptionCostUsd": null
+        },
+        "zero-retrieval-claude-v1": {
+          "accepted": 3,
+          "inputTokens": 1232427,
+          "outputTokens": 75828,
+          "totalTokens": 1308255,
+          "cacheReadTokens": 1135027,
+          "cacheCreationTokens": 97316,
+          "uncachedInputTokens": 84,
+          "toolActions": 44,
+          "apiEquivalentCostEstimateUsd": 1.3747173999999998,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "members": [
+        {
+          "pair": 1,
+          "order": [
+            "claude-fixed-v1",
+            "zero-retrieval-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T19-50-47-560Z-19b0c778f0c4/pair-1/2026-10-16T19-50-47-594Z-76719141dfd0/report.json",
+          "reportSha256": "d2d91710be82070ae1dedbeb975870e70fc045afcd4664f8aca918c0bc718f9c",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 160067,
+                "gradingMs": 24627
+              },
+              "trialElapsedMs": 184711,
+              "toolCalls": 13,
+              "toolFailures": 1,
+              "usage": {
+                "inputTokens": 354582,
+                "outputTokens": 23579,
+                "cachedInputTokens": 323340,
+                "cacheCreationInputTokens": 31216,
+                "uncachedInputTokens": 26,
+                "totalTokens": 378161
+              },
+              "apiEquivalentCostEstimateUsd": 0.4253739999999999,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "zero-retrieval-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "7a061d65da731ba120e9fa4e7a8a299433e41326376d05c5a1735ac20d03874c",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 8165,
+              "contextBytes": 3614,
+              "timings": {
+                "retrievalMs": 4,
+                "codingMs": 211619,
+                "gradingMs": 24645
+              },
+              "trialElapsedMs": 236287,
+              "toolCalls": 17,
+              "toolFailures": 2,
+              "usage": {
+                "inputTokens": 484460,
+                "outputTokens": 28595,
+                "cachedInputTokens": 444683,
+                "cacheCreationInputTokens": 39747,
+                "uncachedInputTokens": 30,
+                "totalTokens": 513055
+              },
+              "apiEquivalentCostEstimateUsd": 0.5339346,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "order": [
+            "zero-retrieval-claude-v1",
+            "claude-fixed-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T19-50-47-560Z-19b0c778f0c4/pair-2/2026-10-16T19-57-50-008Z-fc61912acb5f/report.json",
+          "reportSha256": "01c90d5a354793a3bcb234efc98b515d665e41fcdd77223ccd83d4944fb31c59",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "trials": [
+            {
+              "profile": "zero-retrieval-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "7a061d65da731ba120e9fa4e7a8a299433e41326376d05c5a1735ac20d03874c",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 8165,
+              "contextBytes": 3614,
+              "timings": {
+                "retrievalMs": 6,
+                "codingMs": 148386,
+                "gradingMs": 24400
+              },
+              "trialElapsedMs": 172831,
+              "toolCalls": 13,
+              "toolFailures": 1,
+              "usage": {
+                "inputTokens": 342711,
+                "outputTokens": 22651,
+                "cachedInputTokens": 314733,
+                "cacheCreationInputTokens": 27952,
+                "uncachedInputTokens": 26,
+                "totalTokens": 365362
+              },
+              "apiEquivalentCostEstimateUsd": 0.40131659999999997,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 164304,
+                "gradingMs": 20243
+              },
+              "trialElapsedMs": 184568,
+              "toolCalls": 13,
+              "toolFailures": 1,
+              "usage": {
+                "inputTokens": 306922,
+                "outputTokens": 22382,
+                "cachedInputTokens": 280291,
+                "cacheCreationInputTokens": 26607,
+                "uncachedInputTokens": 24,
+                "totalTokens": 329304
+              },
+              "apiEquivalentCostEstimateUsd": 0.3863542,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "order": [
+            "claude-fixed-v1",
+            "zero-retrieval-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T19-50-47-560Z-19b0c778f0c4/pair-3/2026-10-16T20-03-49-175Z-9f9ec5573dfc/report.json",
+          "reportSha256": "a79e71199c75f050a87312f4f55a03031152b2809b462877db636200f00d7129",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 176073,
+                "gradingMs": 19853
+              },
+              "trialElapsedMs": 195940,
+              "toolCalls": 16,
+              "toolFailures": 1,
+              "usage": {
+                "inputTokens": 455999,
+                "outputTokens": 24833,
+                "cachedInputTokens": 426419,
+                "cacheCreationInputTokens": 29546,
+                "uncachedInputTokens": 34,
+                "totalTokens": 480832
+              },
+              "apiEquivalentCostEstimateUsd": 0.45186579999999993,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "zero-retrieval-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "qualityComplete": true,
+              "promptDigest": "7a061d65da731ba120e9fa4e7a8a299433e41326376d05c5a1735ac20d03874c",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 8165,
+              "contextBytes": 3614,
+              "timings": {
+                "retrievalMs": 3,
+                "codingMs": 163166,
+                "gradingMs": 20450
+              },
+              "trialElapsedMs": 183632,
+              "toolCalls": 14,
+              "toolFailures": 3,
+              "usage": {
+                "inputTokens": 405256,
+                "outputTokens": 24582,
+                "cachedInputTokens": 375611,
+                "cacheCreationInputTokens": 29617,
+                "uncachedInputTokens": 28,
+                "totalTokens": 429838
+              },
+              "apiEquivalentCostEstimateUsd": 0.4394661999999999,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "cleanup": "passed"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "historicalFailures": "catalog/claude-cohort-live-2026-10-16.json",
+  "limits": [
+    "Distinct source/prompt hashes are not pooled",
+    "Three repetitions of SprintDesk do not establish a cross-task advantage",
+    "Provider cache and service load remain uncontrolled",
+    "Token counts include cached input once and are not monetary costs",
+    "Actual Claude subscription charges remain unknown",
+    "No failure or incomplete trial is discarded",
+    "Full RepositoryZero runtime and Auto are not exercised"
+  ]
+}

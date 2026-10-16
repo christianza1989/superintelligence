@@ -29,7 +29,7 @@ npm run lab:run -- --engine claude --prompt-version 2
 
 Paskutinė komanda yra **dry-run**: paruošia du promptus ir not-run ataskaitą, modelių nekviečia. `lab:prepare -- --engine claude` patikrina pasirinktą prenumeratos CLI, vietinį Docker, pinned Node image ir naršyklės failus. Prireikus atsisiunčia tik pinned image; modelio nekviečia. Trūkstant CLI/auth/Docker/image/browser, gyvas runneris sustoja prieš coding kvietimą. Naudojant Claude šiam keliui nereikia Codex writable state ar Codex prisijungimo.
 
-Auth prerequisite PASS patvirtina prenumeratos prisijungimą, tačiau negarantuoja prieigos prie pasirinkto modelio. 2026-10-16 abu vietiniai gyvi etapai sustojo su `model_unavailable` modeliui `claude-sonnet-5-5`; trys pilnos poros neužbaigtos. [Ataskaita ir ribos](CLAUDE-CALIBRATION.md#nauji-vietiniai-paleidimai-modelis-neprieinamas).
+Auth prerequisite PASS patvirtina prenumeratos prisijungimą, tačiau negarantuoja prieigos prie pasirinkto modelio. 2026-10-16 du ankstesni gyvi etapai sustojo su `model_unavailable`; jų nesėkmės išsaugotos. Vėliau tas pats Sonnet 5.5 veikė ir naujoje pakartojimų kohortoje užbaigtos visos 3 poros, 6/6 PASS. [Naujausi rezultatai ir ribos](CLAUDE-CALIBRATION.md#trys-naujos-poros-katalogo-kontekstas).
 
 Failų prerequisite PASS dar neįrodo, kad Node/Chromium image iš tikro veikia. Vienkartinės runtime regresijos be modelių:
 

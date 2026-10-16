@@ -85,7 +85,7 @@
   },
   "limits": [
     "Byte reduction is not token savings or quality evidence",
-    "Only one historical successful Claude pair exists; both new live cohorts stopped before a complete pair with model_unavailable",
+    "Three new repeated pairs are complete; the historical successful pair and blocked attempts remain separate evidence",
     "Three repetitions of one task are not cross-task validation",
     "Unknown subscription charges remain null",
     "Coding CLI directories are not mutually unreadable OS sandboxes",
@@ -95,13 +95,25 @@
   "general_winner": "not_assessed",
   "full_product_runtime_jev_auto": "NOT_RUN",
   "liveExecutionEvidence": {
-    "path": "catalog/claude-cohort-live-2026-10-16.json",
-    "repeatStatus": "stopped_shared_prerequisite",
-    "compactStatus": "stopped_shared_prerequisite",
-    "reason": "model_unavailable",
-    "completePairsPerMode": 0,
-    "cliInvocationAttemptsPerMode": 1,
-    "modelDispatchAttempts": null,
-    "performanceMeasured": false
+    "historicalFailures": {
+      "path": "catalog/claude-cohort-live-2026-10-16.json",
+      "repeatStatus": "stopped_shared_prerequisite",
+      "compactStatus": "stopped_shared_prerequisite",
+      "reason": "model_unavailable",
+      "completePairsPerMode": 0,
+      "cliInvocationAttemptsPerMode": 1,
+      "performanceMeasured": false
+    },
+    "latestResults": "catalog/claude-cohort-results-2026-10-16.json",
+    "repeat": {
+      "status": "completed",
+      "completedPairs": 3,
+      "acceptedTrials": 6,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null
+    },
+    "compact": {
+      "status": "pending_new_cohort"
+    }
   }
 }
