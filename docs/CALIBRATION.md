@@ -1,6 +1,6 @@
 # Kokybės, greičio ir sąnaudų kalibravimas
 
-2026-10-16. **Veikia nuolatinio kalibravimo CLI; pirmas Claude prenumeratos v2 A/B turi patikrintus abiejų programų artefaktus. Pakartojimai ir kitos užduotys dar laukia.** Kalibruojama visa RepositoryZero darbo eiga, nuo užklausos supratimo iki patikrinto artefakto. [Daugkartinis Zero Lab modulis](ZERO-LAB.md), [porinio bandymo taisyklės](PAIRED-BENCHMARK.md), [pirma paruošta užduotis](../benchmarks/sprintdesk-v1/README.md).
+2026-10-17. **Katalogo pakartojimai baigti (6/6 PASS), atskiras compact etapas turi vieną kokybės nesėkmę (5/6 PASS). Jev ir tikrų Git bibliotekų kohorta baigta: 6/6 PASS, bendra workflow laikų suma −8,35 %, API kainos ekvivalentas −18,47 %. Bendras 50 % pranašumas dar neįrodytas.** Kalibruojama visa RepositoryZero darbo eiga, nuo užklausos supratimo iki patikrinto artefakto. [Daugkartinis Zero Lab modulis](ZERO-LAB.md), [porinio bandymo taisyklės](PAIRED-BENCHMARK.md), [pirma paruošta užduotis](../benchmarks/sprintdesk-v1/README.md).
 
 ## Tikslas
 
@@ -31,7 +31,7 @@ Licencijos, leidimų, secret handling ir privalomo acceptance vartai nesilpninam
 3. **C — Zero retrieval + Jev:** tas pats coding modelis, papildoma ribota Jev atranka. Jev ir visų pagalbinių kvietimų laikas bei sąnaudos įtraukiami.
 4. **D — Zero Auto model:** ankstesnis laimėjęs retrieval profilis ir Jev parenkami realiai prijungti modeliai. Tai jau kitas modelių profilis, todėl jo rezultato nepriskiriame vien retrieval ar promptui.
 
-Importuotame Claude bandyme modelio ID ir tikras usage užfiksuoti CLI reportuose; auth status vienas to neįrodo. Codex auth ir OpenRouter/Jev lenktynės dabartiniam etapui atidėtos. Visų keturių profilių paleisti kiekvienam mažam pakeitimui nereikia. Pirmiausia tikrinama konkreti hipotezė su dviem atitinkamais profiliais.
+Importuotame Claude bandyme modelio ID ir tikras usage užfiksuoti CLI reportuose; auth status vienas to neįrodo. Codex auth ir mokami OpenRouter pagrindinio coding modelio bandymai atidėti. Jev atrankai naudotojas atskirai leido bendrą 1 USD API biudžetą; [visų paruošimų sąnaudos](../catalog/jev-preparations-2026-10-16.json). Sonnet prenumeratos kalibravimui papildomo bendro sesijų limito nėra; kiekvieno vykdymo ir kohortos baigtinės resursų ribos lieka. Visų keturių profilių paleisti kiekvienam mažam pakeitimui nereikia. Pirmiausia tikrinama konkreti hipotezė su dviem atitinkamais profiliais.
 
 ## Vienas ciklas
 
@@ -58,7 +58,8 @@ Privačios naudotojo užduotys netampa viešu benchmarku ar bendru kalibravimo r
 - [x] Pirmos SprintDesk užduoties promptas ir nepriklausomas API tikrintuvas paruošti prieš generavimą.
 - [x] Bendras SystemOne transportas ir tools/model/repo atrankos ribos turi offline testus.
 - [x] Importuotas Claude prenumeratos CLI conformance ir usage su abiejų sugeneruotų programų revalidation; be naujų modelių kvietimų integruojant.
-- [ ] Jev account/entitlement/usage ir Auto lane conformance; Codex auth šiuo metu atidėtas.
+- [x] Jev standalone typed decision API ir usage atsakai realiai gauti su bendru biudžeto rezervavimo žurnalu; tai dar ne coding kokybės ar pilno runtime įrodymas.
+- [ ] Auto lane conformance; Codex auth šiuo metu atidėtas.
 - [x] Viena sėkminga Claude prompt-v2 pora: abi realios programos praėjo restart/SQLite ir desktop/mobile acceptance. V1 nesėkmės nepašalintos.
 - [x] Vietinių versijuotų A/B JSON, prompt/source digest, faktinių CLI usage ir konservatyvaus reportų palyginimo kodas; offline testai PASS, importuotas tikras Claude palyginimas perskaičiuotas; [apimtis ir ribos](CLAUDE-CALIBRATION.md).
 - [x] Kontroliuojamo fixture API/SQLite ir izoliuoto desktop/mobile/keyboard grader integracija; regressions aptinkamos, subjektyvus UI vertinimas lieka atskiras.
@@ -69,6 +70,6 @@ Tai konkretina esamus P0.29 ir P1Q kokybės darbus; pilno MVP30užduočių accep
 
 ## Artimiausia kohorta
 
-[Patikrinta vienos poros santrauka ir trijų papildomų porų planas](CLAUDE-CALIBRATION.md#kitas-ribotas-etapas). V2 promptas ir graderis fiksuojami prieš sesijas. Kodavimo laikas analizuojamas atskirai nuo graderio; v1 ir v2 bei skirtingų CLI/grader hash kohortos nesuplakamos. Dabartinis tikslas — pakartojamumas, po to naujas CSV/SQLite užduoties promptas su nepriklausomu tikrintuvu.
+[Istorinė viena pora, pakartojimai ir naujausi rezultatai](CLAUDE-CALIBRATION.md). V2 promptas ir graderis fiksuojami prieš sesijas. Kodavimo laikas analizuojamas atskirai nuo graderio; v1 ir v2 bei skirtingų CLI/grader hash kohortos nesuplakamos. Dabartinis tikslas — pakartojamumas, po to naujas CSV/SQLite užduoties promptas su nepriklausomu tikrintuvu.
 
 `npm run lab:cohort` saugiai paruošia tris poras be modelių; `-- --live` jas vykdo su Claude prenumerata. `--mode compact` yra atskiras seno ir kompaktiško katalogo konteksto palyginimas, o ne automatinis antras etapas. [Komandos, limitai ir ataskaitos](LOCAL-LAB.md#trys-poros-viena-komanda). Naujas kandidatas pakeičia ir kandidatų limitą, ir kodavimą; pirmas eksperimentas vertina jų bendrą poveikį. Payload baitų sumažėjimas nėra tokenų sutaupymo įrodymas. Automatinis numatyto profilio pakeitimas neįjungtas.

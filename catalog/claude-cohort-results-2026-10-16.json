@@ -1,7 +1,7 @@
 {
   "version": 1,
   "kind": "claude_repeated_live_calibration_not_general_product_performance",
-  "updatedAtUtc": "2026-10-16T21:12:57.630Z",
+  "updatedAtUtc": "2026-10-16T21:34:53.034Z",
   "model": "claude-sonnet-5-5",
   "reasoning": "high",
   "promptVersion": 2,
@@ -1176,6 +1176,847 @@
         "cliWallMinusMonotonicCodingMs": 1957977,
         "automaticSleepPreventionAddedForSubsequentCohorts": true
       }
+    },
+    {
+      "cohortId": "2026-10-16T21-13-26-972Z-d9e4dab9eb7d",
+      "mode": "jev-http",
+      "sourceCommit": "0218f1ee8e82f76069817f96b19352e29294b46e",
+      "startedAtUtc": "2026-10-16T21:13:26.973Z",
+      "finishedAtUtc": "2026-10-16T21:33:36.798Z",
+      "status": "completed",
+      "plannedPairs": 3,
+      "recordedPairs": 3,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null,
+      "cohortReport": ".artifacts/zero-lab/cohorts/2026-10-16T21-13-26-972Z-d9e4dab9eb7d/cohort.json",
+      "cohortReportSha256": "72eda3c0bb0e1ad0ed4de98061053973de3bd158278bc8e49377008b253707b0",
+      "sourceDigests": {
+        "benchmarks/zero-lab.v1.json": "b9f59f1bfa007d8a0ca2caa4f731f6216f9dd512274603136d7ebd61f999b564",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-claude-cli.mjs": "38cb1f9c1a0d5944c4a25b426a804f6588349737610f2448ccb30083e595b9bd",
+        "platform/scripts/zero-lab-config.mjs": "b458cdc2fc3e53537362db0153e6bb9493ccf097e817322ef04adcf9db1efd49",
+        "platform/scripts/zero-lab-run.mjs": "7db10aff98c4f3c3342d46a03587aec0a96cb73667471a1f0452e6f39ae6353b",
+        "platform/scripts/zero-lab-cohort.mjs": "142af46813148a591c1d550309a8c443b9530c396cff5d4be12975c42e410991",
+        "platform/scripts/zero-lab-compare.mjs": "2d9ce0bc70d1a71bc4d84167cfba33296a9c1f671ad2e49b472e9f042bfb418d",
+        "platform/scripts/zero-lab-context.mjs": "615de70d3a74867cefab78690df699aee6dfb89c2747ab397f873ef024f06bbc",
+        "platform/scripts/zero-lab-reuse.mjs": "798dd87303a86b12e130d001ad6bcf584a7b6a80048e12733caf0b22f496ea6b",
+        "platform/scripts/zero-lab-jev.mjs": "c56cef3129ffc097d23e69aec0be6bcbd0ab59b5714a8d6aede12c85a2ba9059",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-evaluate.mjs": "ad5157a91a98841f82afefe5178ae63b01dd8829ff80ae73d4f4ea9c0d0ef5c4",
+        "platform/scripts/zero-lab-acceptance.mjs": "c4b0e65b952b8fef9af50811777204faae5f3ed4af4962c7a2029ad0670e6ab7",
+        "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+        "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-model-selector.ts": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "benchmarks/sprintdesk-v1/PROMPT.md": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+        "benchmarks/sprintdesk-v1/acceptance.mjs": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/testkit/src/evals/report.ts": "c612ccf0dd62a3cad72e237a04c713557d30adfaa70e330f32d2d3316db38f4b",
+        "platform/packages/testkit/src/evals/measurement.ts": "0ffd0c08d9e7473eb8aeab39470a7adabdc5ae1975390693a83825d4ab6d6c03",
+        "benchmarks/sprintdesk-v1/PROMPT.v2.md": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb"
+      },
+      "sourceDigestsVerified": true,
+      "promptDigestsVerified": 6,
+      "summary": {
+        "status": "comparable",
+        "reasons": [],
+        "plannedPairs": 3,
+        "recordedPairs": 3,
+        "baselineProfile": "claude-fixed-v1",
+        "candidateProfile": "zero-jev-http-claude-v1",
+        "pairs": [
+          {
+            "number": 1,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 224500,
+                "candidate": 159258,
+                "delta": -65242,
+                "relativeChangePercent": -29.061024498886415
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 192868,
+                "candidate": 135348,
+                "delta": -57520,
+                "relativeChangePercent": -29.82350623224174
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 31613,
+                "candidate": 23884,
+                "delta": -7729,
+                "relativeChangePercent": -24.448802707746815
+              },
+              "inputTokens": {
+                "baseline": 414801,
+                "candidate": 251178,
+                "delta": -163623,
+                "relativeChangePercent": -39.44614405461896
+              },
+              "outputTokens": {
+                "baseline": 27139,
+                "candidate": 19651,
+                "delta": -7488,
+                "relativeChangePercent": -27.591289288477835
+              },
+              "totalTokens": {
+                "baseline": 441940,
+                "candidate": 270829,
+                "delta": -171111,
+                "relativeChangePercent": -38.718151785310226
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-jev-http-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 205823,
+                "candidate": 207425,
+                "delta": 1602,
+                "relativeChangePercent": 0.7783386696336172
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 183016,
+                "candidate": 150558,
+                "delta": -32458,
+                "relativeChangePercent": -17.735061415395375
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 22790,
+                "candidate": 56844,
+                "delta": 34054,
+                "relativeChangePercent": 149.42518648530057
+              },
+              "inputTokens": {
+                "baseline": 468397,
+                "candidate": 264239,
+                "delta": -204158,
+                "relativeChangePercent": -43.58653022969831
+              },
+              "outputTokens": {
+                "baseline": 25647,
+                "candidate": 20577,
+                "delta": -5070,
+                "relativeChangePercent": -19.76839396420634
+              },
+              "totalTokens": {
+                "baseline": 494044,
+                "candidate": 284816,
+                "delta": -209228,
+                "relativeChangePercent": -42.350074082470385
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-jev-http-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 200313,
+                "candidate": 206736,
+                "delta": 6423,
+                "relativeChangePercent": 3.2064818558955235
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 178444,
+                "candidate": 183519,
+                "delta": 5075,
+                "relativeChangePercent": 2.844029499450808
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 21854,
+                "candidate": 23200,
+                "delta": 1346,
+                "relativeChangePercent": 6.15905555047131
+              },
+              "inputTokens": {
+                "baseline": 408353,
+                "candidate": 440125,
+                "delta": 31772,
+                "relativeChangePercent": 7.780523223779426
+              },
+              "outputTokens": {
+                "baseline": 25382,
+                "candidate": 23792,
+                "delta": -1590,
+                "relativeChangePercent": -6.264281774485856
+              },
+              "totalTokens": {
+                "baseline": 433735,
+                "candidate": 463917,
+                "delta": 30182,
+                "relativeChangePercent": 6.958626811301832
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-jev-http-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          }
+        ],
+        "measurements": {
+          "trialMedianMs": {
+            "baseline": 205823,
+            "candidate": 206736,
+            "delta": 913,
+            "relativeChangePercent": 0.4435850220820802
+          },
+          "codingMedianMs": {
+            "baseline": 183016,
+            "candidate": 150558,
+            "delta": -32458,
+            "relativeChangePercent": -17.735061415395375
+          },
+          "gradingMedianMs": {
+            "baseline": 22790,
+            "candidate": 23884,
+            "delta": 1094,
+            "relativeChangePercent": 4.8003510311540145
+          },
+          "allAttemptTotalTokens": {
+            "baseline": 1369719,
+            "candidate": 1019562,
+            "delta": -350157,
+            "relativeChangePercent": -25.564148558938
+          },
+          "allAttemptWorkflowMs": {
+            "baseline": 630636,
+            "candidate": 577966,
+            "delta": -52670,
+            "relativeChangePercent": -8.351886032513208
+          },
+          "estimatedApiEquivalentCostUsd": {
+            "baseline": 1.3995184,
+            "candidate": 1.14107256,
+            "delta": -0.25844584000000004,
+            "relativeChangePercent": -18.466769711637948
+          }
+        },
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "evidenceLevel": "same_task_calibration_not_general_advantage",
+        "limitations": [
+          "Order alternates but provider cache and service load remain uncontrolled",
+          "Coding, grading and total trial time are separate measurements",
+          "Unknown subscription price remains null",
+          "All failures remain visible; no selective successful-pair speed claim",
+          "The 50 percent API-equivalent target uses CLI estimates plus reported Jev cost; actual subscription savings remain unknown",
+          "One frozen preparation is charged in full to the candidate cohort, without pretending it ran independently for each pair",
+          "The combined source/tool/library profile does not isolate Jev's causal contribution"
+        ],
+        "preparation": {
+          "digest": "33e026b1d6cdc6ade3acd4c8aa0c3e1110ea4ee6855549f478b88450f143016c",
+          "elapsedMs": 4547,
+          "api": {
+            "model": "typesafe/jev-1.13",
+            "modelDispatchAttempts": 1,
+            "actualCostUsd": 0.00013356,
+            "pricing": {
+              "source": "https://openrouter.ai/api/v1/models/typesafe/jev-1.13/endpoints",
+              "maximumPromptUsdPerToken": 4.2e-8,
+              "completionUsdPerToken": 0,
+              "maximumContextTokens": 262144,
+              "maximumQuestions": 7,
+              "reservationUsd": 0.1
+            },
+            "httpStatus": 200,
+            "status": "answered",
+            "elapsedMs": 720,
+            "actualModel": "typesafe/jev-1.13-20260917",
+            "provider": "TypeSafe",
+            "usage": {
+              "inputTokens": 3180,
+              "outputTokens": 133,
+              "cost": 0.00013356
+            },
+            "answers": {
+              "source0": {
+                "type": "noul",
+                "noul": 0.35
+              },
+              "source1": {
+                "type": "noul",
+                "noul": 0.15
+              },
+              "source2": {
+                "type": "noul",
+                "noul": 0.1
+              },
+              "source3": {
+                "type": "noul",
+                "noul": 0.04
+              },
+              "source4": {
+                "type": "noul",
+                "noul": 0.02
+              },
+              "http_library": {
+                "type": "noul",
+                "noul": 0.71
+              },
+              "tools": {
+                "type": "choice",
+                "choice": "local",
+                "confidence": 0.84,
+                "probabilities": {
+                  "local": 0.92,
+                  "full": 0.08
+                }
+              }
+            },
+            "reservedBudgetUsd": 0.4
+          },
+          "librarySelected": true,
+          "libraryPolicy": "verified-http",
+          "library": {
+            "assets": [
+              {
+                "name": "vendor/http.mjs",
+                "file": "library/http.mjs",
+                "bytes": 40851,
+                "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+              },
+              {
+                "name": "vendor/LICENSE.hono",
+                "file": "library/LICENSE.hono",
+                "bytes": 1101,
+                "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+              },
+              {
+                "name": "vendor/LICENSE.node-server",
+                "file": "library/LICENSE.node-server",
+                "bytes": 1101,
+                "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+              },
+              {
+                "name": "vendor/README.md",
+                "file": "library/README.md",
+                "bytes": 684,
+                "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+              }
+            ],
+            "sources": [
+              {
+                "repository": "honojs/hono",
+                "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+                "license": "MIT",
+                "entry": "src/hono.ts",
+                "exports": "Hono"
+              },
+              {
+                "repository": "honojs/node-server",
+                "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+                "license": "MIT",
+                "entry": "src/server.ts",
+                "exports": "serve"
+              }
+            ],
+            "elapsedMs": 3571,
+            "verification": "passed",
+            "scope": "generic_HTTP_library_only_no_task_solution",
+            "bytes": 43737
+          },
+          "selectedSources": 0
+        },
+        "usage": {
+          "baselineTokens": 1369719,
+          "candidateTokens": 1019562,
+          "actualSubscriptionCostUsd": null
+        },
+        "target50Percent": {
+          "scope": "same_task_calibration_all_planned_trials_passed",
+          "preparationTimeIncluded": true,
+          "workflowTimeReductionReached": false,
+          "estimatedApiEquivalentReductionReached": false,
+          "actualSubscriptionCostReductionReached": null
+        }
+      },
+      "totals": {
+        "claude-fixed-v1": {
+          "accepted": 3,
+          "failed": 0,
+          "inputTokens": 1291551,
+          "outputTokens": 78168,
+          "totalTokens": 1369719,
+          "cacheReadTokens": 1196892,
+          "cacheCreationTokens": 94571,
+          "uncachedInputTokens": 88,
+          "codingMs": 554328,
+          "gradingMs": 76257,
+          "trialElapsedMs": 630636,
+          "toolActions": 49,
+          "apiEquivalentCostEstimateUsd": 1.3995184,
+          "actualSubscriptionCostUsd": null
+        },
+        "zero-jev-http-claude-v1": {
+          "accepted": 3,
+          "failed": 0,
+          "inputTokens": 955542,
+          "outputTokens": 64020,
+          "totalTokens": 1019562,
+          "cacheReadTokens": 874015,
+          "cacheCreationTokens": 81441,
+          "uncachedInputTokens": 86,
+          "codingMs": 469425,
+          "gradingMs": 103928,
+          "trialElapsedMs": 573419,
+          "toolActions": 45,
+          "apiEquivalentCostEstimateUsd": 1.140939,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "members": [
+        {
+          "pair": 1,
+          "order": [
+            "claude-fixed-v1",
+            "zero-jev-http-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T21-13-26-972Z-d9e4dab9eb7d/pair-1/2026-10-16T21-13-27-014Z-da7d6528fc8b/report.json",
+          "reportSha256": "fbfa586b085533354aaab45f659a5422685a7bab85bebf09abc87c9bed3eae8f",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "timingIntegrity": {
+            "wallElapsedMs": 385872,
+            "monotonicElapsedMs": 385906,
+            "hostPauseSuspected": false
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "recordedCliElapsedMs": 192847,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 192868,
+                "gradingMs": 31613
+              },
+              "trialElapsedMs": 224500,
+              "toolCalls": 16,
+              "toolFailures": 2,
+              "usage": {
+                "inputTokens": 414801,
+                "outputTokens": 27139,
+                "cachedInputTokens": 380655,
+                "cacheCreationInputTokens": 34118,
+                "uncachedInputTokens": 28,
+                "totalTokens": 441940
+              },
+              "configuredTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.48404899999999995,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "zero-jev-http-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "00cc9648999ee9622e9c1d6c22d72569bf40d5515944493e2419e90996986f9e",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 5795,
+              "contextBytes": 1244,
+              "recordedCliElapsedMs": 135337,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 135348,
+                "gradingMs": 23884,
+                "stagingMs": 3
+              },
+              "trialElapsedMs": 159258,
+              "toolCalls": 13,
+              "toolFailures": 2,
+              "usage": {
+                "inputTokens": 251178,
+                "outputTokens": 19651,
+                "cachedInputTokens": 223707,
+                "cacheCreationInputTokens": 27445,
+                "uncachedInputTokens": 26,
+                "totalTokens": 270829
+              },
+              "configuredTools": "Bash,Read,Write,Edit",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.35108340000000005,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              },
+              "reuseEvidence": {
+                "assets": [
+                  {
+                    "name": "vendor/http.mjs",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.hono",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.node-server",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/README.md",
+                    "unchanged": true
+                  }
+                ],
+                "allAssetDigestsUnchanged": true,
+                "staticLibraryImportFound": true,
+                "scope": "static_source_reference_plus_separate_runtime_acceptance_not_instruction_trace"
+              }
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "order": [
+            "zero-jev-http-claude-v1",
+            "claude-fixed-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T21-13-26-972Z-d9e4dab9eb7d/pair-2/2026-10-16T21-19-52-931Z-d1734f02ee22/report.json",
+          "reportSha256": "25d13574250ccab77a2165e3201b2eb5cf62a2ec6ff28e3c5dfa3cfff47e377f",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "timingIntegrity": {
+            "wallElapsedMs": 415027,
+            "monotonicElapsedMs": 415062,
+            "hostPauseSuspected": false
+          },
+          "trials": [
+            {
+              "profile": "zero-jev-http-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "00cc9648999ee9622e9c1d6c22d72569bf40d5515944493e2419e90996986f9e",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 5795,
+              "contextBytes": 1244,
+              "recordedCliElapsedMs": 150545,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 150558,
+                "gradingMs": 56844,
+                "stagingMs": 3
+              },
+              "trialElapsedMs": 207425,
+              "toolCalls": 14,
+              "toolFailures": 0,
+              "usage": {
+                "inputTokens": 264239,
+                "outputTokens": 20577,
+                "cachedInputTokens": 238596,
+                "cacheCreationInputTokens": 25617,
+                "uncachedInputTokens": 26,
+                "totalTokens": 284816
+              },
+              "configuredTools": "Bash,Read,Write,Edit",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.35600919999999997,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              },
+              "reuseEvidence": {
+                "assets": [
+                  {
+                    "name": "vendor/http.mjs",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.hono",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.node-server",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/README.md",
+                    "unchanged": true
+                  }
+                ],
+                "allAssetDigestsUnchanged": true,
+                "staticLibraryImportFound": true,
+                "scope": "static_source_reference_plus_separate_runtime_acceptance_not_instruction_trace"
+              }
+            },
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "recordedCliElapsedMs": 183001,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 183016,
+                "gradingMs": 22790
+              },
+              "trialElapsedMs": 205823,
+              "toolCalls": 18,
+              "toolFailures": 2,
+              "usage": {
+                "inputTokens": 468397,
+                "outputTokens": 25647,
+                "cachedInputTokens": 437834,
+                "cacheCreationInputTokens": 30531,
+                "uncachedInputTokens": 32,
+                "totalTokens": 494044
+              },
+              "configuredTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.4662248,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              }
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "order": [
+            "claude-fixed-v1",
+            "zero-jev-http-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T21-13-26-972Z-d9e4dab9eb7d/pair-3/2026-10-16T21-26-48-006Z-20ec30519e1c/report.json",
+          "reportSha256": "0c148a36e38d4de8b4b326ebdfcc6a4de081f4bcb0a3ddf980eb82e657717153",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "timingIntegrity": {
+            "wallElapsedMs": 408772,
+            "monotonicElapsedMs": 408805,
+            "hostPauseSuspected": false
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "recordedCliElapsedMs": 178429,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 178444,
+                "gradingMs": 21854
+              },
+              "trialElapsedMs": 200313,
+              "toolCalls": 15,
+              "toolFailures": 0,
+              "usage": {
+                "inputTokens": 408353,
+                "outputTokens": 25382,
+                "cachedInputTokens": 378403,
+                "cacheCreationInputTokens": 29922,
+                "uncachedInputTokens": 28,
+                "totalTokens": 433735
+              },
+              "configuredTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.44924460000000005,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "zero-jev-http-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "00cc9648999ee9622e9c1d6c22d72569bf40d5515944493e2419e90996986f9e",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 5795,
+              "contextBytes": 1244,
+              "recordedCliElapsedMs": 183504,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 183519,
+                "gradingMs": 23200,
+                "stagingMs": 2
+              },
+              "trialElapsedMs": 206736,
+              "toolCalls": 18,
+              "toolFailures": 3,
+              "usage": {
+                "inputTokens": 440125,
+                "outputTokens": 23792,
+                "cachedInputTokens": 411712,
+                "cacheCreationInputTokens": 28379,
+                "uncachedInputTokens": 34,
+                "totalTokens": 463917
+              },
+              "configuredTools": "Bash,Read,Write,Edit",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "apiEquivalentCostEstimateUsd": 0.4338464,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              },
+              "reuseEvidence": {
+                "assets": [
+                  {
+                    "name": "vendor/http.mjs",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.hono",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/LICENSE.node-server",
+                    "unchanged": true
+                  },
+                  {
+                    "name": "vendor/README.md",
+                    "unchanged": true
+                  }
+                ],
+                "allAssetDigestsUnchanged": true,
+                "staticLibraryImportFound": true,
+                "scope": "static_source_reference_plus_separate_runtime_acceptance_not_instruction_trace"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "historicalFailures": "catalog/claude-cohort-live-2026-10-16.json",

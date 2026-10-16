@@ -1,6 +1,6 @@
 # Claude prenumeratos kalibravimas
 
-Naujausia trijų porų kohorta: **6/6 automatinių patikrų PASS**, Zero kūrimo mediana trumpesnė tik **0,69 %**, visi tokenai **10,09 % didesni**. 50 % tikslas nepasiektas. Tai pakartojimai su fiksuotu katalogo kontekstu; Jev juose nedalyvavo. [Visi nauji reportai ir cache apskaita](../catalog/claude-cohort-results-2026-10-16.json).
+Naujausia Jev ir tikros HTTP bibliotekos trijų porų kohorta: **6/6 automatinių patikrų PASS**. Bendra trial laikų suma su paruošimu mažesnė **8,35 %**, CLI API kainos ekvivalentas **18,47 %**, tokenų suma **25,56 %**. 50 % tikslas nepasiektas; faktinė prenumeratos kaina nežinoma. Ankstesnis vien katalogo kontekstas tokios ekonomijos nepatvirtino. [Visi nauji reportai ir cache apskaita](../catalog/claude-cohort-results-2026-10-16.json).
 
 2026-10-16. **Importuotas vietinis Claude CLI bandymas, perskaičiuotas palyginimas ir pakartotinai patikrintos abi sugeneruotos programos.** Tai to paties Claude CLI su statiniu Zero katalogo kontekstu ir be jo palyginimas. Pilnas RepositoryZero runtime, Jev ir Auto šiame bandyme nedalyvavo.
 
@@ -90,3 +90,27 @@ Visi tokenai: 1745005 → 1546847 (−11,36 %). Cache read: 1550961 → 1357330;
 Trečioje poroje nustatyta vykdymo pauzė: baseline CLI laikrodžio laikas 2313828 ms, monotonic coding laikas 355851 ms (skirtumas 1957977 ms). Laiko pranašumo neskelbiame. Vėlesniems bandymams vykdymo metu laikinai stabdomas automatinis host užmigimas.
 
 Papildomas repeat agregatų patikslinimas: visų trijų coding laikų sumos 500444 → 523171 ms; trial sumos 565219 → 592750 ms. Nedidelis medianos sumažėjimas nereiškia mažesnio bendro darbo laiko. [Pilni abiejų kohortų sanitizuoti matavimai](../catalog/claude-cohort-results-2026-10-16.json).
+
+## Jev atranka ir reali Git HTTP biblioteka
+
+Kohorta `2026-10-16T21-13-26-972Z-d9e4dab9eb7d`: trys naujos kaitaliojamos poros, **6/6 PASS**, 25 source hash, vienodas Sonnet 5.5/high ir promptas v2. API, tikro SQLite restart, desktop/mobile klaviatūros ir cleanup patikros praėjo. Laikrodžių neatitikimo nenustatyta: porų wall/monotonic skirtumai 34–35 ms.
+
+| Metrika | Claude baseline | Jev + biblioteka | Pokytis |
+|---|---:|---:|---:|
+| Coding mediana |183016 ms|150558 ms|−17,74 %|
+| Grading mediana |22790 ms|23884 ms|+4,80 %|
+| Trial mediana |205823 ms|206736 ms|+0,44 %|
+| Visų trial suma su paruošimu |630636 ms|577966 ms|−8,35 %|
+| Visi tokenai |1369719|1019562|−25,56 %|
+| Cache read |1196892|874015|įtraukti po vieną kartą|
+| Cache creation |94571|81441|atskirai nuo cache read|
+| Nekache input |88|86|atskirai|
+| Output |78168|64020|atskirai|
+| API kainos ekvivalentas su Jev |1,3995184 USD|1,14107256 USD|−18,47 %, tik estimate|
+| Faktinė prenumeratos kaina |nežinoma|nežinoma|nevertinta|
+
+Jev vieną kartą visai kohortai parinko vietinius keturis įrankius ir atmetė penkis katalogo šaltinius pagal eksperimentinę 0,7 ribą. Pinned Hono ir node-server biblioteka pasirinkta **operatoriaus verified-http politika**; tai nepriskiriama Jev atrankos pergalei. Bibliotekos šaltiniai ir abi MIT notices išsaugoti. Visi trys kandidatai turi statinį `vendor/http.mjs` importą ir nepakeistus keturis seeded failus; atskiras runtime acceptance PASS. Tai statinis panaudojimo įrodymas su veikiančia programa, ne instrukcijų vykdymo trace.
+
+Vienas frozen paruošimas kainavo 4547 ms ir 0,00013356 USD; abi sąnaudos pridėtos kandidatui vieną kartą. Ankstesni paruošimai ir diagnostika atskirai įtraukti į [bendrą kalibravimo apskaitą](../catalog/jev-preparations-2026-10-16.json): keturi API kvietimai, provider pateikta 0,000443394 USD suma, konservatyviai rezervuota 0,40 USD iš leisto 1 USD. Šio kombinuoto profilio bandymas neatskiria įrankių, konteksto ir bibliotekos individualios naudos; pilnas produkto runtime ir Auto nedalyvavo.
+
+Toliau atskirai tikrinami [lean profiliai](LEAN-CALIBRATION.md); jų sisteminės instrukcijos, įrankiai ir effort skiriasi, todėl tai visos konfigūracijos palyginimas.
