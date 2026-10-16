@@ -1,6 +1,6 @@
 # Kokybės, greičio ir sąnaudų kalibravimas
 
-2026-10-17. **Katalogo pakartojimai baigti (6/6 PASS), atskiras compact etapas turi vieną kokybės nesėkmę (5/6 PASS). Jev ir tikrų Git bibliotekų kohorta baigta: 6/6 PASS, bendra workflow laikų suma −8,35 %, API kainos ekvivalentas −18,47 %. Bendras 50 % pranašumas dar neįrodytas.** Kalibruojama visa RepositoryZero darbo eiga, nuo užklausos supratimo iki patikrinto artefakto. [Daugkartinis Zero Lab modulis](ZERO-LAB.md), [porinio bandymo taisyklės](PAIRED-BENCHMARK.md), [pirma paruošta užduotis](../benchmarks/sprintdesk-v1/README.md).
+2026-10-17. **Katalogo pakartojimai baigti (6/6 PASS), atskiras compact etapas turi vieną kokybės nesėkmę (5/6 PASS). Jev ir tikrų Git bibliotekų kohorta baigta: 6/6 PASS, bendra workflow laikų suma −8,35 %, API kainos ekvivalentas −18,47 %. Atskiras lean-low patvirtinimas: 6/6 PASS, visų trial laikų suma −61,61 %, API kainos ekvivalentas −68,69 %. Tai vienos užduoties visos konfigūracijos rezultatas; bendras produkto pranašumas neįrodytas.** Kalibruojama visa RepositoryZero darbo eiga, nuo užklausos supratimo iki patikrinto artefakto. [Daugkartinis Zero Lab modulis](ZERO-LAB.md), [porinio bandymo taisyklės](PAIRED-BENCHMARK.md), [pirma paruošta užduotis](../benchmarks/sprintdesk-v1/README.md).
 
 ## Tikslas
 

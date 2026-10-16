@@ -132,6 +132,33 @@
       "allCandidateStaticLibraryImports": true,
       "allSeededAssetsUnchanged": true,
       "target50PercentReached": false
+    },
+    "leanScreening": {
+      "status": "completed",
+      "modes": [
+        "lean-high",
+        "lean-medium",
+        "lean-low"
+      ],
+      "pairsPerMode": 1,
+      "acceptedTrials": 6,
+      "cliInvocationAttempts": 6
+    },
+    "leanLowConfirmation": {
+      "status": "completed",
+      "completedPairs": 3,
+      "acceptedTrials": 6,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null,
+      "sourceHashCount": 26,
+      "target50Percent": {
+        "scope": "same_task_calibration_all_planned_trials_passed",
+        "preparationTimeIncluded": false,
+        "workflowTimeReductionReached": true,
+        "estimatedApiEquivalentReductionReached": true,
+        "actualSubscriptionCostReductionReached": null
+      }
     }
-  }
+  },
+  "new_model_calls_scope": "historical offline preparation only; later live sessions are listed under liveExecutionEvidence"
 }
