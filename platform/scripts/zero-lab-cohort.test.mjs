@@ -42,6 +42,46 @@ async function temporary(t) {
   const artifactRoot = await mkdtemp(path.join(tmpdir(), "zero-cohort-test-"));
   t.after(() => rm(artifactRoot, { recursive: true, force: true })); return artifactRoot;
 }
+
+function jevFixture(index, preparationMs = 100) {
+  const report = fixture(index), candidate = "zero-jev-reuse-claude-v1";
+  for (const profile of report.profiles) if (profile.id === ids[1]) {
+    profile.id = candidate; profile.tools = "Bash,Read,Write,Edit"; profile.reusePlanDigest = pin;
+  }
+  report.profileDigests[candidate] = report.profileDigests[ids[1]]; delete report.profileDigests[ids[1]];
+  for (const row of report.trials) {
+    row.generation.apiEquivalentCostEstimateUsd = row.strategy === ids[0] ? 1 : 0.4;
+    if (row.strategy === ids[1]) {
+      row.strategy = candidate; row.latencyMs = 100; row.reusePlanDigest = pin;
+      row.generation.enabledTools = "Bash,Read,Write,Edit";
+    }
+  }
+  report.sourceDigests["platform/scripts/zero-lab-jev.mjs"] = pin;
+  report.sourceDigests["platform/scripts/zero-lab-reuse.mjs"] = pin;
+  report.reusePreparation = { digest: pin, elapsedMs: preparationMs, api: { status: "answered", modelDispatchAttempts: 1, actualCostUsd: 0.01 } };
+  return report;
+}
+test("Jev's 50 percent target charges the frozen preparation once and keeps subscription savings unknown", () => {
+  const reports = [jevFixture(0), jevFixture(1), jevFixture(2)];
+  const result = summarizeLabCohort(reports, { mode: "jev" });
+  assert.equal(result.status, "comparable"); assert.equal(result.measurements.allAttemptWorkflowMs.candidate, 400);
+  assert.equal(result.target50Percent.workflowTimeReductionReached, true);
+  assert.equal(result.target50Percent.estimatedApiEquivalentReductionReached, true);
+  assert.equal(result.target50Percent.actualSubscriptionCostReductionReached, null);
+  const expensive = summarizeLabCohort([jevFixture(0, 800), jevFixture(1, 800), jevFixture(2, 800)], { mode: "jev" });
+  assert.equal(expensive.target50Percent.workflowTimeReductionReached, false);
+});
+test("missing Jev preparation, inconsistent tool receipts or changed plans cannot establish a target result", () => {
+  for (const mutate of [r => { r[0].reusePreparation = null; }, r => { r[1].reusePreparation.digest = "d".repeat(64); },
+    r => { r[0].trials.find(t => t.strategy === "zero-jev-reuse-claude-v1").generation.enabledTools = "Agent"; }]) {
+    const reports = [jevFixture(0), jevFixture(1), jevFixture(2)]; mutate(reports);
+    const result = summarizeLabCohort(reports, { mode: "jev" }); assert.equal(result.status, "not_comparable"); assert.equal(result.measurements, null);
+    assert.equal(result.target50Percent, undefined);
+  }
+  const reports = [jevFixture(0), jevFixture(1), jevFixture(2)]; delete reports[0].trials[0].latencyMs;
+  const unknown = summarizeLabCohort(reports, { mode: "jev" }); assert.equal(unknown.measurements.allAttemptWorkflowMs.relativeChangePercent, null);
+  assert.equal(unknown.target50Percent.workflowTimeReductionReached, null);
+});
 test("three distinct alternating pairs separate coding from grading and never invent subscription savings", () => {
   const result = summarizeLabCohort([fixture(0), fixture(1), fixture(2)]);
   assert.equal(result.status, "comparable"); assert.equal(result.measurements.codingMedianMs.relativeChangePercent, -10);

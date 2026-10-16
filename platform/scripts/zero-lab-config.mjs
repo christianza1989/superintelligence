@@ -28,6 +28,8 @@ export async function buildLabPlan({ promptVersion = 1 } = {}) {
     "platform/scripts/zero-lab-cohort.mjs",
     "platform/scripts/zero-lab-compare.mjs",
     "platform/scripts/zero-lab-context.mjs",
+    "platform/scripts/zero-lab-reuse.mjs",
+    "platform/scripts/zero-lab-jev.mjs",
     "platform/scripts/zero-lab-prepare.mjs",
     "platform/scripts/zero-lab-evaluate.mjs",
     "platform/scripts/zero-lab-acceptance.mjs",

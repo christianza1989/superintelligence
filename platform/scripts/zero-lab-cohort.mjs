@@ -11,6 +11,7 @@ import { runLabExperiment } from "./zero-lab-run.mjs";
 const modes = {
   repeat: ["claude-fixed-v1", "zero-retrieval-claude-v1"],
   compact: ["zero-retrieval-claude-v1", "zero-compact-claude-v1"],
+  jev: ["claude-fixed-v1", "zero-jev-reuse-claude-v1"],
 };
 const canonical = value => JSON.stringify(value, (_, item) => item && typeof item === "object" && !Array.isArray(item)
   ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b))) : item);
@@ -54,6 +55,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
   if (reports.some(r => typeof r?.runId !== "string" || !r.runId || r.runId.length > 100) || new Set(reports.map(r => r.runId)).size !== reports.length)
     result.reasons.push("duplicate_or_missing_run_identity");
   const first = reports[0];
+  if (mode === "jev") result.preparation = first.reusePreparation ?? null;
   const rows = { baseline: [], candidate: [] };
   for (let index = 0; index < reports.length; index++) {
     const report = reports[index];
@@ -88,13 +90,34 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
     gradingMedianMs: delta(median(rows.baseline.map(r => timing(r, "grading"))), median(rows.candidate.map(r => timing(r, "grading")))),
     allAttemptTotalTokens: delta(result.usage.baselineTokens, result.usage.candidateTokens),
   };
+  if (mode === "jev") {
+    const preparation = first.reusePreparation;
+    if (!preparation || !count(preparation.elapsedMs) || preparation.api?.status !== "answered" ||
+        preparation.api.modelDispatchAttempts !== 1 || reports.some(r => r.reusePreparation?.digest !== preparation.digest)) {
+      result.status = "not_comparable"; result.reasons.push("missing_or_changed_jev_preparation"); result.measurements = null; return result;
+    }
+    const candidateElapsed = total(rows.candidate, "latencyMs");
+    result.measurements.allAttemptWorkflowMs = delta(total(rows.baseline, "latencyMs"), candidateElapsed === null ? null : candidateElapsed + preparation.elapsedMs);
+    const estimate = trials => trials.every(r => typeof r.generation?.apiEquivalentCostEstimateUsd === "number" && Number.isFinite(r.generation.apiEquivalentCostEstimateUsd) && r.generation.apiEquivalentCostEstimateUsd >= 0)
+      ? trials.reduce((n,r) => n + r.generation.apiEquivalentCostEstimateUsd, 0) : null;
+    const baseEstimate = estimate(rows.baseline), candidateEstimate = estimate(rows.candidate), routingCost = preparation.api.actualCostUsd;
+    result.measurements.estimatedApiEquivalentCostUsd = delta(baseEstimate,
+      candidateEstimate !== null && typeof routingCost === "number" && Number.isFinite(routingCost) && routingCost >= 0 ? candidateEstimate + routingCost : null);
+    result.target50Percent = { scope: "same_task_calibration_all_planned_trials_passed", preparationTimeIncluded: true,
+      workflowTimeReductionReached: result.measurements.allAttemptWorkflowMs.relativeChangePercent === null ? null : result.measurements.allAttemptWorkflowMs.relativeChangePercent <= -50,
+      estimatedApiEquivalentReductionReached: result.measurements.estimatedApiEquivalentCostUsd.relativeChangePercent === null ? null : result.measurements.estimatedApiEquivalentCostUsd.relativeChangePercent <= -50,
+      actualSubscriptionCostReductionReached: null };
+    result.limitations.push("The 50 percent API-equivalent target uses CLI estimates plus reported Jev cost; actual subscription savings remain unknown",
+      "One frozen preparation is charged in full to the candidate cohort, without pretending it ran independently for each pair",
+      "The combined source/tool/library profile does not isolate Jev's causal contribution");
+  }
   return result;
 }
 
 export async function runLabCohort(options = {}, deps = {}) {
   const mode = options.mode ?? "repeat", pairs = options.pairs ?? 3;
   if (!Object.hasOwn(modes, mode) || !Number.isSafeInteger(pairs) || pairs < 1 || pairs > 3 ||
-      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact and one to three pairs.");
+      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact/jev and one to three pairs.");
   const artifactRoot = options.artifactRoot ?? fileURLToPath(new URL("../../.artifacts/zero-lab/cohorts/", import.meta.url));
   if (typeof artifactRoot !== "string" || !path.isAbsolute(artifactRoot)) throw new Error("Cohort artifact root must be absolute.");
   const getPlan = deps.getPlan ?? (() => buildLabPlan({ promptVersion: 2 }));
@@ -116,6 +139,7 @@ export async function runLabCohort(options = {}, deps = {}) {
     if (["stopped_source_changed", "stopped_shared_prerequisite", "cancelled", "harness_error"].includes(report.status)) {
       report.summary.status = "not_comparable";
       report.summary.measurements = null;
+      if (report.summary.target50Percent) report.summary.target50Percent = null;
       report.summary.reasons.push("cohort_interrupted_or_source_unverified");
     }
     await writeFile(path.join(directory, "cohort.json.tmp"), JSON.stringify(report, null, 2) + "\n", { mode: 0o600 });
@@ -132,7 +156,7 @@ export async function runLabCohort(options = {}, deps = {}) {
       const ids = index % 2 ? [...modes[mode]].reverse() : modes[mode];
       if (options.live) { report.cliInvocationAttempts = null; report.modelDispatchAttempts = null; await save(); }
       const value = await runPair({ engine: "claude", promptVersion: 2, profiles: [...ids], live: options.live === true,
-        evaluate: true, artifactRoot: path.join(directory, "pair-" + (index + 1)), frozenSourceDigests: plan.sourceDigests, signal });
+        evaluate: true, artifactRoot: path.join(directory, "pair-" + (index + 1)), frozenSourceDigests: plan.sourceDigests, signal, reusePlan: options.reusePlan });
       const child = value.report;
       members.push(child);
       report.members.push({ pair: index + 1, profiles: [...ids], status: child.status,
@@ -164,12 +188,12 @@ export async function runLabCohort(options = {}, deps = {}) {
 
 async function main() {
   const { values } = parseArgs({ options: { live: { type: "boolean", default: false },
-    mode: { type: "string", default: "repeat" }, pairs: { type: "string", default: "3" } } });
+    mode: { type: "string", default: "repeat" }, pairs: { type: "string", default: "3" }, plan: { type: "string" } } });
   const controller = new AbortController();
   const cancel = () => controller.abort();
   process.on("SIGINT", cancel); process.on("SIGTERM", cancel);
   try {
-    const { directory, report } = await runLabCohort({ mode: values.mode, pairs: Number(values.pairs), live: values.live, signal: controller.signal });
+    const { directory, report } = await runLabCohort({ mode: values.mode, pairs: Number(values.pairs), live: values.live, signal: controller.signal, reusePlan: values.plan });
     console.log(JSON.stringify({ status: report.status, artifact: path.relative(fileURLToPath(new URL("../../", import.meta.url)), path.join(directory, "cohort.json")),
       plannedPairs: report.plannedPairs, recordedPairs: report.members.length, cliInvocationAttempts: report.cliInvocationAttempts,
       modelDispatchAttempts: report.modelDispatchAttempts, summary: report.summary }, null, 2));

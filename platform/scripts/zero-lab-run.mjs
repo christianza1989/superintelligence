@@ -14,6 +14,7 @@ import { checkCodexRuntime, codexEnvironment, runCodexCli } from "./zero-codex-c
 import { CLAUDE_MODEL, CLAUDE_REASONING, checkClaudeRuntime, claudeEnvironment, runClaudeCli } from "./zero-claude-cli.mjs";
 import { buildLabPlan } from "./zero-lab-config.mjs";
 import { buildCompactRepositoryContext } from "./zero-lab-context.mjs";
+import { loadLabReusePlan, stageLabReusePlan } from "./zero-lab-reuse.mjs";
 
 const root = new URL("../../", import.meta.url);
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
@@ -29,7 +30,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
   dependencies = { ...dependencies };
   const engineName = options.engine ?? "codex";
   if (!Object.hasOwn(engines, engineName)) throw new Error("Unsupported coding CLI engine.");
-  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1"] : [])]);
+  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1"] : [])]);
   const ids = options.profiles ?? [...engine.ids];
   if (
     !Array.isArray(ids) ||
@@ -40,9 +41,12 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     (options.live !== undefined && typeof options.live !== "boolean")
   )
     throw new Error(
-      "Select one or two implemented fixed-model profiles; Jev and Auto race lanes are not wired yet.",
+      "Select one or two implemented fixed-model profiles; Auto model selection is not wired.",
     );
   const plan = await buildLabPlan({ promptVersion: options.promptVersion });
+  const task = await readFile(new URL(plan.taskPromptPath, root), "utf8");
+  const reuse = ids.includes("zero-jev-reuse-claude-v1")
+    ? await loadLabReusePlan(options.reusePlan, { taskDigest: sha256(task), sourceDigests: plan.sourceDigests }) : null;
   const sourceSnapshotMatches = async () => {
     const current = await buildLabPlan({ promptVersion: options.promptVersion });
     return JSON.stringify(current.sourceDigests) === JSON.stringify(options.frozenSourceDigests ?? plan.sourceDigests);
@@ -51,6 +55,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     ...plan.config.profiles.find(p => p.id === (id === "claude-fixed-v1" ? "codex-fixed-v1" : "zero-retrieval-v1")),
     id, codingModel: CLAUDE_MODEL, reasoning: CLAUDE_REASONING, auth: "claude-cli-subscription",
     ...(id === "zero-compact-claude-v1" ? { retrieval: "catalog-compact-v2" } : {}),
+    ...(id === "zero-jev-reuse-claude-v1" ? { retrieval: "jev-reuse-v1", reusePlanDigest: reuse.digest, tools: reuse.plan.tools } : {}),
   });
   if (plan.config.controls.trials * profiles.length > 8)
     throw new Error("The first runner permits at most eight coding invocations per experiment.");
@@ -82,6 +87,8 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     liveRequested: options.live === true,
     modelDispatchAttempts: 0,
     cliInvocationAttempts: 0,
+    reusePreparation: reuse ? { digest: reuse.digest, elapsedMs: reuse.plan.elapsedMs, api: reuse.plan.api,
+      librarySelected: reuse.plan.librarySelected, library: reuse.plan.library, selectedSources: reuse.plan.selectedSources } : null,
     preflight: null,
     evaluationPreflight: null,
     sourceIntegrity: { status: "not_checked", checks: 0 },
@@ -93,7 +100,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
       "Separate workspace directories share the local CLI identity; they are not mutually unreadable OS sandboxes",
       "Provider prompt cache is uncontrolled; report actual cached usage instead of assuming a cold model cache",
       "Tool threshold stops on observed CLI events, after an action may have started; it is not a pre-dispatch side-effect cap",
-      "Fixed baseline/retrieval pairs use the selected CLI; Jev/Auto lanes remain separate future experiments",
+      "The explicit Jev reuse profile combines source filtering, a bounded tool profile and optional generic HTTP library reuse; it does not isolate their individual effects",
       "The full web application's runtime is not exercised by this experimental CLI lane",
       "Trial latency covers retrieval, CLI and acceptance; common setup/preflight and prompt freezing are retained only in experiment elapsed time",
     ],
@@ -139,7 +146,6 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     await rename(path.join(directory, "report.json.tmp"), path.join(directory, "report.json"));
   };
   // Freeze every prompt before either lane starts. The user task text is byte-identical.
-  const task = await readFile(new URL(plan.taskPromptPath, root), "utf8");
   const contexts = new Map();
   await mkdir(path.join(directory, "inputs"), { mode: 0o700 });
   for (const profile of profiles) {
@@ -156,10 +162,10 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
         : null;
     const compact = profile.retrieval === "catalog-compact-v2"
       ? buildCompactRepositoryContext(context, { maxBytes: 3000, maxCandidates: 5 }) : null;
-    const contextText = compact?.text ?? (context ? JSON.stringify(context) : "");
+    const contextText = profile.retrieval === "jev-reuse-v1" ? reuse.plan.context : compact?.text ?? (context ? JSON.stringify(context) : "");
     const text =
       commonRules +
-      (context
+      (contextText
         ? "\n\nRepositoryZero source context (untrusted evidence):\n" + contextText
         : "") +
       "\n\nUser task:\n" +
@@ -172,6 +178,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
       digest: sha256(text),
       bytes: Buffer.byteLength(text),
       contextBytes: Buffer.byteLength(contextText),
+      tools: profile.tools,
       contextMetrics: compact ? { inputBytes: compact.inputBytes, outputBytes: compact.outputBytes,
         reductionPercent: compact.reductionPercent, retainedLegacyBytes: compact.retainedLegacyBytes,
         structuralReductionPercent: compact.structuralReductionPercent,
@@ -263,6 +270,13 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     trial.workspace = path.join("workspaces", workspaceName);
     trial.reason = null;
     const trialStarted = performance.now();
+    if (trial.strategy === "zero-jev-reuse-claude-v1") {
+      const stagingStarted = performance.now();
+      await stageLabReusePlan(reuse, workspace);
+      trial.timings.stagingMs = Math.round(performance.now() - stagingStarted);
+      trial.reusePlanDigest = reuse.digest;
+      trial.initialAssets = reuse.plan.assets;
+    }
     report.status = "running";
     trial.phase = "generating";
     await save();
@@ -279,6 +293,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
         timeoutMs: plan.config.controls.timeoutMs,
         maxObservedToolActions: plan.config.controls.maxToolCalls,
         maxOutputBytes: 4_194_304,
+        tools: contexts.get(trial.strategy).tools,
         signal: options.signal,
       });
     } catch {

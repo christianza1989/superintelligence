@@ -9,15 +9,17 @@ import { codexEnvironment } from "./zero-codex-cli.mjs";
 export const CLAUDE_MODEL = "claude-sonnet-5-5";
 export const CLAUDE_REASONING = "high";
 export const CLAUDE_TOOLS = "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch";
+export const CLAUDE_LOCAL_TOOLS = "Bash,Read,Write,Edit";
 export const claudeEnvironment = (source = process.env) => {
   const env = codexEnvironment(source);
   delete env.CODEX_HOME;
   return env;
 };
-export function claudeArguments() {
+export function claudeArguments({ tools = CLAUDE_TOOLS } = {}) {
+  if (![CLAUDE_TOOLS, CLAUDE_LOCAL_TOOLS].includes(tools)) throw new Error("Unsupported bounded Claude tool profile.");
   return ["--safe-mode", "--print", "--model", CLAUDE_MODEL, "--effort", CLAUDE_REASONING,
     "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk",
-    "--permission-prompts", "none", "--tools", CLAUDE_TOOLS, "--allowedTools", CLAUDE_TOOLS,
+    "--permission-prompts", "none", "--tools", tools, "--allowedTools", tools,
     "--strict-mcp-config", "--no-session-persistence", "--disable-slash-commands", "--max-turns", "60"];
 }
 function failure(text) {
@@ -139,10 +141,11 @@ export async function runClaudeCli(options, deps = {}) {
     !count(toolLimit) || toolLimit < 1 || toolLimit > 100 || !count(maxOutputBytes) || maxOutputBytes < 1024 || maxOutputBytes > 8388608)
     throw new Error("Invalid bounded Claude invocation.");
   const env = claudeEnvironment(deps.env ?? process.env);
+  const args = claudeArguments({ tools: options.tools });
   const workspace = await realpath(options.workspace);
   if (!(await stat(workspace)).isDirectory()) throw new Error("Claude workspace must be a directory.");
   const base = { requestedModel: CLAUDE_MODEL, requestedReasoning: CLAUDE_REASONING, actualCostUsd: null,
-    sandbox: "cli_permissions_dontAsk_not_os_isolation", actualModel: null };
+    sandbox: "cli_permissions_dontAsk_not_os_isolation", actualModel: null, enabledTools: options.tools ?? CLAUDE_TOOLS };
   if (options.signal?.aborted) return { ...base, status: "cancelled", reason: "cancelled_before_start" };
   const started = Date.now();
   return new Promise(resolve => {
@@ -170,7 +173,7 @@ export async function runClaudeCli(options, deps = {}) {
       onToolAction: n => { if (n > toolLimit) stop("observed_tool_limit"); },
       onInvalidEvent: () => stop("invalid_cli_events"),
     });
-    try { child = (deps.spawn ?? spawn)("claude", claudeArguments(), { cwd: workspace, env, shell: false,
+    try { child = (deps.spawn ?? spawn)("claude", args, { cwd: workspace, env, shell: false,
       detached: process.platform !== "win32", stdio: ["pipe", "pipe", "pipe"] }); }
     catch { stopReason = "unavailable"; finish(null, null); return; }
     const collect = (chunk, error) => {

@@ -103,9 +103,11 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
     requiredSources.push("platform/scripts/zero-claude-cli.mjs");
   if (baselineReport.taskPromptVersion === 2 || candidateReport.taskPromptVersion === 2)
     requiredSources.push("benchmarks/sprintdesk-v1/PROMPT.v2.md");
+  if ([baselineReport, candidateReport].some(r => r.profiles.some(p => p.reusePlanDigest !== undefined)))
+    requiredSources.push("platform/scripts/zero-lab-reuse.mjs", "platform/scripts/zero-lab-jev.mjs");
   // Optional browser grading must have the same implementation on both sides too.
   for (const key of new Set([...Object.keys(baselineReport.sourceDigests ?? {}), ...Object.keys(candidateReport.sourceDigests ?? {})]))
-    if (["zero-lab-browser", "zero-lab-context", "zero-lab-cohort", "zero-lab-compare"].some(name => key.includes(name)) && !requiredSources.includes(key)) requiredSources.push(key);
+    if (["zero-lab-browser", "zero-lab-context", "zero-lab-cohort", "zero-lab-compare", "zero-lab-reuse", "zero-lab-jev"].some(name => key.includes(name)) && !requiredSources.includes(key)) requiredSources.push(key);
   for (const source of requiredSources) {
     const a = baselineReport.sourceDigests?.[source], b = candidateReport.sourceDigests?.[source];
     if (!digest(a) || !digest(b) || a !== b) reject("task_grader_or_cli_source_mismatch");
@@ -139,6 +141,8 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
       else if (row.generation.requestedModel !== profile?.codingModel || row.generation.requestedReasoning !== profile?.reasoning)
         reject("recorded_generation_model_mismatch");
       if (row.generation?.actualModel && row.generation.actualModel !== profile?.codingModel) reject("attested_model_mismatch");
+      if (profile?.tools !== undefined && row.generation?.enabledTools !== profile.tools) reject("recorded_tool_profile_mismatch");
+      if (profile?.reusePlanDigest !== undefined && (!digest(profile.reusePlanDigest) || row.reusePlanDigest !== profile.reusePlanDigest)) reject("reuse_preparation_mismatch");
       if (row.outcome === "passed" && (row.qualityComplete !== true || row.evaluation?.automatedContractComplete !== true ||
           row.evaluation?.status !== "passed" ||
           row.evaluation?.cleanup !== "passed" || row.evaluation?.functionalStatus !== "passed" ||

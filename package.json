@@ -44,6 +44,8 @@
     "test:lab-prepare": "node --test platform/scripts/zero-lab-prepare.test.mjs",
     "lab:cohort": "node scripts/platform.mjs exec tsx scripts/zero-lab-cohort.mjs",
     "test:lab-cohort": "node scripts/platform.mjs exec tsx --test scripts/zero-lab-cohort.test.mjs",
-    "test:lab-context": "node --test platform/scripts/zero-lab-context.test.mjs"
+    "test:lab-context": "node --test platform/scripts/zero-lab-context.test.mjs",
+    "lab:jev-prepare": "node scripts/platform.mjs exec tsx scripts/zero-lab-jev.mjs",
+    "test:lab-reuse": "node scripts/platform.mjs exec tsx --test scripts/zero-lab-reuse.test.mjs"
   }
 }
