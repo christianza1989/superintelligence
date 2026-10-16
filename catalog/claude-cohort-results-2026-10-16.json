@@ -1,7 +1,7 @@
 {
   "version": 1,
   "kind": "claude_repeated_live_calibration_not_general_product_performance",
-  "updatedAtUtc": "2026-10-16T21:34:53.034Z",
+  "updatedAtUtc": "2026-10-16T21:42:59.126Z",
   "model": "claude-sonnet-5-5",
   "reasoning": "high",
   "promptVersion": 2,
@@ -2017,6 +2017,333 @@
           ]
         }
       ]
+    },
+    {
+      "cohortId": "2026-10-16T21-35-20-039Z-c59356262667",
+      "mode": "lean-high",
+      "sourceCommit": "ee3d5be64e42ff84315e715d13b4821c91953436",
+      "startedAtUtc": "2026-10-16T21:35:20.040Z",
+      "finishedAtUtc": "2026-10-16T21:41:58.285Z",
+      "status": "completed",
+      "plannedPairs": 1,
+      "recordedPairs": 1,
+      "cliInvocationAttempts": 2,
+      "modelDispatchAttempts": null,
+      "cohortReport": ".artifacts/zero-lab/cohorts/2026-10-16T21-35-20-039Z-c59356262667/cohort.json",
+      "cohortReportSha256": "0c3de029227351a05c6cd0e717dfc05f7b46888ac73d104f8b7fa632e42e5749",
+      "sourceDigests": {
+        "benchmarks/zero-lab.v1.json": "b9f59f1bfa007d8a0ca2caa4f731f6216f9dd512274603136d7ebd61f999b564",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-claude-cli.mjs": "828df397b606f0fd8db347ef07f784e43c2042fed9d3cfd93b1c90451feedff0",
+        "platform/scripts/zero-lab-strategies.mjs": "eacc23869a5e56bc0c6532dcb9d1001e011ba21b8cf41fd9314f93df285a35b7",
+        "platform/scripts/zero-lab-config.mjs": "29b41883f7e61acdf18525af7b0b9406d16e1662d7ee29a3b64603c2f72fbf98",
+        "platform/scripts/zero-lab-run.mjs": "0774f743fb41fe4de757ca5d42f4d8e13d92b320839d4f5400d0995f204aa1dd",
+        "platform/scripts/zero-lab-cohort.mjs": "0d679dc4287d9375f1abf3e3484c1eed292eb0027453989064f1b1eeb7aaf958",
+        "platform/scripts/zero-lab-compare.mjs": "e5d942295845adc0cffafa13bbd188f1b55408ba50ed5bce47926024beb16d44",
+        "platform/scripts/zero-lab-context.mjs": "615de70d3a74867cefab78690df699aee6dfb89c2747ab397f873ef024f06bbc",
+        "platform/scripts/zero-lab-reuse.mjs": "798dd87303a86b12e130d001ad6bcf584a7b6a80048e12733caf0b22f496ea6b",
+        "platform/scripts/zero-lab-jev.mjs": "c56cef3129ffc097d23e69aec0be6bcbd0ab59b5714a8d6aede12c85a2ba9059",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-evaluate.mjs": "ad5157a91a98841f82afefe5178ae63b01dd8829ff80ae73d4f4ea9c0d0ef5c4",
+        "platform/scripts/zero-lab-acceptance.mjs": "c4b0e65b952b8fef9af50811777204faae5f3ed4af4962c7a2029ad0670e6ab7",
+        "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+        "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-model-selector.ts": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "benchmarks/sprintdesk-v1/PROMPT.md": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+        "benchmarks/sprintdesk-v1/acceptance.mjs": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/testkit/src/evals/report.ts": "c612ccf0dd62a3cad72e237a04c713557d30adfaa70e330f32d2d3316db38f4b",
+        "platform/packages/testkit/src/evals/measurement.ts": "0ffd0c08d9e7473eb8aeab39470a7adabdc5ae1975390693a83825d4ab6d6c03",
+        "benchmarks/sprintdesk-v1/PROMPT.v2.md": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb"
+      },
+      "sourceDigestsVerified": true,
+      "promptDigestsVerified": 2,
+      "summary": {
+        "status": "comparable",
+        "reasons": [],
+        "plannedPairs": 1,
+        "recordedPairs": 1,
+        "baselineProfile": "claude-fixed-v1",
+        "candidateProfile": "zero-lean-high-claude-v1",
+        "pairs": [
+          {
+            "number": 1,
+            "comparisonStatus": "comparable",
+            "reasons": [],
+            "quality": {
+              "status": "measured",
+              "scope": "declared_automated_checks_not_subjective_product_quality",
+              "baselineAccepted": 1,
+              "candidateAccepted": 1,
+              "pairedTrials": 1
+            },
+            "deltas": {
+              "acceptedLatencyMedianMs": {
+                "baseline": 175060,
+                "candidate": 220672,
+                "delta": 45612,
+                "relativeChangePercent": 26.055066834228263
+              },
+              "acceptedCodingMedianMs": {
+                "baseline": 153433,
+                "candidate": 198115,
+                "delta": 44682,
+                "relativeChangePercent": 29.121505803836204
+              },
+              "acceptedGradingMedianMs": {
+                "baseline": 21610,
+                "candidate": 22540,
+                "delta": 930,
+                "relativeChangePercent": 4.303563165201296
+              },
+              "inputTokens": {
+                "baseline": 427300,
+                "candidate": 375660,
+                "delta": -51640,
+                "relativeChangePercent": -12.08518605195413
+              },
+              "outputTokens": {
+                "baseline": 22847,
+                "candidate": 24475,
+                "delta": 1628,
+                "relativeChangePercent": 7.125662012518055
+              },
+              "totalTokens": {
+                "baseline": 450147,
+                "candidate": 400135,
+                "delta": -50012,
+                "relativeChangePercent": -11.110148462613324
+              },
+              "costUsd": {
+                "baseline": null,
+                "candidate": null,
+                "delta": null,
+                "relativeChangePercent": null
+              }
+            },
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "passed"
+              },
+              {
+                "profile": "zero-lean-high-claude-v1",
+                "outcome": "passed"
+              }
+            ]
+          }
+        ],
+        "measurements": {
+          "trialMedianMs": {
+            "baseline": 175060,
+            "candidate": 220672,
+            "delta": 45612,
+            "relativeChangePercent": 26.055066834228263
+          },
+          "codingMedianMs": {
+            "baseline": 153433,
+            "candidate": 198115,
+            "delta": 44682,
+            "relativeChangePercent": 29.121505803836204
+          },
+          "gradingMedianMs": {
+            "baseline": 21610,
+            "candidate": 22540,
+            "delta": 930,
+            "relativeChangePercent": 4.303563165201296
+          },
+          "allAttemptTotalTokens": {
+            "baseline": 450147,
+            "candidate": 400135,
+            "delta": -50012,
+            "relativeChangePercent": -11.110148462613324
+          },
+          "allAttemptWorkflowMs": {
+            "baseline": 175060,
+            "candidate": 220672,
+            "delta": 45612,
+            "relativeChangePercent": 26.055066834228263
+          },
+          "estimatedApiEquivalentCostUsd": {
+            "baseline": 0.43813,
+            "candidate": 0.45438759999999995,
+            "delta": 0.016257599999999928,
+            "relativeChangePercent": 3.710679478693522
+          }
+        },
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "evidenceLevel": "same_task_calibration_not_general_advantage",
+        "limitations": [
+          "Order alternates but provider cache and service load remain uncontrolled",
+          "Coding, grading and total trial time are separate measurements",
+          "Unknown subscription price remains null",
+          "All failures remain visible; no selective successful-pair speed claim",
+          "The 50 percent API-equivalent target uses CLI estimates and any reported routing cost; actual subscription savings remain unknown",
+          "This named configuration changes system prompt, tools and optionally effort; no isolated Jev or source-reuse effect is measured"
+        ],
+        "usage": {
+          "baselineTokens": 450147,
+          "candidateTokens": 400135,
+          "actualSubscriptionCostUsd": null
+        },
+        "target50Percent": {
+          "scope": "same_task_calibration_all_planned_trials_passed",
+          "preparationTimeIncluded": false,
+          "workflowTimeReductionReached": false,
+          "estimatedApiEquivalentReductionReached": false,
+          "actualSubscriptionCostReductionReached": null
+        }
+      },
+      "totals": {
+        "claude-fixed-v1": {
+          "accepted": 1,
+          "failed": 0,
+          "inputTokens": 427300,
+          "outputTokens": 22847,
+          "totalTokens": 450147,
+          "cacheReadTokens": 394600,
+          "cacheCreationTokens": 32670,
+          "uncachedInputTokens": 30,
+          "codingMs": 153433,
+          "gradingMs": 21610,
+          "trialElapsedMs": 175060,
+          "toolActions": 16,
+          "apiEquivalentCostEstimateUsd": 0.43813,
+          "actualSubscriptionCostUsd": null
+        },
+        "zero-lean-high-claude-v1": {
+          "accepted": 1,
+          "failed": 0,
+          "inputTokens": 375660,
+          "outputTokens": 24475,
+          "totalTokens": 400135,
+          "cacheReadTokens": 340248,
+          "cacheCreationTokens": 35382,
+          "uncachedInputTokens": 30,
+          "codingMs": 198115,
+          "gradingMs": 22540,
+          "trialElapsedMs": 220672,
+          "toolActions": 16,
+          "apiEquivalentCostEstimateUsd": 0.45438759999999995,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "members": [
+        {
+          "pair": 1,
+          "order": [
+            "claude-fixed-v1",
+            "zero-lean-high-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T21-35-20-039Z-c59356262667/pair-1/2026-10-16T21-35-20-112Z-81a94fd4ba56/report.json",
+          "reportSha256": "777a7088ee888891450f77e052d73696bb6f6e5754fff9d1817d412142fbdd0d",
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 7
+          },
+          "timingIntegrity": {
+            "status": "passed",
+            "maximumClockDiscrepancyMs": 33,
+            "toleranceMs": 5000,
+            "wallElapsedMs": 398149,
+            "monotonicElapsedMs": 398181,
+            "hostPauseSuspected": false
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "recordedCliElapsedMs": 153421,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 153433,
+                "gradingMs": 21610
+              },
+              "trialElapsedMs": 175060,
+              "toolCalls": 16,
+              "toolFailures": 1,
+              "usage": {
+                "inputTokens": 427300,
+                "outputTokens": 22847,
+                "cachedInputTokens": 394600,
+                "cacheCreationInputTokens": 32670,
+                "uncachedInputTokens": 30,
+                "totalTokens": 450147
+              },
+              "configuredTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "systemPromptMode": "default",
+              "systemPromptDigest": null,
+              "apiEquivalentCostEstimateUsd": 0.43813,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              }
+            },
+            {
+              "profile": "zero-lean-high-claude-v1",
+              "status": "passed",
+              "outcome": "passed",
+              "reason": "passed",
+              "qualityComplete": true,
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "recordedCliElapsedMs": 198095,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 198115,
+                "gradingMs": 22540
+              },
+              "trialElapsedMs": 220672,
+              "toolCalls": 16,
+              "toolFailures": 2,
+              "usage": {
+                "inputTokens": 375660,
+                "outputTokens": 24475,
+                "cachedInputTokens": 340248,
+                "cacheCreationInputTokens": 35382,
+                "uncachedInputTokens": 30,
+                "totalTokens": 400135
+              },
+              "configuredTools": "Bash,Read,Write,Edit",
+              "requestedModel": "claude-sonnet-5-5",
+              "requestedReasoning": "high",
+              "systemPromptMode": "lean-v1",
+              "systemPromptDigest": "df19c61b45a374194bf3698a223775b3a48ac3ab76b2ac28742e0f4e6151573c",
+              "apiEquivalentCostEstimateUsd": 0.45438759999999995,
+              "actualSubscriptionCostUsd": null,
+              "evaluation": {
+                "status": "passed",
+                "api": "passed",
+                "persistence": "passed",
+                "ui": "passed",
+                "failedCheck": null,
+                "cleanup": "passed"
+              }
+            }
+          ]
+        }
+      ],
+      "purpose": "screening_one_pair_not_confirmation"
     }
   ],
   "historicalFailures": "catalog/claude-cohort-live-2026-10-16.json",

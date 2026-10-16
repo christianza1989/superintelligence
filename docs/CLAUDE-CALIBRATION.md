@@ -114,3 +114,7 @@ Jev vieną kartą visai kohortai parinko vietinius keturis įrankius ir atmetė 
 Vienas frozen paruošimas kainavo 4547 ms ir 0,00013356 USD; abi sąnaudos pridėtos kandidatui vieną kartą. Ankstesni paruošimai ir diagnostika atskirai įtraukti į [bendrą kalibravimo apskaitą](../catalog/jev-preparations-2026-10-16.json): keturi API kvietimai, provider pateikta 0,000443394 USD suma, konservatyviai rezervuota 0,40 USD iš leisto 1 USD. Šio kombinuoto profilio bandymas neatskiria įrankių, konteksto ir bibliotekos individualios naudos; pilnas produkto runtime ir Auto nedalyvavo.
 
 Toliau atskirai tikrinami [lean profiliai](LEAN-CALIBRATION.md); jų sisteminės instrukcijos, įrankiai ir effort skiriasi, todėl tai visos konfigūracijos palyginimas.
+
+## Lean atranka: high
+
+Pirma iš anksto deklaruotos atrankos pora `2026-10-16T21-35-20-039Z-c59356262667`: abu variantai PASS, nepakitęs user task ir graderis, Sonnet 5.5/high. Trumpa sisteminė instrukcija ir keturi vietiniai įrankiai šioje poroje nepagerino darbo eigos: trial 175060 → 220672 ms (+26,06 %), coding 153433 → 198115 ms (+29,12 %), tokenai 450147 → 400135 (−11,11 %), CLI API kainos ekvivalentas 0,43813 → 0,4543876 USD (+3,71 %). Output padidėjo 22847 → 24475; vien mažesnė tokenų suma nėra pigesnio darbo įrodymas. Tai viena atrankos pora, ne patvirtinimo kohorta ir ne Jev/reuse poveikio matavimas. Toliau to paties protokolo medium ir low atrankos.
