@@ -95,18 +95,25 @@
   "general_winner": "not_assessed",
   "full_product_runtime_jev_auto": "NOT_RUN",
   "liveExecutionEvidence": {
-    "path": "catalog/claude-cohort-live-2026-10-16.json",
-    "repeatStatus": "completed",
-    "compactStatus": "stopped_shared_prerequisite",
-    "reason": "model_unavailable",
-    "completePairsPerMode": 0,
-    "cliInvocationAttemptsPerMode": 1,
-    "modelDispatchAttempts": null,
-    "performanceMeasured": false,
+    "historicalFailures": {
+      "path": "catalog/claude-cohort-live-2026-10-16.json",
+      "repeatStatus": "stopped_shared_prerequisite",
+      "compactStatus": "stopped_shared_prerequisite",
+      "reason": "model_unavailable",
+      "completePairsPerMode": 0,
+      "cliInvocationAttemptsPerMode": 1,
+      "performanceMeasured": false
+    },
     "latestResults": "catalog/claude-cohort-results-2026-10-16.json",
-    "repeatCompletedPairs": 3,
-    "repeatAcceptedTrials": 6,
-    "repeatCliInvocationAttempts": 6,
-    "compactPendingNewCohort": true
+    "repeat": {
+      "status": "completed",
+      "completedPairs": 3,
+      "acceptedTrials": 6,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null
+    },
+    "compact": {
+      "status": "pending_new_cohort"
+    }
   }
 }
