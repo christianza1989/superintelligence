@@ -107,7 +107,7 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
     requiredSources.push("benchmarks/sprintdesk-v1/PROMPT.v2.md");
   if ([baselineReport, candidateReport].some(r => r.profiles.some(p => p.reusePlanDigest !== undefined)))
     requiredSources.push("platform/scripts/zero-lab-reuse.mjs", "platform/scripts/zero-lab-jev.mjs");
-  if ([baselineReport, candidateReport].some(r => r.profiles.some(p => p.id?.startsWith("zero-lean-")))) requiredSources.push("platform/scripts/zero-lab-strategies.mjs");
+  if ([baselineReport, candidateReport].some(r => r.profiles.some(p => (p.id?.startsWith("zero-lean-") || p.id?.startsWith("zero-jev-http-lean-"))))) requiredSources.push("platform/scripts/zero-lab-strategies.mjs");
   // Optional browser grading must have the same implementation on both sides too.
   for (const key of new Set([...Object.keys(baselineReport.sourceDigests ?? {}), ...Object.keys(candidateReport.sourceDigests ?? {})]))
     if (["zero-lab-browser", "zero-lab-context", "zero-lab-cohort", "zero-lab-compare", "zero-lab-reuse", "zero-lab-jev", "zero-lab-strategies"].some(name => key.includes(name)) && !requiredSources.includes(key)) requiredSources.push(key);
@@ -120,7 +120,7 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
   if (!aProfile || !bProfile || aProfile.modelMode !== "fixed" || bProfile.modelMode !== "fixed" ||
       aProfile.codingModel !== bProfile.codingModel || (aProfile.reasoning !== bProfile.reasoning && !isDeclaredEffortComparison(aProfile, bProfile)) || aProfile.auth !== bProfile.auth)
     reject("fixed_model_or_reasoning_or_auth_mismatch");
-  if (bProfile?.id?.startsWith("zero-lean-") && !isDeclaredEffortComparison(aProfile, bProfile)) reject("declared_configuration_mismatch");
+  if ((bProfile?.id?.startsWith("zero-lean-") || bProfile?.id?.startsWith("zero-jev-http-lean-")) && !isDeclaredEffortComparison(aProfile, bProfile)) reject("declared_configuration_mismatch");
   if (isDeclaredEffortComparison(aProfile, bProfile)) {
     result.comparisonScope = "configured_system_including_effort";
     result.limitations.push("This declared configuration changes the system prompt, tools and optionally effort; it does not isolate repository reuse or Jev");

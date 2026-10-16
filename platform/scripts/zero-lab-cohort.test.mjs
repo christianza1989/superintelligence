@@ -4,6 +4,23 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { runLabCohort, summarizeLabCohort } from "./zero-lab-cohort.mjs";
+import { COMBINED_LEAN_PROFILES } from "./zero-lab-strategies.mjs";
+
+test("combined lower effort targets still charge all preparation and require exact prompt and tool receipts", () => {
+  const id = "zero-jev-http-lean-low-claude-v1";
+  const reports = [0,1,2].map(i => {
+    const r = jevFixture(i, 100, id), p = r.profiles.find(p => p.id === id), row = r.trials.find(t => t.strategy === id);
+    Object.assign(p, COMBINED_LEAN_PROFILES[id]);
+    Object.assign(row.generation, { requestedReasoning: "low", systemPromptMode: p.systemPromptMode, systemPromptDigest: p.systemPromptDigest });
+    r.sourceDigests["platform/scripts/zero-lab-strategies.mjs"] = pin;
+    return r;
+  });
+  const summary = summarizeLabCohort(reports, { mode: "jev-http-lean-low" });
+  assert.equal(summary.status, "comparable"); assert.equal(summary.measurements.allAttemptWorkflowMs.candidate, 400);
+  assert.equal(summary.target50Percent.preparationTimeIncluded, true);
+  reports[1].trials.find(t => t.strategy === id).generation.systemPromptDigest = pin;
+  assert.equal(summarizeLabCohort(reports, { mode: "jev-http-lean-low" }).status, "not_comparable");
+});
 
 test("each declared lean cohort is opt-in, bounded and alternates with the original baseline", async t => {
   for (const effort of ["high", "medium", "low"]) {

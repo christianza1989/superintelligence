@@ -27,6 +27,35 @@ async function fixture(t) {
   const save = () => writeFile(file, JSON.stringify(plan), { mode: 0o600 }); await save();
   return { directory, file, plan, save, match: { sourceDigests, taskDigest } };
 }
+test("combined profiles retain staged provenance and reject overriding Jev's tool decision before auth", async t => {
+  const f = await fixture(t), snapshot = await buildLabPlan({ promptVersion: 2 });
+  f.plan.sourceDigests = snapshot.sourceDigests;
+  f.plan.taskDigest = reuseHash(await readFile(new URL("../../benchmarks/sprintdesk-v1/PROMPT.v2.md", import.meta.url)));
+  f.plan.libraryPolicy = "verified-http"; await f.save();
+  let calls = 0;
+  for (const reasoning of ["high", "medium", "low"]) {
+    const { report } = await runLabExperiment({ engine: "claude", profiles: [`zero-jev-http-lean-${reasoning}-claude-v1`], promptVersion: 2,
+      artifactRoot: path.join(f.directory, reasoning), reusePlan: f.file, live: true }, {
+      preflight: async () => ({ ready: true }), invoke: async options => {
+        calls++; assert.equal(options.reasoning, reasoning); assert.equal(options.systemPromptMode, "lean-v1");
+        assert.equal(options.tools, CLAUDE_LOCAL_TOOLS);
+        assert.ok((await readFile(path.join(options.workspace, "vendor/LICENSE.hono"), "utf8")).includes("Controlled"));
+        return { status: "completed", usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } };
+      },
+    });
+    assert.equal(report.profiles[0].libraryPolicy, "verified-http"); assert.equal(report.trials[0].initialAssets.length, 4);
+    assert.equal(report.executionKind, "injected_executor_test_not_model_benchmark");
+  }
+  assert.equal(calls, 3);
+  f.plan.tools = CLAUDE_TOOLS; await f.save();
+  const check = () => runLabExperiment({ engine: "claude", profiles: ["zero-jev-http-lean-low-claude-v1"], promptVersion: 2,
+    artifactRoot: path.join(f.directory, "blocked"), reusePlan: f.file, live: true }, {
+    preflight: async () => { calls++; throw new Error("Should not authenticate"); }, invoke: async () => { calls++; },
+  });
+  await assert.rejects(check()); assert.equal(calls, 3);
+  f.plan.tools = CLAUDE_LOCAL_TOOLS; f.plan.libraryPolicy = "jev"; await f.save();
+  await assert.rejects(check()); assert.equal(calls, 3);
+});
 test("offline Jev preparation does not authenticate, build, fetch or dispatch a model", async () => {
   const original = globalThis.fetch; globalThis.fetch = () => { throw new Error("Unexpected network"); };
   try { const plan = await prepareJevLabPlan(); assert.equal(plan.status, "prepared_not_run"); assert.equal(plan.modelDispatchAttempts, 0); }

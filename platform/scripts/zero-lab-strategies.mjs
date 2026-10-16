@@ -8,10 +8,16 @@ export const LEAN_PROFILES = Object.freeze(Object.fromEntries(["high", "medium",
     tools: "Bash,Read,Write,Edit", retrieval: "none", comparisonScope: "configured_system_including_effort" }),
 ])));
 
+export const COMBINED_LEAN_PROFILES = Object.freeze(Object.fromEntries(Object.values(LEAN_PROFILES).map(profile => [
+  `zero-jev-http-lean-${profile.reasoning}-claude-v1`, Object.freeze({ ...profile, retrieval: "jev-reuse-v1", libraryPolicy: "verified-http" }),
+])));
+const declaredProfiles = { ...LEAN_PROFILES, ...COMBINED_LEAN_PROFILES };
+
 /** A different effort is allowed only for a named, fully recorded experiment. */
 export function isDeclaredEffortComparison(baseline, candidate) {
-  const expected = candidate && Object.hasOwn(LEAN_PROFILES, candidate.id) ? LEAN_PROFILES[candidate.id] : null;
+  const expected = candidate && Object.hasOwn(declaredProfiles, candidate.id) ? declaredProfiles[candidate.id] : null;
   return Boolean(expected && baseline?.id === "claude-fixed-v1" && baseline.reasoning === "high" &&
+    (!Object.hasOwn(COMBINED_LEAN_PROFILES, candidate.id) || /^[a-f0-9]{64}$/.test(candidate.reusePlanDigest ?? "")) &&
     baseline.codingModel === "claude-sonnet-5-5" && candidate.codingModel === baseline.codingModel &&
     baseline.auth === "claude-cli-subscription" && candidate.auth === baseline.auth &&
     Object.entries(expected).every(([key, value]) => candidate[key] === value));

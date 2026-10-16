@@ -9,6 +9,9 @@ import { compareLabExperiments } from "./zero-lab-compare.mjs";
 import { runLabExperiment } from "./zero-lab-run.mjs";
 
 const modes = {
+  "jev-http-lean-high": ["claude-fixed-v1", "zero-jev-http-lean-high-claude-v1"],
+  "jev-http-lean-medium": ["claude-fixed-v1", "zero-jev-http-lean-medium-claude-v1"],
+  "jev-http-lean-low": ["claude-fixed-v1", "zero-jev-http-lean-low-claude-v1"],
   "lean-high": ["claude-fixed-v1", "zero-lean-high-claude-v1"],
   "lean-medium": ["claude-fixed-v1", "zero-lean-medium-claude-v1"],
   "lean-low": ["claude-fixed-v1", "zero-lean-low-claude-v1"],
@@ -114,7 +117,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
     result.limitations.push("The 50 percent API-equivalent target uses CLI estimates and any reported routing cost; actual subscription savings remain unknown");
     if (mode.startsWith("jev")) result.limitations.push("One frozen preparation is charged in full to the candidate cohort, without pretending it ran independently for each pair",
       "The combined source/tool/library profile does not isolate Jev's causal contribution");
-    if (mode.startsWith("lean-")) result.limitations.push("This named configuration changes system prompt, tools and optionally effort; no isolated Jev or source-reuse effect is measured");
+    if (mode.includes("lean-")) result.limitations.push("This named configuration changes system prompt, tools and optionally effort; no isolated Jev or source-reuse effect is measured");
   }
   return result;
 }

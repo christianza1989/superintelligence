@@ -16,7 +16,7 @@ import { buildLabPlan } from "./zero-lab-config.mjs";
 import { buildCompactRepositoryContext } from "./zero-lab-context.mjs";
 import { loadLabReusePlan, stageLabReusePlan } from "./zero-lab-reuse.mjs";
 
-import { LEAN_PROFILES } from "./zero-lab-strategies.mjs";
+import { LEAN_PROFILES, COMBINED_LEAN_PROFILES } from "./zero-lab-strategies.mjs";
 
 const root = new URL("../../", import.meta.url);
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
@@ -32,7 +32,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
   dependencies = { ...dependencies };
   const engineName = options.engine ?? "codex";
   if (!Object.hasOwn(engines, engineName)) throw new Error("Unsupported coding CLI engine.");
-  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1", ...Object.keys(LEAN_PROFILES)] : [])]);
+  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1", ...Object.keys(LEAN_PROFILES), ...Object.keys(COMBINED_LEAN_PROFILES)] : [])]);
   const ids = options.profiles ?? [...engine.ids];
   if (
     !Array.isArray(ids) ||
@@ -47,11 +47,13 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     );
   const plan = await buildLabPlan({ promptVersion: options.promptVersion });
   const task = await readFile(new URL(plan.taskPromptPath, root), "utf8");
-  const isReuse = id => ["zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1"].includes(id);
+  const isReuse = id => ["zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1"].includes(id) || Object.hasOwn(COMBINED_LEAN_PROFILES, id);
   const reuse = ids.some(isReuse)
     ? await loadLabReusePlan(options.reusePlan, { taskDigest: sha256(task), sourceDigests: plan.sourceDigests }) : null;
-  if (reuse && ids.some(id => isReuse(id) && ((id === "zero-jev-http-claude-v1") !== (reuse.plan.libraryPolicy === "verified-http"))))
+  if (reuse && ids.some(id => isReuse(id) && (id.startsWith("zero-jev-http-") !== (reuse.plan.libraryPolicy === "verified-http"))))
     throw new Error("Profile and frozen library selection policy differ.");
+  if (reuse && ids.some(id => Object.hasOwn(COMBINED_LEAN_PROFILES, id)) && reuse.plan.tools !== "Bash,Read,Write,Edit")
+    throw new Error("Combined lean profile requires a Jev plan selecting local tools; no override is permitted.");
   const sourceSnapshotMatches = async () => {
     const current = await buildLabPlan({ promptVersion: options.promptVersion });
     return JSON.stringify(current.sourceDigests) === JSON.stringify(options.frozenSourceDigests ?? plan.sourceDigests);
@@ -60,6 +62,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     ...plan.config.profiles.find(p => p.id === (id === "claude-fixed-v1" ? "codex-fixed-v1" : "zero-retrieval-v1")),
     id, codingModel: CLAUDE_MODEL, reasoning: CLAUDE_REASONING, auth: "claude-cli-subscription",
     ...(Object.hasOwn(LEAN_PROFILES, id) ? LEAN_PROFILES[id] : {}),
+    ...(Object.hasOwn(COMBINED_LEAN_PROFILES, id) ? COMBINED_LEAN_PROFILES[id] : {}),
     ...(id === "zero-compact-claude-v1" ? { retrieval: "catalog-compact-v2" } : {}),
     ...(isReuse(id) ? { retrieval: "jev-reuse-v1", reusePlanDigest: reuse.digest, tools: reuse.plan.tools, libraryPolicy: reuse.plan.libraryPolicy ?? "jev" } : {}),
   });
