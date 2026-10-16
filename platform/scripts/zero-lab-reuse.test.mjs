@@ -64,6 +64,11 @@ test("the real experiment stages the frozen library and passes selected tools be
   });
   assert.equal(invoked, 1); assert.equal(result.report.executionKind, "injected_executor_test_not_model_benchmark");
   assert.equal(result.report.trials[0].initialAssets.length, 4); assert.equal(result.report.reusePreparation.digest, reuseHash(await readFile(f.file)));
+  f.plan.libraryPolicy = "verified-http"; await f.save();
+  await assert.rejects(runLabExperiment({ engine: "claude", profiles: ["zero-jev-reuse-claude-v1"], promptVersion: 2, artifactRoot: path.join(f.directory,"wrong"), reusePlan: f.file }));
+  const http = await runLabExperiment({ engine: "claude", profiles: ["zero-jev-http-claude-v1"], promptVersion: 2, artifactRoot: path.join(f.directory,"http"), reusePlan: f.file });
+  assert.equal(http.report.status, "prepared_not_run"); assert.equal(http.report.cliInvocationAttempts, 0);
+  assert.equal(http.report.profiles[0].libraryPolicy, "verified-http");
 });
 test("changed task, trusted source, context, tools or source pin blocks a plan before staging", async t => {
   const f = await fixture(t);
@@ -92,6 +97,10 @@ test("uncertain source decisions are omitted, full tools remain the fallback and
   assert.equal(selected.selectedSources, 1); assert.equal(selected.librarySelected, false); assert.deepEqual(selected.assets, []); assert.equal(selected.tools, CLAUDE_TOOLS);
   const enabled = selectJevLabContext(sources, { http_library: { type: "noul", noul: 0.9 }, tools: { type: "choice", choice: "local" } }, library);
   assert.equal(enabled.librarySelected, true); assert.equal(enabled.tools, CLAUDE_LOCAL_TOOLS);
+  const fixed = selectJevLabContext(sources, { http_library: { type: "noul", noul: 0.69 } }, library, { libraryPolicy: "verified-http" });
+  assert.equal(fixed.librarySelected, true); assert.equal(fixed.libraryPolicy, "verified-http");
+  assert.ok(fixed.context.includes("operator_selected_verified_foundation_not_Jev_choice"));
+  assert.throws(() => selectJevLabContext(sources, {}, library, { libraryPolicy: "unknown" }));
 });
 test("library execution failure survives successful cleanup, and unverified cleanup prevents a pass", async () => {
   const missing = () => Object.assign(new Error("Controlled missing object"), { stderr: "No such object" });

@@ -43,8 +43,8 @@ async function temporary(t) {
   t.after(() => rm(artifactRoot, { recursive: true, force: true })); return artifactRoot;
 }
 
-function jevFixture(index, preparationMs = 100) {
-  const report = fixture(index), candidate = "zero-jev-reuse-claude-v1";
+function jevFixture(index, preparationMs = 100, candidate = "zero-jev-reuse-claude-v1") {
+  const report = fixture(index);
   for (const profile of report.profiles) if (profile.id === ids[1]) {
     profile.id = candidate; profile.tools = "Bash,Read,Write,Edit"; profile.reusePlanDigest = pin;
   }
@@ -70,6 +70,8 @@ test("Jev's 50 percent target charges the frozen preparation once and keeps subs
   assert.equal(result.target50Percent.actualSubscriptionCostReductionReached, null);
   const expensive = summarizeLabCohort([jevFixture(0, 800), jevFixture(1, 800), jevFixture(2, 800)], { mode: "jev" });
   assert.equal(expensive.target50Percent.workflowTimeReductionReached, false);
+  const http = summarizeLabCohort([0,1,2].map(i => jevFixture(i, 100, "zero-jev-http-claude-v1")), { mode: "jev-http" });
+  assert.equal(http.status, "comparable"); assert.equal(http.target50Percent.workflowTimeReductionReached, true);
 });
 test("missing Jev preparation, inconsistent tool receipts or changed plans cannot establish a target result", () => {
   for (const mutate of [r => { r[0].reusePreparation = null; }, r => { r[1].reusePreparation.digest = "d".repeat(64); },

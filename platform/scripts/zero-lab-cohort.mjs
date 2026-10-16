@@ -12,6 +12,7 @@ const modes = {
   repeat: ["claude-fixed-v1", "zero-retrieval-claude-v1"],
   compact: ["zero-retrieval-claude-v1", "zero-compact-claude-v1"],
   jev: ["claude-fixed-v1", "zero-jev-reuse-claude-v1"],
+  "jev-http": ["claude-fixed-v1", "zero-jev-http-claude-v1"],
 };
 const canonical = value => JSON.stringify(value, (_, item) => item && typeof item === "object" && !Array.isArray(item)
   ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b))) : item);
@@ -55,7 +56,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
   if (reports.some(r => typeof r?.runId !== "string" || !r.runId || r.runId.length > 100) || new Set(reports.map(r => r.runId)).size !== reports.length)
     result.reasons.push("duplicate_or_missing_run_identity");
   const first = reports[0];
-  if (mode === "jev") result.preparation = first.reusePreparation ?? null;
+  if (mode.startsWith("jev")) result.preparation = first.reusePreparation ?? null;
   const rows = { baseline: [], candidate: [] };
   for (let index = 0; index < reports.length; index++) {
     const report = reports[index];
@@ -90,7 +91,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
     gradingMedianMs: delta(median(rows.baseline.map(r => timing(r, "grading"))), median(rows.candidate.map(r => timing(r, "grading")))),
     allAttemptTotalTokens: delta(result.usage.baselineTokens, result.usage.candidateTokens),
   };
-  if (mode === "jev") {
+  if (mode.startsWith("jev")) {
     const preparation = first.reusePreparation;
     if (!preparation || !count(preparation.elapsedMs) || preparation.api?.status !== "answered" ||
         preparation.api.modelDispatchAttempts !== 1 || reports.some(r => r.reusePreparation?.digest !== preparation.digest)) {
@@ -117,7 +118,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
 export async function runLabCohort(options = {}, deps = {}) {
   const mode = options.mode ?? "repeat", pairs = options.pairs ?? 3;
   if (!Object.hasOwn(modes, mode) || !Number.isSafeInteger(pairs) || pairs < 1 || pairs > 3 ||
-      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact/jev and one to three pairs.");
+      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact/jev/jev-http and one to three pairs.");
   const artifactRoot = options.artifactRoot ?? fileURLToPath(new URL("../../.artifacts/zero-lab/cohorts/", import.meta.url));
   if (typeof artifactRoot !== "string" || !path.isAbsolute(artifactRoot)) throw new Error("Cohort artifact root must be absolute.");
   const getPlan = deps.getPlan ?? (() => buildLabPlan({ promptVersion: 2 }));

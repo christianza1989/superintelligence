@@ -7,12 +7,12 @@ import { parseArgs } from "node:util";
 import { requestSystemOneDecision } from "../packages/adapters/src/zero-systemone.ts";
 import { repositorySearchFromTool } from "../packages/adapters/src/zero-repository-tools.ts";
 import { buildLabPlan } from "./zero-lab-config.mjs";
-import { CLAUDE_TOOLS } from "./zero-claude-cli.mjs";
+import { CLAUDE_LOCAL_TOOLS, CLAUDE_TOOLS } from "./zero-claude-cli.mjs";
 import { SPRINTDESK_IMAGE } from "./zero-lab-evaluate.mjs";
 import { HTTP_LIBRARY_SOURCES, REUSE_LIBRARY_GUIDANCE, prepareHttpReuseLibrary, reuseHash } from "./zero-lab-reuse.mjs";
 
 export const JEV_LAB_MODEL = "typesafe/jev-1.13";
-export const LOCAL_CODING_TOOLS = "Bash,Read,Write,Edit";
+export const LOCAL_CODING_TOOLS = CLAUDE_LOCAL_TOOLS;
 const root = new URL("../../", import.meta.url);
 const canonical = value => JSON.stringify(value);
 
@@ -45,18 +45,21 @@ export async function withJevLabBudget(file, operation) {
   } finally { await lock.close(); await unlink(file + ".lock"); }
 }
 
-export function selectJevLabContext(discovery, answers, library) {
+export function selectJevLabContext(discovery, answers, library, { libraryPolicy = "jev" } = {}) {
+  if (!["jev", "verified-http"].includes(libraryPolicy)) throw new Error("Unknown library policy.");
   const selected = discovery.filter((_, index) => answers["source" + index]?.type === "noul" && answers["source" + index].noul >= 0.7);
-  const useLibrary = answers.http_library?.type === "noul" && answers.http_library.noul >= 0.7;
+  const useLibrary = libraryPolicy === "verified-http" || (answers.http_library?.type === "noul" && answers.http_library.noul >= 0.7);
   const tools = answers.tools?.type === "choice" && answers.tools.choice === "local" ? LOCAL_CODING_TOOLS : CLAUDE_TOOLS;
   const payload = { scope: "SOURCE_ONLY_NOT_INSTALL_PERMISSION", untrusted: true,
     selection: "Jev_noul_at_least_0.7_experimental_not_calibrated_confidence", sources: selected,
-    library: useLibrary ? { guidance: REUSE_LIBRARY_GUIDANCE, sources: HTTP_LIBRARY_SOURCES, verification: library.verification, scope: library.scope } : null,
+    library: useLibrary ? { guidance: REUSE_LIBRARY_GUIDANCE, sources: HTTP_LIBRARY_SOURCES, verification: library.verification, scope: library.scope,
+      selectionOrigin: libraryPolicy === "verified-http" ? "operator_selected_verified_foundation_not_Jev_choice" : "Jev_advisory_threshold" } : null,
     limits: "Source claims are not app quality evidence. Preserve notices and verify the completed application." };
-  return { context: JSON.stringify(payload), tools, assets: useLibrary ? library.assets : [], selectedSources: selected.length, librarySelected: useLibrary };
+  return { context: JSON.stringify(payload), tools, assets: useLibrary ? library.assets : [], selectedSources: selected.length, librarySelected: useLibrary, libraryPolicy };
 }
 
 export async function prepareJevLabPlan(options = {}) {
+  if (!["jev", "verified-http"].includes(options.libraryPolicy ?? "jev")) throw new Error("Unknown library policy.");
   const snapshot = await buildLabPlan({ promptVersion: 2 });
   if (options.live !== true) return { status: "prepared_not_run", modelDispatchAttempts: 0, sourceDigests: snapshot.sourceDigests };
   const connection = options.connection;
@@ -102,7 +105,7 @@ export async function prepareJevLabPlan(options = {}) {
       provider: decision.provider ?? null, usage: decision.usage ?? null, actualCostUsd: decision.usage?.cost ?? null,
       answers: decision.answers ?? null, reservedBudgetUsd: budget.reservedBudgetUsd };
     if (decision.status !== "answered" || ![JEV_LAB_MODEL, "typesafe/jev-1.13-20260917"].includes(decision.model)) throw new Error("Jev preparation unavailable.");
-    Object.assign(report, selectJevLabContext(discovery, decision.answers, library));
+    Object.assign(report, selectJevLabContext(discovery, decision.answers, library, { libraryPolicy: options.libraryPolicy }));
     report.contextDigest = reuseHash(report.context);
     if (canonical((await buildLabPlan({ promptVersion: 2 })).sourceDigests) !== canonical(snapshot.sourceDigests)) throw new Error("Sources changed during preparation.");
     report.status = "ready";
@@ -121,9 +124,9 @@ async function readConnectionStdin() {
   return JSON.parse(Buffer.concat(chunks).toString("utf8"));
 }
 async function main() {
-  const { values } = parseArgs({ options: { live: { type: "boolean", default: false }, "connection-stdin": { type: "boolean", default: false }, "budget-ledger": { type: "string" } } });
+  const { values } = parseArgs({ options: { live: { type: "boolean", default: false }, "connection-stdin": { type: "boolean", default: false }, "budget-ledger": { type: "string" }, library: { type: "string", default: "jev" } } });
   if (values.live && !values["connection-stdin"]) throw new Error("Explicit private connection stdin required.");
-  const result = await prepareJevLabPlan({ live: values.live, connection: values.live ? await readConnectionStdin() : undefined, budgetLedger: values["budget-ledger"] });
+  const result = await prepareJevLabPlan({ live: values.live, connection: values.live ? await readConnectionStdin() : undefined, budgetLedger: values["budget-ledger"] , libraryPolicy: values.library });
   if (!values.live) { console.log(JSON.stringify(result)); return; }
   console.log(JSON.stringify({ status: result.report.status, plan: path.relative(fileURLToPath(root), path.join(result.directory, "plan.json")),
     elapsedMs: result.report.elapsedMs, api: { status: result.report.api.status, modelDispatchAttempts: result.report.api.modelDispatchAttempts, actualCostUsd: result.report.api.actualCostUsd } }));

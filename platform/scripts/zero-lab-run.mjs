@@ -30,7 +30,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
   dependencies = { ...dependencies };
   const engineName = options.engine ?? "codex";
   if (!Object.hasOwn(engines, engineName)) throw new Error("Unsupported coding CLI engine.");
-  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1"] : [])]);
+  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1"] : [])]);
   const ids = options.profiles ?? [...engine.ids];
   if (
     !Array.isArray(ids) ||
@@ -45,8 +45,11 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     );
   const plan = await buildLabPlan({ promptVersion: options.promptVersion });
   const task = await readFile(new URL(plan.taskPromptPath, root), "utf8");
-  const reuse = ids.includes("zero-jev-reuse-claude-v1")
+  const isReuse = id => ["zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1"].includes(id);
+  const reuse = ids.some(isReuse)
     ? await loadLabReusePlan(options.reusePlan, { taskDigest: sha256(task), sourceDigests: plan.sourceDigests }) : null;
+  if (reuse && ids.some(id => isReuse(id) && ((id === "zero-jev-http-claude-v1") !== (reuse.plan.libraryPolicy === "verified-http"))))
+    throw new Error("Profile and frozen library selection policy differ.");
   const sourceSnapshotMatches = async () => {
     const current = await buildLabPlan({ promptVersion: options.promptVersion });
     return JSON.stringify(current.sourceDigests) === JSON.stringify(options.frozenSourceDigests ?? plan.sourceDigests);
@@ -55,7 +58,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     ...plan.config.profiles.find(p => p.id === (id === "claude-fixed-v1" ? "codex-fixed-v1" : "zero-retrieval-v1")),
     id, codingModel: CLAUDE_MODEL, reasoning: CLAUDE_REASONING, auth: "claude-cli-subscription",
     ...(id === "zero-compact-claude-v1" ? { retrieval: "catalog-compact-v2" } : {}),
-    ...(id === "zero-jev-reuse-claude-v1" ? { retrieval: "jev-reuse-v1", reusePlanDigest: reuse.digest, tools: reuse.plan.tools } : {}),
+    ...(isReuse(id) ? { retrieval: "jev-reuse-v1", reusePlanDigest: reuse.digest, tools: reuse.plan.tools, libraryPolicy: reuse.plan.libraryPolicy ?? "jev" } : {}),
   });
   if (plan.config.controls.trials * profiles.length > 8)
     throw new Error("The first runner permits at most eight coding invocations per experiment.");
@@ -88,7 +91,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     modelDispatchAttempts: 0,
     cliInvocationAttempts: 0,
     reusePreparation: reuse ? { digest: reuse.digest, elapsedMs: reuse.plan.elapsedMs, api: reuse.plan.api,
-      librarySelected: reuse.plan.librarySelected, library: reuse.plan.library, selectedSources: reuse.plan.selectedSources } : null,
+      librarySelected: reuse.plan.librarySelected, libraryPolicy: reuse.plan.libraryPolicy ?? "jev", library: reuse.plan.library, selectedSources: reuse.plan.selectedSources } : null,
     preflight: null,
     evaluationPreflight: null,
     sourceIntegrity: { status: "not_checked", checks: 0 },
@@ -270,7 +273,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
     trial.workspace = path.join("workspaces", workspaceName);
     trial.reason = null;
     const trialStarted = performance.now();
-    if (trial.strategy === "zero-jev-reuse-claude-v1") {
+    if (isReuse(trial.strategy)) {
       const stagingStarted = performance.now();
       await stageLabReusePlan(reuse, workspace);
       trial.timings.stagingMs = Math.round(performance.now() - stagingStarted);

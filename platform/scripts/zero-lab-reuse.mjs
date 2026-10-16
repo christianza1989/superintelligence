@@ -37,6 +37,7 @@ export async function loadLabReusePlan(file, { taskDigest, sourceDigests } = {})
       !["Bash,Read,Write,Edit", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"].includes(plan.tools) ||
       typeof plan.context !== "string" || Buffer.byteLength(plan.context) > 8192 || !digest(plan.contextDigest) || reuseHash(plan.context) !== plan.contextDigest ||
       !Number.isSafeInteger(plan.elapsedMs) || plan.elapsedMs < 0 || plan.api?.status !== "answered" ||
+      !["jev", "verified-http"].includes(plan.libraryPolicy ?? "jev") ||
       plan.api.model !== "typesafe/jev-1.13" || plan.api.modelDispatchAttempts !== 1 ||
       !Array.isArray(plan.assets) || plan.assets.length > 4 || new Set(plan.assets.map(a => a.name)).size !== plan.assets.length)
     throw new Error("Reuse plan does not match the frozen task, sources or bounded contract.");
@@ -51,6 +52,7 @@ export async function loadLabReusePlan(file, { taskDigest, sourceDigests } = {})
     assets.push({ name: asset.name, data });
   }
   if (typeof plan.librarySelected !== "boolean" || plan.librarySelected !== (plan.assets.length === 4) ||
+      (plan.libraryPolicy === "verified-http" && !plan.librarySelected) ||
       (plan.assets.length && (plan.assets.length !== allowedNames.size || ![...allowedNames].every(name => plan.assets.some(a => a.name === name)) ||
       plan.library?.verification !== "passed" || JSON.stringify(plan.library?.sources) !== JSON.stringify(HTTP_LIBRARY_SOURCES))))
     throw new Error("Unverified reuse library.");
