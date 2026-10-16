@@ -4,6 +4,24 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { compareLabExperiments, readLabReport } from "./zero-lab-compare.mjs";
+import { LEAN_PROFILES } from "./zero-lab-strategies.mjs";
+
+test("different effort is comparable only for a fully declared configuration with matching adapter receipt", () => {
+  const report = fixture(), candidate = "zero-lean-medium-claude-v1", baseline = "claude-fixed-v1";
+  report.executionKind = "claude_cli";
+  report.sourceDigests["platform/scripts/zero-claude-cli.mjs"] = pin;
+  report.sourceDigests["platform/scripts/zero-lab-strategies.mjs"] = pin;
+  report.profiles.forEach((p, i) => Object.assign(p, { id: i ? candidate : baseline, codingModel: "claude-sonnet-5-5", auth: "claude-cli-subscription", reasoning: "high" }, i ? LEAN_PROFILES[candidate] : {}));
+  report.trials.forEach((r, i) => { r.strategy = i ? candidate : baseline; Object.assign(r.generation, { requestedModel: "claude-sonnet-5-5", requestedReasoning: i ? "medium" : "high", actualModel: "claude-sonnet-5-5" }, i ? { enabledTools: LEAN_PROFILES[candidate].tools, systemPromptMode: "lean-v1", systemPromptDigest: LEAN_PROFILES[candidate].systemPromptDigest } : {}); });
+  const compare = () => compareLabExperiments(report, report, { baselineProfile: baseline, candidateProfile: candidate });
+  assert.equal(compare().status, "comparable"); assert.equal(compare().comparisonScope, "configured_system_including_effort");
+  const good = structuredClone(report);
+  for (const mutate of [r => { r.profiles[1].systemPromptDigest = pin; }, r => { r.trials[1].generation.systemPromptDigest = pin; },
+    r => { r.profiles[1].reasoning = "low"; }, r => { delete r.sourceDigests["platform/scripts/zero-lab-strategies.mjs"]; },
+    r => { r.timingIntegrity = { status: "clock_discontinuity" }; }]) {
+    Object.assign(report, structuredClone(good)); mutate(report); assert.equal(compare().status, "not_comparable");
+  }
+});
 
 const a = "codex-fixed-v1", b = "zero-retrieval-v1", pin = "a".repeat(64);
 function fixture() {

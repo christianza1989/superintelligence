@@ -5,6 +5,16 @@ import path from "node:path";
 import { test } from "node:test";
 import { runLabCohort, summarizeLabCohort } from "./zero-lab-cohort.mjs";
 
+test("each declared lean cohort is opt-in, bounded and alternates with the original baseline", async t => {
+  for (const effort of ["high", "medium", "low"]) {
+    const ids = ["claude-fixed-v1", `zero-lean-${effort}-claude-v1`];
+    const { report } = await runLabCohort({ mode: `lean-${effort}`, artifactRoot: await temporary(t) });
+    assert.deepEqual(report.members.map(m => m.profiles), [ids, [...ids].reverse(), ids]);
+    assert.equal(report.cliInvocationAttempts, 0); assert.equal(report.maximumCodingSessions, 6);
+    assert.equal(report.summary.target50Percent, undefined);
+  }
+});
+
 const ids = ["claude-fixed-v1", "zero-retrieval-claude-v1"], pin = "a".repeat(64);
 const commonSources = ["benchmarks/sprintdesk-v1/PROMPT.md", "benchmarks/sprintdesk-v1/PROMPT.v2.md", "benchmarks/sprintdesk-v1/acceptance.mjs",
   "platform/scripts/zero-lab-evaluate.mjs", "platform/scripts/zero-codex-cli.mjs", "platform/scripts/zero-claude-cli.mjs",

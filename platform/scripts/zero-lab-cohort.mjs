@@ -9,6 +9,9 @@ import { compareLabExperiments } from "./zero-lab-compare.mjs";
 import { runLabExperiment } from "./zero-lab-run.mjs";
 
 const modes = {
+  "lean-high": ["claude-fixed-v1", "zero-lean-high-claude-v1"],
+  "lean-medium": ["claude-fixed-v1", "zero-lean-medium-claude-v1"],
+  "lean-low": ["claude-fixed-v1", "zero-lean-low-claude-v1"],
   repeat: ["claude-fixed-v1", "zero-retrieval-claude-v1"],
   compact: ["zero-retrieval-claude-v1", "zero-compact-claude-v1"],
   jev: ["claude-fixed-v1", "zero-jev-reuse-claude-v1"],
@@ -91,26 +94,27 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
     gradingMedianMs: delta(median(rows.baseline.map(r => timing(r, "grading"))), median(rows.candidate.map(r => timing(r, "grading")))),
     allAttemptTotalTokens: delta(result.usage.baselineTokens, result.usage.candidateTokens),
   };
-  if (mode.startsWith("jev")) {
+  {
     const preparation = first.reusePreparation;
-    if (!preparation || !count(preparation.elapsedMs) || preparation.api?.status !== "answered" ||
-        preparation.api.modelDispatchAttempts !== 1 || reports.some(r => r.reusePreparation?.digest !== preparation.digest)) {
+    if (mode.startsWith("jev") && (!preparation || !count(preparation.elapsedMs) || preparation.api?.status !== "answered" ||
+        preparation.api.modelDispatchAttempts !== 1 || reports.some(r => r.reusePreparation?.digest !== preparation.digest))) {
       result.status = "not_comparable"; result.reasons.push("missing_or_changed_jev_preparation"); result.measurements = null; return result;
     }
     const candidateElapsed = total(rows.candidate, "latencyMs");
-    result.measurements.allAttemptWorkflowMs = delta(total(rows.baseline, "latencyMs"), candidateElapsed === null ? null : candidateElapsed + preparation.elapsedMs);
+    result.measurements.allAttemptWorkflowMs = delta(total(rows.baseline, "latencyMs"), candidateElapsed === null ? null : candidateElapsed + (mode.startsWith("jev") ? preparation.elapsedMs : 0));
     const estimate = trials => trials.every(r => typeof r.generation?.apiEquivalentCostEstimateUsd === "number" && Number.isFinite(r.generation.apiEquivalentCostEstimateUsd) && r.generation.apiEquivalentCostEstimateUsd >= 0)
       ? trials.reduce((n,r) => n + r.generation.apiEquivalentCostEstimateUsd, 0) : null;
-    const baseEstimate = estimate(rows.baseline), candidateEstimate = estimate(rows.candidate), routingCost = preparation.api.actualCostUsd;
+    const baseEstimate = estimate(rows.baseline), candidateEstimate = estimate(rows.candidate), routingCost = mode.startsWith("jev") ? preparation.api.actualCostUsd : 0;
     result.measurements.estimatedApiEquivalentCostUsd = delta(baseEstimate,
       candidateEstimate !== null && typeof routingCost === "number" && Number.isFinite(routingCost) && routingCost >= 0 ? candidateEstimate + routingCost : null);
-    result.target50Percent = { scope: "same_task_calibration_all_planned_trials_passed", preparationTimeIncluded: true,
+    result.target50Percent = { scope: "same_task_calibration_all_planned_trials_passed", preparationTimeIncluded: mode.startsWith("jev"),
       workflowTimeReductionReached: result.measurements.allAttemptWorkflowMs.relativeChangePercent === null ? null : result.measurements.allAttemptWorkflowMs.relativeChangePercent <= -50,
       estimatedApiEquivalentReductionReached: result.measurements.estimatedApiEquivalentCostUsd.relativeChangePercent === null ? null : result.measurements.estimatedApiEquivalentCostUsd.relativeChangePercent <= -50,
       actualSubscriptionCostReductionReached: null };
-    result.limitations.push("The 50 percent API-equivalent target uses CLI estimates plus reported Jev cost; actual subscription savings remain unknown",
-      "One frozen preparation is charged in full to the candidate cohort, without pretending it ran independently for each pair",
+    result.limitations.push("The 50 percent API-equivalent target uses CLI estimates and any reported routing cost; actual subscription savings remain unknown");
+    if (mode.startsWith("jev")) result.limitations.push("One frozen preparation is charged in full to the candidate cohort, without pretending it ran independently for each pair",
       "The combined source/tool/library profile does not isolate Jev's causal contribution");
+    if (mode.startsWith("lean-")) result.limitations.push("This named configuration changes system prompt, tools and optionally effort; no isolated Jev or source-reuse effect is measured");
   }
   return result;
 }
@@ -118,7 +122,7 @@ export function summarizeLabCohort(reports, { mode = "repeat", expectedPairs = 3
 export async function runLabCohort(options = {}, deps = {}) {
   const mode = options.mode ?? "repeat", pairs = options.pairs ?? 3;
   if (!Object.hasOwn(modes, mode) || !Number.isSafeInteger(pairs) || pairs < 1 || pairs > 3 ||
-      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact/jev/jev-http and one to three pairs.");
+      (options.live !== undefined && typeof options.live !== "boolean")) throw new Error("Choose repeat/compact/jev/jev-http/lean-high/lean-medium/lean-low and one to three pairs.");
   const artifactRoot = options.artifactRoot ?? fileURLToPath(new URL("../../.artifacts/zero-lab/cohorts/", import.meta.url));
   if (typeof artifactRoot !== "string" || !path.isAbsolute(artifactRoot)) throw new Error("Cohort artifact root must be absolute.");
   const getPlan = deps.getPlan ?? (() => buildLabPlan({ promptVersion: 2 }));

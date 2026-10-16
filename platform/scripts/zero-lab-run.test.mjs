@@ -4,6 +4,24 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, test } from "node:test";
 import { runLabExperiment } from "./zero-lab-run.mjs";
+import { LEAN_SYSTEM_PROMPT_DIGEST } from "./zero-lab-strategies.mjs";
+
+test("declared lean candidates keep the exact user task, baseline prompt and correct adapter configuration", async () => {
+  const original = await runLabExperiment({ artifactRoot, engine: "claude", promptVersion: 2 });
+  for (const reasoning of ["high", "medium", "low"]) {
+    const requests = [], id = `zero-lean-${reasoning}-claude-v1`;
+    const { report } = await runLabExperiment({ artifactRoot, engine: "claude", promptVersion: 2, profiles: ["claude-fixed-v1", id], live: true }, {
+      preflight: ready, invoke: async request => { requests.push(request); return generated(); },
+    });
+    assert.equal(report.trials[0].promptDigest, original.report.trials[0].promptDigest);
+    assert.equal(report.trials[0].taskDigest, report.trials[1].taskDigest);
+    assert.equal(report.trials[1].contextBytes, 0);
+    assert.equal(report.profiles[1].systemPromptDigest, LEAN_SYSTEM_PROMPT_DIGEST);
+    assert.equal(requests[0].systemPromptMode, undefined); assert.equal(requests[0].reasoning, "high");
+    assert.equal(requests[1].systemPromptMode, "lean-v1"); assert.equal(requests[1].reasoning, reasoning);
+    assert.equal(requests[1].tools, "Bash,Read,Write,Edit"); assert.equal(report.timingIntegrity.status, "passed");
+  }
+});
 
 let artifactRoot;
 before(async () => {

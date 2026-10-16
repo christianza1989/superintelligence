@@ -1,4 +1,5 @@
 /** Read-only comparison of recorded experiments. Never invokes a model or promotes a profile. */
+import { isDeclaredEffortComparison } from "./zero-lab-strategies.mjs";
 import { constants } from "node:fs";
 import { mkdir, open, rename, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
@@ -77,6 +78,7 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
     }
     if (!["codex_cli", "claude_cli"].includes(report.executionKind)) reject("injected_execution_is_not_a_model_benchmark");
     if (report.liveRequested !== true) reject("experiment_not_live");
+    if (report.timingIntegrity !== undefined && report.timingIntegrity?.status !== "passed") reject("timing_clock_discontinuity");
     if (report.sourceIntegrity !== undefined && report.sourceIntegrity?.status !== "passed") reject("source_integrity_not_verified");
   }
   if (baselineReport.executionKind !== candidateReport.executionKind) reject("coding_cli_engine_mismatch");
@@ -105,9 +107,10 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
     requiredSources.push("benchmarks/sprintdesk-v1/PROMPT.v2.md");
   if ([baselineReport, candidateReport].some(r => r.profiles.some(p => p.reusePlanDigest !== undefined)))
     requiredSources.push("platform/scripts/zero-lab-reuse.mjs", "platform/scripts/zero-lab-jev.mjs");
+  if ([baselineReport, candidateReport].some(r => r.profiles.some(p => p.id?.startsWith("zero-lean-")))) requiredSources.push("platform/scripts/zero-lab-strategies.mjs");
   // Optional browser grading must have the same implementation on both sides too.
   for (const key of new Set([...Object.keys(baselineReport.sourceDigests ?? {}), ...Object.keys(candidateReport.sourceDigests ?? {})]))
-    if (["zero-lab-browser", "zero-lab-context", "zero-lab-cohort", "zero-lab-compare", "zero-lab-reuse", "zero-lab-jev"].some(name => key.includes(name)) && !requiredSources.includes(key)) requiredSources.push(key);
+    if (["zero-lab-browser", "zero-lab-context", "zero-lab-cohort", "zero-lab-compare", "zero-lab-reuse", "zero-lab-jev", "zero-lab-strategies"].some(name => key.includes(name)) && !requiredSources.includes(key)) requiredSources.push(key);
   for (const source of requiredSources) {
     const a = baselineReport.sourceDigests?.[source], b = candidateReport.sourceDigests?.[source];
     if (!digest(a) || !digest(b) || a !== b) reject("task_grader_or_cli_source_mismatch");
@@ -115,8 +118,13 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
   const aProfile = baselineReport.profiles.find((p) => p.id === baselineId);
   const bProfile = candidateReport.profiles.find((p) => p.id === candidateId);
   if (!aProfile || !bProfile || aProfile.modelMode !== "fixed" || bProfile.modelMode !== "fixed" ||
-      aProfile.codingModel !== bProfile.codingModel || aProfile.reasoning !== bProfile.reasoning || aProfile.auth !== bProfile.auth)
+      aProfile.codingModel !== bProfile.codingModel || (aProfile.reasoning !== bProfile.reasoning && !isDeclaredEffortComparison(aProfile, bProfile)) || aProfile.auth !== bProfile.auth)
     reject("fixed_model_or_reasoning_or_auth_mismatch");
+  if (bProfile?.id?.startsWith("zero-lean-") && !isDeclaredEffortComparison(aProfile, bProfile)) reject("declared_configuration_mismatch");
+  if (isDeclaredEffortComparison(aProfile, bProfile)) {
+    result.comparisonScope = "configured_system_including_effort";
+    result.limitations.push("This declared configuration changes the system prompt, tools and optionally effort; it does not isolate repository reuse or Jev");
+  }
   const identity = (r) => `${r.caseId}:${r.trial}`;
   if (baseline.length !== candidate.length || new Set(baseline.map(identity)).size !== baseline.length ||
       new Set(candidate.map(identity)).size !== candidate.length) reject("trial_pairing_mismatch");
@@ -141,6 +149,7 @@ export function compareLabExperiments(baselineReport, candidateReport, options =
       else if (row.generation.requestedModel !== profile?.codingModel || row.generation.requestedReasoning !== profile?.reasoning)
         reject("recorded_generation_model_mismatch");
       if (row.generation?.actualModel && row.generation.actualModel !== profile?.codingModel) reject("attested_model_mismatch");
+      if (profile?.systemPromptDigest !== undefined && (row.generation?.systemPromptDigest !== profile.systemPromptDigest || row.generation?.systemPromptMode !== profile.systemPromptMode)) reject("recorded_system_prompt_mismatch");
       if (profile?.tools !== undefined && row.generation?.enabledTools !== profile.tools) reject("recorded_tool_profile_mismatch");
       if (profile?.reusePlanDigest !== undefined && (!digest(profile.reusePlanDigest) || row.reusePlanDigest !== profile.reusePlanDigest)) reject("reuse_preparation_mismatch");
       if (row.outcome === "passed" && (row.qualityComplete !== true || row.evaluation?.automatedContractComplete !== true ||

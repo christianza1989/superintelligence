@@ -6,6 +6,23 @@ import path from "node:path";
 import { PassThrough, Writable } from "node:stream";
 import { test } from "node:test";
 import { CLAUDE_MODEL, checkClaudeRuntime, claudeArguments, claudeEnvironment, createClaudeEventParser, runClaudeCli } from "./zero-claude-cli.mjs";
+import { LEAN_SYSTEM_PROMPT, LEAN_SYSTEM_PROMPT_DIGEST } from "./zero-lab-strategies.mjs";
+
+test("lean configurations retain security boundaries and record the exact system prompt and effort", async t => {
+  const workspace = await mkdtemp(path.join(tmpdir(), "zero-lean-cli-")); t.after(() => rm(workspace, { recursive: true, force: true }));
+  for (const reasoning of ["high", "medium", "low"]) {
+    const stub = fake([result()]);
+    const value = await runClaudeCli({ workspace, prompt: "Controlled task", reasoning, systemPromptMode: "lean-v1", tools: "Bash,Read,Write,Edit" }, stub);
+    const args = stub.calls[0].args;
+    assert.equal(args[args.indexOf("--system-prompt") + 1], LEAN_SYSTEM_PROMPT);
+    assert.equal(args[args.indexOf("--effort") + 1], reasoning);
+    assert.ok(args.includes("--safe-mode") && args.includes("--strict-mcp-config"));
+    assert.equal(value.requestedReasoning, reasoning); assert.equal(value.systemPromptDigest, LEAN_SYSTEM_PROMPT_DIGEST);
+    assert.equal(value.systemPromptMode, "lean-v1"); assert.equal(value.enabledTools, "Bash,Read,Write,Edit");
+  }
+  assert.ok(!claudeArguments().includes("--system-prompt"));
+  for (const config of [{ reasoning: "unbounded" }, { systemPromptMode: "custom" }, { tools: "Bash,Agent" }]) assert.throws(() => claudeArguments(config));
+});
 
 const result = () => ({ type: "result", subtype: "success", is_error: false, result: "Synthetic handoff", num_turns: 2,
   total_cost_usd: 0.012, permission_denials: [], modelUsage: { [CLAUDE_MODEL]: {} },

@@ -16,6 +16,8 @@ import { buildLabPlan } from "./zero-lab-config.mjs";
 import { buildCompactRepositoryContext } from "./zero-lab-context.mjs";
 import { loadLabReusePlan, stageLabReusePlan } from "./zero-lab-reuse.mjs";
 
+import { LEAN_PROFILES } from "./zero-lab-strategies.mjs";
+
 const root = new URL("../../", import.meta.url);
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 const engines = {
@@ -30,7 +32,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
   dependencies = { ...dependencies };
   const engineName = options.engine ?? "codex";
   if (!Object.hasOwn(engines, engineName)) throw new Error("Unsupported coding CLI engine.");
-  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1"] : [])]);
+  const engine = engines[engineName], supported = new Set([...engine.ids, ...(engineName === "claude" ? ["zero-compact-claude-v1", "zero-jev-reuse-claude-v1", "zero-jev-http-claude-v1", ...Object.keys(LEAN_PROFILES)] : [])]);
   const ids = options.profiles ?? [...engine.ids];
   if (
     !Array.isArray(ids) ||
@@ -57,6 +59,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
   const profiles = ids.map((id) => engineName === "codex" ? plan.config.profiles.find((p) => p.id === id) : {
     ...plan.config.profiles.find(p => p.id === (id === "claude-fixed-v1" ? "codex-fixed-v1" : "zero-retrieval-v1")),
     id, codingModel: CLAUDE_MODEL, reasoning: CLAUDE_REASONING, auth: "claude-cli-subscription",
+    ...(Object.hasOwn(LEAN_PROFILES, id) ? LEAN_PROFILES[id] : {}),
     ...(id === "zero-compact-claude-v1" ? { retrieval: "catalog-compact-v2" } : {}),
     ...(isReuse(id) ? { retrieval: "jev-reuse-v1", reusePlanDigest: reuse.digest, tools: reuse.plan.tools, libraryPolicy: reuse.plan.libraryPolicy ?? "jev" } : {}),
   });
@@ -108,7 +111,8 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
       "Trial latency covers retrieval, CLI and acceptance; common setup/preflight and prompt freezing are retained only in experiment elapsed time",
     ],
   };
-  const started = performance.now();
+  const started = performance.now(), startedWall = Date.now();
+  report.timingIntegrity = { status: "passed", maximumClockDiscrepancyMs: 0, toleranceMs: 5000 };
   const save = async () => {
     report.summary = summarize(report.trials).map((measurement) => {
       const { passed, failed, autonomousSuccessRate, firstAttemptPassed, modelCalls, ...rest } =
@@ -136,6 +140,10 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
       };
     });
     report.elapsedMs = Math.round(performance.now() - started);
+    report.wallElapsedMs = Date.now() - startedWall;
+    const discrepancy = Math.abs(report.wallElapsedMs - report.elapsedMs);
+    report.timingIntegrity.maximumClockDiscrepancyMs = Math.max(report.timingIntegrity.maximumClockDiscrepancyMs, discrepancy);
+    if (discrepancy > report.timingIntegrity.toleranceMs) report.timingIntegrity.status = "clock_discontinuity";
     const attempted = report.trials.filter((t) => t.status !== "not-run");
     report.workflowCostUsd =
       attempted.length && attempted.every((t) => t.costUsd !== null)
@@ -297,6 +305,8 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
         maxObservedToolActions: plan.config.controls.maxToolCalls,
         maxOutputBytes: 4_194_304,
         tools: contexts.get(trial.strategy).tools,
+        reasoning: profiles.find(p => p.id === trial.strategy).reasoning,
+        systemPromptMode: profiles.find(p => p.id === trial.strategy).systemPromptMode,
         signal: options.signal,
       });
     } catch {

@@ -23,6 +23,7 @@ export async function buildLabPlan({ promptVersion = 1 } = {}) {
     "benchmarks/zero-lab.v1.json",
     "platform/scripts/zero-codex-cli.mjs",
     "platform/scripts/zero-claude-cli.mjs",
+    "platform/scripts/zero-lab-strategies.mjs",
     "platform/scripts/zero-lab-config.mjs",
     "platform/scripts/zero-lab-run.mjs",
     "platform/scripts/zero-lab-cohort.mjs",

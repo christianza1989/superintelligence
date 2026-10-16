@@ -1,4 +1,5 @@
 /** Subscription CLI adapter. The official CLI owns OAuth; credentials are never read here. */
+import { LEAN_SYSTEM_PROMPT, LEAN_SYSTEM_PROMPT_DIGEST } from "./zero-lab-strategies.mjs";
 import { execFile, spawn } from "node:child_process";
 import { realpath, stat } from "node:fs/promises";
 import path from "node:path";
@@ -15,9 +16,10 @@ export const claudeEnvironment = (source = process.env) => {
   delete env.CODEX_HOME;
   return env;
 };
-export function claudeArguments({ tools = CLAUDE_TOOLS } = {}) {
+export function claudeArguments({ tools = CLAUDE_TOOLS, reasoning = CLAUDE_REASONING, systemPromptMode = "default" } = {}) {
+  if (!["high", "medium", "low"].includes(reasoning) || !["default", "lean-v1"].includes(systemPromptMode)) throw new Error("Unsupported declared Claude configuration.");
   if (![CLAUDE_TOOLS, CLAUDE_LOCAL_TOOLS].includes(tools)) throw new Error("Unsupported bounded Claude tool profile.");
-  return ["--safe-mode", "--print", "--model", CLAUDE_MODEL, "--effort", CLAUDE_REASONING,
+  return ["--safe-mode", "--print", "--model", CLAUDE_MODEL, "--effort", reasoning, ...(systemPromptMode === "lean-v1" ? ["--system-prompt", LEAN_SYSTEM_PROMPT] : []),
     "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk",
     "--permission-prompts", "none", "--tools", tools, "--allowedTools", tools,
     "--strict-mcp-config", "--no-session-persistence", "--disable-slash-commands", "--max-turns", "60"];
@@ -144,10 +146,11 @@ export async function runClaudeCli(options, deps = {}) {
     !count(toolLimit) || toolLimit < 1 || toolLimit > 100 || !count(maxOutputBytes) || maxOutputBytes < 1024 || maxOutputBytes > 8388608)
     throw new Error("Invalid bounded Claude invocation.");
   const env = claudeEnvironment(deps.env ?? process.env);
-  const args = claudeArguments({ tools: options.tools });
+  const args = claudeArguments({ tools: options.tools, reasoning: options.reasoning, systemPromptMode: options.systemPromptMode });
   const workspace = await realpath(options.workspace);
   if (!(await stat(workspace)).isDirectory()) throw new Error("Claude workspace must be a directory.");
-  const base = { requestedModel: CLAUDE_MODEL, requestedReasoning: CLAUDE_REASONING, actualCostUsd: null,
+  const base = { requestedModel: CLAUDE_MODEL, requestedReasoning: options.reasoning ?? CLAUDE_REASONING, actualCostUsd: null,
+    systemPromptMode: options.systemPromptMode ?? "default", systemPromptDigest: options.systemPromptMode === "lean-v1" ? LEAN_SYSTEM_PROMPT_DIGEST : null,
     sandbox: "cli_permissions_dontAsk_not_os_isolation", actualModel: null, enabledTools: options.tools ?? CLAUDE_TOOLS };
   if (options.signal?.aborted) return { ...base, status: "cancelled", reason: "cancelled_before_start" };
   const started = Date.now();
