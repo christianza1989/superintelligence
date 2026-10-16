@@ -158,3 +158,11 @@ npm run lab:cohort -- --mode lean-low --live
 ```
 
 Po patvirtinimo atskirai pradėta viena `jev-http-lean-low` atrankos pora su nauju frozen paruošimu (4894 ms, 0,00013356 USD). Kol ji ir būtini kartojimai neužbaigti, kombinuotas variantas nepaskelbtas geresniu. Atskirai, tarp kohortų, vien tik naršyklės assetų paruošimas be modelio pamatuotas 6278 ms (tas pats 461392285 baitų digest); tikrintuvas ar jo kontraktas dėl šio profiliavimo nepakeisti.
+
+## Kombinuoto low atranka
+
+Atskira viena pora `2026-10-16T22-15-24-200Z-acfb0d6efc2c`: high baseline ir `zero-jev-http-lean-low-claude-v1` abu PASS. Baseline trial 238547 ms, kandidato 68265 ms, su visu frozen paruošimu 73159 ms (−69,33 %); coding 215752 → 47108 ms. CLI API kainos ekvivalentas su Jev 0,506496 → 0,12086576 USD (−76,14 %), tokenai 506327 → 33850. Bibliotekos panaudojimo ir nepakeistų assetų duomenys saugomi ataskaitoje.
+
+Tai viena atrankos pora. Pradėtas atskiras trijų naujų porų kombinacijos patvirtinimas, nes kandidatas perspektyvus pagal kainos ir laiko apskaitą. Patvirtinto `lean-low` dar nepakeičiame. Šis palyginimas yra prieš high baseline; jis neizoliuoja Jev ar bibliotekos individualios naudos prieš paprastą low.
+
+Tas pats nepakitęs paruošimo planas pernaudojamas patvirtinimui. Kiekvienos kohortos scenarijui konservatyviai pridedama visa jo 4894 ms ir 0,00013356 USD kaina; bendra realių API kvietimų apskaita naudoja unikalius paruošimus, todėl globalus Jev mokestis nepadvigubinamas.
