@@ -1,0 +1,389 @@
+{
+  "version": 1,
+  "kind": "jev_calibration_preparation_accounting",
+  "updatedAtUtc": "2026-10-16T21:19:39.983Z",
+  "authorizedBudgetUsd": 1,
+  "conservativelyReservedUsd": 0.4,
+  "apiRequests": 4,
+  "automaticRetries": 0,
+  "diagnostic": {
+    "model": "typesafe/jev-1.13",
+    "status": "answered",
+    "httpStatus": 200,
+    "modelDispatchAttempts": 1,
+    "elapsedMs": 569,
+    "actualCostUsd": 0.000042714,
+    "scope": "connection_check_not_coding_benchmark"
+  },
+  "reportedActualCostUsd": 0.00044339399999999995,
+  "preparations": [
+    {
+      "preparationId": "2026-10-16T20-14-42-463Z-2fa081e1a8e8",
+      "planSha256": "b99d90916379c3f2c1c26bca86c688594b08b35612cc65381c351e7ad409110d",
+      "sourceRevision": "6c810eb61c82b290ec56fdaa944282edfabf8a42",
+      "status": "ready",
+      "elapsedMs": 4444,
+      "api": {
+        "model": "typesafe/jev-1.13",
+        "modelDispatchAttempts": 1,
+        "actualCostUsd": 0.00013356,
+        "pricing": {
+          "source": "https://openrouter.ai/api/v1/models/typesafe/jev-1.13/endpoints",
+          "maximumPromptUsdPerToken": 4.2e-8,
+          "completionUsdPerToken": 0,
+          "maximumContextTokens": 262144,
+          "maximumQuestions": 7,
+          "reservationUsd": 0.1
+        },
+        "httpStatus": 200,
+        "status": "answered",
+        "elapsedMs": 701,
+        "actualModel": "typesafe/jev-1.13-20260917",
+        "provider": "TypeSafe",
+        "usage": {
+          "inputTokens": 3180,
+          "outputTokens": 133,
+          "cost": 0.00013356
+        },
+        "answers": {
+          "source0": {
+            "type": "noul",
+            "noul": 0.35
+          },
+          "source1": {
+            "type": "noul",
+            "noul": 0.16
+          },
+          "source2": {
+            "type": "noul",
+            "noul": 0.1
+          },
+          "source3": {
+            "type": "noul",
+            "noul": 0.04
+          },
+          "source4": {
+            "type": "noul",
+            "noul": 0.02
+          },
+          "http_library": {
+            "type": "noul",
+            "noul": 0.69
+          },
+          "tools": {
+            "type": "choice",
+            "choice": "local",
+            "confidence": 0.86,
+            "probabilities": {
+              "local": 0.93,
+              "full": 0.07
+            }
+          }
+        },
+        "reservedBudgetUsd": 0.2
+      },
+      "tools": "Bash,Read,Write,Edit",
+      "libraryPolicy": "jev",
+      "librarySelected": false,
+      "library": {
+        "assets": [
+          {
+            "name": "vendor/http.mjs",
+            "file": "library/http.mjs",
+            "bytes": 40851,
+            "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+          },
+          {
+            "name": "vendor/LICENSE.hono",
+            "file": "library/LICENSE.hono",
+            "bytes": 1101,
+            "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+          },
+          {
+            "name": "vendor/LICENSE.node-server",
+            "file": "library/LICENSE.node-server",
+            "bytes": 1101,
+            "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+          },
+          {
+            "name": "vendor/README.md",
+            "file": "library/README.md",
+            "bytes": 684,
+            "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+          }
+        ],
+        "sources": [
+          {
+            "repository": "honojs/hono",
+            "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+            "license": "MIT",
+            "entry": "src/hono.ts",
+            "exports": "Hono"
+          },
+          {
+            "repository": "honojs/node-server",
+            "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+            "license": "MIT",
+            "entry": "src/server.ts",
+            "exports": "serve"
+          }
+        ],
+        "elapsedMs": 3490,
+        "verification": "passed",
+        "scope": "generic_HTTP_library_only_no_task_solution",
+        "bytes": 43737
+      },
+      "selectedSources": 0,
+      "contextBytes": 276,
+      "use": "superseded_before_coding_source_or_policy_changed"
+    },
+    {
+      "preparationId": "2026-10-16T20-19-14-712Z-d80e1a56dd5d",
+      "planSha256": "347cae373c8b0f999d97327cd051c7e42412211424555a361b246b93b3f4ec12",
+      "sourceRevision": "f9ffe710ab1a4273d241b8f89070dbced9a8c084",
+      "status": "ready",
+      "elapsedMs": 4599,
+      "api": {
+        "model": "typesafe/jev-1.13",
+        "modelDispatchAttempts": 1,
+        "actualCostUsd": 0.00013356,
+        "pricing": {
+          "source": "https://openrouter.ai/api/v1/models/typesafe/jev-1.13/endpoints",
+          "maximumPromptUsdPerToken": 4.2e-8,
+          "completionUsdPerToken": 0,
+          "maximumContextTokens": 262144,
+          "maximumQuestions": 7,
+          "reservationUsd": 0.1
+        },
+        "httpStatus": 200,
+        "status": "answered",
+        "elapsedMs": 864,
+        "actualModel": "typesafe/jev-1.13-20260917",
+        "provider": "TypeSafe",
+        "usage": {
+          "inputTokens": 3180,
+          "outputTokens": 133,
+          "cost": 0.00013356
+        },
+        "answers": {
+          "source0": {
+            "type": "noul",
+            "noul": 0.33
+          },
+          "source1": {
+            "type": "noul",
+            "noul": 0.15
+          },
+          "source2": {
+            "type": "noul",
+            "noul": 0.11
+          },
+          "source3": {
+            "type": "noul",
+            "noul": 0.05
+          },
+          "source4": {
+            "type": "noul",
+            "noul": 0.02
+          },
+          "http_library": {
+            "type": "noul",
+            "noul": 0.72
+          },
+          "tools": {
+            "type": "choice",
+            "choice": "local",
+            "confidence": 0.84,
+            "probabilities": {
+              "local": 0.92,
+              "full": 0.08
+            }
+          }
+        },
+        "reservedBudgetUsd": 0.3
+      },
+      "tools": "Bash,Read,Write,Edit",
+      "libraryPolicy": "verified-http",
+      "librarySelected": true,
+      "library": {
+        "assets": [
+          {
+            "name": "vendor/http.mjs",
+            "file": "library/http.mjs",
+            "bytes": 40851,
+            "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+          },
+          {
+            "name": "vendor/LICENSE.hono",
+            "file": "library/LICENSE.hono",
+            "bytes": 1101,
+            "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+          },
+          {
+            "name": "vendor/LICENSE.node-server",
+            "file": "library/LICENSE.node-server",
+            "bytes": 1101,
+            "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+          },
+          {
+            "name": "vendor/README.md",
+            "file": "library/README.md",
+            "bytes": 684,
+            "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+          }
+        ],
+        "sources": [
+          {
+            "repository": "honojs/hono",
+            "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+            "license": "MIT",
+            "entry": "src/hono.ts",
+            "exports": "Hono"
+          },
+          {
+            "repository": "honojs/node-server",
+            "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+            "license": "MIT",
+            "entry": "src/server.ts",
+            "exports": "serve"
+          }
+        ],
+        "elapsedMs": 3518,
+        "verification": "passed",
+        "scope": "generic_HTTP_library_only_no_task_solution",
+        "bytes": 43737
+      },
+      "selectedSources": 0,
+      "contextBytes": 1244,
+      "use": "superseded_before_coding_source_or_policy_changed"
+    },
+    {
+      "preparationId": "2026-10-16T20-26-49-278Z-b7e7fc493d20",
+      "planSha256": "33e026b1d6cdc6ade3acd4c8aa0c3e1110ea4ee6855549f478b88450f143016c",
+      "sourceRevision": "29915c3e072df8d00e2bc201afe1f2109ae92857",
+      "status": "ready",
+      "elapsedMs": 4547,
+      "api": {
+        "model": "typesafe/jev-1.13",
+        "modelDispatchAttempts": 1,
+        "actualCostUsd": 0.00013356,
+        "pricing": {
+          "source": "https://openrouter.ai/api/v1/models/typesafe/jev-1.13/endpoints",
+          "maximumPromptUsdPerToken": 4.2e-8,
+          "completionUsdPerToken": 0,
+          "maximumContextTokens": 262144,
+          "maximumQuestions": 7,
+          "reservationUsd": 0.1
+        },
+        "httpStatus": 200,
+        "status": "answered",
+        "elapsedMs": 720,
+        "actualModel": "typesafe/jev-1.13-20260917",
+        "provider": "TypeSafe",
+        "usage": {
+          "inputTokens": 3180,
+          "outputTokens": 133,
+          "cost": 0.00013356
+        },
+        "answers": {
+          "source0": {
+            "type": "noul",
+            "noul": 0.35
+          },
+          "source1": {
+            "type": "noul",
+            "noul": 0.15
+          },
+          "source2": {
+            "type": "noul",
+            "noul": 0.1
+          },
+          "source3": {
+            "type": "noul",
+            "noul": 0.04
+          },
+          "source4": {
+            "type": "noul",
+            "noul": 0.02
+          },
+          "http_library": {
+            "type": "noul",
+            "noul": 0.71
+          },
+          "tools": {
+            "type": "choice",
+            "choice": "local",
+            "confidence": 0.84,
+            "probabilities": {
+              "local": 0.92,
+              "full": 0.08
+            }
+          }
+        },
+        "reservedBudgetUsd": 0.4
+      },
+      "tools": "Bash,Read,Write,Edit",
+      "libraryPolicy": "verified-http",
+      "librarySelected": true,
+      "library": {
+        "assets": [
+          {
+            "name": "vendor/http.mjs",
+            "file": "library/http.mjs",
+            "bytes": 40851,
+            "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+          },
+          {
+            "name": "vendor/LICENSE.hono",
+            "file": "library/LICENSE.hono",
+            "bytes": 1101,
+            "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+          },
+          {
+            "name": "vendor/LICENSE.node-server",
+            "file": "library/LICENSE.node-server",
+            "bytes": 1101,
+            "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+          },
+          {
+            "name": "vendor/README.md",
+            "file": "library/README.md",
+            "bytes": 684,
+            "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+          }
+        ],
+        "sources": [
+          {
+            "repository": "honojs/hono",
+            "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+            "license": "MIT",
+            "entry": "src/hono.ts",
+            "exports": "Hono"
+          },
+          {
+            "repository": "honojs/node-server",
+            "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+            "license": "MIT",
+            "entry": "src/server.ts",
+            "exports": "serve"
+          }
+        ],
+        "elapsedMs": 3571,
+        "verification": "passed",
+        "scope": "generic_HTTP_library_only_no_task_solution",
+        "bytes": 43737
+      },
+      "selectedSources": 0,
+      "contextBytes": 1244,
+      "use": "frozen_for_jev_http_cohort"
+    }
+  ],
+  "limitations": [
+    "The shared private ledger reserves USD 0.10 before each dispatch and does not refund unknown calls",
+    "Reservations are not actual spend or account-wide enforcement over unrelated clients",
+    "Superseded preparations and diagnostic costs remain included in total exploration expense",
+    "The verified-http policy is an operator-selected pinned library, not a Jev decision",
+    "Jev noul values and the 0.7 experimental threshold are not calibrated relevance probabilities",
+    "No completed coding result follows from preparation alone"
+  ]
+}
