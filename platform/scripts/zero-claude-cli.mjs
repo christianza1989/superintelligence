@@ -27,7 +27,7 @@ export function claudeArguments({ tools = CLAUDE_TOOLS, reasoning = CLAUDE_REASO
 function failure(text) {
   if (/unauthorized|not logged in|authentication|401\b/i.test(text)) return "auth_required";
   if (/model.{0,100}(not supported|not available|unsupported|not found|does not exist)/i.test(text)) return "model_unavailable";
-  if (/rate.limit|usage.limit|limit reached|(?:hit|reached)\s+(?:(?:your|the)\s+)?(?:usage\s+)?limit\b|out of.{0,20}usage|429\b/i.test(text)) return "usage_limit";
+  if (/rate.limit|(?:usage|session|weekly|daily|monthly)[ _-]+(?:limit|cap)|limit reached|(?:hit|reached)\s+(?:(?:your|the)\s+)?(?:(?:usage|session)\s+)?limit\b|out of.{0,20}usage|quota.{0,30}(?:exhausted|exceeded)|429\b/i.test(text)) return "usage_limit";
   if (/network|connection|dns|timed out/i.test(text)) return "network_unavailable";
   return "cli_failure";
 }
@@ -35,7 +35,7 @@ const count = value => Number.isSafeInteger(value) && value >= 0;
 const record = value => value !== null && typeof value === "object" && !Array.isArray(value);
 export function createClaudeEventParser(options = {}) {
   const decoder = new StringDecoder("utf8"), tools = new Set(), toolErrors = new Set(), models = new Set();
-  let pending = "", malformed = false, results = 0, receipt, reportedFailure;
+  let pending = "", malformed = false, results = 0, receipt, reportedFailure, assistantFailure;
   const eventCounts = {};
   const invalidate = () => {
     if (malformed) return;
@@ -61,6 +61,10 @@ export function createClaudeEventParser(options = {}) {
         models.add(event.message.model);
         if (event.message.model !== CLAUDE_MODEL) reportedFailure = "model_unavailable";
       }
+      if (event.error !== undefined) {
+        const category = failure(JSON.stringify(event.error));
+        if (category !== "cli_failure") reportedFailure = assistantFailure = category;
+      }
       for (const block of event.message.content) {
         if (block.type !== "tool_use") continue;
         if (typeof block.id !== "string" || !block.id || block.id.length > 128 ||
@@ -85,8 +89,8 @@ export function createClaudeEventParser(options = {}) {
       }
       const errorResult = event.is_error || event.subtype !== "success";
       if (errorResult) {
-        const errorText = JSON.stringify(event.errors ?? event.result ?? "");
-        reportedFailure = event.subtype === "error_max_turns" ? "turn_limit" : failure(errorText);
+        const category = failure(JSON.stringify([event.errors, event.result, event.api_error_status, event.api_error]));
+        reportedFailure = event.subtype === "error_max_turns" ? "turn_limit" : category === "cli_failure" ? assistantFailure ?? category : category;
       }
       const u = event.usage;
       if (!record(u) || ![u.input_tokens, u.output_tokens, u.cache_creation_input_tokens ?? 0, u.cache_read_input_tokens ?? 0].every(count)) {
@@ -105,6 +109,8 @@ export function createClaudeEventParser(options = {}) {
         apiEquivalentCostEstimateUsd: typeof event.total_cost_usd === "number" && Number.isFinite(event.total_cost_usd) && event.total_cost_usd >= 0 ? event.total_cost_usd : null,
         reportedTurns: count(event.num_turns) ? event.num_turns : null,
         permissionDenials: Array.isArray(event.permission_denials) ? event.permission_denials.length : null,
+        terminalSubtype: ["success", "error_max_turns", "error_during_execution", "error_max_budget_usd"].includes(event.subtype) ? event.subtype : "other",
+        apiErrorStatus: Number.isInteger(event.api_error_status) && event.api_error_status >= 100 && event.api_error_status <= 599 ? event.api_error_status : null,
       };
     }
   }

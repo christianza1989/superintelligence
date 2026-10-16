@@ -170,6 +170,16 @@ test("a shared missing auth prerequisite stops after one blocked member without 
   });
   assert.equal(calls, 1); assert.equal(report.cliInvocationAttempts, 0); assert.equal(report.status, "stopped_shared_prerequisite");
 });
+test("generic CLI invocation failures stop the cohort before another pair instead of repeating an unknown outage", async t => {
+  let calls = 0;
+  const { report } = await runLabCohort({ artifactRoot: await temporary(t), live: true }, {
+    runPair: async options => { calls++; const r = fixture(0, options.frozenSourceDigests);
+      r.trials[0].outcome = "generation_failed"; r.trials[0].generation = { status: "failed", reason: "cli_failure" };
+      return { directory: options.artifactRoot, report: r }; },
+  });
+  assert.equal(calls, 1); assert.equal(report.status, "stopped_shared_prerequisite");
+  assert.equal(report.summary.measurements, null);
+});
 test("source mutation stops the next pair and invalidates the cohort even if an earlier receipt passed", async t => {
   let plans = 0, calls = 0; const original = { config: { controls: { trials: 1, timeoutMs: 900000 } }, sourceDigests: Object.fromEntries(commonSources.map(p => [p, pin])) };
   const { report } = await runLabCohort({ artifactRoot: await temporary(t), live: true }, {

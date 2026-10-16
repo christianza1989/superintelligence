@@ -416,7 +416,7 @@ export async function runLabExperiment(options = {}, dependencies = {}) {
         "network_unavailable",
         "unavailable",
         "invalid_cli_events",
-        "invocation_unavailable",
+        "invocation_unavailable", "cli_failure",
       ].includes(generation.reason)
     ) {
       for (const pending of report.trials.filter((t) => t.phase === undefined))

@@ -114,7 +114,7 @@ test("cancelled coding retains reported usage and shared grader failure prevents
   assert.ok(Number.isSafeInteger(broken.report.trials[0].timings.gradingMs));
 });
 test("shared protocol or network failures cannot spend another lane and injected grading is labelled", async () => {
-  for (const reason of ["subscription_auth_required", "network_unavailable", "unavailable", "invalid_cli_events", "invocation_unavailable"]) {
+  for (const reason of ["subscription_auth_required", "network_unavailable", "unavailable", "invalid_cli_events", "invocation_unavailable", "cli_failure", "usage_limit"]) {
     let calls = 0;
     const { report } = await runLabExperiment({ artifactRoot, engine: "claude", live: true }, {
       preflight: ready, invoke: async () => { calls++; return { status: "failed", reason, usage: null }; },

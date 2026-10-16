@@ -179,7 +179,7 @@ export async function runLabCohort(options = {}, deps = {}) {
       if (signal?.aborted || child.status === "cancelled") { report.status = "cancelled"; break; }
       if (options.live && (child.status.startsWith("blocked") || child.trials.some(row => row.outcome === "harness_error" ||
           ["local_state_unwritable", "auth_required", "subscription_auth_required", "model_unavailable", "sandbox_unavailable", "usage_limit",
-            "network_unavailable", "unavailable", "invalid_cli_events", "invocation_unavailable"].includes(row.generation?.reason)))) {
+            "network_unavailable", "unavailable", "invalid_cli_events", "invocation_unavailable", "cli_failure"].includes(row.generation?.reason)))) {
         report.status = "stopped_shared_prerequisite"; break;
       }
     }

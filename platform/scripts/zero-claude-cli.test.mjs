@@ -64,6 +64,24 @@ test("synthetic error model placeholders do not hide quota, auth or network fail
   const placeholderSuccess = { type: "assistant", message: { model: "<synthetic>", content: [] } };
   assert.equal(parse([placeholderSuccess, result()]).failure, "model_unavailable");
 });
+test("real session-limit shape and structured API flags survive empty error arrays without leaking text", () => {
+  const quota = "You've hit your session limit · resets 12:40am (UTC)";
+  const placeholder = { type: "assistant", error: "rate_limit", message: { model: "<synthetic>", content: [{ type: "text", text: quota }] } };
+  const zero = { input_tokens: 0, output_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 };
+  for (const terminal of [
+    { ...result(), is_error: true, result: quota, modelUsage: {}, usage: zero },
+    { ...result(), is_error: true, errors: [], result: quota, modelUsage: {}, usage: zero },
+    { ...result(), is_error: true, errors: [], result: "", modelUsage: {}, usage: zero },
+  ]) {
+    const r = parse([placeholder, terminal]); assert.equal(r.valid, false); assert.equal(r.failure, "usage_limit");
+    assert.equal(r.usage.totalTokens, 0); assert.equal(r.terminalSubtype, "success"); assert.equal(r.actualModel, null);
+  }
+  const byStatus = parse([{ ...result(), is_error: true, errors: [], result: "", api_error_status: 429 }]);
+  assert.equal(byStatus.failure, "usage_limit"); assert.equal(byStatus.apiErrorStatus, 429);
+  const secret = "SYNTHETIC_PRIVATE_ACCOUNT", flagged = { ...placeholder, message: { ...placeholder.message, content: [{ type: "text", text: secret }] } };
+  const sanitized = parse([flagged, { ...result(), is_error: true, result: "", modelUsage: {}, usage: zero }]);
+  assert.equal(JSON.stringify(sanitized).includes(secret), false);
+});
 
 test("rejects missing/duplicate receipts, malformed usage, unintended models and failed turns", () => {
   for (const events of [[], [result(), result()], [{ ...result(), usage: { input_tokens: "3", output_tokens: 7 } }],
