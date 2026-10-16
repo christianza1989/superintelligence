@@ -1,10 +1,10 @@
 {
   "version": 1,
   "kind": "jev_calibration_preparation_accounting",
-  "updatedAtUtc": "2026-10-16T21:19:39.983Z",
+  "updatedAtUtc": "2026-10-16T21:55:09.395Z",
   "authorizedBudgetUsd": 1,
-  "conservativelyReservedUsd": 0.4,
-  "apiRequests": 4,
+  "conservativelyReservedUsd": 0.5,
+  "apiRequests": 5,
   "automaticRetries": 0,
   "diagnostic": {
     "model": "typesafe/jev-1.13",
@@ -15,7 +15,7 @@
     "actualCostUsd": 0.000042714,
     "scope": "connection_check_not_coding_benchmark"
   },
-  "reportedActualCostUsd": 0.00044339399999999995,
+  "reportedActualCostUsd": 0.000576954,
   "preparations": [
     {
       "preparationId": "2026-10-16T20-14-42-463Z-2fa081e1a8e8",
@@ -375,7 +375,127 @@
       },
       "selectedSources": 0,
       "contextBytes": 1244,
-      "use": "frozen_for_jev_http_cohort"
+      "use": "executed_complete_jev_http_cohort"
+    },
+    {
+      "preparationId": "2026-10-16T21-54-18-902Z-eab70ff334d8",
+      "planSha256": "1d90daf3dc0d20dc4ff4b7c20ee3e738600cdd19627a3ae7c3a6a6ffa62845ed",
+      "sourceRevision": "65b7c04e517060bc2cb2921bca4a6942aa037900",
+      "status": "ready",
+      "elapsedMs": 4894,
+      "api": {
+        "model": "typesafe/jev-1.13",
+        "modelDispatchAttempts": 1,
+        "actualCostUsd": 0.00013356,
+        "pricing": {
+          "source": "https://openrouter.ai/api/v1/models/typesafe/jev-1.13/endpoints",
+          "maximumPromptUsdPerToken": 4.2e-8,
+          "completionUsdPerToken": 0,
+          "maximumContextTokens": 262144,
+          "maximumQuestions": 7,
+          "reservationUsd": 0.1
+        },
+        "httpStatus": 200,
+        "status": "answered",
+        "elapsedMs": 737,
+        "actualModel": "typesafe/jev-1.13-20260917",
+        "provider": "TypeSafe",
+        "usage": {
+          "inputTokens": 3180,
+          "outputTokens": 133,
+          "cost": 0.00013356
+        },
+        "answers": {
+          "source0": {
+            "type": "noul",
+            "noul": 0.34
+          },
+          "source1": {
+            "type": "noul",
+            "noul": 0.15
+          },
+          "source2": {
+            "type": "noul",
+            "noul": 0.09
+          },
+          "source3": {
+            "type": "noul",
+            "noul": 0.04
+          },
+          "source4": {
+            "type": "noul",
+            "noul": 0.02
+          },
+          "http_library": {
+            "type": "noul",
+            "noul": 0.65
+          },
+          "tools": {
+            "type": "choice",
+            "choice": "local",
+            "confidence": 0.88,
+            "probabilities": {
+              "local": 0.94,
+              "full": 0.06
+            }
+          }
+        },
+        "reservedBudgetUsd": 0.5
+      },
+      "tools": "Bash,Read,Write,Edit",
+      "libraryPolicy": "verified-http",
+      "librarySelected": true,
+      "library": {
+        "assets": [
+          {
+            "name": "vendor/http.mjs",
+            "file": "library/http.mjs",
+            "bytes": 40851,
+            "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+          },
+          {
+            "name": "vendor/LICENSE.hono",
+            "file": "library/LICENSE.hono",
+            "bytes": 1101,
+            "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+          },
+          {
+            "name": "vendor/LICENSE.node-server",
+            "file": "library/LICENSE.node-server",
+            "bytes": 1101,
+            "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+          },
+          {
+            "name": "vendor/README.md",
+            "file": "library/README.md",
+            "bytes": 684,
+            "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+          }
+        ],
+        "sources": [
+          {
+            "repository": "honojs/hono",
+            "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+            "license": "MIT",
+            "entry": "src/hono.ts",
+            "exports": "Hono"
+          },
+          {
+            "repository": "honojs/node-server",
+            "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+            "license": "MIT",
+            "entry": "src/server.ts",
+            "exports": "serve"
+          }
+        ],
+        "elapsedMs": 3778,
+        "verification": "passed",
+        "scope": "generic_HTTP_library_only_no_task_solution",
+        "bytes": 43737
+      },
+      "selectedSources": 0,
+      "contextBytes": 1244,
+      "use": "frozen_for_optional_combined_lean_low_cohort"
     }
   ],
   "limitations": [
