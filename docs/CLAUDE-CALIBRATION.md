@@ -166,3 +166,13 @@ Atskira viena pora `2026-10-16T22-15-24-200Z-acfb0d6efc2c`: high baseline ir `ze
 Tai viena atrankos pora. Pradėtas atskiras trijų naujų porų kombinacijos patvirtinimas, nes kandidatas perspektyvus pagal kainos ir laiko apskaitą. Patvirtinto `lean-low` dar nepakeičiame. Šis palyginimas yra prieš high baseline; jis neizoliuoja Jev ar bibliotekos individualios naudos prieš paprastą low.
 
 Tas pats nepakitęs paruošimo planas pernaudojamas patvirtinimui. Kiekvienos kohortos scenarijui konservatyviai pridedama visa jo 4894 ms ir 0,00013356 USD kaina; bendra realių API kvietimų apskaita naudoja unikalius paruošimus, todėl globalus Jev mokestis nepadvigubinamas.
+
+## Kombinuoto patvirtinimo nesėkmė ir sesijos kvota
+
+Kohorta `2026-10-16T22-21-29-987Z-520ec330d1ed`: trys suplanuotos poros bandytos, visos šešios generacijos baigėsi `cli_failure`, po 0 CLI pateiktų tokenų, programos nesukurtos, acceptance nepaleistas. Raw ataskaitos nepakeistos. Kohorta **not_comparable**, measurements null, greičio pergalės nėra. Sėkminga viena kombinuota atrankos pora nepaversta patvirtinimu.
+
+Vienas vėlesnis trumpas diagnostinis kvietimas grąžino struktūrinį `rate_limit`, HTTP 429 ir Claude sesijos limitą; CLI nurodė atsinaujinimą 00:40 UTC, pagal diagnostikos laiką tai 2026-10-17 00:40 UTC (03:40 Europe/Kiev). Tai vėlesnės diagnostikos priežastis, originalių šešių reportų `cli_failure` įrašai neatgalinami. Tiekėjo kvota skiriasi nuo naudotojo leidimo neriboti Sonnet bandymų.
+
+Rasta adapterio klaida: neatpažintas tekstas „session limit“ ir struktūrinė assistant klaidos žyma. Ištaisyta jų klasifikacija, išsaugomas terminal subtype ir saugus HTTP statusas; tuščias errors masyvas nebeužgožia result. Nežinomas bendras CLI failure dabar sustabdo tolesnes lane ir poras. Išsaugota diagnostika peržaista offline: usage_limit/429, 0 naujų modelių kvietimų. Integruotoje main kopijoje 91 offline regresija PASS, 0 fail/skip. Po šio klasifikavimo taisymo nauja gyva kohorta nevykdyta; ankstesni performance source hash neperrašyti.
+
+Geriausias patvirtintas opt-in pasirinkimas lieka **lean-low**. Kombinuotas profilis dar nepatvirtintas. Po kvotos atsinaujinimo reikalinga nauja kohorta ir naujas frozen Jev planas, nes adapterio/runnerio source hash pasikeitė; tęsti tą patį bendrą 1 USD ledger, nekurti naujo biudžeto ir nepernaudoti pasenusio plano. Automatinis retry ar kito modelio/provider fallback neįjungtas.

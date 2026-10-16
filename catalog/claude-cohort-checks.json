@@ -158,7 +158,46 @@
         "estimatedApiEquivalentReductionReached": true,
         "actualSubscriptionCostReductionReached": null
       }
+    },
+    "combinedLowConfirmation": {
+      "status": "completed_with_generation_failures",
+      "cohortId": "2026-10-16T22-21-29-987Z-520ec330d1ed",
+      "plannedPairs": 3,
+      "recordedPairs": 3,
+      "acceptedTrials": 0,
+      "failedGenerations": 6,
+      "reportedTotalTokens": 0,
+      "measurements": null,
+      "originalReason": "cli_failure",
+      "pooledWithScreening": false
+    },
+    "latestDiagnostic": {
+      "status": "usage_limit",
+      "assistantErrorFlag": "rate_limit",
+      "httpStatus": 429,
+      "reportedTotalTokens": 0,
+      "resetAtUtc": "2026-10-17T00:40:00Z",
+      "resetLocal": {
+        "timeZone": "Europe/Kiev",
+        "localTime": "2026-10-17 03:40"
+      },
+      "resetDateInterpretation": "next_occurrence_of_CLI_reported_00_40_UTC_after_diagnostic",
+      "attribution": "subsequent_probe_original_reports_are_not_relabelled",
+      "offlineReplayAfterFix": {
+        "failure": "usage_limit",
+        "newModelCalls": 0
+      },
+      "automaticRetry": false
     }
   },
-  "new_model_calls_scope": "historical offline preparation only; later live sessions are listed under liveExecutionEvidence"
+  "new_model_calls_scope": "historical offline preparation only; later live sessions are listed under liveExecutionEvidence",
+  "latestIntegrationRegression": {
+    "status": "passed",
+    "tests": 91,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "claude_adapter_runner_cohort_comparison_context_preparation_reuse",
+    "modelCalls": 0,
+    "realDiagnosticReplay": "usage_limit_HTTP_429_no_new_model_call"
+  }
 }
