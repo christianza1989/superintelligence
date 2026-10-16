@@ -1,0 +1,27 @@
+{
+  "status": "document_validation_complete",
+  "checked_at_utc": "2026-10-16T13:35:17.958981+00:00",
+  "scope": "Root authored planning artifacts only, excluding platform upstream source/dependency/build trees; JSON/schema/CSV/Markdown/catalog consistency only; this document check does not test application runtime; see docs/IMPLEMENTATION.md for separate foundation UI/adapter checks; no OAuth, Treg account, deployment or payment tested",
+  "checks": {
+    "json_files_parsed": 34,
+    "json_schemas_checked": 6,
+    "manifest_examples_validated": 2,
+    "invalid_manifest_activation_and_permission_cases_rejected": 4,
+    "tool_envelope_and_capability_input_validated": 2,
+    "initial_documentary_sample_projects": 100,
+    "candidate_registry_records": 796,
+    "checked_addresses": 806,
+    "unique_accessible_repositories": 757,
+    "media_candidate_records": 197,
+    "new_candidates_unscored": true,
+    "csv_json_consistent": true,
+    "markdown_files_checked": 59,
+    "fenced_json_blocks_parsed": 4,
+    "roadmap_work_ids_unique": 244,
+    "missing_local_links": [],
+    "missing_local_anchors": [],
+    "trailing_whitespace": [],
+    "runtime_candidate_tests": 0,
+    "deployment_status": "NOT_DEPLOYED"
+  }
+}

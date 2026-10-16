@@ -1,0 +1,409 @@
+{
+  "generatedAtUtc": "2026-10-16T01:46:11.615Z",
+  "executionKind": "scripted_local_reuse_demonstration",
+  "scope": "Actual repository_search calls and local source manifests; no autonomous model selection, fetch, new build or test run is claimed by this script.",
+  "paidModelCalls": 0,
+  "networkCalls": 0,
+  "brief": "Build RepositoryZero from an existing agent workspace and focused maintained components, keeping one runtime and verifiable results.",
+  "searches": [
+    {
+      "query": "agent platform",
+      "result": {
+        "status": "source_candidates",
+        "researchDate": "2026-10-16",
+        "evaluation": "Source evidence only; no install or execution grant. Human/community validation must be inspected separately.",
+        "candidates": [
+          {
+            "repository": "FoundationAgents/OpenManus",
+            "category": "agent-platform",
+            "capability": "Bendros paskirties įrankius naudojantis agento produktas.",
+            "source": "https://github.com/FoundationAgents/OpenManus/tree/3309bf4e416fb1c74b008f3e86494439a31bad53",
+            "sourceRevision": "3309bf4e416fb1c74b008f3e86494439a31bad53",
+            "sourceAvailable": true,
+            "licenseSource": "MIT text",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "bytedance/UI-TARS-desktop",
+            "category": "desktop-agent",
+            "capability": "Desktop ir naršyklės užduotis atliekantis agento produktas.",
+            "source": "https://github.com/bytedance/UI-TARS-desktop/tree/3ac2cb8d946d78d5ff92ad17b318eaafa18c178c",
+            "sourceRevision": "3ac2cb8d946d78d5ff92ad17b318eaafa18c178c",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0 text",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "eigent-ai/eigent",
+            "category": "agent-platform",
+            "capability": "Darbastalio multi-agent darbo ir užduoties delegavimo produktas.",
+            "source": "https://github.com/eigent-ai/eigent/tree/f47482574471ca45cbee51e1e55fa6bbe9657f71",
+            "sourceRevision": "f47482574471ca45cbee51e1e55fa6bbe9657f71",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0 text",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "elie222/rakazo",
+            "category": "user-discovery",
+            "capability": "Visos persistent agentų platformos bazės kandidatas",
+            "source": "https://github.com/elie222/rakazo/tree/7d5e64c886da7d556673f99e4923b013315007a9",
+            "sourceRevision": "7d5e64c886da7d556673f99e4923b013315007a9",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          }
+        ]
+      }
+    },
+    {
+      "query": "rakazo",
+      "result": {
+        "status": "source_candidates",
+        "researchDate": "2026-10-16",
+        "evaluation": "Source evidence only; no install or execution grant. Human/community validation must be inspected separately.",
+        "candidates": [
+          {
+            "repository": "elie222/rakazo",
+            "category": "user-discovery",
+            "capability": "Visos persistent agentų platformos bazės kandidatas",
+            "source": "https://github.com/elie222/rakazo/tree/7d5e64c886da7d556673f99e4923b013315007a9",
+            "sourceRevision": "7d5e64c886da7d556673f99e4923b013315007a9",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          }
+        ]
+      }
+    },
+    {
+      "query": "llm proxy",
+      "result": {
+        "status": "source_candidates",
+        "researchDate": "2026-10-16",
+        "evaluation": "Source evidence only; no install or execution grant. Human/community validation must be inspected separately.",
+        "candidates": [
+          {
+            "repository": "BerriAI/litellm",
+            "category": "models",
+            "capability": "LLM proxy / AI gateway: multi-provider routing, spend management, cost tracking; budget tooling candidate.",
+            "source": "https://github.com/BerriAI/litellm/tree/46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+            "sourceRevision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+            "sourceAvailable": true,
+            "licenseSource": "MIT core with separately licensed enterprise scope; BSD family (inspect clause count)",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "helicone/helicone",
+            "category": "observability",
+            "capability": "LLM proxy / AI gateway and observability: agent/request tracing, cost and latency tracking.",
+            "source": "https://github.com/helicone/helicone/tree/067d9290acb4f1fc9320e902fc67b4b399b50363",
+            "sourceRevision": "067d9290acb4f1fc9320e902fc67b4b399b50363",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          }
+        ]
+      }
+    },
+    {
+      "query": "budget",
+      "result": {
+        "status": "source_candidates",
+        "researchDate": "2026-10-16",
+        "evaluation": "Source evidence only; no install or execution grant. Human/community validation must be inspected separately.",
+        "candidates": [
+          {
+            "repository": "BerriAI/litellm",
+            "category": "models",
+            "capability": "LLM proxy / AI gateway: multi-provider routing, spend management, cost tracking; budget tooling candidate.",
+            "source": "https://github.com/BerriAI/litellm/tree/46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+            "sourceRevision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+            "sourceAvailable": true,
+            "licenseSource": "MIT core with separately licensed enterprise scope; BSD family (inspect clause count)",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          }
+        ]
+      }
+    },
+    {
+      "query": "LLM observability",
+      "result": {
+        "status": "source_candidates",
+        "researchDate": "2026-10-16",
+        "evaluation": "Source evidence only; no install or execution grant. Human/community validation must be inspected separately.",
+        "candidates": [
+          {
+            "repository": "traceloop/openllmetry",
+            "category": "observability",
+            "capability": "",
+            "source": "https://github.com/traceloop/openllmetry/tree/94d3f04bd9a7eec0804562fe8126c01a4f342b18",
+            "sourceRevision": "94d3f04bd9a7eec0804562fe8126c01a4f342b18",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "helicone/helicone",
+            "category": "observability",
+            "capability": "LLM proxy / AI gateway and observability: agent/request tracing, cost and latency tracking.",
+            "source": "https://github.com/helicone/helicone/tree/067d9290acb4f1fc9320e902fc67b4b399b50363",
+            "sourceRevision": "067d9290acb4f1fc9320e902fc67b4b399b50363",
+            "sourceAvailable": true,
+            "licenseSource": "Apache-2.0",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          },
+          {
+            "repository": "langfuse/langfuse",
+            "category": "observability",
+            "capability": "LLM observability: tracing, prompt management, evaluation and datasets.",
+            "source": "https://github.com/langfuse/langfuse/tree/0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25",
+            "sourceRevision": "0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25",
+            "sourceAvailable": true,
+            "licenseSource": "MIT",
+            "licenseApproved": false,
+            "runtimeTested": false,
+            "archived": false
+          }
+        ]
+      }
+    }
+  ],
+  "decision": {
+    "madeBy": "human-directed implementation with assisting agents",
+    "foundation": {
+      "repository": "elie222/rakazo",
+      "category": "user-discovery",
+      "capability": "Visos persistent agentų platformos bazės kandidatas",
+      "source": "https://github.com/elie222/rakazo/tree/7d5e64c886da7d556673f99e4923b013315007a9",
+      "sourceRevision": "7d5e64c886da7d556673f99e4923b013315007a9",
+      "sourceAvailable": true,
+      "licenseSource": "Apache-2.0",
+      "licenseApproved": false,
+      "runtimeTested": false,
+      "archived": false
+    },
+    "reason": "Reuse one existing React/API/PostgreSQL/worker workspace instead of starting a second orchestration stack.",
+    "sourceCandidateStatus": "The research index remains source-only. The local adaptation has separate, narrowly scoped implementation evidence."
+  },
+  "reusedComponents": [
+    {
+      "name": "React workspace",
+      "repository": "facebook/react",
+      "manifest": "platform/apps/web/package.json",
+      "dependency": "react",
+      "declaredVersion": "19.2.3",
+      "source": "https://github.com/facebook/react"
+    },
+    {
+      "name": "Hono API",
+      "repository": "honojs/hono",
+      "manifest": "platform/apps/api/package.json",
+      "dependency": "hono",
+      "declaredVersion": "4.13.7",
+      "source": "https://github.com/honojs/hono"
+    },
+    {
+      "name": "Graphile worker",
+      "repository": "graphile/worker",
+      "manifest": "platform/packages/adapters/package.json",
+      "dependency": "graphile-worker",
+      "declaredVersion": "0.17.3",
+      "source": "https://github.com/graphile/worker"
+    },
+    {
+      "name": "Prisma database layer",
+      "repository": "prisma/prisma",
+      "manifest": "platform/packages/db/package.json",
+      "dependency": "@prisma/client",
+      "declaredVersion": "7.10.0",
+      "source": "https://github.com/prisma/prisma"
+    },
+    {
+      "name": "Astro website",
+      "repository": "withastro/astro",
+      "manifest": "platform/apps/www/package.json",
+      "dependency": "astro",
+      "declaredVersion": "7.3.2",
+      "source": "https://github.com/withastro/astro"
+    },
+    {
+      "name": "Vitest verification",
+      "repository": "vitest-dev/vitest",
+      "manifest": "platform/package.json",
+      "dependency": "vitest",
+      "declaredVersion": "4.1.11",
+      "source": "https://github.com/vitest-dev/vitest"
+    },
+    {
+      "name": "Playwright browser checks",
+      "repository": "microsoft/playwright",
+      "manifest": "platform/apps/web/package.json",
+      "dependency": "@playwright/test",
+      "declaredVersion": "1.63.0",
+      "source": "https://github.com/microsoft/playwright"
+    }
+  ],
+  "newWork": [
+    "Repository catalog and read-only executor search tool",
+    "Shared RepositoryZero appearance and source directory",
+    "Jev selector boundary, not paid activation",
+    "Finite account/lane allocation glue using existing PostgreSQL transactions",
+    "Project-specific documentation, website adaptation and verification scripts"
+  ],
+  "priorRecordedChecks": {
+    "checkedAtUtc": "2026-10-16T01:46:11.368392+00:00",
+    "checks": {
+      "scoped_frozen_dependency_install": "PASS",
+      "root_setup_command": "PASS",
+      "unit_tests": {
+        "passed": 98,
+        "files": 10,
+        "scope": "catalog/search, shared SystemOne and tools/model/repo policy boundaries, appearance/locale, tool schema; deterministic offline providers"
+      },
+      "browser_tests": {
+        "passed": 3,
+        "scope": "source evidence without install, empty state, appearance persistence, local account/agent workspace persistence over reload and authenticated synthetic account cleanup",
+        "browser": "system Chromium"
+      },
+      "web_build": "PASS",
+      "web_typecheck": "PASS",
+      "new_jev_adapter_strict_typecheck": "PASS",
+      "website_build": "PASS",
+      "website_visual_review": "desktop1440/mobile390 docs grid15cards reviewed; no overflow or pageerrors; four new Markdown endpoints200",
+      "postgres_local_health": "healthy",
+      "prisma_generate": "PASS",
+      "api_worker_boot": "PASS_local_API_and_one_Graphile_worker",
+      "paid_model_calls": 0,
+      "full_technical_mvp_acceptance": "NOT_RUN",
+      "public_deployment": "NOT_DEPLOYED",
+      "adapters_typecheck": "PASS",
+      "database_migrations": "PASS",
+      "postgres_executor_subset": {
+        "passed": 4,
+        "scope": [
+          "concurrent_claim_once",
+          "expired_lease_higher_fence",
+          "interrupted_external_effect_uncertain_without_replay",
+          "terminal_commit_single_durable_final_message"
+        ],
+        "database": "real_disposable_loopback_PostgreSQL",
+        "models_and_tools": "deterministic_fakes",
+        "migration": "PASS",
+        "cleanup": "PASS",
+        "main_database_or_volume_reset": false,
+        "multiprocess_Graphile_restart": "NOT_RUN"
+      },
+      "database_typecheck": "PASS",
+      "finite_budget_postgres_subset": {
+        "passed": 6,
+        "database": "real_disposable_loopback_PostgreSQL",
+        "scope": [
+          "atomic_shared_account_and_lane_reservation",
+          "sql_failure_rolls_back_receipt_and_both_debits",
+          "global_invocation_id_admitted_once",
+          "held_reservation_survives_reconnect",
+          "missing_disabled_zero_invalid_allocations_deny",
+          "finite_micro_usd_ceiling_under_concurrency"
+        ],
+        "allocation_semantics": "finite_non_expiring_no_automatic_refund",
+        "migration": "PASS",
+        "cleanup": "PASS",
+        "paid_provider_activation": false,
+        "actual_provider_invoice_cap": "NOT_PROVEN",
+        "periodic_windows_and_reconciliation": "NOT_IMPLEMENTED",
+        "process_crash_restart": "NOT_RUN"
+      },
+      "website_why_document": "PASS_local_document_response_and_docs_link",
+      "self_reuse_demonstration": {
+        "status": "PASS",
+        "actual_search_calls": 5,
+        "source_pin_matches_adaptation": true,
+        "existing_component_manifests_read": 7,
+        "paid_model_calls": 0,
+        "network_calls_during_demo": 0,
+        "selection": "human_directed_with_assisting_agents",
+        "full_autonomous_fetch_build": "NOT_IMPLEMENTED"
+      },
+      "jev_application_audit": {
+        "status": "official_source_review_complete",
+        "use_cases": [
+          "tool_selection",
+          "repo_shortlist",
+          "documentation_relevance",
+          "code_file_selection",
+          "test_and_delegation_triage",
+          "auto_model_selection"
+        ],
+        "multiquestion": "supported_by_pinned_official_SDK_source",
+        "source_reuse": "existing_Rakazo_Jev_auto_review_reviewed_and_bounded_reader_reused",
+        "live_provider_quality_cost_savings": "BLOCKED_preflight_no_model_dispatch"
+      },
+      "isolated_reuse_build": {
+        "status": "PASS",
+        "application_cases_passed": 6,
+        "negative_control": "EXPECTED_FAILURE_2_cases_detected",
+        "evidence": "catalog/reuse-build-checks.json",
+        "selection": "human_directed_fixture_not_autonomous_model_generation"
+      },
+      "zero_lab_plan": {
+        "status": "PASS",
+        "planned_profiles": 4,
+        "planned_trials": 4,
+        "attempted": 0,
+        "model_dispatch_attempts": 0,
+        "cost_usd": null,
+        "reused": "existing_eval_report_controls_and_summary",
+        "live_race": "NOT_RUN",
+        "source_digests": 11
+      },
+      "jev_live_repository_preflight": {
+        "status": "BLOCKED_network_before_model_dispatch",
+        "source_candidates": 4,
+        "model_dispatch_attempts": 0,
+        "key_validity": "NOT_VERIFIED",
+        "model_entitlement": "NOT_VERIFIED",
+        "actual_cost": "unavailable",
+        "network_draft": "openrouter.ai_saved_not_applied",
+        "checked_at_utc": "2026-10-16T01:44:48.701Z"
+      },
+      "codex_cli_bridge": {
+        "deterministic_tests_passed": 14,
+        "live_probe": "BLOCKED_local_state_unwritable_before_model_events",
+        "oauth_status": "CLI_reports_OAuth_login",
+        "model": "gpt-6.1-sol_requested_not_verified",
+        "reasoning": "xhigh_requested_not_verified",
+        "usage": null,
+        "credential_files_read_or_copied": false
+      }
+    }
+  },
+  "limitations": [
+    "This script does not ask Jev or a main model to choose or build software.",
+    "Upstream README, stars and an accessible source tree are not our integration PASS.",
+    "LiteLLM, Helicone and Langfuse are source-reviewed alternatives, not installed modules.",
+    "Dependency-specific license and distribution scope still require their own review.",
+    "A full automatic source-fetch, isolated build and independent acceptance cycle remains unfinished.",
+    "No claim of perfect code, artificial superintelligence, or measured token/time savings."
+  ]
+}

@@ -1,0 +1,2 @@
+import type { APIRoute } from "astro";
+export const GET: APIRoute = () => new Response("# RepositoryZero\n\nOne open core. A world of AI tools.\n\nStatus: first MVP implementation; no public software release. Source candidates are not verified integrations.\n\n- /docs/project-v1.md: Product documentation\n- /docs/mvp-roadmap.md: Focused MVP checklist\n- /docs/full-roadmap.md: Full roadmap\n- /catalog/: Source-research directory\n- /changes/: Project changes\n- /support/: Donation status NOT_CONFIGURED\n", { headers: { "Content-Type": "text/plain; charset=utf-8" } });

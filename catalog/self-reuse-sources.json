@@ -1,0 +1,92 @@
+{
+  "scope": "Pinned upstream README and root LICENSE review only; no installed alternative or deep budget enforcement verification",
+  "sources": [
+    {
+      "repository": "BerriAI/litellm",
+      "revision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/BerriAI/litellm/46913be92b785f7cb3cbc0cdc9dde354572cbb2f/README.md",
+      "checked_at_utc": "2026-10-16T00:42:33.499953+00:00",
+      "status": 200,
+      "bytes": 38766,
+      "truncated": false,
+      "sha256": "76a7553835839f7995844b4915ecc9421926af2907bc66db6c3ac63f380bb8b0"
+    },
+    {
+      "repository": "BerriAI/litellm",
+      "revision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/BerriAI/litellm/46913be92b785f7cb3cbc0cdc9dde354572cbb2f/LICENSE",
+      "checked_at_utc": "2026-10-16T00:42:33.500880+00:00",
+      "status": 200,
+      "bytes": 1419,
+      "truncated": false,
+      "sha256": "b170d6bf8e8835dd357e011681db028f4d51e2fb0ea892058f56e01fb39b8273"
+    },
+    {
+      "repository": "helicone/helicone",
+      "revision": "067d9290acb4f1fc9320e902fc67b4b399b50363",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/helicone/helicone/067d9290acb4f1fc9320e902fc67b4b399b50363/README.md",
+      "checked_at_utc": "2026-10-16T00:42:33.501493+00:00",
+      "status": 200,
+      "bytes": 15453,
+      "truncated": false,
+      "sha256": "80c63bc9e4335ab1b4174a452b1fe77074c819d58e982279cacaea2e1efd2a6f"
+    },
+    {
+      "repository": "helicone/helicone",
+      "revision": "067d9290acb4f1fc9320e902fc67b4b399b50363",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/helicone/helicone/067d9290acb4f1fc9320e902fc67b4b399b50363/LICENSE",
+      "checked_at_utc": "2026-10-16T00:42:33.501904+00:00",
+      "status": 200,
+      "bytes": 11341,
+      "truncated": false,
+      "sha256": "6d8db3e822f477520b065f1ebfeb9d6c23aa99967c292d70147aef798ba3efd5"
+    },
+    {
+      "repository": "langfuse/langfuse",
+      "revision": "0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/langfuse/langfuse/0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25/README.md",
+      "checked_at_utc": "2026-10-16T00:42:33.819413+00:00",
+      "status": 200,
+      "bytes": 53476,
+      "truncated": false,
+      "sha256": "d5a07630afeeaa4c11eda7c0d133941950805cb29ce84b13fa272eeb9a3794f5"
+    },
+    {
+      "repository": "langfuse/langfuse",
+      "revision": "0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25",
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/langfuse/langfuse/0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25/LICENSE",
+      "checked_at_utc": "2026-10-16T00:42:33.821630+00:00",
+      "status": 200,
+      "bytes": 1612,
+      "truncated": false,
+      "sha256": "fd09d42b5b16606ad2042cc1edf3a82da1c47743709f170c959c74758af229d6"
+    },
+    {
+      "repository": "BerriAI/litellm",
+      "revision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+      "path": "litellm/proxy/hooks/max_budget_limiter.py",
+      "url": "https://raw.githubusercontent.com/BerriAI/litellm/46913be92b785f7cb3cbc0cdc9dde354572cbb2f/litellm/proxy/hooks/max_budget_limiter.py",
+      "checked_at_utc": "2026-10-16T00:42:33.833629+00:00",
+      "status": 404,
+      "error": "HTTPError"
+    },
+    {
+      "repository": "BerriAI/litellm",
+      "revision": "46913be92b785f7cb3cbc0cdc9dde354572cbb2f",
+      "path": "docs/my-website/docs/proxy/users.md",
+      "url": "https://raw.githubusercontent.com/BerriAI/litellm/46913be92b785f7cb3cbc0cdc9dde354572cbb2f/docs/my-website/docs/proxy/users.md",
+      "checked_at_utc": "2026-10-16T00:42:33.836528+00:00",
+      "status": 404,
+      "error": "HTTPError"
+    }
+  ],
+  "paid_model_calls": 0,
+  "runtime_tests_for_these_three_alternatives": 0,
+  "github_api_tree": "unavailable; no complete tree or internal budget implementation audit claimed"
+}

@@ -1,0 +1,113 @@
+{
+  "manifest_version": "0.1",
+  "id": "reverse.rea.static",
+  "version": "0.1.0-plan.1",
+  "status": "candidate",
+  "upstream": {
+    "repository": "https://github.com/morluto/rea",
+    "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e"
+  },
+  "license": {
+    "code_spdx": "MIT",
+    "model_licenses_verified": false,
+    "third_party_notices_verified": false
+  },
+  "core_compatibility": ">=0.1.0 <0.2.0",
+  "platforms": [
+    "linux-x86_64"
+  ],
+  "capabilities": [
+    {
+      "id": "reverse.static.inspect",
+      "contract_version": "1",
+      "input_schema": "schemas/rea.static.inspect.input.v1.json",
+      "output_schema": "schemas/rea.static.inspect.output.v1.json"
+    }
+  ],
+  "runtime": {
+    "kind": "node_worker",
+    "node_engine": "^22.19.0 || ^24.11.0 || >=26.0.0",
+    "entrypoint": "planned_adapter.rea_static_worker",
+    "command": "node",
+    "arguments": [
+      "PATH_TO_VERIFIED_MODULE/scripts/rea.mjs",
+      "mcp"
+    ],
+    "dependency_lock": null,
+    "artifact_digests": [],
+    "package": {
+      "name": "rea-agents",
+      "version": "6.5.0",
+      "integrity": null,
+      "source_mapping_verified": false
+    },
+    "tool_discovery_digest": null
+  },
+  "permissions": {
+    "network": [],
+    "files_read": [
+      "input_artifact"
+    ],
+    "files_write": [
+      "staging_artifacts"
+    ],
+    "secrets": [],
+    "external_side_effects": []
+  },
+  "authentication": {
+    "required": false
+  },
+  "resources": {
+    "cpu_limit": 2,
+    "ram_limit_mb": 4096,
+    "gpu": "none",
+    "installed_bytes_measured": null,
+    "model_bytes_measured": null,
+    "cache_limit_mb": 1024,
+    "estimates_are_measured": false
+  },
+  "execution": {
+    "timeout_seconds": 300,
+    "max_attempts": 2,
+    "cancellation": "cooperative_then_terminate_process_tree",
+    "idempotency": "canonical_input_digest",
+    "healthcheck": "synthetic_js_entrypoint_fixture",
+    "error_contract": "tool_error.v1"
+  },
+  "tests": {
+    "acceptance_suite": "rea_static_js_v1",
+    "requires": [
+      "golden_entrypoints",
+      "file_line_provenance",
+      "mcp_tool_allowlist",
+      "no_process_capture",
+      "no_optional_frida",
+      "timeout",
+      "no_network"
+    ]
+  },
+  "lifecycle": {
+    "install": "reviewed_adapter_installer_only",
+    "update": "stage_verify_then_atomic_activate",
+    "uninstall": "remove_runtime_and_unreferenced_cache_preserve_user_artifacts"
+  },
+  "activation": {
+    "allowed": false,
+    "blocking_checks": [
+      "published_package_and_source_mapping",
+      "transitive_lifecycle_hooks_review",
+      "dependency_lock_and_integrity",
+      "mcp_tool_fingerprint",
+      "runtime_acceptance",
+      "resource_measurement",
+      "third_party_notices"
+    ]
+  },
+  "costs": {
+    "pricing_status": "unverified",
+    "external_paid_calls_allowed": false,
+    "unit_rate_usd": null,
+    "model_provider_cost_separate": true,
+    "local_compute_cost_measured": false
+  }
+}

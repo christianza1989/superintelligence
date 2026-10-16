@@ -1,0 +1,18 @@
+---
+import SiteFrame from "../components/SiteFrame.astro";
+import { repositoryFile } from "../project-data";
+const calibration = JSON.parse(repositoryFile("catalog/claude-calibration.json"));
+const trialChange = Math.abs(calibration.deltas.trialRelativeChangePercent).toFixed(2);
+const codingChange = Math.abs(calibration.deltas.codingRelativeChangePercent).toFixed(2);
+const tokenChange = Math.abs(calibration.deltas.totalTokensRelativeChangePercent).toFixed(2);
+const changes = [
+  { title: "Repeatable Claude calibration prepared", body: "A bounded runner prepares up to three pairs with alternating order, frozen sources and separate coding and grading time. A compact catalog context is available as a separate candidate. Offline checks pass; new live repetitions have not run yet.", href: "/docs/local-lab.md", label: "Read the local calibration steps" },
+  { title: "One Claude calibration pair recorded", body: `Both generated apps passed API, SQLite restart and desktop/mobile keyboard checks. In this one pair, static Zero catalog context reduced trial time by ${trialChange}% (${codingChange}% for coding) and reported tokens by ${tokenChange}%. Grading time also varied. Repetitions and other tasks are still needed.`, href: "/docs/claude-calibration.md", label: "Read the evidence and limits" },
+  { title: "Claude CLI and SQLite WAL checks integrated", body: "The official subscription CLI adapter, versioned prompt v2 and WAL recovery probe are integrated. Both imported applications passed revalidation without new model calls. The full RepositoryZero runtime, Jev and Auto were outside this test.", href: "/docs/zero-lab.md", label: "Read the module status" },
+  { title: "MVP implementation started", body: "The actual Rakazo source foundation is being adapted, including this Astro website and the product workspace. There is no public software release yet.", href: "/docs/ui-foundations.md", label: "Read the UI decision" },
+  { title: "The reuse-first workflow documented", body: "Discover existing solutions, compare a bounded shortlist, choose one foundation, build the missing part and verify the result.", href: "/docs/project-creation.md", label: "Read the project workflow" },
+  { title: "Jev/OpenRouter selected for MVP tool routing", body: "Jev selects from permitted tools after hard filters. The main reasoning model remains separate. Offline source, tool and model selection checks pass. Live connectivity, billing and quality tests are still pending.", href: "/roadmap/", label: "View the gates" },
+  { title: "Source-research directory prepared", body: "Documented candidates cover agents, coding, data, science, speech, media and other domains. Source entries are not verified or installed integrations.", href: "/catalog/", label: "Browse the source directory" },
+];
+---
+<SiteFrame title="Recent changes — RepositoryZero" description="Dated project changes with their actual scope and source evidence."><section class="page-intro"><span class="eyebrow">PROJECT LOG</span><h1>Built in the open.<br /><span>Recorded honestly.</span></h1><p>Documentation and implementation updates. A source decision is not a released runtime capability.</p></section><div class="change-list">{changes.map((change) => <article class="change-card"><time datetime="2026-10-16">16 OCT 2026</time><div><h2>{change.title}</h2><p>{change.body}</p><a class="text-link" href={change.href}>{change.label} </a></div></article>)}</div></SiteFrame>

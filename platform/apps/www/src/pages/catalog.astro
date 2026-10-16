@@ -1,0 +1,48 @@
+---
+import SiteFrame from "../components/SiteFrame.astro";
+import { sourceCandidates, categories, categoryLabel, snapshot } from "../project-data";
+const first = sourceCandidates.slice(0, 18);
+const payload = JSON.stringify(sourceCandidates).replaceAll("<", "\\u003c");
+---
+<SiteFrame title="Source directory — RepositoryZero" description="Search the public source-research directory. Candidate entries are not installed or verified integrations.">
+  <section class="page-intro"><span class="eyebrow">THE SOURCE DIRECTORY</span><h1>Find a starting point.<br /><span>Build on existing work.</span></h1><p>Search repository names, domains and source license notes. These are research candidates: no entry here grants permission to install or proves a working integration.</p></section>
+  <div class="catalog-toolbar"><label for="candidate-search">Search source candidates<input id="candidate-search" type="search" placeholder="Try speech, browser, PDF or a repository name" autocomplete="off" /></label><label for="candidate-category">Category<select id="candidate-category"><option value="">All categories</option>{categories.map((category) => <option value={category}>{categoryLabel(category)}</option>)}</select></label></div>
+  <div class="catalog-summary"><span id="candidate-count" aria-live="polite">Showing {first.length} of {sourceCandidates.length} source candidates</span><span>Snapshot {snapshot.date} · <a href="/catalog.json">Download source index </a></span></div>
+  <div class="candidate-grid" id="candidate-grid">{first.map((entry) => <article class="candidate-card"><span class="tiny-label">{categoryLabel(entry.category)}</span><h2>{entry.repository}</h2><div class="candidate-meta"><span class="tag">SOURCE CANDIDATE</span><span class="tag">RUNTIME NOT RUN</span></div><p>{entry.license}</p><p>Source revision: {entry.revision ? entry.revision.slice(0, 12) : "not established"}</p><a class="source-link" href={"https://github.com/" + entry.repository} target="_blank" rel="noreferrer">View upstream source </a></article>)}</div>
+  <div class="catalog-bottom"><button id="candidate-more" class="button button--secondary" type="button">Show more sources </button></div>
+  <noscript><p class="note-panel">JavaScript enables local filtering and pagination. The complete source index is available as a JSON download above.</p></noscript>
+  <script type="application/json" id="candidate-data" set:html={payload}></script>
+</SiteFrame>
+<script>
+  type Candidate = { repository: string; category: string; revision: string; license: string; capability: string };
+  const source = document.getElementById("candidate-data");
+  const input = document.getElementById("candidate-search");
+  const category = document.getElementById("candidate-category");
+  const grid = document.getElementById("candidate-grid");
+  const count = document.getElementById("candidate-count");
+  const more = document.getElementById("candidate-more");
+  if (source && input instanceof HTMLInputElement && category instanceof HTMLSelectElement && grid && count && more instanceof HTMLButtonElement) {
+    const entries: Candidate[] = JSON.parse(source.textContent || "[]");
+    let limit = 18;
+    function element(name: string, className: string, text: string) {
+      const node = document.createElement(name); node.className = className; node.textContent = text; return node;
+    }
+    const render = () => {
+      const query = input.value.trim().toLowerCase();
+      const selected = entries.filter((entry) => (!category.value || entry.category === category.value) && (!query || (entry.repository + " " + entry.category.replaceAll("-", " ") + " " + entry.license + " " + entry.capability).toLowerCase().includes(query)));
+      const nodes = selected.slice(0, limit).map((entry) => {
+        const card = element("article", "candidate-card", "");
+        const tags = element("div", "candidate-meta", ""); tags.append(element("span", "tag", "SOURCE CANDIDATE"), element("span", "tag", "RUNTIME NOT RUN"));
+        const link = document.createElement("a"); link.className = "source-link"; link.href = "https://github.com/" + entry.repository; link.target = "_blank"; link.rel = "noreferrer"; link.textContent = "View upstream source ";
+        card.append(element("span", "tiny-label", entry.category.replaceAll("-", " ")), element("h2", "", entry.repository), tags, element("p", "", entry.license), element("p", "", "Source revision: " + (entry.revision ? entry.revision.slice(0, 12) : "not established")), link);
+        return card;
+      });
+      if (!nodes.length) nodes.push(element("p", "empty-state", "No matching source candidates. Try a different term or category."));
+      grid.replaceChildren(...nodes); count.textContent = "Showing " + Math.min(limit, selected.length) + " of " + selected.length + " source candidates"; more.hidden = selected.length <= limit;
+    };
+    input.addEventListener("input", () => { limit = 18; render(); });
+    category.addEventListener("change", () => { limit = 18; render(); });
+    more.addEventListener("click", () => { limit += 18; render(); });
+    render();
+  }
+</script>

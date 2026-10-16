@@ -1,0 +1,191 @@
+{
+  "research_date": "2026-10-16",
+  "scope": "Public immutable official source analysis; no updater or deployment runtime executed.",
+  "primary_sources": [
+    {
+      "repository": "theupdateframework/specification",
+      "source_revision": "d4cb70582ba507b9265672792c0fc8a5f390b851",
+      "url": "https://raw.githubusercontent.com/theupdateframework/specification/d4cb70582ba507b9265672792c0fc8a5f390b851/tuf-spec.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:57:07.100323+00:00",
+      "sha256": "87c7136231b8cb3355736d8e7cfe88380d030cb2994ea283a19e78e03fb171ff",
+      "excerpts": [
+        {
+          "term": "rollback",
+          "text": "us tricking a software update system into\n  thinking any subsequent updates are trying to rollback the package to a\n  previous, out-of-date version.  In some situations, such as those where\n  there is a maximum possible version number, the perpetrator cannot use a\n  number so high that the system would never be able to match it with the\n  one in the snapshot metadata, and thus new updates could never be\n  downloaded.\n\n+ **Indefinite freeze attacks.**  An attacker cannot respond to client\n  requests with the same, outdated metadata without the client being aware\n  of the problem.\n\n+ **Malicious mirrors preventing updates.**  A repository mirror cannot\n  prevent updates from good mir"
+        },
+        {
+          "term": "freeze",
+          "text": " the snapshot metadata, and thus new updates could never be\n  downloaded.\n\n+ **Indefinite freeze attacks.**  An attacker cannot respond to client\n  requests with the same, outdated metadata without the client being aware\n  of the problem.\n\n+ **Malicious mirrors preventing updates.**  A repository mirror cannot\n  prevent updates from good mirrors.\n\n+ **Mix-and-match attacks.**  An attacker cannot trick clients into using\n  a combination of metadata that never existed together on the repository\n  at the same time.\n\n+ **Rollback attacks.**  An attacker cannot trick clients into installing\n  software that is older than that which the client previously knew to be\n  available.\n\n+ **Vulne"
+        },
+        {
+          "term": "root",
+          "text": "ingful, a role should be able to\n  delegate full or limited trust to another role.\n\n* The root of trust must not rely on external PKI.  That is, no authority will\n  be derived from keys outside of the framework.\n\n### TUF Augmentation Proposal (TAP) support ### {#tuf-augmentation-proposal-tap-support}\n\nThis major version (1.x.y) of the specification adheres to the following TAPs:\n\n- [TAP 6](https://github.com/theupdateframework/taps/blob/master/tap6.md):\n    Include specification version in metadata\n- [TAP 9](https://github.com/theupdateframework/taps/blob/master/tap9.md):\n    Mandatory Metadata signing schemes\n- [TAP 10](https://github.com/theupdateframework/taps/blob/master/tap10."
+        },
+        {
+          "term": "expiration",
+          "text": "n using TUF to effectively pause time, in order to ensure that\nmetadata which has a valid expiration time at the beginning of an update\ndoes not fail an expiration check later in the update workflow.\n\n## Load trusted root metadata ## {#load-trusted-root}\n\nLoad the trusted root metadata file.  We assume that a good,\ntrusted copy of this file was shipped with the package manager or software\nupdater using an out-of-band process.  Note that the expiration of the\ntrusted root metadata file does not matter, because we will attempt to update\nit in the next step.\n\n## Update the root role ## {#update-root}\n\n1. Since it may now be signed using entirely different keys, the client MUST\n  someh"
+        }
+      ],
+      "scope": "source documentation only; not runtime validation"
+    },
+    {
+      "repository": "github/docs",
+      "source_revision": "83119024f6fae13def06f07774686e4e91212f46",
+      "url": "https://raw.githubusercontent.com/github/docs/83119024f6fae13def06f07774686e4e91212f46/content/actions/reference/workflows-and-actions/events-that-trigger-workflows.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:57:07.119134+00:00",
+      "sha256": "69e251c1510f84d7b0a05ff8a4146456e657f175133081213805e02b0a655f50",
+      "excerpts": [
+        {
+          "term": "pull_request_target",
+          "text": "unlabeled` activity types for the [`issues`](#issues), [`pull_request`](#pull_request), [`pull_request_target`](#pull_request_target), or [`discussion`](#discussion) events instead.\n\nFor example, you can run a workflow when a label has been `created` or `deleted`.\n\n```yaml\non:\n  label:\n    types: [created, deleted]\n```\n\n## `merge_group`\n\n| Webhook event payload | Activity types | `GITHUB_SHA` | `GITHUB_REF` |\n| --------------------- | -------------- | ------------ | -------------|\n| [`merge_group`](/webhooks/webhook-events-and-payloads#merge_group) | `checks_requested` | SHA of the merge group | Ref of the merge group |\n\n> [!NOTE]\n>\n> * {% data reusables.developer-site.multiple_act"
+        },
+        {
+          "term": "secrets",
+          "text": "safe code from the head of the pull request that could alter your repository or steal any secrets you use in your workflow. This event allows your workflow to do things like label or comment on pull requests from forks. Avoid using this event if you need to build or run code from the pull request.\n\nTo ensure repository security, branches with names that match certain patterns (such as those which look similar to SHAs) may not trigger workflows with the `pull_request_target` event.\n\n{% data reusables.actions.pull-request-target-permissions-warning %}\n\nFor example, you can run a workflow when a pull request has been `assigned`, `opened`, `synchronize`, or `reopened`.\n\n```yaml\non:\n  p"
+        },
+        {
+          "term": "merge_group",
+          "text": "been `created` or `deleted`.\n\n```yaml\non:\n  label:\n    types: [created, deleted]\n```\n\n## `merge_group`\n\n| Webhook event payload | Activity types | `GITHUB_SHA` | `GITHUB_REF` |\n| --------------------- | -------------- | ------------ | -------------|\n| [`merge_group`](/webhooks/webhook-events-and-payloads#merge_group) | `checks_requested` | SHA of the merge group | Ref of the merge group |\n\n> [!NOTE]\n>\n> * {% data reusables.developer-site.multiple_activity_types %} Although only the `checks_requested` activity type is supported, specifying the activity type will keep your workflow specific if more activity types are added in the future. For information about each activity type, see "
+        },
+        {
+          "term": "schedule",
+          "text": "kflows to run when specific activity on {% data variables.product.github %} happens, at a scheduled time, or when an event outside of {% data variables.product.github %} occurs.\nredirect_from:\n  - /articles/events-that-trigger-workflows\n  - /github/automating-your-workflow-with-github-actions/events-that-trigger-workflows\n  - /actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows\n  - /actions/learn-github-actions/events-that-trigger-workflows\n  - /actions/using-workflows/events-that-trigger-workflows\n  - /actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows\n  - /actions/reference/events-that-trigger-workflows\nversions"
+        }
+      ],
+      "scope": "source documentation only; not runtime validation"
+    },
+    {
+      "repository": "github/docs",
+      "source_revision": "83119024f6fae13def06f07774686e4e91212f46",
+      "url": "https://raw.githubusercontent.com/github/docs/83119024f6fae13def06f07774686e4e91212f46/content/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:57:07.056437+00:00",
+      "sha256": "3ccb7ceb787e04077634c15ff7b5cf63641f20b0245341dcf31d6ac3511e382e",
+      "excerpts": [
+        {
+          "term": "merge_group",
+          "text": "ge group checks with {% data variables.product.prodname_actions %}\n\nYou **must** use the `merge_group` event to trigger your {% data variables.product.prodname_actions %} workflow when a pull request is added to a merge queue.\n\n> [!NOTE]\n> {% data reusables.actions.merge-group-event-with-required-checks %}\n\nA workflow that reports a check which is required by the target branch's protections would look like this:\n\n```yaml\non:\n  pull_request:\n  merge_group:\n```\n\nFor more information on the `merge_group` event, see [AUTOTITLE](/actions/reference/workflows-and-actions/events-that-trigger-workflows#merge_group).\n\n### Triggering merge group checks with third-party CI providers\n\nWith thir"
+        },
+        {
+          "term": "merge queue",
+          "text": "---\ntitle: Managing a merge queue\nintro: You can increase development velocity with a merge queue for pull requests in your repository.\nversions:\n  fpt: '*'\n  ghec: '*'\n  ghes: '*'\npermissions: People with admin permissions can manage merge queues for pull requests targeting selected branches of a repository.\nproduct: '{% data reusables.gated-features.merge-queue %}'\nshortTitle: Managing merge queue\nredirect_from:\n  - /repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/using-a-merge-queue\ncategory:\n  - Configure merges and pull requests\n---\n\n## About merge queues\n\n{% dat"
+        }
+      ],
+      "scope": "source documentation only; not runtime validation"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/api/auto-updater.md",
+      "resolved_url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/api/auto-updater.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.758740+00:00",
+      "sha256": "2cfd575c3fc4baca5db61513144b794518e6394bbc440eebed97124e2aa3b4f0",
+      "bytes": 8930,
+      "repository": "electron/electron",
+      "source_revision": "2766ef64b6593b647cc69a277e1555855a9de1e0",
+      "path": "docs/api/auto-updater.md",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/updates.md",
+      "resolved_url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/updates.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.758721+00:00",
+      "sha256": "ed405716b0fa8ffded75697e5d5f50a31a15e96951ac69bf97659c34db7ed7e8",
+      "bytes": 11953,
+      "repository": "electron/electron",
+      "source_revision": "2766ef64b6593b647cc69a277e1555855a9de1e0",
+      "path": "docs/tutorial/updates.md",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/code-signing.md",
+      "resolved_url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/code-signing.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.790144+00:00",
+      "sha256": "3c93f060eb8f85510b30303d1e255c2d5906870ecc1498a920ac4a2ad9c2318b",
+      "bytes": 13286,
+      "repository": "electron/electron",
+      "source_revision": "2766ef64b6593b647cc69a277e1555855a9de1e0",
+      "path": "docs/tutorial/code-signing.md",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/application-distribution.md",
+      "resolved_url": "https://raw.githubusercontent.com/electron/electron/2766ef64b6593b647cc69a277e1555855a9de1e0/docs/tutorial/application-distribution.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.724099+00:00",
+      "sha256": "7c29b5d82f785ebe5cc1d8fa066e43c1bffb1b62571e88a825b11fa6d7ba6aef",
+      "bytes": 4359,
+      "repository": "electron/electron",
+      "source_revision": "2766ef64b6593b647cc69a277e1555855a9de1e0",
+      "path": "docs/tutorial/application-distribution.md",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron-userland/electron-builder/434f6e98b017c14176be9aaf06891f09624c88fc/packages/electron-updater/src/AppUpdater.ts",
+      "resolved_url": "https://raw.githubusercontent.com/electron-userland/electron-builder/434f6e98b017c14176be9aaf06891f09624c88fc/packages/electron-updater/src/AppUpdater.ts",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.750993+00:00",
+      "sha256": "de0e29dc5083e1f7815d61da5342d5d0a7c2ea17a04955c494fae48fa33e2050",
+      "bytes": 61451,
+      "repository": "electron-userland/electron-builder",
+      "source_revision": "434f6e98b017c14176be9aaf06891f09624c88fc",
+      "path": "packages/electron-updater/src/AppUpdater.ts",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/electron-userland/electron-builder/434f6e98b017c14176be9aaf06891f09624c88fc/packages/electron-updater/src/AppImageUpdater.ts",
+      "resolved_url": "https://raw.githubusercontent.com/electron-userland/electron-builder/434f6e98b017c14176be9aaf06891f09624c88fc/packages/electron-updater/src/AppImageUpdater.ts",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.746238+00:00",
+      "sha256": "2e5415bc5c8e3b484a7519a12a8a82857e0b62dc48ce7cdef489b3dcaa26db44",
+      "bytes": 5668,
+      "repository": "electron-userland/electron-builder",
+      "source_revision": "434f6e98b017c14176be9aaf06891f09624c88fc",
+      "path": "packages/electron-updater/src/AppImageUpdater.ts",
+      "runtime_tested": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MicrosoftDocs/win32/ca8274decead49403d70ceeed4af8d4ca74eaf11/desktop-src/SecCrypto/signtool.md",
+      "resolved_url": "https://raw.githubusercontent.com/MicrosoftDocs/win32/ca8274decead49403d70ceeed4af8d4ca74eaf11/desktop-src/SecCrypto/signtool.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T22:19:06.759020+00:00",
+      "sha256": "17bee547ba6e87838cfd5a0f3c5f529e72e99869d7113e92f9b734e4d0a43171",
+      "bytes": 18506,
+      "repository": "MicrosoftDocs/win32",
+      "source_revision": "ca8274decead49403d70ceeed4af8d4ca74eaf11",
+      "path": "desktop-src/SecCrypto/signtool.md",
+      "runtime_tested": false
+    }
+  ],
+  "blocked_documentation_requests": [
+    {
+      "name": "electron-updates",
+      "url": "https://www.electronjs.org/docs/latest/tutorial/updates",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "name": "electron-autoupdater",
+      "url": "https://www.electronjs.org/docs/latest/api/auto-updater",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "name": "electron-security",
+      "url": "https://www.electronjs.org/docs/latest/tutorial/security",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "name": "github-untrusted-pr",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "name": "github-merge-queue",
+      "url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "runtime_status": "NOT_RUN"
+}

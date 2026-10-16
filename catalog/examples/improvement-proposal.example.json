@@ -1,0 +1,31 @@
+{
+  "proposal_version": "1",
+  "finding_id": "example_synthetic_pdf_header",
+  "scope": "platform_adapter",
+  "base_revision": "not_yet_implemented",
+  "module_id": "documents.docling",
+  "classification": "reproducible_bug",
+  "autonomy_level": "B",
+  "lease_id": "example_lease",
+  "fencing_token": 17,
+  "evidence": {
+    "fixture_class": "synthetic",
+    "private_data_exported": false,
+    "baseline_run": null,
+    "candidate_run": null,
+    "trusted_suite_revision": null,
+    "environment_digest": null,
+    "before_metrics": null,
+    "after_metrics": null,
+    "known_regressions": []
+  },
+  "state": "planned_not_run",
+  "risk": "unassessed_until_execution",
+  "required_review": [
+    "module_owner"
+  ],
+  "rollback": {
+    "strategy": "previous_adapter_release",
+    "migration_required": false
+  }
+}

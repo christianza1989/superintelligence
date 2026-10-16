@@ -1,0 +1,143 @@
+{
+  "kind": "controlled_fixture_evaluator_conformance_not_generated_app_benchmark",
+  "checkedAtUtc": "2026-10-16T02:02:19.513Z",
+  "evaluatorSourceDigest": "3098124c62f86293988dc78b6f417de5f9ff6f2fdf628a7489ce3abc874396f4",
+  "positive": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "status": "partial",
+    "functionalStatus": "passed",
+    "qualityComplete": false,
+    "trustProfile": "controlled_synthetic",
+    "api": {
+      "status": "passed",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "subtests": 7,
+      "outputSha256": "44e630f49c292a059b2f21a55edbe35fb72881835787676348ffb5ab2917f6be"
+    },
+    "persistence": {
+      "status": "passed",
+      "coldContainerRestart": true,
+      "fieldsPreserved": true,
+      "sqliteHeader": true,
+      "quickCheck": "ok",
+      "sqliteTaskStored": true
+    },
+    "ui": {
+      "status": "not_run",
+      "reason": "desktop_mobile_keyboard_browser_profile_not_implemented"
+    },
+    "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+    "profile": {
+      "id": "sprintdesk-node24-prebuilt-linux-x64-v1",
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "nodeVersion": "24",
+      "platform": "linux",
+      "arch": "x64",
+      "dependencyMode": "prebuilt_no_declared_external_npm_dependencies_no_install",
+      "startCommand": "npm --ignore-scripts start",
+      "network": "none",
+      "dataLimitBytes": 67108864,
+      "persistenceBoundary": "application_container_restart_not_daemon_or_host_restart",
+      "sqliteRecordProbe": "task_id_and_title_in_one_regular_table_row_including_json_cells_max32tables_512rows",
+      "uiImplemented": false
+    },
+    "paidModelCalls": 0,
+    "cleanup": "passed",
+    "limitations": [
+      "Linux x64, prebuilt Node24 builtins-only artifacts; no dependency installation",
+      "Explicit controlled local code grant, not a human audit claim or hostile upstream PR sandbox",
+      "API and persistence success does not establish full UI or benchmark quality",
+      "Bounded tmpfs verifies SQLite across app restart, not disk durability across host or Docker daemon restart"
+    ],
+    "sourceDigest": "8bbcb0950fa18b7ed9772e98cf2310a3d5dd44ce34c95fbeecf4527f0b8b9c5e",
+    "sourceFiles": 4,
+    "sourceBytes": 5374,
+    "acceptanceDigest": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+    "isolation": {
+      "network": "none",
+      "user": "1000:1000",
+      "readOnlySource": true,
+      "readOnlyRoot": true,
+      "writableData": "invocation_owned_tmpfs_volume",
+      "dataLimitBytes": 67108864,
+      "anchorKeepsDataMountedAcrossRestart": true,
+      "memoryBytes": 268435456,
+      "pids": 128,
+      "nanoCpus": 1000000000,
+      "graderSeparateContainer": true,
+      "inheritedSecretEnvironment": false,
+      "hostSocketMountedInContainer": false
+    },
+    "elapsedMs": 11547
+  },
+  "persistenceRegression": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "status": "failed",
+    "functionalStatus": "failed",
+    "qualityComplete": false,
+    "trustProfile": "controlled_synthetic",
+    "api": {
+      "status": "passed",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "subtests": 7,
+      "outputSha256": "3dcc17f0ab985a0d56d645e482c280cf2acd8d16c5ca7656f9daac615ef3cfbb"
+    },
+    "persistence": {
+      "status": "failed"
+    },
+    "ui": {
+      "status": "not_run",
+      "reason": "desktop_mobile_keyboard_browser_profile_not_implemented"
+    },
+    "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+    "profile": {
+      "id": "sprintdesk-node24-prebuilt-linux-x64-v1",
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "nodeVersion": "24",
+      "platform": "linux",
+      "arch": "x64",
+      "dependencyMode": "prebuilt_no_declared_external_npm_dependencies_no_install",
+      "startCommand": "npm --ignore-scripts start",
+      "network": "none",
+      "dataLimitBytes": 67108864,
+      "persistenceBoundary": "application_container_restart_not_daemon_or_host_restart",
+      "sqliteRecordProbe": "task_id_and_title_in_one_regular_table_row_including_json_cells_max32tables_512rows",
+      "uiImplemented": false
+    },
+    "paidModelCalls": 0,
+    "cleanup": "passed",
+    "limitations": [
+      "Linux x64, prebuilt Node24 builtins-only artifacts; no dependency installation",
+      "Explicit controlled local code grant, not a human audit claim or hostile upstream PR sandbox",
+      "API and persistence success does not establish full UI or benchmark quality",
+      "Bounded tmpfs verifies SQLite across app restart, not disk durability across host or Docker daemon restart"
+    ],
+    "sourceDigest": "d3455ad590101b20f09b2c61d7bf54e2a443963e382152e2aa9a232bc7ae94e7",
+    "sourceFiles": 4,
+    "sourceBytes": 5356,
+    "acceptanceDigest": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+    "isolation": {
+      "network": "none",
+      "user": "1000:1000",
+      "readOnlySource": true,
+      "readOnlyRoot": true,
+      "writableData": "invocation_owned_tmpfs_volume",
+      "dataLimitBytes": 67108864,
+      "anchorKeepsDataMountedAcrossRestart": true,
+      "memoryBytes": 268435456,
+      "pids": 128,
+      "nanoCpus": 1000000000,
+      "graderSeparateContainer": true,
+      "inheritedSecretEnvironment": false,
+      "hostSocketMountedInContainer": false
+    },
+    "reason": "restart_or_sqlite_persistence_failed",
+    "elapsedMs": 8491
+  }
+}

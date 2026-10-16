@@ -1,0 +1,53 @@
+{
+  "research_date": "2026-10-16",
+  "timezone": "Europe/Kiev",
+  "stats": {
+    "requested_urls": 806,
+    "http_200": 767,
+    "unique_accessible_repositories": 757,
+    "registry_records_including_unresolved": 796,
+    "readme_files_read": 760,
+    "repositories_with_license_files_read": 726,
+    "selected": 100,
+    "selected_with_readme_and_license": 100,
+    "selected_manifest_files_read": 88,
+    "selected_ci_workflows_read": 86,
+    "independent_source_checks": 25,
+    "runtime_tests": 0,
+    "popularity_sources": 18,
+    "popularity_observations": 195,
+    "unique_repositories_with_readme": 750,
+    "unique_repositories_with_license_source": 716,
+    "initial_documentary_sample": 100,
+    "new_main_expansion_addresses": 163,
+    "new_media_expansion_addresses": 155,
+    "new_second_agent_candidates": 55
+  },
+  "limitations": [
+    "No runtime candidate tests",
+    "GitHub REST API blocked by proxy; official GitHub HTML and immutable raw file URLs used",
+    "No paid tools or calls",
+    "Not an exhaustive historical GitHub census",
+    "No claim that documentary scores predict actual task success",
+    "Code, weights, voices, data, assets and provider APIs have separate terms. Public GitHub source does not establish open-source status or deployment permission.",
+    "Additional unscored candidates were collected without manufacturing quality scores."
+  ],
+  "status": "planning_artifacts",
+  "schema_version": "0.2-plan",
+  "candidate_count_limit": null,
+  "selected_scope": "Historical initial100 documentary sample; all expanded candidates await rigorous task-based selection.",
+  "additional_source_snapshots": [
+    {
+      "path": "router-candidates.json",
+      "scope": "separate Jev/Laya follow-up; not folded into historical source-pool stats",
+      "repositories": 15,
+      "runtime_tests": 0
+    },
+    {
+      "path": "ui-foundations.json",
+      "scope": "six UI follow-up candidates, overlaps historic pool; no aggregate count inflation",
+      "repositories": 6,
+      "runtime_tests": 0
+    }
+  ]
+}

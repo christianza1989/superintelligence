@@ -1,0 +1,15 @@
+---
+import { GITHUB_URL, APP_DISCOVER_URL } from "../site";
+import Button from "./Button.astro";
+import Logo from "./Logo.astro";
+const links = [{ href: "/catalog/", label: "Tool directory" }, { href: "/roadmap/", label: "Roadmap" }, { href: "/changes/", label: "Changes" }];
+const current = Astro.url.pathname;
+---
+<header class="site-header">
+  <Logo />
+  <nav class="site-nav" aria-label="Main navigation">
+    {links.map((link) => <a href={link.href} aria-current={current === link.href ? "page" : undefined}>{link.label}</a>)}
+  </nav>
+  <div class="header-actions">{APP_DISCOVER_URL && <a href={APP_DISCOVER_URL} class="support-link">Open workspace </a>}<a href="/support/" class="support-link">Support</a><Button href={GITHUB_URL} size="sm" external>GitHub <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></Button></div>
+  <details class="site-menu"><summary aria-label="Open navigation">Menu <span aria-hidden="true">+</span></summary><nav aria-label="Mobile navigation">{links.map((link) => <a href={link.href}>{link.label}</a>)}<a href="/support/">Support</a>{APP_DISCOVER_URL && <a href={APP_DISCOVER_URL}>Open workspace</a>}</nav></details>
+</header>

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:superintelligence:document.extract_tables.output.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "table_artifacts",
+    "source_artifact_id",
+    "validation_state"
+  ],
+  "properties": {
+    "table_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      },
+      "maxItems": 100
+    },
+    "source_artifact_id": {
+      "type": "string"
+    },
+    "validation_state": {
+      "enum": [
+        "unverified",
+        "verified",
+        "failed"
+      ]
+    }
+  }
+}

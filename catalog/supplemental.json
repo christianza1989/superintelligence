@@ -1,0 +1,291 @@
+{
+  "research_date": "2026-10-16",
+  "projects": [
+    {
+      "selection_order": 101,
+      "name": "inbox-zero",
+      "repository": "elie222/inbox-zero",
+      "github_url": "https://github.com/elie222/inbox-zero",
+      "requested_alias": "elie222/inbox-zero",
+      "category": "user-discovery-email",
+      "purpose": "El. pašto taisyklės, rūšiavimas ir atsakymų juodraščiai",
+      "new_capability": "El. pašto taisyklės, rūšiavimas ir atsakymų juodraščiai",
+      "realistic_task": "Sintetiniame Gmail/Outlook inbox suklasifikuoti laiškus ir parengti atsakymų juodraščius",
+      "selection_reason": "Vartotojo C6 radinys prideda iki šiol nepakankamai aprėptą email gebėjimą ir vietinius provider emuliatorius",
+      "strongest_alternative": "Plonas Gmail/Graph API connector modulis",
+      "alternative_difference": "Inbox Zero yra pilna specializuota app su taisyklėmis ir emuliatoriais; plonas connector lengvesnis",
+      "integration": "Pasirenkamas atskiras servisas/adapteris; read ir draft profilis pirmas",
+      "languages": [
+        "TypeScript"
+      ],
+      "target_os": "Linux separate service",
+      "upstream_os_mentions_in_readme": [
+        "Android",
+        "Linux",
+        "Windows",
+        "iOS",
+        "macOS"
+      ],
+      "full_upstream_os_matrix_audited": false,
+      "dependencies_summary": "Application, DB/queue, migrations, backups and operator",
+      "version_constraints_observed": [
+        "packageManager=pnpm@11.19.0",
+        "engines={\"node\": \"24.x\"}"
+      ],
+      "resources": {
+        "measurement_status": "NOT_RUN",
+        "measured_cpu_ram_gpu_disk": null,
+        "initial_test_reservation_estimate": "4–8 CPU,8–16 GiB initial cap; storage unknown",
+        "resource_profile": "service-heavy",
+        "claim": "Planning reservation, not upstream minimum or observed consumption."
+      },
+      "license": {
+        "expression_summary": "LicenseRef-Inbox-Zero-commercial-enterprise-restricted (AGPL text plus additional restrictions)",
+        "status": "source_read_scope_review_pending",
+        "conditions": "Retain license/copyright and applicable notices; no trademark permission inferred. Inspect bundled dependencies and file-level exceptions before redistribution. Copyleft obligations depend on linking, modification, distribution and, for AGPL, network-use scope; a separate process is not a blanket exemption. Exclude separately licensed enterprise paths from the proposed community distribution unless their terms are independently accepted.",
+        "code_license_does_not_cover_models_data_or_assets": true,
+        "scope_approval_for_distribution": false
+      },
+      "execution_cost": {
+        "external_account_required": "No external account inherent to the local capability; optional connectors/providers may require one",
+        "price_verified": false,
+        "price_usd": null,
+        "model_and_api_costs_separate": true,
+        "formula": "tokens_in*P_in/1e6 + tokens_out*P_out/1e6 + tool_api + compute_hours*P_compute + storage + egress + maintenance",
+        "offline_claim": "Local computation path is a candidate; installation/download and optional remote dependencies must be separately verified."
+      },
+      "maturity_evidence": {
+        "source_facts": {
+          "repository_accessible": true,
+          "readme_read": true,
+          "license_source_read": true,
+          "manifest_read": "package.json",
+          "ci_yaml_read": ".github/workflows/test.yml",
+          "archived_notice_observed": false,
+          "head_sha_observed": "f482190a12aa5708f67d64a4f088b96d7029741f"
+        },
+        "test_directories_observed": [
+          ".github"
+        ],
+        "latest_ci_pass_status": "not_checked",
+        "release_history_audit": "pending",
+        "claims": "README availability, checked manifest/CI source and exact source revision do not prove current runtime quality."
+      },
+      "limitations": "AGPL ir visas licencijų scope, OAuth scopes, laiškų injection, draft/send ir unsubscribe šalutiniai veiksmai; LLM emuliatorius netikrina kokybės",
+      "integration_complexity": "didelis",
+      "complexity_reason": "AGPL ir visas licencijų scope, OAuth scopes, laiškų injection, draft/send ir unsubscribe šalutiniai veiksmai; LLM emuliatorius netikrina kokybės",
+      "scores": {
+        "practical_capability_quality": 8,
+        "integration_fit": 7,
+        "maturity_maintenance_tests": 12,
+        "license_fit": 0,
+        "cost_self_hosting": 6,
+        "speed_resources": 5,
+        "isolation_permissions_reliability": 5,
+        "incremental_value_overlap": 8
+      },
+      "score_total": 51,
+      "score_kind": "provisional_documentary_architecture_fit_not_a_benchmark",
+      "quality_score_scope": {
+        "documented_task_fit_0_10": 8,
+        "empirical_quality_0_10": null,
+        "empirical_quality_credit": 0,
+        "note": "Unmeasured quality points are unawarded, not evidence of failure."
+      },
+      "score_rationale": {
+        "capability": "Vartotojo C6 radinys prideda iki šiol nepakankamai aprėptą email gebėjimą ir vietinius provider emuliatorius",
+        "integration": "Pasirenkamas atskiras servisas/adapteris; read ir draft profilis pirmas; didelis",
+        "maturity": "CI YAML .github/workflows/test.yml; test paths ['.github']",
+        "license": "LicenseRef-Inbox-Zero-commercial-enterprise-restricted (AGPL text plus additional restrictions)",
+        "cost_resources": "service-heavy; not measured",
+        "isolation": "5/10 reflects an adapter isolation proposal without runtime security evidence",
+        "incremental_value": "Inbox Zero yra pilna specializuota app su taisyklėmis ir emuliatoriais; plonas connector lengvesnis"
+      },
+      "priority": "P2",
+      "role": "pasirenkamas modulis",
+      "registry_status": "license_blocked_reference_only",
+      "required_by_user": false,
+      "confidence": "medium-for-source-interface; low-for-runtime",
+      "evidence_level": "L2_public_entrypoint_source_read",
+      "claim_labels": {
+        "verified_source_facts": {
+          "repository_accessible": true,
+          "readme_read": true,
+          "license_source_read": true,
+          "manifest_read": "package.json",
+          "ci_yaml_read": ".github/workflows/test.yml",
+          "archived_notice_observed": false,
+          "head_sha_observed": "f482190a12aa5708f67d64a4f088b96d7029741f"
+        },
+        "authors_claims": "The capability and advertised platform support described in the official README; not reproduced here.",
+        "our_inference": [
+          "Vartotojo C6 radinys prideda iki šiol nepakankamai aprėptą email gebėjimą ir vietinius provider emuliatorius",
+          "Inbox Zero yra pilna specializuota app su taisyklėmis ir emuliatoriais; plonas connector lengvesnis",
+          "pasirenkamas modulis",
+          "P2"
+        ],
+        "not_verified": [
+          "end-to-end integration",
+          "performance",
+          "cost",
+          "actual resource usage",
+          "full license compatibility",
+          "full OS matrix",
+          "recent issue response and release cadence"
+        ]
+      },
+      "research_date": "2026-10-16",
+      "source_revision": "f482190a12aa5708f67d64a4f088b96d7029741f",
+      "runtime_tested": false,
+      "runtime_status": "NOT_RUN",
+      "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/elie222/inbox-zero"
+        },
+        {
+          "type": "readme",
+          "url": "https://github.com/elie222/inbox-zero/blob/f482190a12aa5708f67d64a4f088b96d7029741f/README.md"
+        },
+        {
+          "type": "license",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/LICENSE"
+        },
+        {
+          "type": "manifest_read",
+          "url": "https://github.com/elie222/inbox-zero/blob/f482190a12aa5708f67d64a4f088b96d7029741f/package.json"
+        },
+        {
+          "type": "ci_file_read",
+          "url": "https://github.com/elie222/inbox-zero/blob/f482190a12aa5708f67d64a4f088b96d7029741f/.github/workflows/test.yml"
+        },
+        {
+          "type": "code_inspection_README.md",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/README.md"
+        },
+        {
+          "type": "code_inspection_LICENSE",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/LICENSE"
+        },
+        {
+          "type": "code_inspection_package.json",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/package.json"
+        },
+        {
+          "type": "code_inspection_AGENTS.md",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/AGENTS.md"
+        },
+        {
+          "type": "code_inspection_apps/web/package.json",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/package.json"
+        },
+        {
+          "type": "code_inspection_pnpm-workspace.yaml",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/pnpm-workspace.yaml"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/email/provider.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/email/provider.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/email/types.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/email/types.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/gmail/client.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/gmail/client.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/outlook/client.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/outlook/client.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/auth.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/auth.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/actions/mail.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/actions/mail.ts"
+        },
+        {
+          "type": "code_inspection_packages/cli/src/main.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/packages/cli/src/main.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/server.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/server.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/gmail/scopes.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/gmail/scopes.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/outlook/scopes.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/outlook/scopes.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/config.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/config.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/email-tools.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/email-tools.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/app/mcp/route.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/app/mcp/route.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/actions/safe-action.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/actions/safe-action.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/email/google.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/email/google.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/email/microsoft.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/email/microsoft.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/ai/assistant/chat.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/ai/assistant/chat.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/ai/assistant/chat-inbox-tools.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/ai/assistant/chat-inbox-tools.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/mail-client-ui.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/mail-client-ui.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/http.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/http.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/actions/chat.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/actions/chat.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/gmail/mail.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/gmail/mail.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/outlook/mail.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/outlook/mail.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/mcp/mail-client.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/mcp/mail-client.ts"
+        },
+        {
+          "type": "code_inspection_apps/web/utils/email/durable-email-send.ts",
+          "url": "https://raw.githubusercontent.com/elie222/inbox-zero/f482190a12aa5708f67d64a4f088b96d7029741f/apps/web/utils/email/durable-email-send.ts"
+        }
+      ],
+      "popularity_observations": [],
+      "adoption_note": "Not in the100 selected portfolio; inspect custom monetization/enterprise restrictions. Use as research/reference; a separate process does not waive its terms."
+    }
+  ]
+}

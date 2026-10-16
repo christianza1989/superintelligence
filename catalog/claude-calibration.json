@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "kind": "imported_claude_subscription_calibration_evidence",
+  "checkedAtUtc": "2026-10-16T10:13:46.560259+00:00",
+  "scope": "Claude CLI baseline versus the same CLI with static Zero catalog context; not full RepositoryZero runtime, Jev or Auto",
+  "status": "single_pair_automated_contract_passed",
+  "suite": "sprintdesk-v1",
+  "promptVersion": 2,
+  "promptSha256": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+  "model": "claude-sonnet-5-5",
+  "reasoning": "high",
+  "cliVersion": "2.1.292",
+  "auth": "claude-cli-subscription",
+  "executionOrder": [
+    "zero-retrieval-claude-v1",
+    "claude-fixed-v1"
+  ],
+  "pairedTrials": 1,
+  "baseline": {
+    "profile": "claude-fixed-v1",
+    "trialMs": 266351,
+    "codingMs": 200251,
+    "gradingMs": 66028,
+    "retrievalMs": 0,
+    "inputTokens": 349922,
+    "outputTokens": 26097,
+    "cacheReadTokens": 317847,
+    "cacheWriteTokens": 32049,
+    "totalTokens": 376019,
+    "actualSubscriptionCostUsd": null,
+    "automatedContractPassed": true,
+    "apiCasesPassed": 8,
+    "sqliteRestartPassed": true,
+    "desktopMobileKeyboardPassed": true,
+    "visualQualityAssessed": false,
+    "candidateSourceDigest": "ab8db7cabea4897428ce67e6f619b957b4990cec0347daa18da76ab45e153e33"
+  },
+  "candidate": {
+    "profile": "zero-retrieval-claude-v1",
+    "trialMs": 200449,
+    "codingMs": 162656,
+    "gradingMs": 37742,
+    "retrievalMs": 19,
+    "inputTokens": 332054,
+    "outputTokens": 23127,
+    "cacheReadTokens": 301197,
+    "cacheWriteTokens": 30833,
+    "totalTokens": 355181,
+    "actualSubscriptionCostUsd": null,
+    "automatedContractPassed": true,
+    "apiCasesPassed": 8,
+    "sqliteRestartPassed": true,
+    "desktopMobileKeyboardPassed": true,
+    "visualQualityAssessed": false,
+    "candidateSourceDigest": "036139ab4ed03d6b96987e07af1cf89b4e942f8b7ab6aa7b5b5bd434d105e0a0"
+  },
+  "deltas": {
+    "trialRelativeChangePercent": -24.742538980518187,
+    "codingRelativeChangePercent": -18.773938706922813,
+    "totalTokensRelativeChangePercent": -5.541741241798952,
+    "gradingDifferenceMs": -28286
+  },
+  "provenance": {
+    "archiveSha256": "7276ebeb65ee90dd49c19d35a6d738f6a9be288203da52eea248eb5c16bab279",
+    "manifestVerifiedFileCount": 53,
+    "integratedSourceFileCount": 13,
+    "originalSourceArchiveSha256": "0877f6d2b89722dd04ddd1f200c238ae2d877de41bbee9ed85e911ac0985ee92",
+    "round2ReportSha256": "cf75dfd79540cd2b0c7e56c5aca9bb12efb8c680ece9e7a979e88e35bbb4130c",
+    "round2SourceDigestsMatchedAtImport": 20,
+    "sameUserTaskBytesVerified": true,
+    "comparisonRecomputed": true,
+    "newCodingCliInvocationsDuringIntegration": 0,
+    "actualProviderDispatches": null
+  },
+  "revalidation": {
+    "kind": "imported_generated_apps_revalidation_without_model_calls",
+    "checkedAtUtc": "2026-10-16T10:11:46.488Z",
+    "sameSourceDigests": true,
+    "allAutomatedContractsPassed": true,
+    "allCleanupPassed": true,
+    "newModelDispatches": 0
+  },
+  "previousRound": {
+    "promptVersion": 1,
+    "originalOutcome": "both_API_passed_SQLite_probe_false_negative",
+    "recheckOutcome": "both_SQLite_passed_UI_exact_heading_failed",
+    "newModelCallsForRecheck": 0,
+    "includedAsSuccessfulPromptV2Repeat": false
+  },
+  "limitations": [
+    "One successful prompt-v2 calibration pair; prompt-v1 failures are retained separately.",
+    "Trial timing includes grading; grading latency itself differed materially.",
+    "Provider prompt cache was uncontrolled; normalized input counts cache read and creation once.",
+    "CLI reports and hashes are local evidence, not independent provider or billing attestations.",
+    "Subscription price is unknown and API-equivalent estimates are not actual subscription charges.",
+    "Automated coverage is bounded; subjective design and every requested UI feature are not assessed.",
+    "Subsequent parser hardening and preparation changes have not been measured in a new coding race."
+  ],
+  "winner": "not_assessed",
+  "automaticPromotion": false,
+  "nextCohort": {
+    "status": "planned_not_run",
+    "model": "claude-sonnet-5-5",
+    "reasoning": "high",
+    "promptVersion": 2,
+    "additionalPairs": 3,
+    "maximumNewCodingSessions": 6,
+    "perSessionTimeoutMs": 900000,
+    "orders": [
+      [
+        "claude-fixed-v1",
+        "zero-retrieval-claude-v1"
+      ],
+      [
+        "zero-retrieval-claude-v1",
+        "claude-fixed-v1"
+      ],
+      [
+        "claude-fixed-v1",
+        "zero-retrieval-claude-v1"
+      ]
+    ],
+    "separateTask": "local CSV import, validation, deduplication and SQLite persistence; prompt and independent grader must be frozen before generation",
+    "automaticExecution": false
+  }
+}

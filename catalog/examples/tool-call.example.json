@@ -1,0 +1,23 @@
+{
+  "protocol_version": "1",
+  "task_id": "task_example",
+  "step_id": "step_example",
+  "attempt_id": "attempt_example_1",
+  "capability_id": "document.extract_tables",
+  "capability_version": "1",
+  "module_release": "0.1.0-plan.1",
+  "idempotency_key": "example-only-input-digest",
+  "lease": {
+    "lease_id": "lease_example",
+    "fencing_token": 17
+  },
+  "permission_grant_id": "grant_scoped_to_input_and_staging",
+  "budget_reservation_id": "reservation_example",
+  "deadline": "2026-10-16T15:00:00Z",
+  "input": {
+    "document": {
+      "artifact_id": "artifact_synthetic_pdf"
+    },
+    "include_page_provenance": true
+  }
+}

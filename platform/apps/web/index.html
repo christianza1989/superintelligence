@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Start with existing software. Build and verify what is missing." />
+    <meta name="theme-color" content="#090b09" />
+    <meta name="apple-mobile-web-app-title" content="RepositoryZero" />
+    <link rel="icon" href="/repositoryzero.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>RepositoryZero</title>
+    <script>
+      (() => {
+        const key = "rakazo.uiAppearance";
+        let preference = "dark";
+        try {
+          const stored = localStorage.getItem(key);
+          if (stored === "system" || stored === "light" || stored === "dark") preference = stored;
+        } catch {}
+        const systemLight =
+          typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: light)").matches;
+        const theme = preference === "system" ? (systemLight ? "light" : "dark") : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "light" ? "#fafaf8" : "#090b09");
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

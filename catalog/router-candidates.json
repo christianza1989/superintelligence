@@ -1,0 +1,1497 @@
+{
+  "schema_version": "0.2-plan",
+  "research_date": "2026-10-16",
+  "status": "supplemental_router_source_snapshot_not_runtime_approved",
+  "historical_pool_note": "Separate follow-up snapshot; original806address/757canonical repository research figures remain historical and are not re-counted as benchmark results.",
+  "selected_mvp_profile": {
+    "purpose": "tool selection after deterministic hard filters",
+    "engine": "TypeSafe Jev via OpenRouter",
+    "endpoint_from_official_sdk": "https://openrouter.ai/api/v1/systemone",
+    "model_id_documented_example": "typesafe/jev-1.13",
+    "credential_binding_name": "OPENROUTER_API_KEY",
+    "credential_value_present": false,
+    "runtime_status": "NOT_RUN",
+    "account_entitlement_and_live_rate_verified": false,
+    "actual_spend_usd": 0,
+    "public_bulk_intake_paid_budget": 0,
+    "local_laya_profile": "later_optional_pending_weights_terms_resources_tests"
+  },
+  "repositories": [
+    {
+      "repository": "receptron/laya",
+      "source_revision": "6478649e723122ca24bbf5fb69ed1010023c9750",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/receptron/laya/6478649e723122ca24bbf5fb69ed1010023c9750/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/receptron/laya",
+          "resolved_url": "https://github.com/receptron/laya",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.327990+00:00",
+          "sha256": "e835df8db3d19fe13a73e101df0a80e1de8d46595593f5f0af67f872b77c0a69",
+          "bytes": 316251
+        },
+        {
+          "url": "https://raw.githubusercontent.com/receptron/laya/6478649e723122ca24bbf5fb69ed1010023c9750/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/receptron/laya/6478649e723122ca24bbf5fb69ed1010023c9750/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.592052+00:00",
+          "sha256": "630512522e90a5eb139d8b7a5d26b09a93a6ba1014cc1bd8105631ee95e53178",
+          "bytes": 5088
+        },
+        {
+          "url": "https://raw.githubusercontent.com/receptron/laya/6478649e723122ca24bbf5fb69ed1010023c9750/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/receptron/laya/6478649e723122ca24bbf5fb69ed1010023c9750/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.808116+00:00",
+          "sha256": "c07ddef02172ce4162a2aae8ebddd5c2b84d8374da865c592afea5710e2acc0c",
+          "bytes": 1066
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "1Panel-dev/laya-server",
+      "source_revision": "19471b2d377ec29e85ac50ad65877f2937c5340b",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "Apache-2.0",
+          "source": "https://raw.githubusercontent.com/1Panel-dev/laya-server/19471b2d377ec29e85ac50ad65877f2937c5340b/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/1Panel-dev/laya-server",
+          "resolved_url": "https://github.com/1Panel-dev/laya-server",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.355958+00:00",
+          "sha256": "360922f030aa684bdb5bdf5dd3778d42d6652d542f5e52a4d53cf72db34da1d6",
+          "bytes": 291795
+        },
+        {
+          "url": "https://raw.githubusercontent.com/1Panel-dev/laya-server/19471b2d377ec29e85ac50ad65877f2937c5340b/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/1Panel-dev/laya-server/19471b2d377ec29e85ac50ad65877f2937c5340b/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.695818+00:00",
+          "sha256": "e01705dba1d8b96b415e406804eba874011d6f78563afdf303e7114d5d5befb0",
+          "bytes": 4283
+        },
+        {
+          "url": "https://raw.githubusercontent.com/1Panel-dev/laya-server/19471b2d377ec29e85ac50ad65877f2937c5340b/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/1Panel-dev/laya-server/19471b2d377ec29e85ac50ad65877f2937c5340b/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.976103+00:00",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "bytes": 11357
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "ollaya-dev/ollaya",
+      "source_revision": "ef448f7e872b3f27a51a1c590716ab08d4551f11",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "Apache-2.0",
+          "source": "https://raw.githubusercontent.com/ollaya-dev/ollaya/ef448f7e872b3f27a51a1c590716ab08d4551f11/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/ollaya-dev/ollaya",
+          "resolved_url": "https://github.com/ollaya-dev/ollaya",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.345445+00:00",
+          "sha256": "a1df772f4409efa56f028525f2e0c947a68ec0aabbb43696fcdaa2d5a961f926",
+          "bytes": 354473
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ollaya-dev/ollaya/ef448f7e872b3f27a51a1c590716ab08d4551f11/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/ollaya-dev/ollaya/ef448f7e872b3f27a51a1c590716ab08d4551f11/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.587579+00:00",
+          "sha256": "e8697d267a16f0633a1787999bb8eb3b3763b13549c9c8e2c16c923e024057cf",
+          "bytes": 15153
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ollaya-dev/ollaya/ef448f7e872b3f27a51a1c590716ab08d4551f11/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/ollaya-dev/ollaya/ef448f7e872b3f27a51a1c590716ab08d4551f11/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.824904+00:00",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+          "bytes": 10173
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "wdobry/laya-playground",
+      "source_revision": "5a825ba0472a460830bc937907d43262a87410f8",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/wdobry/laya-playground/5a825ba0472a460830bc937907d43262a87410f8/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/wdobry/laya-playground",
+          "resolved_url": "https://github.com/wdobry/laya-playground",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.301615+00:00",
+          "sha256": "3251b0f87d3080f1624217c28a548634e35a0a1b3722467dc71a79383f8b9839",
+          "bytes": 310122
+        },
+        {
+          "url": "https://raw.githubusercontent.com/wdobry/laya-playground/5a825ba0472a460830bc937907d43262a87410f8/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/wdobry/laya-playground/5a825ba0472a460830bc937907d43262a87410f8/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.542792+00:00",
+          "sha256": "149a490233fb4868cc9d907941a0490806e771fe695a264c5d449a2a0f1c3a76",
+          "bytes": 5225
+        },
+        {
+          "url": "https://raw.githubusercontent.com/wdobry/laya-playground/5a825ba0472a460830bc937907d43262a87410f8/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/wdobry/laya-playground/5a825ba0472a460830bc937907d43262a87410f8/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.795385+00:00",
+          "sha256": "5e2eca9fe26a8da81e537a10f58f60beaccfa52ea7fc5b4d0c80e0762a4eb9df",
+          "bytes": 1080
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "mizorewww/laya-mlx",
+      "source_revision": "9f00d592fcf843753e6d3edd2eab63ec2b44f3c9",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "Apache-2.0",
+          "source": "https://raw.githubusercontent.com/mizorewww/laya-mlx/9f00d592fcf843753e6d3edd2eab63ec2b44f3c9/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/mizorewww/laya-mlx",
+          "resolved_url": "https://github.com/mizorewww/laya-mlx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.271867+00:00",
+          "sha256": "0ffe30ec2cc63d0fb9b2a945c7cf2b88f855f742ff1d335a2a806a42d3b0cb17",
+          "bytes": 406676
+        },
+        {
+          "url": "https://raw.githubusercontent.com/mizorewww/laya-mlx/9f00d592fcf843753e6d3edd2eab63ec2b44f3c9/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/mizorewww/laya-mlx/9f00d592fcf843753e6d3edd2eab63ec2b44f3c9/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.561255+00:00",
+          "sha256": "f5c2413bfa43df245f2b20b7cb23dd475bde35d728351cfadf2918e949a39a61",
+          "bytes": 25382
+        },
+        {
+          "url": "https://raw.githubusercontent.com/mizorewww/laya-mlx/9f00d592fcf843753e6d3edd2eab63ec2b44f3c9/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/mizorewww/laya-mlx/9f00d592fcf843753e6d3edd2eab63ec2b44f3c9/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:09:31.813833+00:00",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+          "bytes": 10173
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "NandhaKishorM/laya",
+      "source_revision": "4ac226d5ee88ed6df8db288a05c766d7a34ee682",
+      "scope": "README/license source; additional Laya upstream entrypoints linked below",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "Apache-2.0",
+          "source": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/LICENSE"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://github.com/NandhaKishorM/laya",
+          "resolved_url": "https://github.com/NandhaKishorM/laya",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:11:19.751934+00:00",
+          "sha256": "ad1bf648cf2f70b39d1215ad0d4b31d0fd575b94fa0688702e3a4086581bac8e",
+          "bytes": 969242
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:11:20.010289+00:00",
+          "sha256": "9189ec0733f31fec8116d425f9af1de64b2ad1e922c339a5a5271cf8bd3a8d89",
+          "bytes": 115731
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:11:20.304234+00:00",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+          "bytes": 10173
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "TheoOliveira/pi-jev",
+      "source_revision": "c5b5847aa189fe5ffec52893b7051fe8f9e7a548",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/README.md",
+          "status": 200,
+          "sha256": "2b04594e613c69d5ee413dc3ef9f9ae97bd1b802e9bc1c72b14fbd9c54dad47b",
+          "bytes": 13346
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/LICENSE",
+          "status": 200,
+          "sha256": "ea4102a77f6d108e25d733dca835267824ac54ea9f6d860137e9430a0f2d1252",
+          "bytes": 1073
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/package.json",
+          "status": 200,
+          "sha256": "aa6f7028ab288e24afb47292f1efbc3a6cb808a4d43c6dad3fe38ace03da9f70",
+          "bytes": 1683
+        },
+        {
+          "path": "pyproject.toml",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/pyproject.toml",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "extensions/index.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/extensions/index.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:07.941956+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/extensions/index.ts",
+          "sha256": "e212a523c91fc9422156ca6795a84d5d4e836d4974ea2bb5a92b19e5f74c29d5",
+          "bytes": 6855
+        },
+        {
+          "path": "src/jev.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/jev.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:07.942520+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/jev.ts",
+          "sha256": "2e60af3529f59ab0ebf599f994c9c861f61ebe9562463bb764bfc0e7a0cb10d8",
+          "bytes": 5559
+        },
+        {
+          "path": "src/client.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/client.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:07.942948+00:00",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "src/skills.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/skills.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:07.943388+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/skills.ts",
+          "sha256": "43c8e8ead8486c92fc47963bf7e421f96421becfcb8883712d8f92c5fbb39b52",
+          "bytes": 6169
+        },
+        {
+          "path": "src/router.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/router.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:07.943864+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/router.ts",
+          "sha256": "71429f5296c189e68cf2ed01aa8824372e7ca2421ec5dc613431ab156cd4daa8",
+          "bytes": 4067
+        },
+        {
+          "path": "src/auto.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/auto.ts",
+          "status": 200,
+          "sha256": "f8ddb5ebafc02b7a9f04a00a6a6f44417f896d93df31a8e51caf4d8c55353aad",
+          "bytes": 4575
+        },
+        {
+          "path": "src/tools.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/tools.ts",
+          "status": 200,
+          "sha256": "6926f1b72455ceb6455a10c6170f0aaa08af81700b0029d52e8cfb36c7f9b40e",
+          "bytes": 6770
+        },
+        {
+          "path": "src/commands.ts",
+          "url": "https://raw.githubusercontent.com/TheoOliveira/pi-jev/c5b5847aa189fe5ffec52893b7051fe8f9e7a548/src/commands.ts",
+          "status": 200,
+          "sha256": "1f56f0cdbe02ef622269dd165addb0458d901b3972ba064296cda227e4b3d771",
+          "bytes": 12136
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "jackbarunz/jev-tool-router",
+      "source_revision": "2e0361133b26d504881d60bc6d95e4bf6ea55af4",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/README.md",
+          "status": 200,
+          "sha256": "81553228899f0d57e0f97dd351087ea90ec59376e917cfe8b12b81e5c40dc092",
+          "bytes": 11412
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/LICENSE",
+          "status": 200,
+          "sha256": "a59debd36b56391ec170d620463e1c0b72ffade579c2bda163b2fd46627ecdba",
+          "bytes": 1068
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/package.json",
+          "status": 200,
+          "sha256": "4e79cac08235f7e84b3f151c9719b355d36e54f40915310af5af0aa9f09fc33e",
+          "bytes": 1145
+        },
+        {
+          "path": "pyproject.toml",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/pyproject.toml",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "src/server.mjs",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/server.mjs",
+          "retrieved_at_utc": "2026-10-15T23:10:07.944232+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/server.mjs",
+          "sha256": "e173d16f31090afdbf8a8b708b09f0980a9e48d3d34e1b53ca6b1108f7a0d427",
+          "bytes": 15367
+        },
+        {
+          "path": "src/router-core.mjs",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/router-core.mjs",
+          "retrieved_at_utc": "2026-10-15T23:10:07.945219+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/router-core.mjs",
+          "sha256": "1b29af872448ba988bedf791cf41f19b48460138c4b4e6e2a33a8594fb62b2b6",
+          "bytes": 26106
+        },
+        {
+          "path": "src/policy.mjs",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/policy.mjs",
+          "retrieved_at_utc": "2026-10-15T23:10:07.945531+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/policy.mjs",
+          "sha256": "b8a0b1892556524aef92f83149559c646008829411402cc7947a0bb7960436d2",
+          "bytes": 8857
+        },
+        {
+          "path": "src/config.mjs",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/src/config.mjs",
+          "status": 200,
+          "sha256": "8d9e38142cba7b24e02c20b857581d9887411e822e026305bf491fa88bb3c910",
+          "bytes": 2932
+        },
+        {
+          "path": "scripts/setup-codex.mjs",
+          "url": "https://raw.githubusercontent.com/jackbarunz/jev-tool-router/2e0361133b26d504881d60bc6d95e4bf6ea55af4/scripts/setup-codex.mjs",
+          "status": 200,
+          "sha256": "0b0f98875294429afb0e0c62ca56eca5cc3cf253e14bc34673f13035e08ee015",
+          "bytes": 12291
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "ini8labs/jev-mcp-router",
+      "source_revision": "168bbce8112c5543243edd3fbd2ada2b71cace16",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/README.md",
+          "status": 200,
+          "sha256": "16db0163bd4e6ed94cf560c067db9f3325d6ab1f060494e586569ce8546a626d",
+          "bytes": 11542
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/LICENSE",
+          "status": 200,
+          "sha256": "e7407ee6ff3601fcc1c68e04227c1ba1b8958702bec0914fea8521b656acba91",
+          "bytes": 1066
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/package.json",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "pyproject.toml",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/pyproject.toml",
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/pyproject.toml",
+          "status": 200,
+          "sha256": "68e0e6509454701798ffbd42a0591049c89d1691e0969c79886b59531e1e816b",
+          "bytes": 420
+        },
+        {
+          "path": "jevmcp/jev.py",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/jev.py",
+          "retrieved_at_utc": "2026-10-15T23:10:07.945942+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/jev.py",
+          "sha256": "dffdd0988380d0ac3867de033d44fa1e3bdf5435c82c255b739a9ced30d8131a",
+          "bytes": 5305
+        },
+        {
+          "path": "jevmcp/router.py",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/router.py",
+          "retrieved_at_utc": "2026-10-15T23:10:07.947635+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/router.py",
+          "sha256": "91846d25f87342af9a625b7dd4fee535111f4892061ad1eb813a70dd4ba26461",
+          "bytes": 5390
+        },
+        {
+          "path": "jevmcp/gateway.py",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/gateway.py",
+          "retrieved_at_utc": "2026-10-15T23:10:08.199789+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/gateway.py",
+          "sha256": "f649bea3806534163ba3e4597d4eec80fc09ef79978f5e7615258a247d0d822a",
+          "bytes": 2633
+        },
+        {
+          "path": "jevmcp/catalog.py",
+          "url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/catalog.py",
+          "retrieved_at_utc": "2026-10-15T23:10:08.227155+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/ini8labs/jev-mcp-router/168bbce8112c5543243edd3fbd2ada2b71cace16/jevmcp/catalog.py",
+          "sha256": "9f8a01daff697255d42aa1bd5a746e38758b81354c0aa11ace616affd56880e0",
+          "bytes": 4767
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "BillionsBobby/JevRouter",
+      "source_revision": "b1cdf80593ee530cedd99728a938f4e74ddd556b",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/README.md",
+          "status": 200,
+          "sha256": "ceaa3ff7d16b778cc79aafd402ffe8d9ff923b0167539ebe7e61c6c5bc24d8d4",
+          "bytes": 18809
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/LICENSE",
+          "status": 200,
+          "sha256": "e7d14cce49b1f7538c72b9c49f8271a5d798f020cb89e6841b61b8e01055fee8",
+          "bytes": 1079
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/package.json",
+          "status": 200,
+          "sha256": "d2526154458972c42d43101b68f6c5f3bb4d364097a587f403694895597ca048",
+          "bytes": 1011
+        },
+        {
+          "path": "pyproject.toml",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/pyproject.toml",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "src/index.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/index.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.240174+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/index.ts",
+          "sha256": "537c96ebce84bd66ddbf28d583a90328b4046ef6c594f26ccba3bd1800b20976",
+          "bytes": 363
+        },
+        {
+          "path": "src/providers/typesafe.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/providers/typesafe.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.263170+00:00",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "src/jev.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/jev.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.278020+00:00",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "src/router.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/router.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.282889+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/router.ts",
+          "sha256": "922d53f01c6c073e8e8851928b1fa75800352485f0c2e087760ca55b87a7872f",
+          "bytes": 28222
+        },
+        {
+          "path": "src/provider.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/provider.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.287227+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/provider.ts",
+          "sha256": "35e1424584508521d66827dbac2e240115081152fe06082d75e9c4a0123da6cd",
+          "bytes": 16372
+        },
+        {
+          "path": "src/mcp.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/mcp.ts",
+          "retrieved_at_utc": "2026-10-15T23:10:08.292239+00:00",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/mcp.ts",
+          "sha256": "8ca6220da56aca95ea00dbafbc9ce817c135025cf8f3b7b39d957d5f2431dde0",
+          "bytes": 6926
+        },
+        {
+          "path": "src/manifest.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/manifest.ts",
+          "status": 200,
+          "sha256": "3a83b0f8c9acd8e6713ef71002ef731714550f099c3f63d2a52b4f9b88d41356",
+          "bytes": 8868
+        },
+        {
+          "path": "src/api.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/api.ts",
+          "status": 200,
+          "sha256": "88133c317f95f899894581f1bd7f2e1be48f9f4a97fa3b5ee7ef32497827fb62",
+          "bytes": 3959
+        },
+        {
+          "path": "src/mcp-server.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/mcp-server.ts",
+          "status": 200,
+          "sha256": "b1d2e8114f7d939b0df3be8dbae546ad85a2c4bdd6dc57d62706c7be22a7ee43",
+          "bytes": 6479
+        },
+        {
+          "path": "src/credentials.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/credentials.ts",
+          "status": 200,
+          "sha256": "ee232b8afd1908c455ef2fba8f0978db236a3e458cdc1bc7d2e9dc914f482fe7",
+          "bytes": 2580
+        },
+        {
+          "path": "src/runtime.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/runtime.ts",
+          "status": 200,
+          "sha256": "996f65db4259f9c238fce2ae9fa06f6886216f07c71b1537db76ee001a225c1b",
+          "bytes": 2133
+        },
+        {
+          "path": "src/agent-setup.ts",
+          "url": "https://raw.githubusercontent.com/BillionsBobby/JevRouter/b1cdf80593ee530cedd99728a938f4e74ddd556b/src/agent-setup.ts",
+          "status": 200,
+          "sha256": "36e4c3aee4d1ebfcc23742a735f6626daaa97329019427738d92c6ce51436ab6",
+          "bytes": 12445
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "typesafe-ai/typesafe-sdk-js",
+      "source_revision": "b844cd1aca12855a5d24a2df52a1401c86e7d37a",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/README.md",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/README.md",
+          "sha256": "08c1d1ec4aff25665533c0189fb837d093bddeef756a77d1d63f834bd6975848",
+          "bytes": 6359
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/LICENSE",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/LICENSE",
+          "sha256": "f7c12f055628204172796b98c08c910b521ab8278e6217fa8af622140e618d94",
+          "bytes": 1065
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/package.json",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/package.json",
+          "sha256": "5b91ef13fa6bc4b943fb18f148420cfb42292855e339949482c08617521045b7",
+          "bytes": 2380
+        },
+        {
+          "path": "src/index.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/index.ts",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/index.ts",
+          "sha256": "1d4daafe295748e86959fa7f9e8ca03788f9ac2e8ab95e7533dfd5d7bafaa398",
+          "bytes": 707
+        },
+        {
+          "path": "src/client.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/client.ts",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/client.ts",
+          "sha256": "9757a8b62a85fe962684d956906bf00662f2b3c48e42e7129e69054238bbdc47",
+          "bytes": 21938
+        },
+        {
+          "path": "src/types.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/types.ts",
+          "status": 200,
+          "resolved_url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/types.ts",
+          "sha256": "c87be86e6d2faefa6846d34ffddb3c059a74cf0342a07d0c56405adcc3a74468",
+          "bytes": 12734
+        },
+        {
+          "path": "src/questions.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/questions.ts",
+          "status": 200,
+          "sha256": "341499aa241a01fa1fbe0db0ae514d1697d90b46dd1c5a58781e8c2dca69d29a",
+          "bytes": 5897
+        },
+        {
+          "path": "src/retry.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/retry.ts",
+          "status": 200,
+          "sha256": "14658cd73d169fe3909ab7988c9ce27f1c24a1b643dc890bc730859a0b033e91",
+          "bytes": 2953
+        },
+        {
+          "path": "src/resources/models.ts",
+          "url": "https://raw.githubusercontent.com/typesafe-ai/typesafe-sdk-js/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/resources/models.ts",
+          "status": 200,
+          "sha256": "beb07e6eeda0442674218a6af2bc5114c8b1a089e175de2eb47dd3755bd8223a",
+          "bytes": 914
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "aaronshaf/opencode-jev-orchestrator",
+      "source_revision": "ffe76fed66b3d544f218cacff1947fc191688c3a",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/README.md",
+          "status": 200,
+          "sha256": "01ba712bddd16457b1210d832bd60730f45544d0d8baa247f6b407a76919a060",
+          "bytes": 2766
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/LICENSE",
+          "status": 200,
+          "sha256": "97d4b4112393cfc5a8e5f996b200dbcbb38a28f68b4e7be3019ebef33c30fb92",
+          "bytes": 1074
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/package.json",
+          "status": 200,
+          "sha256": "2d09821957946c742d3f269e4e1b32d32aa9817d2d631e249fc4a198eb49eb83",
+          "bytes": 1722
+        },
+        {
+          "path": "src/index.ts",
+          "url": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/src/index.ts",
+          "status": 200,
+          "sha256": "1a36abd846f7bf3d36d03817d3fcb56d5af0617d5dd58700161b7d0dfda0df6f",
+          "bytes": 997
+        },
+        {
+          "path": "src/jev.ts",
+          "url": "https://raw.githubusercontent.com/aaronshaf/opencode-jev-orchestrator/ffe76fed66b3d544f218cacff1947fc191688c3a/src/jev.ts",
+          "status": 200,
+          "sha256": "35da3e01794950a7eacdd03ffff123a0dbe17bddd9dcde33d9206cb01e95c0a6",
+          "bytes": 5562
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "overbit/fast-jev-compaction-opencode",
+      "source_revision": "bb1448cf518f282a2664efc936e259e0129456b2",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/README.md",
+          "status": 200,
+          "sha256": "5bfdc74ebcfb6f303016f07db05bacd264c58e99b6008f8292970e1c4c1b0deb",
+          "bytes": 18097
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/LICENSE",
+          "status": 200,
+          "sha256": "20a54d4c6d77900a60da6c4977ab54243b1550eff8a3a81a37d882d3bdccf066",
+          "bytes": 1064
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/package.json",
+          "status": 200,
+          "sha256": "6f277107d4fb0d497e022fdc1a768fbf04e4c47b02cdae1f4c797bf07532100f",
+          "bytes": 1127
+        },
+        {
+          "path": "src/server.ts",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/src/server.ts",
+          "status": 200,
+          "sha256": "d7027a7b80cb932b2b2a13ab80723b5e83c0f9b2f54a4837644fa16575daa906",
+          "bytes": 39
+        },
+        {
+          "path": "src/plugin.ts",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/src/plugin.ts",
+          "status": 200,
+          "sha256": "ec372195ed96107ad5639f037510248b838587e31e78c11b9bb1bdee9f0b869c",
+          "bytes": 14590
+        },
+        {
+          "path": "src/client.ts",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/src/client.ts",
+          "status": 200,
+          "sha256": "086dabf83d3b1d0a269affad9dd74bdeb0bf3fc3a9810a6d1fde0fcc2dd7d489",
+          "bytes": 1829
+        },
+        {
+          "path": "NOTICE",
+          "url": "https://raw.githubusercontent.com/overbit/fast-jev-compaction-opencode/bb1448cf518f282a2664efc936e259e0129456b2/NOTICE",
+          "status": 200,
+          "sha256": "93a61c0cf484dd8d68d5aaee1216ff502fadc6b62e495fa3402d3fc471fafd70",
+          "bytes": 444
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "FrancoisChastel/jev-code",
+      "source_revision": "74a4569bfe8bb4ad0cc1ba74fa5867f09e267300",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "source": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/LICENSE",
+          "provisional_summary": "MIT"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/README.md",
+          "status": 200,
+          "sha256": "523bf23b3a9f3e9eb7a1ab2a4c9fbdba8c74b6cf2001148cee285a22a3dfc37b",
+          "bytes": 21471
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/LICENSE",
+          "status": 200,
+          "sha256": "f55837db60ed571947d07b9724f3968ca0b77f360d769a0d7913017b8d431493",
+          "bytes": 1074
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/package.json",
+          "status": 200,
+          "sha256": "af7db28359d80128ead1556cdd3711aa7bc8602d078c48a8407a29bce3b4cc74",
+          "bytes": 2715
+        },
+        {
+          "path": "docs/harnesses/opencode.md",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/docs/harnesses/opencode.md",
+          "status": 200,
+          "sha256": "9ef0ebe20f35252d375c7bd9b1e6d0f426211fa6a8c049356f57611623767fe0",
+          "bytes": 2361
+        },
+        {
+          "path": "integrations/opencode/jev.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/integrations/opencode/jev.ts",
+          "status": 200,
+          "sha256": "0c8b53f3832774e8b2c716cc6268d2bfb900463fec6bffe91a66d8cd28452fbc",
+          "bytes": 4468
+        },
+        {
+          "path": "integrations/pi/jev.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/integrations/pi/jev.ts",
+          "status": 200,
+          "sha256": "f6d27a07caf4d44f4b4465a6bdf0bdadabb9812fe8facf54725c03716b1050be",
+          "bytes": 6503
+        },
+        {
+          "path": "src/core/client.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/core/client.ts",
+          "status": 200,
+          "sha256": "8be29c936f2ad1cc5322389ab370a374c36eec1d1ade26da495dc1436b5d9d8b",
+          "bytes": 8679
+        },
+        {
+          "path": "src/core/providers.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/core/providers.ts",
+          "status": 200,
+          "sha256": "67500d55da357fb9500a1d3a25cde584f3c01b696c5bbf59e4bdafe61689ad80",
+          "bytes": 6136
+        },
+        {
+          "path": "src/core/config.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/core/config.ts",
+          "status": 200,
+          "sha256": "5d33d0f7be9ba5df255be5e5388572ebc4c0ba775e7301d539cdb097e40820d0",
+          "bytes": 18661
+        },
+        {
+          "path": "src/core/limits.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/core/limits.ts",
+          "status": 200,
+          "sha256": "ef1f08ea7efa987ca9d21ba4e0574881ce4e9275a978d60533f84827531f3b49",
+          "bytes": 908
+        },
+        {
+          "path": "src/tools/rank.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/tools/rank.ts",
+          "status": 200,
+          "sha256": "668320445c454028f59f316bb11b394b4708041bf064a78a400d78ba0e9a4440",
+          "bytes": 4850
+        },
+        {
+          "path": "src/mcp/server.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/mcp/server.ts",
+          "status": 200,
+          "sha256": "b1dd354876e8c96907089c60783b4b5d4150f93903ccad24e8fb1b7bac80fb44",
+          "bytes": 2811
+        },
+        {
+          "path": "src/setup/harnesses.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/setup/harnesses.ts",
+          "status": 200,
+          "sha256": "0212ad8053ac27195c5fd27c36d0897c4b930357530a87afce803844fba7ee0a",
+          "bytes": 2863
+        },
+        {
+          "path": "src/core/wires.ts",
+          "url": "https://raw.githubusercontent.com/FrancoisChastel/jev-code/74a4569bfe8bb4ad0cc1ba74fa5867f09e267300/src/core/wires.ts",
+          "status": 200,
+          "sha256": "b98b9865ecc4a9bb091dddb0dfa8c5e81e98df071d539820610b97d363bef3ac",
+          "bytes": 7987
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    },
+    {
+      "repository": "OpenRouterTeam/typescript-sdk",
+      "source_revision": "4200d11265efd9e27916989f0ac013f64ef949d0",
+      "scope": "Public source/README/license/entrypoint inspection only; package-source/runtime compatibility pending",
+      "license_sources": [
+        {
+          "path": "LICENSE.md",
+          "source": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/LICENSE.md",
+          "provisional_summary": "Apache-2.0"
+        }
+      ],
+      "sources": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/README.md",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "3c911c1f989444d8115407e1b6ccff80a67c8581a973c0e133c6261c380c77bd",
+          "bytes": 6719
+        },
+        {
+          "path": "docs/models/decisions.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisions.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "74eaa9a946b5ef0d03cb4ea78ac314b6bda0bab42bde8ac767330451e030431d",
+          "bytes": 1819
+        },
+        {
+          "path": "docs/models/decisionschoiceanswer.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionschoiceanswer.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "44e96d1af43547b5a34b08cdc136b8a74707b1dd41d50cedd9c53a01837056d6",
+          "bytes": 832
+        },
+        {
+          "path": "docs/models/decisionschoicequestion.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionschoicequestion.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "c91a4fedbdbcb340b2dc41dae23b0b6be36df99c771d3e9b77ea007e26dbcd9b",
+          "bytes": 1650
+        },
+        {
+          "path": "docs/models/decisionschoicequestioninstructions.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionschoicequestioninstructions.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "0e4bf6db42e4ecc188eccd10a2fb4d9692f0ef3c8b65816d97507a537f2e4a9d",
+          "bytes": 461
+        },
+        {
+          "path": "docs/models/decisionsnoulanswer.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsnoulanswer.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "c6b3093dff94a1297d55e2aa611af0d83b25dbcd1aa386ed9279317877557f74",
+          "bytes": 532
+        },
+        {
+          "path": "docs/models/decisionsnoulquestion.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsnoulquestion.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "181e2c88b85ae668a0c96b1221b5fcea1913215f4db62aa91b1b5b4aaf49674a",
+          "bytes": 1901
+        },
+        {
+          "path": "docs/models/decisionsnoulquestioncriteria.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsnoulquestioncriteria.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "2865dd0ded5aa8168162e76d29ab3561d21a3be0cb545f749500123d6891a80a",
+          "bytes": 1361
+        },
+        {
+          "path": "docs/models/decisionsnoulquestioninstructions.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsnoulquestioninstructions.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "d3d1430291bde95d43e570b87ffae37dbeb1d80248c3ff9b3ee457471543ac2c",
+          "bytes": 459
+        },
+        {
+          "path": "docs/models/decisionsrequest.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsrequest.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "d69f164971217688bf42cc93add3432568a21aa03085858ad37d03e5588ff350",
+          "bytes": 14300
+        },
+        {
+          "path": "docs/models/decisionsresponse.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsresponse.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "592715d405647ffa030b10b7d5b5a65b4acf5caac2646c6425c857c3db4b6797",
+          "bytes": 2206
+        },
+        {
+          "path": "docs/models/decisionsresponseusage.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsresponseusage.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "fa394a8780b1481525c1a8934d9efbca642ccce48eabb646a7a522e21ddb0db5",
+          "bytes": 627
+        },
+        {
+          "path": "docs/models/decisionsscoreanswer.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsscoreanswer.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "34358c4e18bc049245bdddad71bf141d747852f1c07f69a81a4e92f2b87027d6",
+          "bytes": 1117
+        },
+        {
+          "path": "docs/models/decisionsscorequestion.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsscorequestion.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "7c38b39a62beea8b767516d3e9c32cd37f046e57ed9236765fc0071dfbce1f0a",
+          "bytes": 1642
+        },
+        {
+          "path": "docs/models/decisionsscorequestioninstructions.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/decisionsscorequestioninstructions.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "9d073ad96103ba02396ee262cf3ca817d8be173f7df9e2e40e7b16d5d04b120d",
+          "bytes": 460
+        },
+        {
+          "path": "docs/models/operations/createapialphadecisionsglobals.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/operations/createapialphadecisionsglobals.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "ba5b4fda1cc890b42c03bcd1e926dd097361dd27366a9522c3ff06816de2e8ab",
+          "bytes": 3162
+        },
+        {
+          "path": "docs/models/operations/createapialphadecisionsrequest.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/operations/createapialphadecisionsrequest.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "1202b0088a88cf2da88f885c30833643a0ff2d651ef84f79db119275fc404a9b",
+          "bytes": 3827
+        },
+        {
+          "path": "docs/models/operations/createsystemoneglobals.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/operations/createsystemoneglobals.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "93314333bc814fa4e5584d217619ce2c45c7148853a022b5fc80e15ab48f53f7",
+          "bytes": 3138
+        },
+        {
+          "path": "docs/models/operations/createsystemonerequest.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/models/operations/createsystemonerequest.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "9d6dc4c9311a9b75108fbbcb94521d17d0006e86055b6cfffc1df822877884fe",
+          "bytes": 3803
+        },
+        {
+          "path": "docs/sdks/decisions/README.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/sdks/decisions/README.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "0e3eca8f50235fd42e90042a2435ef3abf537e72833d55f163bd5cd14b6ea49d",
+          "bytes": 10814
+        },
+        {
+          "path": "docs/sdks/systemone/README.mdx",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/docs/sdks/systemone/README.mdx",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "aa32cc6df22644e31f875a1ecd7c4fadfb642b5378d84402e03035647114c7cf",
+          "bytes": 10457
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/package.json",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "8e1c27c12ff1bcc20f670e5ad8668f0a1e6883e97c9156ba9213edf659a49064",
+          "bytes": 2714
+        },
+        {
+          "path": "src/funcs/alphaDecisionsCreate.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/funcs/alphaDecisionsCreate.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "cd7338c555481c932658ff23a2048c8ae5cc42dab111c48df0b02084f672e6fc",
+          "bytes": 8199
+        },
+        {
+          "path": "src/funcs/systemOneCreate.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/funcs/systemOneCreate.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "b820345d46736f8b24a82a60d6d2badab9738639df1ab68d2fc0a74106e29ffd",
+          "bytes": 8129
+        },
+        {
+          "path": "src/models/decisionschoiceanswer.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionschoiceanswer.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "3f20e7568b4977acfac91131d7c954afebfbca7c441f40ab9564c9722351e9a8",
+          "bytes": 1067
+        },
+        {
+          "path": "src/models/decisionschoicequestion.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionschoicequestion.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "e1bd0bbfea4c864a8eb2748d630a6985a0660882ee03f98e5c28d1b0c3f014ac",
+          "bytes": 2703
+        },
+        {
+          "path": "src/models/decisionsnoulanswer.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsnoulanswer.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "df1b28491491795655438c301ebe584361ef37591a2279e8cd23dc50e8ce78cb",
+          "bytes": 856
+        },
+        {
+          "path": "src/models/decisionsnoulquestion.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsnoulquestion.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "b4f4a59aeec513e9b27a04fd096f361515e3d93625f7f11be7eb4ab56cd5dac7",
+          "bytes": 4153
+        },
+        {
+          "path": "src/models/decisionsrequest.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsrequest.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "2a90c0e24aad836d91a4bf2320f248a1c37f6549fe539e8170b05eceefed5aea",
+          "bytes": 4577
+        },
+        {
+          "path": "src/models/decisionsresponse.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsresponse.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "1abf75fd54b3b693a7b153c9c344045f1c070ec54c6814cb1fe306289cbccd7b",
+          "bytes": 3433
+        },
+        {
+          "path": "src/models/decisionsscoreanswer.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsscoreanswer.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "f730a915935b5fddf2abfff18ead9c4ab3c2c81d9a0b70ec7fc952f006a28670",
+          "bytes": 1827
+        },
+        {
+          "path": "src/models/decisionsscorequestion.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/decisionsscorequestion.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "a4445bff0faae11c705719827102218a33260b7029c87a0fac5ca15c2252436d",
+          "bytes": 2617
+        },
+        {
+          "path": "src/models/operations/createapialphadecisions.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/operations/createapialphadecisions.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "155826ed02dc7149861c83e7659f98bde92447a5a03c3973a2c310d37ca28576",
+          "bytes": 2582
+        },
+        {
+          "path": "src/models/operations/createsystemone.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/operations/createsystemone.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "ce086264a5e49fd08286d8a1a481e820cda4b6d6aaed67d6fec1551b94d050d7",
+          "bytes": 2390
+        },
+        {
+          "path": "src/sdk/decisions.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/sdk/decisions.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "28137dc2fd6de82479ee5e3cb4732f8340745a9c8c0d3a71c4ca1fea078da350",
+          "bytes": 802
+        },
+        {
+          "path": "src/sdk/systemone.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/sdk/systemone.ts",
+          "archive_source": "https://codeload.github.com/OpenRouterTeam/typescript-sdk/tar.gz/4200d11265efd9e27916989f0ac013f64ef949d0",
+          "status": 200,
+          "sha256": "81e6062a6304e2bdffe25360c64a78f9eb75bdabffc8404093e5d2b6f4f66797",
+          "bytes": 959
+        },
+        {
+          "path": "src/lib/config.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/lib/config.ts",
+          "status": 200,
+          "sha256": "dea65b1b030f791b36bcf888fd3f9cdc704b90a463b483c2e342ee6b2df6a03e",
+          "bytes": 2207
+        },
+        {
+          "path": "src/models/security.ts",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/src/models/security.ts",
+          "status": 200,
+          "sha256": "2653740f77dfcbc49b119a368c355b66687e1c37f7c8e3893036618b3b8c8f5f",
+          "bytes": 565
+        },
+        {
+          "path": "LICENSE.md",
+          "url": "https://raw.githubusercontent.com/OpenRouterTeam/typescript-sdk/4200d11265efd9e27916989f0ac013f64ef949d0/LICENSE.md",
+          "status": 200,
+          "sha256": "7c509323d1bc3ceeb041405a3fc09fd3ed2c035b33ec69cf64e1449b49f5b3c9",
+          "bytes": 10205
+        }
+      ],
+      "runtime_status": "NOT_RUN",
+      "score_total": null
+    }
+  ],
+  "additional_laya_entrypoint_checks": [
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/pyproject.toml",
+      "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/pyproject.toml",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:12:05.506771+00:00",
+      "sha256": "ed12fda97a6f8b0cf4243fb8f93e3e75f07168ac8265fb0e9fa6cc90c71f60a2",
+      "bytes": 3956
+    },
+    {
+      "path": "laya/router.py",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/router.py",
+      "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/router.py",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:12:05.520565+00:00",
+      "sha256": "4758be905a7f0aa420da75364b2b1ec80f28101f7b7ec8df4ca9635ff7e3d742",
+      "bytes": 103956
+    },
+    {
+      "path": "laya/serve.py",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/serve.py",
+      "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/serve.py",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:12:05.545439+00:00",
+      "sha256": "d14f0a73afb88a7efb177f43b2bb2e3a2c221feed85d0a70be779f7a34569a19",
+      "bytes": 84844
+    },
+    {
+      "path": "laya/server.py",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/server.py",
+      "status": 404,
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "path": "laya/mcp_server.py",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/mcp_server.py",
+      "status": 404,
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "path": "laya/__init__.py",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/__init__.py",
+      "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/laya/__init__.py",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:12:05.550583+00:00",
+      "sha256": "2ed30b0ed813f210ef782daea012c3df6bfaea624afd69522a48b65c5395b675",
+      "bytes": 6223
+    },
+    {
+      "path": "LOCAL_SETUP.md",
+      "url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/LOCAL_SETUP.md",
+      "resolved_url": "https://raw.githubusercontent.com/NandhaKishorM/laya/4ac226d5ee88ed6df8db288a05c766d7a34ee682/LOCAL_SETUP.md",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:12:05.502201+00:00",
+      "sha256": "a6787eca49313e3f373d0a3c4f3d8897142ace4a1ddcfd7b6e0c0e6aedaca07f",
+      "bytes": 15182
+    }
+  ],
+  "blocked_weights_checks": [
+    {
+      "url": "https://huggingface.co/convaiinnovations/laya/raw/main/README.md",
+      "status": null,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://huggingface.co/api/models/convaiinnovations/laya",
+      "status": null,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://huggingface.co/convaiinnovations/laya/raw/main/LICENSE",
+      "status": null,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://huggingface.co/convaiinnovations/laya/raw/main/config.json",
+      "status": null,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "primary_discovery_and_blocked_blog": [
+    {
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "status": null,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://github.com/search?q=Laya+decision+model&type=repositories",
+      "resolved_url": "https://github.com/search?q=Laya+decision+model&type=repositories",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:09:17.082042+00:00",
+      "sha256": "5f6f57d8ddd260df5d5e6fbbebe060e633d3bb05bfd04abf65aab30ebc2a68ba",
+      "bytes": 268573
+    },
+    {
+      "url": "https://github.com/search?q=Laya+model+router&type=repositories",
+      "resolved_url": "https://github.com/search?q=Laya+model+router&type=repositories",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T23:09:17.111735+00:00",
+      "sha256": "1cbcacc08783c637779f109260cab7acc480bf0f472f060776b1fdd9f2ac5338",
+      "bytes": 266243
+    }
+  ],
+  "official_package_or_document_sources": [
+    {
+      "path": "npm-sdk.json",
+      "url": "https://registry.npmjs.org/@typesafe-ai/sdk/latest",
+      "retrieved_at_utc": "2026-10-15T23:10:08.318223+00:00",
+      "status": 200,
+      "resolved_url": "https://registry.npmjs.org/@typesafe-ai/sdk/latest",
+      "sha256": "36aced32a0435284a99c528ef60dafb7a8c0d6df893fc1aa299cc2617f48558c",
+      "bytes": 3515
+    },
+    {
+      "path": "docs-llms.txt",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "retrieved_at_utc": "2026-10-15T23:10:08.412090+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "docs-quickstart.html",
+      "url": "https://docs.typesafe.ai/quickstart",
+      "retrieved_at_utc": "2026-10-15T23:10:08.420956+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "docs-models.html",
+      "url": "https://docs.typesafe.ai/models",
+      "retrieved_at_utc": "2026-10-15T23:10:08.426473+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "github-search-jev-opencode.html",
+      "url": "https://github.com/search?q=jev+opencode&type=repositories",
+      "status": 200,
+      "repo_links_observed": [
+        "Devin-AXIS/jev-dsh-decision",
+        "NiazMorshed2007/jev-review",
+        "thruwire/foreman",
+        "leepokai/jev-guard",
+        "FrancoisChastel/jev-code",
+        "tacticocc/Jevbridge",
+        "nidhi-singh02/agent-router",
+        "aaronshaf/opencode-jev-orchestrator",
+        "zilliztech/memsearch",
+        "overbit/fast-jev-compaction-opencode"
+      ],
+      "sha256": "9f4b0f9f1e994a905b1244722080e7528e1a468317a283448d12e95791cc12ec",
+      "bytes": 263752
+    },
+    {
+      "path": "openrouter-public-doc",
+      "url": "https://openrouter.ai/docs/llms.txt",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "openrouter-public-doc",
+      "url": "https://openrouter.ai/docs/api-reference/decisions",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "openrouter-public-doc",
+      "url": "https://openrouter.ai/typesafe/jev-1.13-20260917",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "openrouter-public-doc",
+      "url": "https://openrouter.ai/jev/jev-latest",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "path": "npm-openrouter-sdk.json",
+      "url": "https://registry.npmjs.org/@openrouter/sdk/latest",
+      "status": 200,
+      "sha256": "eda680f349d9c0c5249835172cb694aea35ce4854ab2bbeb47b3515bd2d7bc32",
+      "bytes": 4167
+    }
+  ],
+  "limitations": [
+    "No new code installed/executed",
+    "No weights download, model call, API credential or account login",
+    "No measured latency/quality/price",
+    "Laya code Apache-2.0 does not establish weights licenses",
+    "Versioned model ID does not establish known immutable hosted weights"
+  ]
+}

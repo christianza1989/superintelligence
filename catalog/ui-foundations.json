@@ -1,0 +1,967 @@
+{
+  "schema_version": "0.2-plan",
+  "research_date": "2026-10-16",
+  "status": "supplemental_ui_source_snapshot_not_runtime_approved",
+  "historical_pool_note": "Six follow-up candidates overlap historical pool; do not add counts without canonical dedup. Historical806/757 figures unchanged.",
+  "direction": "Real Rakazo UI adaptation with OpenCode UX, one authoritative runtime; final source base after P0 evidence",
+  "default_theme": "zero-lime",
+  "repositories": [
+    {
+      "repository": "elie222/rakazo",
+      "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+      "framework_source": "React/Vite + Electron",
+      "preliminary_license_scope": "Apache-2.0",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "Apache-2.0",
+          "source": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/LICENSE"
+        }
+      ],
+      "role": "first_ui_adapt_candidate",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "url": "https://github.com/elie222/rakazo",
+          "resolved_url": "https://github.com/elie222/rakazo",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:34:01.572491+00:00",
+          "sha256": "5cdea0a2b098b41f90e5d0b9fb3e6d8a7f4df4e6a9b844951d1b10662799df06",
+          "bytes": 388708
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:34:01.876194+00:00",
+          "sha256": "e0ad8c77bba070a9a7ef6f1ad0ad0f167f021bed80419dd1658dd46f30f6746c",
+          "bytes": 12938
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:34:02.127350+00:00",
+          "sha256": "b9738182c46747cb7cd36cad62d55c8922ca8d0029df280d3d73bb3c95d34935",
+          "bytes": 9717
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:35:03.398328+00:00",
+          "sha256": "5678213f71f988e19cfbb8072fc0b83d3ae5787c2a37aef81adad7960394b094",
+          "bytes": 2477
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/.github/workflows/ci.yml",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/.github/workflows/ci.yml",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:35:03.608001+00:00",
+          "sha256": "db2fb5be872b414e14b6ad951ae57da029b63f70ee5f6b0e6313198d6cc2ffcf",
+          "bytes": 10428
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.098480+00:00",
+          "sha256": "0ea25684cc0adf69f82e993dfeb06015f0bfdf55b85082424f2264441dbf5a04",
+          "bytes": 1623,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/desktop/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/desktop/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.129012+00:00",
+          "sha256": "ee0924699212c8c4b3c1e1822d6265a34b3fe037dbc65a7eebc5b5a9ccc1b71f",
+          "bytes": 2277,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/desktop/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/App.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/App.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.520244+00:00",
+          "sha256": "aa89f9488b1c58ee4302a0760ec7f6e85bbe84fc2ba456f3b0a58a64d4daa104",
+          "bytes": 10434,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/App.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/main.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/main.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.527625+00:00",
+          "sha256": "48eb3cd3184899390bfc38cd1ed9673cccbec374e509f918bda187fae7a90d5e",
+          "bytes": 1759,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/main.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/pages/Shell.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/pages/Shell.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.769340+00:00",
+          "sha256": "290ffe76cecc0a59d26cace9aaac4caa3d7237f7afdc2c8e36aee95e79f3cbff",
+          "bytes": 282357,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/pages/Shell.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/lib/rpc.ts",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/lib/rpc.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.753530+00:00",
+          "sha256": "4317f592ca4c8ba0272fa88be11e9cdc9409cc6dac4590fde263e1cbdeb0a643",
+          "bytes": 2653,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/lib/rpc.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/lib/i18n.ts",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/lib/i18n.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.754105+00:00",
+          "sha256": "c36838bb68892fe69e7f9020e28c3cd2c89ba394cf88ab2a0f92997bbab2a6f0",
+          "bytes": 3779,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/lib/i18n.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/ArtifactFileCard.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/ArtifactFileCard.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.762292+00:00",
+          "sha256": "16763d92ba548c2d3453f39d2c43aceeffd4cfcbccf5c345d934e21bbb03b6f3",
+          "bytes": 8856,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/components/ArtifactFileCard.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/PdfViewer.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/PdfViewer.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.790002+00:00",
+          "sha256": "159eb9289beae50308189cc738fac6fed2720c590d748113f63ab1a87b1368a7",
+          "bytes": 300,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/components/PdfViewer.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/ToolActivityDisclosure.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/elie222/rakazo/7d5e64c886da7d556673f99e4923b013315007a9/apps/web/src/components/ToolActivityDisclosure.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.768933+00:00",
+          "sha256": "d10ec594068ea9254807cb5d3fb7bc233a0ded89c41a1955d916a844a5fa0a99",
+          "bytes": 5184,
+          "repo": "elie222/rakazo",
+          "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+          "path": "apps/web/src/components/ToolActivityDisclosure.tsx"
+        }
+      ]
+    },
+    {
+      "repository": "anomalyco/opencode",
+      "source_revision": "a448d5b987d01887e1597269b57ae2f259f5725b",
+      "framework_source": "SolidJS + Electron",
+      "preliminary_license_scope": "MIT",
+      "role": "UX_reference_and_full_UI_adapt_alternative",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/package.json",
+          "status": 200,
+          "sha256": "49189f1e6df03ddde0cd64c221c0eb8bc236c0ffba41778f466192325076e217",
+          "bytes": 7568,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/package.json",
+          "status": 200,
+          "sha256": "09f1c56e94b35aebfb074fb52de66b569bc16d83ddf4b69e9afadf15e430d6c6",
+          "bytes": 4251,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/desktop/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/desktop/package.json",
+          "status": 200,
+          "sha256": "57b29d6f530c639c88c46eeba97dbbd8588645a99111979f35549b19b8da1b90",
+          "bytes": 2345,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/ui/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/ui/package.json",
+          "status": 200,
+          "sha256": "be1387107142213a811efbe7ccf269d9869b70a0837ea18f178a0dbd8579779b",
+          "bytes": 5066,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/sdk/js/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/sdk/js/package.json",
+          "status": "error",
+          "error": "HTTP Error 404: Not Found"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/LICENSE",
+          "status": 200,
+          "sha256": "625f0f619133f89bbbb2abe37369613dfa1885eba1e50d02170deb62bb42cb6b",
+          "bytes": 1065,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/index.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/index.ts",
+          "status": 200,
+          "sha256": "4c62c6a0b1a3ad9703515fab35e7c50641d07bc40afba0ed733d38cb360210a1",
+          "bytes": 238,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/desktop.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/desktop.ts",
+          "status": 200,
+          "sha256": "5a85d3c92243135122458f77e67b0ab583ded837fc354579a33243cfa23ed85f",
+          "bytes": 886,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/desktop/src/main/index.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/desktop/src/main/index.ts",
+          "status": 200,
+          "sha256": "4a79446286662f0d1b0b988b0bfa74aca52cfd5d44cd383c3557b0955ef8b840",
+          "bytes": 1770,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/client/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/client/package.json",
+          "status": 200,
+          "sha256": "1409cae97137532e046191ce14179a7e9a212aac8cf0d0259e9a6496b9a1d635",
+          "bytes": 1631,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/session-ui/package.json",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/session-ui/package.json",
+          "status": 200,
+          "sha256": "16f84ce1072664ef5726dfa6192c7aa358bc71666dbebb15ef57b5a778b421f6",
+          "bytes": 3618,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/app.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/app.tsx",
+          "status": 200,
+          "sha256": "57f95cbd0b2a4eb50308d1788885aa86b59001d6c31bc7dafc4078e7b38c90e9",
+          "bytes": 4060,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/entry.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/entry.tsx",
+          "status": 200,
+          "sha256": "34dbfa0d75997e8f224e6a31f26031a5a683ba551133681e740b720283797c3c",
+          "bytes": 3700,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/session-ui/src/components/message-part.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/session-ui/src/components/message-part.tsx",
+          "status": 200,
+          "sha256": "f0cc8c38034e2dccbb448275d52dec412392f954b48fe771b44e0c8709915454",
+          "bytes": 220,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/session-ui/src/components/file-media.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/session-ui/src/components/file-media.tsx",
+          "status": 200,
+          "sha256": "8e5606f700829b7bcc314afc9918ba5be49934c5ccba696df6d3fcc27e1ff6a1",
+          "bytes": 9581,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/client/src/solid/index.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/client/src/solid/index.ts",
+          "status": 200,
+          "sha256": "d3d99b1e67630df7eb82f3da6cbd930dcea3763e6891eea107d35f63c7c6bd2f",
+          "bytes": 98,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/runtime/server/client.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/runtime/server/client.tsx",
+          "status": 200,
+          "sha256": "641a7f8dc9676fcccd1aca470b030610c811977be54f1255d9841633d6b2afff",
+          "bytes": 5387,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/runtime/server/api.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/runtime/server/api.ts",
+          "status": 200,
+          "sha256": "12f860f63f38f62764ee833f5fb1cc24056d848a4a79ccbd24cdbc1200bdd17e",
+          "bytes": 1034,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/runtime/i18n/language.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/runtime/i18n/language.tsx",
+          "status": 200,
+          "sha256": "c35e6d53a47e2100edf34ddf655746c0232095d750780a5846405d8c192aabe4",
+          "bytes": 13879,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/session-ui/src/tools/tool-renderer.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/session-ui/src/tools/tool-renderer.tsx",
+          "status": 200,
+          "sha256": "487ff18ba3b1d34dfdd236855fb3108d9ccb6c681ffbed5fc740ce7f48453124",
+          "bytes": 81263,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/desktop/src/renderer/index.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/desktop/src/renderer/index.tsx",
+          "status": 200,
+          "sha256": "732eebf05b26a5f67fa6d3be1b1dca181fa5ee81c7f83d878078accf328e9aae",
+          "bytes": 610,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/desktop/src/preload/index.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/desktop/src/preload/index.ts",
+          "status": 200,
+          "sha256": "9cb812ecde5f29a759ef8a7abad4d27892ec8bbcc1c41a2a0e129fd15de12465",
+          "bytes": 1122,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/shell/routes/routes.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/shell/routes/routes.tsx",
+          "status": 200,
+          "sha256": "521f874b59a69e2829bf840c8e4947fd1f631d911c1ae1c2d07cb667146d627e",
+          "bytes": 3970,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/session/revert.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/session/revert.ts",
+          "status": 200,
+          "sha256": "2715bd374133a76de13852f91ea02c85680d2f4c1ee29efe6c3fe145005ff13e",
+          "bytes": 4685,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/desktop/src/renderer/desktop-app.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/desktop/src/renderer/desktop-app.tsx",
+          "status": 200,
+          "sha256": "10f671d20ec4842b5db1851a1ce3720201047ba43bb52bc494f217da152a37c4",
+          "bytes": 6907,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/session-ui/src/components/basic-tool.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/session-ui/src/components/basic-tool.tsx",
+          "status": 200,
+          "sha256": "69b23b662d1f3793fa0007822ee8985e66dadbfd282287c31ca2a1c6a9c60cab",
+          "bytes": 12139,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/runtime/i18n/desktop-native.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/runtime/i18n/desktop-native.ts",
+          "status": 200,
+          "sha256": "ec25a190439ec458b3768859886f90756c51017afd6dd4031bab664d8c394b1a",
+          "bytes": 9528,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/core/src/mcp/index.ts",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/core/src/mcp/index.ts",
+          "status": 200,
+          "sha256": "522849a479fca15852e43d4db6146ecf4fd83097dfa97005bd8101af879e1246",
+          "bytes": 37969,
+          "runtime_tested": false
+        },
+        {
+          "path": "packages/app/src/session/commands/fork-dialog.tsx",
+          "url": "https://raw.githubusercontent.com/anomalyco/opencode/a448d5b987d01887e1597269b57ae2f259f5725b/packages/app/src/session/commands/fork-dialog.tsx",
+          "status": 200,
+          "sha256": "1f2f7009acf6856e0f8691aed23e6b27e623560c3765537387b4cd2ff5535246",
+          "bytes": 3972,
+          "runtime_tested": false
+        }
+      ],
+      "findings": [
+        {
+          "topic": "framework",
+          "fact": "GUI app and component packages use SolidJS, not React",
+          "source_paths": [
+            "packages/app/package.json",
+            "packages/app/src/entry.tsx",
+            "packages/ui/package.json"
+          ]
+        },
+        {
+          "topic": "desktop",
+          "fact": "Current pinned desktop uses Electron, not Tauri; main/preload/renderer and sidecar initialization are separate",
+          "source_paths": [
+            "packages/desktop/package.json",
+            "packages/desktop/src/main/index.ts",
+            "packages/desktop/src/preload/index.ts",
+            "packages/desktop/src/renderer/desktop-app.tsx"
+          ]
+        },
+        {
+          "topic": "license",
+          "fact": "Full root LICENSE is MIT; examined package manifests declare MIT; no complete transitive dependency/asset/model/trademark audit",
+          "source_paths": [
+            "LICENSE",
+            "packages/app/package.json",
+            "packages/desktop/package.json",
+            "packages/ui/package.json",
+            "packages/session-ui/package.json",
+            "packages/client/package.json"
+          ]
+        },
+        {
+          "topic": "coupling",
+          "fact": "AppInterface injects servers/router but composes OpenCode contexts; actual API/events/PTY require OpenCode client protocol or replacement adapter",
+          "source_paths": [
+            "packages/app/src/app.tsx",
+            "packages/app/src/runtime/server/client.tsx",
+            "packages/app/src/runtime/server/api.ts",
+            "packages/client/package.json"
+          ]
+        },
+        {
+          "topic": "locale",
+          "fact": "Lazy and persisted app/UI i18n; en ru es de fr lt dictionaries and explicit zh-to-zh-Hans/br-to-pt-BR tags",
+          "source_paths": [
+            "packages/app/src/runtime/i18n/language.tsx",
+            "packages/app/src/runtime/i18n/desktop-native.ts"
+          ]
+        },
+        {
+          "topic": "history",
+          "fact": "Session fork, undo and redo invoke backend methods, not solely view state; no claim that this is external side effect rollback or Git branching",
+          "source_paths": [
+            "packages/app/src/session/revert.ts",
+            "packages/app/src/session/commands/fork-dialog.tsx"
+          ]
+        },
+        {
+          "topic": "tool_ui",
+          "fact": "Tool registry and specialized renderers plus GenericTool fallback; generic MCP icon and lifecycle state do not prove arbitrary embedded MCP Apps or progress percentage support",
+          "source_paths": [
+            "packages/session-ui/src/tools/tool-renderer.tsx",
+            "packages/session-ui/src/components/basic-tool.tsx",
+            "packages/core/src/mcp/index.ts"
+          ]
+        },
+        {
+          "topic": "viewer",
+          "fact": "FileMedia renders image/audio/SVG and binary fallback via data/readFile; no verified generic PDF/video/CAD or RepositoryZero ArtifactRef viewer",
+          "source_paths": [
+            "packages/session-ui/src/components/file-media.tsx",
+            "packages/app/src/shell/routes/routes.tsx"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "openclaw/openclaw",
+      "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+      "framework_source": "Solid app root with Lit bridge, Vite + Gateway protocol",
+      "preliminary_license_scope": "MIT",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/LICENSE"
+        }
+      ],
+      "role": "source_reference",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "url": "https://github.com/openclaw/openclaw",
+          "resolved_url": "https://github.com/openclaw/openclaw",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:16:32.801815+00:00",
+          "sha256": "066d0f1476572879c0697d3d49c497f8105943ee216c2f744dd9e3d4ae2ba3ed",
+          "bytes": 969513
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:16:33.400594+00:00",
+          "sha256": "d82fbca82ec05d132e0dbbb2c98763fcea56a0f0ce818768b1a9a94776a06411",
+          "bytes": 113174
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:16:33.831581+00:00",
+          "sha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4",
+          "bytes": 1076
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:09.747814+00:00",
+          "sha256": "e8ff96e436052b076f79755d13ae2cc09e6fb4fe5d8f472be5742086a6ad17b2",
+          "bytes": 148884
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/.github/workflows/ci-android-focused-testbox.yml",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/.github/workflows/ci-android-focused-testbox.yml",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:10.811976+00:00",
+          "sha256": "2fd3800d81c9e7c636d44331d462e7607f367960b0d2ab957ef2a30717f4af64",
+          "bytes": 4684
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.301499+00:00",
+          "sha256": "10421ad365206752938e2ac12fa47ae1b5905100e382be3a8941faa79ed4863c",
+          "bytes": 2625,
+          "repo": "openclaw/openclaw",
+          "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+          "path": "ui/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/main.ts",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/main.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.337834+00:00",
+          "sha256": "09df0b9b0b57ae937c9ab7bc13ebf8494338b57ab063e42be6cb9036e2d64d7b",
+          "bytes": 3819,
+          "repo": "openclaw/openclaw",
+          "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+          "path": "ui/src/main.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/app/app-root.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/app/app-root.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.740618+00:00",
+          "sha256": "48ecb0260543e1df2cdacbd5f896c4d88850160357ac67ba595da2a2edf479eb",
+          "bytes": 26565,
+          "repo": "openclaw/openclaw",
+          "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+          "path": "ui/src/app/app-root.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/app/gateway.ts",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/app/gateway.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.722708+00:00",
+          "sha256": "5f88cddba6abfe56383264c4b8817d7cd03b88014abfea8e23794e25756edfea",
+          "bytes": 3463,
+          "repo": "openclaw/openclaw",
+          "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+          "path": "ui/src/app/gateway.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/api/gateway.ts",
+          "resolved_url": "https://raw.githubusercontent.com/openclaw/openclaw/48737801f74d6b7aabb71ee10dcc5f0b19a8494d/ui/src/api/gateway.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.999673+00:00",
+          "sha256": "10c9411c39e5f8a83811efed722c7fca182f2684e99c860259a3e5437e9caf06",
+          "bytes": 28044,
+          "repo": "openclaw/openclaw",
+          "source_revision": "48737801f74d6b7aabb71ee10dcc5f0b19a8494d",
+          "path": "ui/src/api/gateway.ts"
+        }
+      ]
+    },
+    {
+      "repository": "NousResearch/hermes-agent",
+      "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+      "framework_source": "React web dashboard + separate Electron desktop",
+      "preliminary_license_scope": "MIT",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/LICENSE"
+        }
+      ],
+      "role": "source_reference",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "url": "https://github.com/NousResearch/Hermes-Agent",
+          "resolved_url": "https://github.com/NousResearch/Hermes-Agent",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:07:23.209859+00:00",
+          "sha256": "5b975dfe1d2f45ef11e4ce37637337a0f9e5a6da2b5852e1c44a72ab30b0a3d4",
+          "bytes": 579270
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/Hermes-Agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/pyproject.toml",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/Hermes-Agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/pyproject.toml",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:05.586204+00:00",
+          "sha256": "ff41b097147124ff2eb51a437d5f44eddea35104900c1c79c7edfb8b7352d901",
+          "bytes": 43035
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/Hermes-Agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/.github/workflows/ci.yaml",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/Hermes-Agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/.github/workflows/ci.yaml",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:06.463613+00:00",
+          "sha256": "9879ef39b5adecd9e1dcbef9da78c2befadb4e0216d411f7a3194b6770953b3a",
+          "bytes": 25149
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:48.080448+00:00",
+          "sha256": "c8c3009b1cf6e8d6e48e96a9b4c549d9ab0c86fdaffd91b19f3e9d9b37d93d9d",
+          "bytes": 16924
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:48.361596+00:00",
+          "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+          "bytes": 1070
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.378797+00:00",
+          "sha256": "4f3c519cfdf7d250a6f24e9f2e638686ada3876af57fb4da516d625bda17aa81",
+          "bytes": 1636,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "web/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.346939+00:00",
+          "sha256": "604e9f21fe4db0389a2bd819b175254ccb669e53da98170d63785472213917c4",
+          "bytes": 2859,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/App.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/App.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.582980+00:00",
+          "sha256": "5e805f5b5ba656aa746b867b8dc38484dbc2ed5f12abed744af5d2d9d40fd53e",
+          "bytes": 44910,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "web/src/App.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/main.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/main.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.612381+00:00",
+          "sha256": "4a4ca8d3ec4506e169f9c7991876ee68d5036a741ba5a7f31eab86f1067c50a1",
+          "bytes": 825,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "web/src/main.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/pages/ChatPage.tsx",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/pages/ChatPage.tsx",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:00.080057+00:00",
+          "sha256": "6a03a3b9ded3347c80ce9097bc3bd8f9d2a05d746deea2775cd40eb1a902e3f0",
+          "bytes": 85183,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "web/src/pages/ChatPage.tsx"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/lib/api.ts",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/web/src/lib/api.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.968389+00:00",
+          "sha256": "124b24919d9d265be0141330b8e44e1a814c3b716eb11239cbc4d4b5cd7085b2",
+          "bytes": 94196,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "web/src/lib/api.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/apps/desktop/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/apps/desktop/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:00.238292+00:00",
+          "sha256": "60b750ad6ec35c51e5cb8d2ae16f12c1ef08d057f5ac10c81f7efdb4d2c03f5b",
+          "bytes": 9077,
+          "repo": "NousResearch/hermes-agent",
+          "source_revision": "60f56a6b13c8eb9a9e088c6fc1165257c92f7e11",
+          "path": "apps/desktop/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/60f56a6b13c8eb9a9e088c6fc1165257c92f7e11/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:36:26.399832+00:00",
+          "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6",
+          "bytes": 1070,
+          "path": "LICENSE"
+        }
+      ]
+    },
+    {
+      "repository": "assistant-ui/assistant-ui",
+      "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+      "framework_source": "React library + OpenCode protocol adapter",
+      "preliminary_license_scope": "MIT",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/LICENSE"
+        }
+      ],
+      "role": "optional_component_candidate",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "url": "https://github.com/assistant-ui/assistant-ui",
+          "resolved_url": "https://github.com/assistant-ui/assistant-ui",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:07:23.290721+00:00",
+          "sha256": "8d2d978b1e1ca53858ffbd76a4649d9310fb17a0eeb3c9cc9dbc7191808a54d4",
+          "bytes": 379640
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:07:23.485663+00:00",
+          "sha256": "91f519bdf12a72584e13dcca4bb42bb1d6aff47e3ea0692dcccd6ab1213a9b3c",
+          "bytes": 9438
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:07:23.610588+00:00",
+          "sha256": "eafb05991a572efa34097474b31fef45b14a8879ed1d1a8fd77de62e6fa7d275",
+          "bytes": 1073
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:04.867783+00:00",
+          "sha256": "4f05fb6c851d7622a7f513ecc5a054afd00d3cb78dc6110fb0cf7392f398038b",
+          "bytes": 4937
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/.github/workflows/python-tests.yaml",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/.github/workflows/python-tests.yaml",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T21:18:05.169310+00:00",
+          "sha256": "6f11f67546f7a2dbdced08c70599e646bc5f7bd55417fec992c5dac5896918ca",
+          "bytes": 2620
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.106419+00:00",
+          "sha256": "19d03f5c90cd01fc84253d313672240b4be705eb8c7b440f6ba74e6e54a6b72e",
+          "bytes": 2958,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:06.121478+00:00",
+          "sha256": "c63675b6e474253c4b0b56880f3bc7dd5d2abd849e3f2e15c943add88c66fc50",
+          "bytes": 2065,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react-opencode/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/index.ts",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/index.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.496486+00:00",
+          "sha256": "dfccb9b16e66fc75f7779f4ea6fe18d88da657d8f7f8a2bbc216275470cf007f",
+          "bytes": 1926,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react-opencode/src/index.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react/src/index.ts",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react/src/index.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:29:27.557873+00:00",
+          "sha256": "d51ceb5a9d172d35dca3e657c59f6212748b9a55957449c9564de8cd6c3e7375",
+          "bytes": 20587,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react/src/index.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/useOpenCodeRuntime.ts",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/useOpenCodeRuntime.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:00.051160+00:00",
+          "sha256": "c7b69601bfb6e074031bdbd375fd7dd091da6dc7ef240f7728fe570313efd02e",
+          "bytes": 15288,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react-opencode/src/useOpenCodeRuntime.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/OpenCodeThreadController.ts",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/OpenCodeThreadController.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:32:59.984394+00:00",
+          "sha256": "1abd84e15717255191f48671f00d89971e7d4c2be327b3c4c7150fcb9a450f20",
+          "bytes": 44483,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react-opencode/src/OpenCodeThreadController.ts"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/types.ts",
+          "resolved_url": "https://raw.githubusercontent.com/assistant-ui/assistant-ui/a46d6634e7a75eddd85d51415b1a615886d4ad0e/packages/react-opencode/src/types.ts",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:00.034855+00:00",
+          "sha256": "ac59114f947b09e12ec05283775d8a08ec8cd3c8093bfc457b85d167f4a0df24",
+          "bytes": 9448,
+          "repo": "assistant-ui/assistant-ui",
+          "source_revision": "a46d6634e7a75eddd85d51415b1a615886d4ad0e",
+          "path": "packages/react-opencode/src/types.ts"
+        }
+      ]
+    },
+    {
+      "repository": "LibreChat-AI/LibreChat",
+      "source_revision": "e1dfc10449ff713faffacd60273fddcfe2c0a698",
+      "framework_source": "React/i18next; transport not deeply inspected",
+      "preliminary_license_scope": "MIT root LICENSE; ISC root/client manifests, file scope pending",
+      "license_sources": [
+        {
+          "path": "LICENSE",
+          "detected_license": "MIT",
+          "source": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/LICENSE"
+        }
+      ],
+      "role": "source_reference_lower_depth",
+      "runtime_status": "NOT_RUN",
+      "runtime_tested": false,
+      "score_total": null,
+      "sources": [
+        {
+          "url": "https://github.com/danny-avila/LibreChat",
+          "resolved_url": "https://github.com/LibreChat-AI/LibreChat",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:00.973157+00:00",
+          "sha256": "cac1a9e4a842b11737ae62c66ce234331aea45442e7a9f88dd6e2c7e7112614c",
+          "bytes": 456741
+        },
+        {
+          "url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/README.md",
+          "resolved_url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/README.md",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:01.263497+00:00",
+          "sha256": "e2437e78b27a2ed18aea0c749768d26672bf0904a77d1024e1fac02c1ca5d5cb",
+          "bytes": 16337
+        },
+        {
+          "url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/LICENSE",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:01.511497+00:00",
+          "sha256": "1ce5c9d51e5ab764b44142cd44d1e687f5bfe32f807c7221c14d061007309b97",
+          "bytes": 1066
+        },
+        {
+          "url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:19.196400+00:00",
+          "sha256": "846de56f7d72d15d225ff5ef18bb4bd12886027f9428f22039cfb79ad8fb544a",
+          "bytes": 17211,
+          "repo": "LibreChat-AI/LibreChat",
+          "source_revision": "e1dfc10449ff713faffacd60273fddcfe2c0a698",
+          "path": "package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/client/package.json",
+          "resolved_url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/client/package.json",
+          "status": 200,
+          "retrieved_at_utc": "2026-10-15T23:33:19.183878+00:00",
+          "sha256": "a89e73009092952fd9e215348b4afa62159ad8188406d6e8213a68eb74f00cdd",
+          "bytes": 6293,
+          "repo": "LibreChat-AI/LibreChat",
+          "source_revision": "e1dfc10449ff713faffacd60273fddcfe2c0a698",
+          "path": "client/package.json"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/LibreChat-AI/LibreChat/e1dfc10449ff713faffacd60273fddcfe2c0a698/client/src/App.tsx",
+          "status": 404,
+          "error": "HTTP Error 404: Not Found",
+          "repo": "LibreChat-AI/LibreChat",
+          "source_revision": "e1dfc10449ff713faffacd60273fddcfe2c0a698",
+          "path": "client/src/App.tsx"
+        }
+      ]
+    }
+  ],
+  "peer_review": "../docs/reviews/ui-foundation-review.md",
+  "runtime_tests": 0
+}

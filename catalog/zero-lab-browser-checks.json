@@ -1,0 +1,268 @@
+{
+  "kind": "controlled_browser_fixture_conformance_not_model_app_benchmark",
+  "checkedAtUtc": "2026-10-16T02:32:42.755Z",
+  "evaluatorSourceDigest": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+  "profile": {
+    "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+    "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+    "platform": "linux",
+    "arch": "x64",
+    "playwrightVersion": "1.63.0",
+    "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+    "network": "candidate_network_namespace_only_no_host_browser",
+    "chromiumSandbox": false,
+    "memoryBytes": 805306368,
+    "pids": 256,
+    "temporaryBytes": 100663296,
+    "shmBytes": 134217728,
+    "desktop": "1440x900",
+    "mobile": "390x844",
+    "maxTabsPerControl": 40,
+    "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+    "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+    "visualQualityAssessed": false
+  },
+  "positive": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "status": "passed",
+    "automatedContractComplete": true,
+    "visualQualityAssessed": false,
+    "paidModelCalls": 0,
+    "profile": {
+      "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "platform": "linux",
+      "arch": "x64",
+      "playwrightVersion": "1.63.0",
+      "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+      "network": "candidate_network_namespace_only_no_host_browser",
+      "chromiumSandbox": false,
+      "memoryBytes": 805306368,
+      "pids": 256,
+      "temporaryBytes": 100663296,
+      "shmBytes": 134217728,
+      "desktop": "1440x900",
+      "mobile": "390x844",
+      "maxTabsPerControl": 40,
+      "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+      "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+      "visualQualityAssessed": false
+    },
+    "executionKind": "docker_system_chromium",
+    "checks": {
+      "desktop": {
+        "load": true,
+        "noHorizontalOverflow": true,
+        "keyboardCreate": true,
+        "keyboardMoveApiReadback": true,
+        "reloadReadback": true,
+        "noJavaScriptOrConsoleErrors": true,
+        "noExternalRequestsOrPopups": true
+      },
+      "mobile": {
+        "load": true,
+        "noHorizontalOverflow": true,
+        "keyboardCreate": true,
+        "keyboardMoveApiReadback": true,
+        "reloadReadback": true,
+        "noJavaScriptOrConsoleErrors": true,
+        "noExternalRequestsOrPopups": true
+      }
+    },
+    "screenshots": [
+      {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "bytes": 25979,
+        "sha256": "1b7295533a99e09fcf98ace9b60fc0a9d5f1e77eabca88a94614112f8bde5b47",
+        "file": "desktop.png"
+      },
+      {
+        "name": "mobile",
+        "width": 390,
+        "height": 844,
+        "bytes": 29432,
+        "sha256": "7919a8017769908aa188075cf6ceae6b42393084b2f9df9eac4f9b6c34c08ef4",
+        "file": "mobile.png"
+      }
+    ],
+    "cleanup": "passed",
+    "limitations": [
+      "Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
+      "System Chromium with exact copied asset digest; not the Playwright bundled browser compatibility guarantee",
+      "Chromium sandbox disabled inside the bounded Docker controlled-code profile; not hostile upstream PR isolation"
+    ],
+    "sourceDigest": "8da781b3bd8cd480cbfb791b2bd3ce16eef8d5561efd0baf0c9fde1514567dbc",
+    "sourceFiles": 5,
+    "sourceBytes": 9536,
+    "graderDigest": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+    "browserAssets": {
+      "bytes": 574600816,
+      "files": 508,
+      "digest": "b0597f9b34afdc92e3198463789d1cf21e437198c063e865a97b6f3c77c6fb2f",
+      "playwrightVersion": "1.63.0"
+    },
+    "isolation": {
+      "network": "none_shared_candidate_namespace",
+      "nonroot": true,
+      "readOnlyRoot": true,
+      "readOnlyHostBinds": true,
+      "inheritedSecretEnvironment": false,
+      "hostBrowserUsed": false,
+      "hostSocketMounted": false,
+      "candidateDataLimitBytes": 67108864
+    },
+    "browserVersion": "154.0.8037.57",
+    "failedCheck": null,
+    "elapsedMs": 7822
+  },
+  "keyboardRegression": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "status": "failed",
+    "automatedContractComplete": false,
+    "visualQualityAssessed": false,
+    "paidModelCalls": 0,
+    "profile": {
+      "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "platform": "linux",
+      "arch": "x64",
+      "playwrightVersion": "1.63.0",
+      "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+      "network": "candidate_network_namespace_only_no_host_browser",
+      "chromiumSandbox": false,
+      "memoryBytes": 805306368,
+      "pids": 256,
+      "temporaryBytes": 100663296,
+      "shmBytes": 134217728,
+      "desktop": "1440x900",
+      "mobile": "390x844",
+      "maxTabsPerControl": 40,
+      "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+      "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+      "visualQualityAssessed": false
+    },
+    "executionKind": "docker_system_chromium",
+    "checks": {
+      "desktop": {
+        "load": true,
+        "noHorizontalOverflow": true,
+        "keyboardCreate": true
+      }
+    },
+    "screenshots": [],
+    "cleanup": "passed",
+    "limitations": [
+      "Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
+      "System Chromium with exact copied asset digest; not the Playwright bundled browser compatibility guarantee",
+      "Chromium sandbox disabled inside the bounded Docker controlled-code profile; not hostile upstream PR isolation"
+    ],
+    "sourceDigest": "2d8cad6c5f1dff93ca54cebb59546887fe4bad5291ca78e071f20d7cea9199cb",
+    "sourceFiles": 5,
+    "sourceBytes": 9539,
+    "graderDigest": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+    "browserAssets": {
+      "bytes": 574600816,
+      "files": 508,
+      "digest": "b0597f9b34afdc92e3198463789d1cf21e437198c063e865a97b6f3c77c6fb2f",
+      "playwrightVersion": "1.63.0"
+    },
+    "isolation": {
+      "network": "none_shared_candidate_namespace",
+      "nonroot": true,
+      "readOnlyRoot": true,
+      "readOnlyHostBinds": true,
+      "inheritedSecretEnvironment": false,
+      "hostBrowserUsed": false,
+      "hostSocketMounted": false,
+      "candidateDataLimitBytes": 67108864
+    },
+    "browserVersion": "154.0.8037.57",
+    "failedCheck": "desktop_keyboard_move",
+    "elapsedMs": 10556
+  },
+  "mobileRegression": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "status": "failed",
+    "automatedContractComplete": false,
+    "visualQualityAssessed": false,
+    "paidModelCalls": 0,
+    "profile": {
+      "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "platform": "linux",
+      "arch": "x64",
+      "playwrightVersion": "1.63.0",
+      "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+      "network": "candidate_network_namespace_only_no_host_browser",
+      "chromiumSandbox": false,
+      "memoryBytes": 805306368,
+      "pids": 256,
+      "temporaryBytes": 100663296,
+      "shmBytes": 134217728,
+      "desktop": "1440x900",
+      "mobile": "390x844",
+      "maxTabsPerControl": 40,
+      "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+      "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+      "visualQualityAssessed": false
+    },
+    "executionKind": "docker_system_chromium",
+    "checks": {
+      "desktop": {
+        "load": true,
+        "noHorizontalOverflow": true,
+        "keyboardCreate": true,
+        "keyboardMoveApiReadback": true,
+        "reloadReadback": true,
+        "noJavaScriptOrConsoleErrors": true,
+        "noExternalRequestsOrPopups": true
+      },
+      "mobile": {
+        "load": true
+      }
+    },
+    "screenshots": [
+      {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900,
+        "bytes": 26635,
+        "sha256": "fc97df97313a0d65e371200260647c2f908c70c541b2cb47b33bd9ead401d4d1"
+      }
+    ],
+    "cleanup": "passed",
+    "limitations": [
+      "Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
+      "System Chromium with exact copied asset digest; not the Playwright bundled browser compatibility guarantee",
+      "Chromium sandbox disabled inside the bounded Docker controlled-code profile; not hostile upstream PR isolation"
+    ],
+    "sourceDigest": "c641c14f8cc234fb308cec24339bed54ecedf7a77592ed0adeea5f611dd97a7e",
+    "sourceFiles": 5,
+    "sourceBytes": 9583,
+    "graderDigest": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+    "browserAssets": {
+      "bytes": 574600816,
+      "files": 508,
+      "digest": "b0597f9b34afdc92e3198463789d1cf21e437198c063e865a97b6f3c77c6fb2f",
+      "playwrightVersion": "1.63.0"
+    },
+    "isolation": {
+      "network": "none_shared_candidate_namespace",
+      "nonroot": true,
+      "readOnlyRoot": true,
+      "readOnlyHostBinds": true,
+      "inheritedSecretEnvironment": false,
+      "hostBrowserUsed": false,
+      "hostSocketMounted": false,
+      "candidateDataLimitBytes": 67108864
+    },
+    "browserVersion": "154.0.8037.57",
+    "failedCheck": "mobile_layout",
+    "elapsedMs": 7107
+  }
+}

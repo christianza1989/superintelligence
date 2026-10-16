@@ -1,0 +1,251 @@
+{
+  "kind": "controlled_fixture_combined_acceptance_not_model_benchmark",
+  "checkedAtUtc": "2026-10-16T02:33:53.330Z",
+  "sourceDigests": {
+    "platform/scripts/zero-lab-acceptance.mjs": "250f18b44b5f6668e8fc1ed0ff72b056fe9c18d88238ca012c9af29fbbd9427f",
+    "platform/scripts/zero-lab-evaluate.mjs": "3098124c62f86293988dc78b6f417de5f9ff6f2fdf628a7489ce3abc874396f4",
+    "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+    "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70"
+  },
+  "report": {
+    "version": 1,
+    "suite": "sprintdesk-v1",
+    "profile": {
+      "id": "sprintdesk-automated-api-sqlite-ui-linux-x64-v1",
+      "functional": {
+        "id": "sprintdesk-node24-prebuilt-linux-x64-v1",
+        "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "nodeVersion": "24",
+        "platform": "linux",
+        "arch": "x64",
+        "dependencyMode": "prebuilt_no_declared_external_npm_dependencies_no_install",
+        "startCommand": "npm --ignore-scripts start",
+        "network": "none",
+        "dataLimitBytes": 67108864,
+        "persistenceBoundary": "application_container_restart_not_daemon_or_host_restart",
+        "sqliteRecordProbe": "task_id_and_title_in_one_regular_table_row_including_json_cells_max32tables_512rows",
+        "uiImplemented": false
+      },
+      "browser": {
+        "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+        "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "platform": "linux",
+        "arch": "x64",
+        "playwrightVersion": "1.63.0",
+        "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+        "network": "candidate_network_namespace_only_no_host_browser",
+        "chromiumSandbox": false,
+        "memoryBytes": 805306368,
+        "pids": 256,
+        "temporaryBytes": 100663296,
+        "shmBytes": 134217728,
+        "desktop": "1440x900",
+        "mobile": "390x844",
+        "maxTabsPerControl": 40,
+        "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+        "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+        "visualQualityAssessed": false
+      },
+      "sourceConsistency": "identical_content_digest_across_independent_snapshots",
+      "coverage": "api_contract_sqlite_restart_desktop_mobile_keyboard_create_move_reload",
+      "visualQualityAssessed": false
+    },
+    "status": "passed",
+    "functionalStatus": "passed",
+    "qualityComplete": true,
+    "automatedContractComplete": true,
+    "visualQualityAssessed": false,
+    "api": {
+      "status": "passed",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "subtests": 7,
+      "outputSha256": "fae4183b1f8f5da4d3e33cb0cd3f8aa53b9ea5d9b9ace197e3d12dc82d7ddc80"
+    },
+    "persistence": {
+      "status": "passed",
+      "coldContainerRestart": true,
+      "fieldsPreserved": true,
+      "sqliteHeader": true,
+      "quickCheck": "ok",
+      "sqliteTaskStored": true
+    },
+    "ui": {
+      "version": 1,
+      "suite": "sprintdesk-v1",
+      "status": "passed",
+      "automatedContractComplete": true,
+      "visualQualityAssessed": false,
+      "paidModelCalls": 0,
+      "profile": {
+        "id": "sprintdesk-controlled-system-chromium-linux-x64-v1",
+        "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "platform": "linux",
+        "arch": "x64",
+        "playwrightVersion": "1.63.0",
+        "browserSource": "installed_system_chromium_readonly_copy_with_content_digest",
+        "network": "candidate_network_namespace_only_no_host_browser",
+        "chromiumSandbox": false,
+        "memoryBytes": 805306368,
+        "pids": 256,
+        "temporaryBytes": 100663296,
+        "shmBytes": 134217728,
+        "desktop": "1440x900",
+        "mobile": "390x844",
+        "maxTabsPerControl": 40,
+        "accessibleContract": "Title textbox; Create/Add task button; named task article; native Status select Todo/doing/Done",
+        "coverage": "load_headings_overflow_keyboard_create_move_api_readback_reload_runtime_errors",
+        "visualQualityAssessed": false
+      },
+      "executionKind": "docker_system_chromium",
+      "checks": {
+        "desktop": {
+          "load": true,
+          "noHorizontalOverflow": true,
+          "keyboardCreate": true,
+          "keyboardMoveApiReadback": true,
+          "reloadReadback": true,
+          "noJavaScriptOrConsoleErrors": true,
+          "noExternalRequestsOrPopups": true
+        },
+        "mobile": {
+          "load": true,
+          "noHorizontalOverflow": true,
+          "keyboardCreate": true,
+          "keyboardMoveApiReadback": true,
+          "reloadReadback": true,
+          "noJavaScriptOrConsoleErrors": true,
+          "noExternalRequestsOrPopups": true
+        }
+      },
+      "screenshots": [
+        {
+          "name": "desktop",
+          "width": 1440,
+          "height": 900,
+          "bytes": 26651,
+          "sha256": "2de0616bf11e1b586dbace96bf38ce5b97e9248cb823c1060595f52ce0abb931"
+        },
+        {
+          "name": "mobile",
+          "width": 390,
+          "height": 844,
+          "bytes": 30637,
+          "sha256": "1fd58c3d36f466c3369b1624033f02ee629ab4e768068b85203da84c27d03475"
+        }
+      ],
+      "cleanup": "passed",
+      "limitations": [
+        "Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
+        "System Chromium with exact copied asset digest; not the Playwright bundled browser compatibility guarantee",
+        "Chromium sandbox disabled inside the bounded Docker controlled-code profile; not hostile upstream PR isolation"
+      ],
+      "sourceDigest": "8da781b3bd8cd480cbfb791b2bd3ce16eef8d5561efd0baf0c9fde1514567dbc",
+      "sourceFiles": 5,
+      "sourceBytes": 9536,
+      "graderDigest": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+      "browserAssets": {
+        "bytes": 574600816,
+        "files": 508,
+        "digest": "b0597f9b34afdc92e3198463789d1cf21e437198c063e865a97b6f3c77c6fb2f",
+        "playwrightVersion": "1.63.0"
+      },
+      "isolation": {
+        "network": "none_shared_candidate_namespace",
+        "nonroot": true,
+        "readOnlyRoot": true,
+        "readOnlyHostBinds": true,
+        "inheritedSecretEnvironment": false,
+        "hostBrowserUsed": false,
+        "hostSocketMounted": false,
+        "candidateDataLimitBytes": 67108864
+      },
+      "browserVersion": "154.0.8037.57",
+      "failedCheck": null,
+      "elapsedMs": 7825
+    },
+    "cleanup": "passed",
+    "paidModelCalls": 0,
+    "limitations": [
+      "Automated contract conformance is not a subjective design or comprehensive product-quality score",
+      "UI coverage is create, move, API readback, reload, overflow and runtime errors; other UI flows require further review",
+      "Controlled local code only; Docker shares its host kernel and Chromium runs without its own process sandbox",
+      "Persistence is checked across application-container restart, not host power loss"
+    ],
+    "functional": {
+      "version": 1,
+      "suite": "sprintdesk-v1",
+      "status": "partial",
+      "functionalStatus": "passed",
+      "qualityComplete": false,
+      "trustProfile": "controlled_synthetic",
+      "api": {
+        "status": "passed",
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "subtests": 7,
+        "outputSha256": "fae4183b1f8f5da4d3e33cb0cd3f8aa53b9ea5d9b9ace197e3d12dc82d7ddc80"
+      },
+      "persistence": {
+        "status": "passed",
+        "coldContainerRestart": true,
+        "fieldsPreserved": true,
+        "sqliteHeader": true,
+        "quickCheck": "ok",
+        "sqliteTaskStored": true
+      },
+      "ui": {
+        "status": "not_run",
+        "reason": "desktop_mobile_keyboard_browser_profile_not_implemented"
+      },
+      "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+      "profile": {
+        "id": "sprintdesk-node24-prebuilt-linux-x64-v1",
+        "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "nodeVersion": "24",
+        "platform": "linux",
+        "arch": "x64",
+        "dependencyMode": "prebuilt_no_declared_external_npm_dependencies_no_install",
+        "startCommand": "npm --ignore-scripts start",
+        "network": "none",
+        "dataLimitBytes": 67108864,
+        "persistenceBoundary": "application_container_restart_not_daemon_or_host_restart",
+        "sqliteRecordProbe": "task_id_and_title_in_one_regular_table_row_including_json_cells_max32tables_512rows",
+        "uiImplemented": false
+      },
+      "paidModelCalls": 0,
+      "cleanup": "passed",
+      "limitations": [
+        "Linux x64, prebuilt Node24 builtins-only artifacts; no dependency installation",
+        "Explicit controlled local code grant, not a human audit claim or hostile upstream PR sandbox",
+        "API and persistence success does not establish full UI or benchmark quality",
+        "Bounded tmpfs verifies SQLite across app restart, not disk durability across host or Docker daemon restart"
+      ],
+      "sourceDigest": "8da781b3bd8cd480cbfb791b2bd3ce16eef8d5561efd0baf0c9fde1514567dbc",
+      "sourceFiles": 5,
+      "sourceBytes": 9536,
+      "acceptanceDigest": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+      "isolation": {
+        "network": "none",
+        "user": "1000:1000",
+        "readOnlySource": true,
+        "readOnlyRoot": true,
+        "writableData": "invocation_owned_tmpfs_volume",
+        "dataLimitBytes": 67108864,
+        "anchorKeepsDataMountedAcrossRestart": true,
+        "memoryBytes": 268435456,
+        "pids": 128,
+        "nanoCpus": 1000000000,
+        "graderSeparateContainer": true,
+        "inheritedSecretEnvironment": false,
+        "hostSocketMountedInContainer": false
+      },
+      "elapsedMs": 11521
+    },
+    "acceptanceDigest": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+    "sourceDigest": "8da781b3bd8cd480cbfb791b2bd3ce16eef8d5561efd0baf0c9fde1514567dbc",
+    "elapsedMs": 19347
+  }
+}

@@ -1,0 +1,40 @@
+---
+import SiteFrame from "./SiteFrame.astro";
+import Button from "./Button.astro";
+import { GITHUB_URL, STAGE } from "../site";
+import { snapshot } from "../project-data";
+const principles = [
+  { n: "01", title: "Find what already exists.", copy: "Start with tools people have built. Look at their source, maintenance and evidence before writing the same thing again.", tag: "DISCOVER" },
+  { n: "02", title: "Build only the difference.", copy: "Choose one suitable foundation. Add focused components and the missing work, with clear versions, permissions and attribution.", tag: "REUSE" },
+  { n: "03", title: "Verify the actual result.", copy: "A useful artifact needs more than an AI saying it is done. Keep the checks, source and known limits beside the result.", tag: "VERIFY" },
+];
+---
+<SiteFrame title="RepositoryZero — One open core. A world of AI tools." description="Reuse what people have already built. Discover AI tools, choose a foundation, and verify the result.">
+  <section class="hero">
+    <div class="hero-copy"><div class="eyebrow"><span class="status-dot"></span>{STAGE}</div>
+      <h1>One open core.<br /><span>A world of AI tools.</span></h1>
+      <p class="lead">Don't rebuild what already works.<br />Discover the right tools. Reuse the best fit.<br class="desktop-break" /> Build the part that makes it yours.</p>
+      <div class="hero-actions"><Button href="/catalog/">Explore the directory <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></Button><Button href="/roadmap/" variant="secondary">Follow the build <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></Button></div>
+      <p class="hero-note">Open source. Reuse first. Evidence before claims.</p>
+    </div>
+    <div class="hero-map" aria-label="The planned workflow: discover existing work, reuse a foundation, build and verify a result">
+      <div class="map-topline"><span class="tiny-label">THE REUSE LOOP</span><span class="map-status">Built on existing work</span></div>
+      <div class="map-source"><span class="map-icon" aria-hidden="true">⌘</span><div><strong>People build useful things.</strong><span>Repositories · libraries · models · tools</span></div></div>
+      <div class="map-connector" aria-hidden="true"></div>
+      <div class="map-core"><span class="core-symbol" aria-hidden="true">0</span><div><strong>RepositoryZero</strong><span>Find  /  compare  /  connect</span></div><span class="map-spark" aria-hidden="true"></span></div>
+      <div class="map-branches" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="map-outputs"><span>YOUR PROJECT</span><span>YOUR WORKFLOW</span><span>YOUR RESULT</span></div>
+      <div class="map-caption">Keep the work. Add the difference.</div>
+    </div>
+  </section>
+  <section class="principles section-block" aria-labelledby="principles-heading">
+    <div class="section-heading"><span class="eyebrow">A BETTER STARTING POINT</span><h2 id="principles-heading">The next idea starts<br />with what people already built.</h2><p>For developers and vibe coders who want a useful result, without stitching together a second stack for every task.</p></div>
+    <div class="principle-grid">{principles.map((item) => <article class="principle-card"><div class="card-top"><span>{item.n}</span><span class="tiny-label">{item.tag}</span></div><h3>{item.title}</h3><p>{item.copy}</p></article>)}</div>
+  </section>
+  <section class="workspace-section section-block" aria-labelledby="workspace-heading">
+    <div class="split-heading"><div><span class="eyebrow">ONE WORKSPACE</span><h2 id="workspace-heading">From an idea<br />to a result you can inspect.</h2></div><p>A reused product foundation, focused tools, visible changes and separate checks. The first slice targets browser research, PDF tables and a small code/test cycle.</p></div>
+    <figure class="workspace-preview"><div class="window-caption"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>RepositoryZero workspace</span><span class="preview-badge">UI CONCEPT</span></div><img src="/images/workspace-concept.png" alt="Future RepositoryZero workspace concept showing a project conversation beside Preview, Changes and Checks panels" loading="lazy" width="1672" height="941" /><figcaption>Design concept · example data · the pictured workflow is not a runtime acceptance result.</figcaption></figure>
+  </section>
+  <section class="research-section section-block" aria-labelledby="research-heading"><div><span class="eyebrow">A GROWING SOURCE DIRECTORY</span><h2 id="research-heading">More possibilities.<br />Clearer evidence.</h2><p>Browse by the work you want to do. A source candidate is an idea to evaluate; a usable integration needs a tested adapter and a compatible profile.</p><Button href="/catalog/" variant="secondary">Browse source candidates <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></Button></div><div class="evidence-panel"><div class="evidence-row"><span>Research snapshot</span><strong>{snapshot.date}</strong></div><div class="evidence-row"><span>Unique accessible repositories</span><strong>{snapshot.repositories.toLocaleString("en")}</strong></div><div class="evidence-row"><span>Candidate runtime tests in this snapshot</span><strong>{snapshot.runtimeTests}</strong></div><p>These are source-research figures, not installed modules, verified integrations or a claim to have reviewed all of GitHub.</p><a href="/docs/">Read the evidence and scope <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></a></div></section>
+  <section class="build-strip"><div><span class="eyebrow">BUILDING IN THE OPEN</span><h2>A small real MVP first.<br />An open ecosystem over time.</h2><p>Rakazo is the implementation foundation. Jev through OpenRouter is the selected tool-routing direction; live account and budget activation remain pending.</p></div><Button href={GITHUB_URL} external>Build with us on GitHub <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 20 20" width="16" height="16"><path d="M5 15 15 5M6 5h9v9" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></Button></section>
+</SiteFrame>

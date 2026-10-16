@@ -1,0 +1,96 @@
+{
+  "manifest_version": "0.1",
+  "id": "documents.docling",
+  "version": "0.1.0-plan.1",
+  "status": "candidate",
+  "upstream": {
+    "repository": "https://github.com/docling-project/docling",
+    "revision": "6fadbae317b09c4dd4051c0f1fc1746c6baf04bc"
+  },
+  "license": {
+    "code_spdx": "MIT",
+    "model_licenses_verified": false,
+    "third_party_notices_verified": false
+  },
+  "core_compatibility": ">=0.1.0 <0.2.0",
+  "platforms": [
+    "linux-x86_64"
+  ],
+  "capabilities": [
+    {
+      "id": "document.extract_tables",
+      "contract_version": "1",
+      "input_schema": "schemas/document.extract_tables.input.v1.json",
+      "output_schema": "schemas/document.extract_tables.output.v1.json"
+    }
+  ],
+  "runtime": {
+    "kind": "python_worker",
+    "python": "3.12",
+    "entrypoint": "platform_adapter.docling_worker:main",
+    "dependency_lock": null,
+    "artifact_digests": []
+  },
+  "permissions": {
+    "network": [],
+    "files_read": [
+      "input_artifact"
+    ],
+    "files_write": [
+      "staging_artifacts"
+    ],
+    "secrets": [],
+    "external_side_effects": []
+  },
+  "authentication": {
+    "required": false
+  },
+  "resources": {
+    "cpu_limit": 2,
+    "ram_limit_mb": 4096,
+    "gpu": "optional",
+    "installed_bytes_measured": null,
+    "model_bytes_measured": null,
+    "cache_limit_mb": 1024,
+    "estimates_are_measured": false
+  },
+  "execution": {
+    "timeout_seconds": 180,
+    "max_attempts": 2,
+    "cancellation": "cooperative_then_terminate_process_tree",
+    "idempotency": "canonical_input_digest",
+    "healthcheck": "synthetic_one_page_fixture",
+    "error_contract": "tool_error.v1"
+  },
+  "tests": {
+    "acceptance_suite": "pdf_tables_v1",
+    "requires": [
+      "golden_cells",
+      "page_provenance",
+      "timeout",
+      "oom",
+      "no_network"
+    ]
+  },
+  "lifecycle": {
+    "install": "reviewed_adapter_installer_only",
+    "update": "stage_verify_then_atomic_activate",
+    "uninstall": "remove_runtime_and_unreferenced_cache_preserve_user_artifacts"
+  },
+  "activation": {
+    "allowed": false,
+    "blocking_checks": [
+      "lockfile_and_digests",
+      "model_license_review",
+      "runtime_acceptance",
+      "resource_measurement"
+    ]
+  },
+  "costs": {
+    "pricing_status": "unverified",
+    "external_paid_calls_allowed": false,
+    "unit_rate_usd": null,
+    "model_provider_cost_separate": true,
+    "local_compute_cost_measured": false
+  }
+}

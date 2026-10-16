@@ -1,0 +1,9 @@
+---
+import { GITHUB_URL, STAGE } from "../site";
+import Logo from "./Logo.astro";
+---
+<footer class="site-footer">
+  <div><Logo /><p>One open core. A world of AI tools.</p><span class="footer-stage">{STAGE}</span></div>
+  <nav aria-label="Project links"><a href="/docs/">Documentation</a><a href="/catalog/">Source directory</a><a href="/roadmap/">Roadmap</a><a href="/support/">Support</a><a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub </a></nav>
+  <div class="footer-bottom"><span>Built in the open · © 2026 RepositoryZero</span><span>Astro foundation adapted from <a href="https://github.com/elie222/rakazo" target="_blank" rel="noreferrer">Rakazo</a> · Apache-2.0</span><span>English preview · more locales planned</span></div>
+</footer>

@@ -1,0 +1,2438 @@
+{
+  "sources": [
+    {
+      "url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "resolved_url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00",
+      "sha256": "a90581c882c298d06817353fe658298a51615a6ce68dd12a529a112738cb40ff",
+      "bytes": 268207,
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "resolved_url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00",
+      "sha256": "0c984da00068bbeba0dea00ec334b65e3d37e106f8aa2d31a91450c888133994",
+      "bytes": 267885,
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "resolved_url": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00",
+      "sha256": "0c69e4d814168ada436184504256a5cdf4443de5a54fc65c70d9bdf9773a0e39",
+      "bytes": 268471,
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "resolved_url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00",
+      "sha256": "fead25782c4d2a91e5c4e4fb128b1ae324d60833ffa5a98bff4cce4e8cba8a87",
+      "bytes": 268555,
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "resolved_url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00",
+      "sha256": "30e7149852183dd3b5637b98226e4e949076b9594e1e33937837b5b4314663f1",
+      "bytes": 268677,
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "resolved_url": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00",
+      "sha256": "600cd07be1aa3780389b35c23df1569438489c493b1da8f3049c8bc050742c89",
+      "bytes": 267828,
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "resolved_url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00",
+      "sha256": "6e8f9f07a2191b5d28afd3823b6d8b075c1bb9baddcc2fa44e95079220c46cf4",
+      "bytes": 265698,
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "resolved_url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00",
+      "sha256": "b3c966162b1fa6cef8f44f59967acf6b4fa8c21fb92ec07ed542be2875023284",
+      "bytes": 266740,
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "resolved_url": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00",
+      "sha256": "f8cdbb3728a0c2ee66cd2a3bc5a3946cb50c9484d00551f6e5d631f3d32d3186",
+      "bytes": 268734,
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "resolved_url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00",
+      "sha256": "3c7a2c905e9040e8abfec7110f8d9df6ecbad2f3e9d6a7190417c8d3837d498e",
+      "bytes": 267962,
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "resolved_url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00",
+      "sha256": "33a080a735d760ccfe9cc84fb2226fdb8000b5354d3f50484b8cdaaae12814ec",
+      "bytes": 264672,
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "resolved_url": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00",
+      "sha256": "8f51bc30cd177eed929dbc96fdd6bc58c59132f8dea7dba7e1268371c2e50708",
+      "bytes": 265860,
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "resolved_url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00",
+      "sha256": "d5b66fc3e05d1bf8c4d384f4b8f2c976f96c14a4105542b78b92a7cb0dfea1f7",
+      "bytes": 269089,
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "resolved_url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00",
+      "sha256": "87478bfee0e9985997238e840b4474b5df2a1e5e49b0df5adbac188380595cf2",
+      "bytes": 266218,
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars"
+    },
+    {
+      "url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "resolved_url": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00",
+      "sha256": "c3ca0b72bb82dcc498e79e1e765e2f187a6471d134f1d644385b1ae1a2a41a7f",
+      "bytes": 265370,
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars"
+    },
+    {
+      "url": "https://github.com/trending?since=daily",
+      "resolved_url": "https://github.com/trending?since=daily",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00",
+      "sha256": "70449aa1e9ce95cc75dd443c7a68ca311010fcd110349a0e93ab88b1cb51f648",
+      "bytes": 602996,
+      "kind": "trending",
+      "query": "daily"
+    },
+    {
+      "url": "https://github.com/trending?since=weekly",
+      "resolved_url": "https://github.com/trending?since=weekly",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00",
+      "sha256": "00eb7b18bb4dda73dbc5eb31de824643ef60c83febe5196e6f295cea0d2f7d86",
+      "bytes": 586278,
+      "kind": "trending",
+      "query": "weekly"
+    },
+    {
+      "url": "https://github.com/trending?since=monthly",
+      "resolved_url": "https://github.com/trending?since=monthly",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00",
+      "sha256": "bcbb894cfff76f202f57b1be64eed3123bd46255ac78bfe26ad42c118e54ca82",
+      "bytes": 714939,
+      "kind": "trending",
+      "query": "monthly"
+    }
+  ],
+  "observations": [
+    {
+      "repo": "openclaw/openclaw",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 1,
+      "stars": 392112,
+      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "obra/superpowers",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 2,
+      "stars": 299789,
+      "description": "An agentic skills framework & software development methodology that works.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "NousResearch/hermes-agent",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 3,
+      "stars": 254092,
+      "description": "The agent that grows with you",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "n8n-io/n8n",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 4,
+      "stars": 207521,
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ in…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "firecrawl/firecrawl",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 5,
+      "stars": 191884,
+      "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "Significant-Gravitas/AutoGPT",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 6,
+      "stars": 187600,
+      "description": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus o…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "f/prompts.chat",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 7,
+      "stars": 173090,
+      "description": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organi…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "AUTOMATIC1111/stable-diffusion-webui",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 8,
+      "stars": 165058,
+      "description": "Stable Diffusion web UI",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "Snailclimb/JavaGuide",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 9,
+      "stars": 159055,
+      "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "langgenius/dify",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 10,
+      "stars": 158586,
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.288439+00:00"
+    },
+    {
+      "repo": "open-webui/open-webui",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 1,
+      "stars": 155821,
+      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "langchain-ai/langchain",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 2,
+      "stars": 147881,
+      "description": "The agent engineering platform.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "x1xhlol/system-prompts-and-models-of-ai-tools",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 3,
+      "stars": 144047,
+      "description": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app,…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "github/spec-kit",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 4,
+      "stars": 141424,
+      "description": "💫 Toolkit to help you get started with SDD or any other process!",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "Comfy-Org/ComfyUI",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 5,
+      "stars": 137701,
+      "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in th…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 6,
+      "stars": 125695,
+      "description": "Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and mak…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "microsoft/generative-ai-for-beginners",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 7,
+      "stars": 121426,
+      "description": "21 Lessons, Get Started Building with Generative AI ",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 8,
+      "stars": 112441,
+      "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 9,
+      "stars": 111607,
+      "description": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI applications.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "google-gemini/gemini-cli",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 10,
+      "stars": 107390,
+      "description": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.286321+00:00"
+    },
+    {
+      "repo": "rasbt/LLMs-from-scratch",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 1,
+      "stars": 106615,
+      "description": "Implement a ChatGPT-like LLM in PyTorch from scratch, step by step",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "thedotmack/claude-mem",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 2,
+      "stars": 101013,
+      "description": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and inje…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "hacksider/Deep-Live-Cam",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 3,
+      "stars": 97082,
+      "description": "real time face swap and one-click video deepfake with only a single image",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "punkpeye/awesome-mcp-servers",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 4,
+      "stars": 96397,
+      "description": "A collection of MCP servers.",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "infiniflow/ragflow",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 5,
+      "stars": 92285,
+      "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to creat…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "koala73/worldmonitor",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 6,
+      "stars": 88509,
+      "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified s…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "D4Vinci/Scrapling",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 7,
+      "stars": 87887,
+      "description": "🕷️ An adaptive Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: <a href=\"https://discord.gg/EMgGbDceNQ\" class=\"Link--inTextBlock\" rel=\"nofollow\">https…</a>",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "unclecode/crawl4ai",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 8,
+      "stars": 85619,
+      "description": "Open-source web crawler and scraper for LLMs and AI agents: any website into clean, LLM-ready Markdown. Run it yourself, or use Crawl4AI …",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "bytedance/deer-flow",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 9,
+      "stars": 83912,
+      "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, s…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "lobehub/lobehub",
+      "kind": "cumulative_stars",
+      "query": "topic:ai sort:stars",
+      "page_rank": 10,
+      "stars": 83251,
+      "description": "🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling, and reporting on your entire A…",
+      "source": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.300218+00:00"
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 1,
+      "stars": 280247,
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, C…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "morluto/rea",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 2,
+      "stars": 267698,
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "NousResearch/hermes-agent",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 3,
+      "stars": 254092,
+      "description": "The agent that grows with you",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "firecrawl/firecrawl",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 4,
+      "stars": 191884,
+      "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "Significant-Gravitas/AutoGPT",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 5,
+      "stars": 187600,
+      "description": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus o…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "ollama/ollama",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 6,
+      "stars": 183305,
+      "description": "Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "f/prompts.chat",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 7,
+      "stars": 173090,
+      "description": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organi…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "huggingface/transformers",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 8,
+      "stars": 167727,
+      "description": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 9,
+      "stars": 164331,
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "langgenius/dify",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 10,
+      "stars": 158586,
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.292037+00:00"
+    },
+    {
+      "repo": "open-webui/open-webui",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 1,
+      "stars": 155821,
+      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "langchain-ai/langchain",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 2,
+      "stars": 147881,
+      "description": "The agent engineering platform.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "harry0703/MoneyPrinterTurbo",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 3,
+      "stars": 131567,
+      "description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "Graphify-Labs/graphify",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 4,
+      "stars": 126874,
+      "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cu…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "browser-use/browser-use",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 5,
+      "stars": 118093,
+      "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 6,
+      "stars": 112441,
+      "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "TauricResearch/TradingAgents",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 7,
+      "stars": 111361,
+      "description": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "rasbt/LLMs-from-scratch",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 8,
+      "stars": 106615,
+      "description": "Implement a ChatGPT-like LLM in PyTorch from scratch, step by step",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "paperclipai/paperclip",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 9,
+      "stars": 102674,
+      "description": "The open-source app everyone uses to manage agents at work",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "vllm-project/vllm",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 10,
+      "stars": 93865,
+      "description": "A high-throughput and memory-efficient inference and serving engine for LLMs",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.337314+00:00"
+    },
+    {
+      "repo": "OpenHands/OpenHands",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 1,
+      "stars": 90992,
+      "description": "🙌 OpenHands: AI-Driven Development",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "unclecode/crawl4ai",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 2,
+      "stars": 85619,
+      "description": "Open-source web crawler and scraper for LLMs and AI agents: any website into clean, LLM-ready Markdown. Run it yourself, or use Crawl4AI …",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "tt-a1i/archify",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 3,
+      "stars": 84017,
+      "description": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "bytedance/deer-flow",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 4,
+      "stars": 83912,
+      "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, s…",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "mlabonne/llm-course",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 5,
+      "stars": 83609,
+      "description": "Course to get into Large Language Models (LLMs) with roadmaps and Colab notebooks.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "rtk-ai/rtk",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 6,
+      "stars": 83509,
+      "description": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "datawhalechina/hello-agents",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 7,
+      "stars": 83288,
+      "description": "📚 《从零开始构建智能体》——从零开始的智能体原理与实践教程",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "shareAI-lab/learn-claude-code",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 8,
+      "stars": 78641,
+      "description": "Bash is all you need - A nano claude code–like 「agent harness」, built from 0 to 1",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "unslothai/unsloth",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 9,
+      "stars": 78070,
+      "description": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "hiyouga/LlamaFactory",
+      "kind": "cumulative_stars",
+      "query": "topic:llm sort:stars",
+      "page_rank": 10,
+      "stars": 75495,
+      "description": "Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024)",
+      "source": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.294552+00:00"
+    },
+    {
+      "repo": "obra/superpowers",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 1,
+      "stars": 299789,
+      "description": "An <em>agentic</em> skills framework & software development methodology that works.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "mattpocock/skills",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 2,
+      "stars": 292707,
+      "description": "Skills for Real Engineers. Straight from my .<em>agents</em> directory.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 3,
+      "stars": 280247,
+      "description": "The <em>agent</em> harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, C…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "morluto/rea",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 4,
+      "stars": 267698,
+      "description": "Reverse engineer anything with <em>agents</em>, from app behavior down to native binaries.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "NousResearch/hermes-agent",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 5,
+      "stars": 254092,
+      "description": "The <em>agent</em> that grows with you",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "anomalyco/opencode",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 6,
+      "stars": 213883,
+      "description": "The open source coding <em>agent</em>.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "ultraworkers/claw-code",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 7,
+      "stars": 194925,
+      "description": "An <em>agent</em>-managed museum exhibit, built in Rust with Gajae-Code / LazyCodex — developed and maintained with no human intervention.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "firecrawl/firecrawl",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 8,
+      "stars": 191884,
+      "description": "Supercharge your AI <em>agents</em> with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "anthropics/skills",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 9,
+      "stars": 181377,
+      "description": "Public repository for <em>Agent</em> Skills",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 10,
+      "stars": 164331,
+      "description": "Makes your AI <em>agent</em> think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.324160+00:00"
+    },
+    {
+      "repo": "msitarzewski/agency-agents",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 1,
+      "stars": 160327,
+      "description": "A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each ",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "Snailclimb/JavaGuide",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 2,
+      "stars": 159055,
+      "description": "Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "langgenius/dify",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 3,
+      "stars": 158586,
+      "description": "Build <em>Agentic</em> workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "langflow-ai/langflow",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 4,
+      "stars": 155712,
+      "description": "Langflow is a powerful tool for building and deploying AI-powered <em>agents</em> and workflows.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "anthropics/claude-code",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 5,
+      "stars": 151056,
+      "description": "Claude Code is an <em>agentic</em> coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing rout…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "langchain-ai/langchain",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 6,
+      "stars": 147881,
+      "description": "The <em>agent</em> engineering platform.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "farion1231/cc-switch",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 7,
+      "stars": 144720,
+      "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Grok Build & Hermes <em>Agent</em>. Only official websit…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "x1xhlol/system-prompts-and-models-of-ai-tools",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 8,
+      "stars": 144047,
+      "description": "FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin AI, Junie, Kiro, Leap.new, Lovable, Manus, NotionAI, Orchids.app,…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "Shubhamsaboo/awesome-llm-apps",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 9,
+      "stars": 141875,
+      "description": "100+ AI <em>Agents</em>, <em>Agent</em> Skills and RAG Apps - Free and Open Source.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "openai/codex",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 10,
+      "stars": 129388,
+      "description": "Lightweight coding <em>agent</em> that runs in your terminal",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.273016+00:00"
+    },
+    {
+      "repo": "VoltAgent/awesome-design-md",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 1,
+      "stars": 121567,
+      "description": "A collection of DESIGN.md files analysis by popular brand design systems. Drop one into your project and let coding <em>agents</em> generate a mat…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "browser-use/browser-use",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 2,
+      "stars": 118093,
+      "description": "Open-source Python library for AI browser <em>agents</em>, plus Browser Use Cloud: stealth browsers and a hosted <em>agent</em> API.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "earendil-works/pi",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 3,
+      "stars": 115440,
+      "description": "AI <em>agent</em> toolkit: unified LLM API, <em>agent</em> loop, TUI, coding <em>agent</em> CLI",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 4,
+      "stars": 112441,
+      "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding <em>agents</em> that cuts 65% of tokens by talking like a caveman.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "TauricResearch/TradingAgents",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 5,
+      "stars": 111361,
+      "description": "TradingAgents: Multi-<em>Agents</em> LLM Financial Trading Framework",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "google-gemini/gemini-cli",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 6,
+      "stars": 107390,
+      "description": "An open-source AI <em>agent</em> that brings the power of Gemini directly into your terminal.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "addyosmani/agent-skills",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 7,
+      "stars": 107007,
+      "description": "Production-grade engineering skills for AI coding <em>agents</em>.",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "paperclipai/paperclip",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 8,
+      "stars": 102674,
+      "description": "The open-source app everyone uses to manage <em>agents</em> at work",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "nexu-io/open-design",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 9,
+      "stars": 101340,
+      "description": "The 1st Collaborative AI Design <em>Agent</em> Workspace. Local-first and open source. Create prototypes, websites, apps, dashboards, presentation…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "thedotmack/claude-mem",
+      "kind": "cumulative_stars",
+      "query": "agent stars:>10000 sort:stars",
+      "page_rank": 10,
+      "stars": 101013,
+      "description": "Persistent Context Across Sessions for Every <em>Agent</em> – Captures everything your <em>agent</em> does during sessions, compresses it with AI, and inje…",
+      "source": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.687756+00:00"
+    },
+    {
+      "repo": "codecrafters-io/build-your-own-x",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 1,
+      "stars": 553439,
+      "description": "Master programming by recreating your favorite technologies from scratch.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "sindresorhus/awesome",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 2,
+      "stars": 519459,
+      "description": "😎 Awesome lists about all kinds of interesting topics [NOTE: Pull requests are temporarily disabled until I have a chance to catch up wit…",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "public-apis/public-apis",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 3,
+      "stars": 489085,
+      "description": "A collective list of free APIs",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "freeCodeCamp/freeCodeCamp",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 4,
+      "stars": 457112,
+      "description": "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "EbookFoundation/free-programming-books",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 5,
+      "stars": 399122,
+      "description": "📚 Freely available programming books",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "openclaw/openclaw",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 6,
+      "stars": 392112,
+      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "donnemartin/system-design-primer",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 7,
+      "stars": 374334,
+      "description": "Learn how to design large-scale systems. Prep for the system design interview. Includes Anki flashcards.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "nilbuild/developer-roadmap",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 8,
+      "stars": 369487,
+      "description": "Interactive roadmaps, guides and other educational content to help developers grow in their careers.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "jwasham/coding-interview-university",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 9,
+      "stars": 362543,
+      "description": "A complete computer science study plan to become a software engineer.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "vinta/awesome-python",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 10,
+      "stars": 327665,
+      "description": "The definitive list that answers \"I want to do X in Python, which tool should I use?\"",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.637676+00:00"
+    },
+    {
+      "repo": "awesome-selfhosted/awesome-selfhosted",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 1,
+      "stars": 326935,
+      "description": "A list of Free Software network services and web applications which can be hosted on your own servers",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "obra/superpowers",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 2,
+      "stars": 299789,
+      "description": "An agentic skills framework & software development methodology that works.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "mattpocock/skills",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 3,
+      "stars": 292707,
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "practical-tutorials/project-based-learning",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 4,
+      "stars": 286802,
+      "description": "Curated list of project-based tutorials",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 5,
+      "stars": 280247,
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, C…",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "996icu/996.ICU",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 6,
+      "stars": 277137,
+      "description": "Repo for counting stars and contributing. Press F to pay respect to glorious developers.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "morluto/rea",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 7,
+      "stars": 267698,
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "NousResearch/hermes-agent",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 8,
+      "stars": 254092,
+      "description": "The agent that grows with you",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "torvalds/linux",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 9,
+      "stars": 251961,
+      "description": "Linux kernel source tree",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "react/react",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 10,
+      "stars": 251066,
+      "description": "The library for web and native user interfaces.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.732703+00:00"
+    },
+    {
+      "repo": "deepseek-ai/deepseek-harness",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 1,
+      "stars": 250405,
+      "description": "DeepSeek Harness: Everything is a Plugin.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "trimstray/the-book-of-secret-knowledge",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 2,
+      "stars": 250308,
+      "description": "A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one-liners, cli/web tools and more.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "TheAlgorithms/Python",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 3,
+      "stars": 225283,
+      "description": "All Algorithms implemented in Python",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 4,
+      "stars": 220067,
+      "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "anomalyco/opencode",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 5,
+      "stars": 213883,
+      "description": "The open source coding agent.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "vuejs/vue",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 6,
+      "stars": 212559,
+      "description": "This is the repo for Vue 2. For Vue 3, go to <a href=\"https://github.com/vuejs/core\" class=\"Link--inTextBlock\">https://github.com/vuejs/core</a>",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "ossu/computer-science",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 7,
+      "stars": 210027,
+      "description": "🎓 Path to a free self-taught education in Computer Science!",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "n8n-io/n8n",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 8,
+      "stars": 207521,
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ in…",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "DigitalPlatDev/FreeDomain",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 9,
+      "stars": 204359,
+      "description": "Free domain registration and practical DNS learning resources for everyone.",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "tensorflow/tensorflow",
+      "kind": "cumulative_stars",
+      "query": "stars:>100000 sort:stars",
+      "page_rank": 10,
+      "stars": 200985,
+      "description": "An Open Source Machine Learning Framework for Everyone",
+      "source": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.785794+00:00"
+    },
+    {
+      "repo": "NationalSecurityAgency/ghidra",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 1,
+      "stars": 88616,
+      "description": "Ghidra is a software <em>reverse</em> <em>engineering</em> (SRE) framework",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "x64dbg/x64dbg",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 2,
+      "stars": 49887,
+      "description": "An open-source user mode debugger for Windows. Optimized for <em>reverse</em> <em>engineering</em> and malware analysis.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "zhaoxuya520/reverse-skill",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 3,
+      "stars": 42126,
+      "description": "<em>Reverse</em> <em>Engineering</em> / Authorized Penetration Testing / Security Research Skill Router Pack AI-powered routing + On-demand toolchain boots…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "The-Art-of-Hacking/h4cker",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 4,
+      "stars": 29765,
+      "description": "This repository is maintained by Omar Santos (<a class=\"user-mention\" data-hovercard-type=\"user\" data-hovercard-url=\"/users/santosomar/hovercard\" data-octo-click=\"hovercard-link-click\" data-octo-dimensions=\"link_type:self\" href=\"https://github.com/santosomar\">@santosomar</a>) and includes thousands of resources related to ethical hacking, bug bounties, …",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "iBotPeaches/Apktool",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 5,
+      "stars": 25933,
+      "description": "A tool for <em>reverse</em> <em>engineering</em> Android apk files",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "radareorg/radare2",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 6,
+      "stars": 25052,
+      "description": "UNIX-like <em>reverse</em> <em>engineering</em> framework and command-line toolset",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "rizinorg/cutter",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 7,
+      "stars": 20028,
+      "description": "Free and Open Source <em>Reverse</em> <em>Engineering</em> Platform powered by rizin",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "Konloch/bytecode-viewer",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 8,
+      "stars": 15676,
+      "description": "A Java 8+ Jar & Android APK <em>Reverse</em> <em>Engineering</em> Suite (Decompiler, Editor, Debugger & More)",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "mytechnotalent/Reverse-Engineering",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 9,
+      "stars": 14712,
+      "description": "A FREE comprehensive <em>reverse</em> <em>engineering</em> tutorial covering x86, x64, 32-bit/64-bit ARM, 8-bit AVR and 32-bit RISC-V architectures.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "OWASP/mastg",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 10,
+      "stars": 13258,
+      "description": "The OWASP Mobile Application Security Testing Guide (MASTG) is a comprehensive manual for mobile app security testing and <em>reverse</em> <em>enginee…</em>",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "retrieved_at_utc": "2026-10-15T21:15:51.646017+00:00"
+    },
+    {
+      "repo": "mrexodia/ida-pro-mcp",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 1,
+      "stars": 12916,
+      "description": "AI-powered <em>reverse</em> <em>engineering</em> assistant that bridges IDA Pro with language models through MCP.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "pwndbg/pwndbg",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 2,
+      "stars": 11064,
+      "description": "Exploit Development and <em>Reverse</em> <em>Engineering</em> with GDB & LLDB Made Easy",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "wtsxDev/reverse-engineering",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 3,
+      "stars": 10580,
+      "description": "List of awesome <em>reverse</em> <em>engineering</em> resources",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "mandiant/flare-vm",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 4,
+      "stars": 9147,
+      "description": "A collection of software installations scripts for Windows systems that allows you to easily setup and maintain a <em>reverse</em> <em>engineering</em> env…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "SimoneAvogadro/android-reverse-engineering-skill",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 5,
+      "stars": 8151,
+      "description": "Claude Code skill to support Android app's <em>reverse</em> <em>engineering</em>",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "rehan-remade/universal-modder",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 6,
+      "stars": 7916,
+      "description": "Point Claude at any game. Skills, tools and the fal MCP that let Claude Code mod almost any PC game you own: recon, <em>reverse</em> <em>engineering</em>, …",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "albertan017/LLM4Decompile",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 7,
+      "stars": 7133,
+      "description": "<em>Reverse</em> <em>Engineering</em>: Decompiling Binary Code with Large Language Models",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "sigalor/whatsapp-web-reveng",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 8,
+      "stars": 6507,
+      "description": "<em>Reverse</em> <em>engineering</em> WhatsApp Web.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "androguard/androguard",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 9,
+      "stars": 6355,
+      "description": "<em>Reverse</em> <em>engineering</em> and pentesting for Android applications ",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "0xZ0F/Z0FCourse_ReverseEngineering",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 10,
+      "stars": 5962,
+      "description": "<em>Reverse</em> <em>engineering</em> focusing on x64 Windows.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=2",
+      "retrieved_at_utc": "2026-10-15T21:15:51.722812+00:00"
+    },
+    {
+      "repo": "bethington/ghidra-mcp",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 1,
+      "stars": 5651,
+      "description": "Ghidra MCP Server — 200+ MCP tools for AI-powered <em>reverse</em> <em>engineering</em>. GUI plugin + headless server, lazy tool loading, convention enforc…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "dsasmblr/game-hacking",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 2,
+      "stars": 5609,
+      "description": "Tutorials, tools, and more as related to <em>reverse</em> <em>engineering</em> video games.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "CreditTone/hooker",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 3,
+      "stars": 5328,
+      "description": "🔥🔥 hooker is a Frida-based <em>reverse</em> <em>engineering</em> toolkit for Android. It offers a user-friendly CLI, universal scripts, auto hook generatio…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "alphaSeclab/awesome-reverse-engineering",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 4,
+      "stars": 5126,
+      "description": "<em>Reverse</em> <em>Engineering</em> Resources About All Platforms(Windows/Linux/macOS/Android/iOS/IoT) And Every Aspect! (More than 3500 open source tool…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "aloshdenny/reverse-SynthID",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 5,
+      "stars": 4989,
+      "description": "<em>reverse</em> <em>engineering</em> Gemini's SynthID detection",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "Integuru-AI/Integuru",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 6,
+      "stars": 4779,
+      "description": "The first AI agent that builds permissionless integrations through <em>reverse</em> <em>engineering</em> platforms' internal APIs.",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "newliver666/apk-reverse",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 7,
+      "stars": 4740,
+      "description": "Suitable for Android APK <em>reverse</em> <em>engineering</em> analysis",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "vaibhavpandeyvpz/apkstudio",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 8,
+      "stars": 4683,
+      "description": "Open-source, cross platform Qt6 based IDE for <em>reverse</em>-<em>engineering</em> Android application packages. It features a friendly IDE-like layout in…",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "iosre/iOSAppReverseEngineering",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 9,
+      "stars": 4440,
+      "description": "The world’s 1st book of very detailed iOS App <em>reverse</em> <em>engineering</em> skills :)",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "GDRETools/gdsdecomp",
+      "kind": "cumulative_stars",
+      "query": "reverse engineering sort:stars",
+      "page_rank": 10,
+      "stars": 4331,
+      "description": "Godot <em>reverse</em> <em>engineering</em> tools",
+      "source": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=3",
+      "retrieved_at_utc": "2026-10-15T21:15:51.768716+00:00"
+    },
+    {
+      "repo": "morluto/rea",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 1,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "anthropics/claude-plugins-official",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 2,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 3,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 4,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "debpalash/VoiceStudio",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 5,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "obra/superpowers",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 6,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "ruvnet/ruflo",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 7,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "mksglu/context-mode",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 8,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "NationalSecurityAgency/ghidra",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 9,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 10,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "lightseekorg/tokenspeed",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 11,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "xerj-org/xerj",
+      "kind": "trending",
+      "period": "daily",
+      "observed_rank": 12,
+      "source": "https://github.com/trending?since=daily",
+      "retrieved_at_utc": "2026-10-15T21:15:52.705631+00:00"
+    },
+    {
+      "repo": "morluto/rea",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 1,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "boykopovar/AnyPS5",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 2,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "mattpocock/skills",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 3,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "heygen-com/hyperframes",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 4,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "cathrynlavery/diagram-design",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 5,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "NationalSecurityAgency/ghidra",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 6,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "ranxianglei/billion-context",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 7,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "earthtojake/text-to-cad",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 8,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "twostraws/SwiftUI-Agent-Skill",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 9,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "DuarteSantos8/openGym",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 10,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "cursor/plugins",
+      "kind": "trending",
+      "period": "weekly",
+      "observed_rank": 11,
+      "source": "https://github.com/trending?since=weekly",
+      "retrieved_at_utc": "2026-10-15T21:15:52.848783+00:00"
+    },
+    {
+      "repo": "paperclipai/paperclip",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 1,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "anthropics/financial-services",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 2,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "vectorize-io/hindsight",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 3,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "debpalash/VoiceStudio",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 4,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "heygen-com/hyperframes",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 5,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 6,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "anthropics/knowledge-work-plugins",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 7,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "agent-substrate/substrate",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 8,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "alibaba/open-code-review",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 9,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "NVIDIA/OpenShell",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 10,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "TencentCloud/Octop",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 11,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "mksglu/context-mode",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 12,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "tashfeenahmed/freellmapi",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 13,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "Tencent/WeKnora",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 14,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "trycua/cua",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 15,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "addyosmani/agent-skills",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 16,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "anthropics/claude-code",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 17,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "NationalSecurityAgency/ghidra",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 18,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "rohitg00/ai-engineering-from-scratch",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 19,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "cursor/plugins",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 20,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "longbridge/gpui-kit",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 21,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    },
+    {
+      "repo": "thedotmack/claude-mem",
+      "kind": "trending",
+      "period": "monthly",
+      "observed_rank": 22,
+      "source": "https://github.com/trending?since=monthly",
+      "retrieved_at_utc": "2026-10-15T21:15:53.013472+00:00"
+    }
+  ],
+  "new_followups": [
+    {
+      "repo": "openclaw/openclaw",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "obra/superpowers",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "heygen-com/hyperframes",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/trending?since=weekly",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "earthtojake/text-to-cad",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/trending?since=weekly",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "ranxianglei/billion-context",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/trending?since=weekly",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "HKUDS/nanobot",
+      "category": "popularity-discovery",
+      "discovered_from": "targeted popularity follow-up",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "alibaba/page-agent",
+      "category": "popularity-discovery",
+      "discovered_from": "targeted popularity follow-up",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "f/prompts.chat",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "Snailclimb/JavaGuide",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "langgenius/dify",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "x1xhlol/system-prompts-and-models-of-ai-tools",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "github/spec-kit",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "microsoft/generative-ai-for-beginners",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "supabase/supabase",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "rasbt/LLMs-from-scratch",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "thedotmack/claude-mem",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "hacksider/Deep-Live-Cam",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "punkpeye/awesome-mcp-servers",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "koala73/worldmonitor",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Aai+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "harry0703/MoneyPrinterTurbo",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "Graphify-Labs/graphify",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "TauricResearch/TradingAgents",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "tt-a1i/archify",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "mlabonne/llm-course",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "rtk-ai/rtk",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "datawhalechina/hello-agents",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "shareAI-lab/learn-claude-code",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "unslothai/unsloth",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "hiyouga/LlamaFactory",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=topic%3Allm+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "mattpocock/skills",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "ultraworkers/claw-code",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "anthropics/skills",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "msitarzewski/agency-agents",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "farion1231/cc-switch",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "Shubhamsaboo/awesome-llm-apps",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "VoltAgent/awesome-design-md",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "earendil-works/pi",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "addyosmani/agent-skills",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "nexu-io/open-design",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=agent+stars%3A%3E10000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "codecrafters-io/build-your-own-x",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "sindresorhus/awesome",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "public-apis/public-apis",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "freeCodeCamp/freeCodeCamp",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "EbookFoundation/free-programming-books",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "donnemartin/system-design-primer",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "nilbuild/developer-roadmap",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "jwasham/coding-interview-university",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "vinta/awesome-python",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "awesome-selfhosted/awesome-selfhosted",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "practical-tutorials/project-based-learning",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "996icu/996.ICU",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "torvalds/linux",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=2",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "deepseek-ai/deepseek-harness",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "trimstray/the-book-of-secret-knowledge",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "TheAlgorithms/Python",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "vuejs/vue",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "ossu/computer-science",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "DigitalPlatDev/FreeDomain",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "tensorflow/tensorflow",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=stars%3A%3E100000+sort%3Astars&type=repositories&p=3",
+      "discovery_cycle": 4
+    },
+    {
+      "repo": "x64dbg/x64dbg",
+      "category": "popularity-discovery",
+      "discovered_from": "https://github.com/search?q=reverse+engineering+sort%3Astars&type=repositories&p=1",
+      "discovery_cycle": 4
+    }
+  ]
+}

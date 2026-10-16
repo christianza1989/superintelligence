@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "kind": "claude_calibration_cohort_preparation_not_model_performance",
+  "checked_at_utc": "2026-10-16T10:57:14.833211+00:00",
+  "checks": {
+    "offline": {
+      "context_offline": 12,
+      "cohort_offline": 12,
+      "runner_offline": 17,
+      "comparison_offline": 13
+    },
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "repeat_dry_run": {
+      "status": "prepared_not_run",
+      "pairs": 3,
+      "coding_cli_invocations": 0,
+      "model_dispatch_attempts": 0
+    },
+    "compact_dry_run": {
+      "status": "prepared_not_run",
+      "pairs": 3,
+      "coding_cli_invocations": 0,
+      "model_dispatch_attempts": 0
+    },
+    "cloud_live_preflight": {
+      "status": "stopped_shared_prerequisite",
+      "reason": "Claude_CLI_not_installed",
+      "coding_cli_invocations": 0,
+      "model_dispatch_attempts": 0,
+      "exit_code": 1
+    },
+    "website": {
+      "build": "PASS",
+      "visual_review_widths": [
+        1440,
+        390
+      ],
+      "change_cards": 7,
+      "overflow": false,
+      "page_errors": 0,
+      "published": false
+    }
+  },
+  "controls": {
+    "default_mode": "repeat",
+    "default_live": false,
+    "pairs_default": 3,
+    "pairs_max": 3,
+    "maximum_coding_sessions": 6,
+    "per_coding_timeout_ms": 900000,
+    "observed_tool_threshold": 60,
+    "cohort_timeout_ms": 7200000,
+    "order": "AB_BA_AB",
+    "source_hash_count_prompt_v2": 23,
+    "automatic_retry": false,
+    "automatic_profile_promotion": false
+  },
+  "compact_candidate": {
+    "profile": "zero-compact-claude-v1",
+    "comparison_baseline": "zero-retrieval-claude-v1",
+    "source_queries": [
+      "honojs/hono",
+      "sqlite",
+      "react"
+    ],
+    "maximum_context_bytes": 3000,
+    "maximum_candidates": 5,
+    "legacy_payload_bytes": 3614,
+    "compact_payload_bytes": 2234,
+    "legacy_candidate_occurrences": 6,
+    "compact_candidates": 5,
+    "payload_reduction_percent": 38.18483674598782,
+    "same_retained_legacy_bytes": 3202,
+    "same_retained_structural_reduction_percent": 30.231105559025607,
+    "changed_dimensions": [
+      "serialization",
+      "lexical_order",
+      "shortlist_limit"
+    ],
+    "legacy_prompt_unchanged": true,
+    "live_quality": "NOT_RUN",
+    "live_token_savings": "NOT_RUN"
+  },
+  "limits": [
+    "Byte reduction is not token savings or quality evidence",
+    "Only one historical successful Claude pair exists; new repetitions are not executed",
+    "Three repetitions of one task are not cross-task validation",
+    "Unknown subscription charges remain null",
+    "Coding CLI directories are not mutually unreadable OS sandboxes",
+    "Existing imported model evidence is not pooled with changed-source cohorts"
+  ],
+  "new_model_calls": 0,
+  "general_winner": "not_assessed",
+  "full_product_runtime_jev_auto": "NOT_RUN"
+}

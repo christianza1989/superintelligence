@@ -1,0 +1,11 @@
+---
+import SiteFrame from "../components/SiteFrame.astro";
+import Button from "../components/Button.astro";
+const phases = [
+  { id: "M0", title: "Reuse the foundation", status: "IN PROGRESS", copy: "Adapt the actual Rakazo UI and runtime. Establish a local profile, pinned dependencies and a reproducible setup." },
+  { id: "M1", title: "Make one task durable", status: "PLANNED", copy: "One coordinator, scoped permissions, bounded budgets, restart recovery and a clear task  /  artifact  /  validator path." },
+  { id: "M2", title: "Prove three useful workflows", status: "PLANNED", copy: "Browser research, PDF tables and a limited code/test cycle. Test the selected main model and Jev routing with an actual authorized account and budget." },
+  { id: "M3", title: "Earn a public beta", status: "PLANNED", copy: "Required REA and Treg profiles, broader provider checks, shared improvement, signed updates and recovery evidence." },
+];
+---
+<SiteFrame title="Roadmap — RepositoryZero" description="The first technical MVP, public beta gates and longer-term RepositoryZero direction."><section class="page-intro"><span class="eyebrow">THE ROAD AHEAD</span><h1>One useful slice.<br /><span>Then the next.</span></h1><p>The technical MVP, a public beta and the full product vision are different milestones. Progress needs evidence, not a checked box on a demo.</p></section><div class="roadmap-list">{phases.map((phase) => <article class="roadmap-card"><span class="phase-id">{phase.id}</span><div><span class="tag">{phase.status}</span><h2>{phase.title}</h2><p>{phase.copy}</p></div></article>)}</div><section class="note-panel"><h2>What stays true at every stage</h2><p>Reuse existing work first. Keep one authoritative runtime. Separate source research from tested integration. Private projects stay private. Public bulk screening starts with a zero paid-model budget.</p><div class="hero-actions"><Button href="/docs/mvp-roadmap.md">Full MVP checklist </Button><Button href="/docs/full-roadmap.md" variant="secondary">Full roadmap </Button></div></section></SiteFrame>

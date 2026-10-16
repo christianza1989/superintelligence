@@ -1,0 +1,4 @@
+{
+  "buildCommand": "pnpm --filter @rakazo/www build",
+  "outputDirectory": "dist"
+}

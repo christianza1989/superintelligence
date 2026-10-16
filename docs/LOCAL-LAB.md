@@ -1,0 +1,101 @@
+# Vietinis Zero Lab su Claude prenumerata
+
+2026-10-16. Aktyvus naudotojo pasirinkimas — **oficialus Claude CLI, Sonnet5.5/high ir Claude prenumerata**. Pirmas vietinis A/B jau atliktas; [rezultatai ir jų ribos](CLAUDE-CALIBRATION.md). Codex auth ir OpenRouter lenktynes kol kas praleidžiame.
+
+## Pradinės sąlygos
+
+- Debian Linux x64 per WSL2, Node.js24/npm ir projektas Linux failų sistemoje, pavyzdžiui `~/projects/repositoryzero`.
+- Docker Desktop su tos WSL distribucijos integracija; `docker info` turi veikti. Evaluator naudoja vietinį `/var/run/docker.sock`.
+- Linux Chromium `/usr/lib/chromium/chromium`, glibc bibliotekos ir DejaVu Sans; tikrintas Chromium154.0.8037.57 ir Playwright1.63.0. Debian paketus paruošia `sudo apt-get update` ir `sudo apt-get install chromium fonts-dejavu-core`. Windows Chrome ar Ubuntu Snap nėra šio profilio dalis.
+- Oficialus Claude CLI tame pačiame WSL naudotojuje; vietiniame bandyme versija2.1.292. Prisijungimas per `claude auth login --claudeai`. Adapteris per oficialų `claude --safe-mode auth status` priima tik `claude.ai` first-party prisijungimą; credential failų neskaito ir jų neperkelia. API raktų nereikia.
+
+CLI coding teisės `dontAsk` nėra OS izoliacija. Dvi coding darbo vietos atskiros, bet tas pats naudotojas gali jas perskaityti; abiem sesijoms galioja vienodas draudimas skaityti kitos pusės rezultatą. Generuotos programos vertinamos atskiruose non-root, network-none, ribotų resursų Docker konteineriuose. Chromium turi atskirą konteinerį ir nenaudoja host naršyklės; tai kontroliuojamo vietinio kodo profilis, ne hostile upstream PR izoliacija.
+
+## Projektas ir patikros
+
+Naudok [saugyklos `main` šaką](https://github.com/christianza1989/superintelligence/tree/main) su integruotais Claude pakeitimais arba šaltinio paketą. Git checkout turi versijų istoriją. Atskiras šaltinio paketas turi `SOURCE-MANIFEST.json`, licencijas ir sibling `.sha256`; `node_modules`, raktai ir Git istorija į paketą neįtraukiami. Pirmajam CLI eksperimentui nereikia paleisti RepositoryZero API/PostgreSQL.
+
+```bash
+npm run setup
+npm run lab:prepare -- --engine claude
+npm run test:claude-bridge
+npm run test:lab
+npm run test:lab-compare
+npm run test:lab-context
+npm run test:lab-cohort
+npm run test:lab-prepare
+npm run lab:run -- --engine claude --prompt-version 2
+```
+
+Paskutinė komanda yra **dry-run**: paruošia du promptus ir not-run ataskaitą, modelių nekviečia. `lab:prepare -- --engine claude` patikrina pasirinktą prenumeratos CLI, vietinį Docker, pinned Node image ir naršyklės failus. Prireikus atsisiunčia tik pinned image; modelio nekviečia. Trūkstant CLI/auth/Docker/image/browser, gyvas runneris sustoja prieš coding kvietimą. Naudojant Claude šiam keliui nereikia Codex writable state ar Codex prisijungimo.
+
+Failų prerequisite PASS dar neįrodo, kad Node/Chromium image iš tikro veikia. Vienkartinės runtime regresijos be modelių:
+
+```bash
+npm run test:lab-docker
+npm run test:lab-browser-docker
+```
+
+Pirmoji patikrina įprastą SQLite, WAL ir tyčinį duomenų praradimą; antroji — tikrą desktop/mobile klaviatūros srautą bei dvi tyčines UI regresijas. Nei viena nešalina svetimų Docker duomenų.
+
+## Nauja gyva A/B pora
+
+Pakartojimams rekomenduojamas žemiau aprašytas `lab:cohort`: jis pats kaitalioja eilę ir išsaugo bendrą suvestinę. Ši komanda skirta vienai atskirai porai.
+
+```bash
+npm run lab:run -- --engine claude --prompt-version 2 --profiles claude-fixed-v1,zero-retrieval-claude-v1 --live --evaluate
+```
+
+Tai aiškiai įjungia daugiausia dvi coding sesijas: baseline ir tas pats Claude CLI su statiniu Zero katalogo kontekstu. Modelis `claude-sonnet-5-5`, effort `high`; kiekvienai15minučių ir60stebimų tool veiksmų slenkstis. Slenkstis gali sustabdyti tik jau pastebėtą veiksmą, todėl tai nėra strict pre-dispatch cap. Papildomi agentai, customizations ir MCP šiam profiliui išjungti. Jev/Auto ir pilnas RepositoryZero runtime nedalyvauja.
+
+Kitoje poroje sukeisk tik `--profiles` tvarką į `zero-retrieval-claude-v1,claude-fixed-v1`. Nekeisk užduoties/graderio tarp tos pačios kohortos bandymų. Pradiniame manifeste viena pora; pakartotinai paleista komanda kuria naują run ir naujas sesijas. [Kito etapo limitai](CLAUDE-CALIBRATION.md#kitas-ribotas-etapas).
+
+Runtime paketas turi būti prebuilt Node24 su `npm start`, be deklaruotų external npm dependencies; subundlintas kodas su notices leidžiamas. Nėra dependency install/build. Nepalaikomas artefaktas yra unsupported. API/SQLite restart ir desktop1440×900/mobile390×844 keyboard/create/move/API readback/reload/overflow/runtime patikros yra ribota automatinė atitiktis; subjektyvi kokybė nevertinama. SQLite WAL/journal tikrinami iki64MiB kopijoje atskirame tmpfs, originalus tūris lieka read-only. App restart nėra host/daemon power-loss patvarumo įrodymas.
+
+Naršyklės assets šioje cloud aplinkoje užima574600816baitų (~548MiB) papildomų testavimo priklausomybių; tai nėra core footprint ar į šaltinio archyvą įtraukti failai.
+
+## Trys poros viena komanda
+
+```bash
+npm run lab:cohort
+npm run lab:cohort -- --live
+```
+
+Pirma komanda yra dry-run. Antra paleidžia tris naujas Claude prenumeratos poras: baseline→Zero, Zero→baseline, baseline→Zero. Daugiausia6coding sesijos, po15minučių ir60stebimų tool veiksmų; visa kohorta ribota2valandomis. `--pairs 1` arba `--pairs 2` sumažina porciją, bet neprideda trūkstamų kartojimų. Kiekvienas paleidimas sukuria naują kohortą; automatinio retry ar kito etapo paleidimo nėra.
+
+Source, promptų ir profilių hash užfiksuojami prieš darbą. Pasikeitę šaltiniai, shared auth/model/network/protokolo gedimas, sugriuvęs tikrintuvas arba Ctrl+C sustabdo tolesnį vykdymą. Kokybės nesėkmės lieka ataskaitoje. Kodavimo, tikrinimo ir bendro trial medianos atskiros; visi baigti mokami bandymai įtraukiami į tokenų sumą. Kohortos laiko skirtumas yra dviejų profilių medianų skirtumas; kiekvienos poros deltos saugomos greta. Trūkstami tokenai ir prenumeratos mokestis lieka null. Pertrauktai, nepilnai ar kokybės nepraėjusiai kohortai greičio pergalė neskaičiuojama.
+
+Ataskaita `.artifacts/zero-lab/cohorts/<id>/cohort.json` nurodo visų porų JSON, promptų ir artefaktų vietas. Išsaugok visą kohortos aplanką. Jos nemaišyk su ankstesne importuota pora: runnerio/adapterio hash pasikeitė. Trys to paties darbo kartojimai dar nėra kelių užduočių pranašumo įrodymas.
+
+## Atskiras trumpesnio konteksto bandymas
+
+Po pakartojimų peržiūros galima atskirai palyginti seną Zero kontekstą su nauju kandidatu:
+
+```bash
+npm run lab:cohort -- --mode compact
+npm run lab:cohort -- --mode compact --live
+```
+
+Čia abu variantai gauna tą patį Claude modelį ir užduotį: `zero-retrieval-claude-v1` prieš `zero-compact-claude-v1`. Senasis profilis ir prompto baitai nepakeisti. Kandidatas naudoja tas pačias tris paieškas, bet riboja rinkinį iki5kandidatų ir3000baitų; išsaugo SHA, licencijas, būsenas, šaltinių kilmę ir originalias instrukcijas. Tai deterministinė atranka/formatas; Jev nedalyvauja.
+
+Dabartinis katalogo payload3614→2234baitai (−38,18%), kandidatai6→5. Tiems patiems likusiems kandidatams formatas3202→2234baitai (−30,23%). Tai baitai, **ne išmatuotas modelio tokenų ar laiko sutaupymas**. Pakeistas ir rinkinio dydis, ir formatas, todėl jų atskiros naudos iš šio A/B neišvesime. Gyvos kokybės ir tokenų poveikis dar NOT_RUN; niekas automatiškai nepakeičia numatyto profilio.
+
+## Ataskaitos ir palyginimas
+
+Kiekvieno run JSON, promptai, workspace ir screenshotai saugomi `.artifacts/zero-lab/runs/`. Runneris išspausdina konkretaus reporto kelią. Naudok jo absoliutų variantą:
+
+```bash
+npm run lab:compare -- --report /absolute/path/to/report.json --baseline claude-fixed-v1 --candidate zero-retrieval-claude-v1
+```
+
+Palyginimas modelių nekviečia. Tikrina vienodą užduotį, prompto versiją, grader/CLI šaltinių hash, modelį/reasoning/auth, aplinką bei tikrus browser assets. Failures ir incomplete išlieka matomi; greitai sugedusi programa negauna greičio pergalės. Viena pora žymima exploratory.
+
+Claude necache input, cache creation ir cache read normalizuojami po vieną kartą. API kainos ekvivalentas laikomas estimate; faktinė prenumeratos kaina lieka null. Visas trial apima retrieval, coding ir acceptance; bendras setup/preflight saugomas eksperimento elapsed atskirai. Provider cache nekontroliuojamas.
+
+## Tęsti kitoje vietinėje coding sesijoje
+
+Atidaryk sesiją su aktualiu WSL projekto katalogu ir pateik:
+
+> Tęsk RepositoryZero iš šio katalogo. Perskaityk platform/AGENTS.md, docs/LOCAL-LAB.md ir docs/CLAUDE-CALIBRATION.md. Naudotojas pasirinko Claude prenumeratą, Sonnet5.5/high. Codex auth ir OpenRouter lenktynes praleisk. Pirmiausia patikrink lab:prepare -- --engine claude ir offline regresijas. Pakartojimams naudok lab:cohort -- --live: trys poros, daugiausia šešios sesijos, promptas v2, fiksuoti šaltiniai ir kaitaliojama eilė. Išsaugok failures, nežinomą kainą ir tikrus cache usage; nekeisk graderio pagal kandidato rezultatą. Kompaktiškas kontekstas yra atskiras vėlesnis --mode compact bandymas, automatiškai jo nejunk. Tikrintuvo pakartojimas nėra nauja kūrimo pora. Pilno RepositoryZero runtime/Jev/Auto šio CLI bandymo PASS nepatvirtina.
+
+Cloud sesija turi savo vykdymo aplinką; Full access pats nesukuria Windows/WSL komandos vykdymo kanalo. Importuoti vietiniai reportai ir šioje cloud aplinkoje pakartotos artefaktų patikros turi atskirą kilmę. [Zero Lab](ZERO-LAB.md), [palyginimo protokolas](PAIRED-BENCHMARK.md).

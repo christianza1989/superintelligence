@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "module": "zero-lab",
+  "suite": "sprintdesk-v1",
+  "split": "calibration",
+  "controls": {
+    "trials": 1,
+    "timeoutMs": 900000,
+    "maxToolCalls": 60
+  },
+  "cacheMode": {
+    "workspace": "fresh",
+    "providerPromptCache": "uncontrolled_record_actual_usage"
+  },
+  "liveEnabled": false,
+  "paidDispatchLimit": 0,
+  "profiles": [
+    {
+      "id": "codex-fixed-v1",
+      "codingModel": "gpt-6.1-sol",
+      "reasoning": "xhigh",
+      "auth": "codex-cli-oauth",
+      "retrieval": "none",
+      "decisionRouter": "none",
+      "modelMode": "fixed"
+    },
+    {
+      "id": "zero-retrieval-v1",
+      "codingModel": "gpt-6.1-sol",
+      "reasoning": "xhigh",
+      "auth": "codex-cli-oauth",
+      "retrieval": "catalog-v1",
+      "decisionRouter": "none",
+      "modelMode": "fixed"
+    },
+    {
+      "id": "zero-jev-v1",
+      "codingModel": "gpt-6.1-sol",
+      "reasoning": "xhigh",
+      "auth": "codex-cli-oauth",
+      "retrieval": "catalog-v1",
+      "decisionRouter": "typesafe/jev-1.13",
+      "modelMode": "fixed"
+    },
+    {
+      "id": "zero-auto-v1",
+      "codingModel": null,
+      "reasoning": null,
+      "auth": "authorized-connections-only",
+      "retrieval": "catalog-v1",
+      "decisionRouter": "typesafe/jev-1.13",
+      "modelMode": "auto"
+    }
+  ]
+}

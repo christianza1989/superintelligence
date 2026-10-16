@@ -1,0 +1,274 @@
+{
+  "checked_at_utc": "2026-10-16T10:57:14.833211+00:00",
+  "stage": "foundation_plus_imported_Claude_catalog_context_pair_not_full_MVP_acceptance",
+  "base": {
+    "repository": "elie222/rakazo",
+    "source_revision": "7d5e64c886da7d556673f99e4923b013315007a9",
+    "path": "platform",
+    "license": "Apache-2.0"
+  },
+  "checks": {
+    "scoped_frozen_dependency_install": "PASS",
+    "root_setup_command": "PASS",
+    "unit_tests": {
+      "passed": 98,
+      "files": 10,
+      "scope": "catalog/search, shared SystemOne and tools/model/repo policy boundaries, appearance/locale, tool schema; deterministic offline providers"
+    },
+    "browser_tests": {
+      "passed": 3,
+      "scope": "source evidence without install, empty state, appearance persistence, local account/agent workspace persistence over reload and authenticated synthetic account cleanup",
+      "browser": "system Chromium"
+    },
+    "web_build": "PASS",
+    "web_typecheck": "PASS",
+    "new_jev_adapter_strict_typecheck": "PASS",
+    "website_build": "PASS_after_cohort_status_and_updated_docs",
+    "website_visual_review": "built changes page reviewed at1440_and390;7cards,no_overflow,no_pageerrors;17Markdown_documents_built",
+    "postgres_local_health": "healthy",
+    "prisma_generate": "PASS",
+    "api_worker_boot": "PASS_local_API_and_one_Graphile_worker",
+    "paid_model_calls": 0,
+    "full_technical_mvp_acceptance": "NOT_RUN",
+    "public_deployment": "NOT_DEPLOYED",
+    "adapters_typecheck": "PASS",
+    "database_migrations": "PASS",
+    "postgres_executor_subset": {
+      "passed": 4,
+      "scope": [
+        "concurrent_claim_once",
+        "expired_lease_higher_fence",
+        "interrupted_external_effect_uncertain_without_replay",
+        "terminal_commit_single_durable_final_message"
+      ],
+      "database": "real_disposable_loopback_PostgreSQL",
+      "models_and_tools": "deterministic_fakes",
+      "migration": "PASS",
+      "cleanup": "PASS",
+      "main_database_or_volume_reset": false,
+      "multiprocess_Graphile_restart": "NOT_RUN"
+    },
+    "database_typecheck": "PASS",
+    "finite_budget_postgres_subset": {
+      "passed": 6,
+      "database": "real_disposable_loopback_PostgreSQL",
+      "scope": [
+        "atomic_shared_account_and_lane_reservation",
+        "sql_failure_rolls_back_receipt_and_both_debits",
+        "global_invocation_id_admitted_once",
+        "held_reservation_survives_reconnect",
+        "missing_disabled_zero_invalid_allocations_deny",
+        "finite_micro_usd_ceiling_under_concurrency"
+      ],
+      "allocation_semantics": "finite_non_expiring_no_automatic_refund",
+      "migration": "PASS",
+      "cleanup": "PASS",
+      "paid_provider_activation": false,
+      "actual_provider_invoice_cap": "NOT_PROVEN",
+      "periodic_windows_and_reconciliation": "NOT_IMPLEMENTED",
+      "process_crash_restart": "NOT_RUN"
+    },
+    "website_why_document": "PASS_local_document_response_and_docs_link",
+    "self_reuse_demonstration": {
+      "status": "PASS",
+      "actual_search_calls": 5,
+      "source_pin_matches_adaptation": true,
+      "existing_component_manifests_read": 7,
+      "paid_model_calls": 0,
+      "network_calls_during_demo": 0,
+      "selection": "human_directed_with_assisting_agents",
+      "full_autonomous_fetch_build": "NOT_IMPLEMENTED"
+    },
+    "jev_application_audit": {
+      "status": "official_source_review_complete",
+      "use_cases": [
+        "tool_selection",
+        "repo_shortlist",
+        "documentation_relevance",
+        "code_file_selection",
+        "test_and_delegation_triage",
+        "auto_model_selection"
+      ],
+      "multiquestion": "supported_by_pinned_official_SDK_source",
+      "source_reuse": "existing_Rakazo_Jev_auto_review_reviewed_and_bounded_reader_reused",
+      "live_provider_quality_cost_savings": "BLOCKED_preflight_no_model_dispatch"
+    },
+    "isolated_reuse_build": {
+      "status": "PASS",
+      "application_cases_passed": 6,
+      "negative_control": "EXPECTED_FAILURE_2_cases_detected",
+      "evidence": "catalog/reuse-build-checks.json",
+      "selection": "human_directed_fixture_not_autonomous_model_generation"
+    },
+    "zero_lab_plan": {
+      "status": "PASS",
+      "planned_profiles": 4,
+      "planned_trials": 4,
+      "attempted": 0,
+      "model_dispatch_attempts": 0,
+      "cost_usd": null,
+      "reused": "existing_eval_report_controls_and_summary",
+      "live_race": "Claude_static_context_pair_imported_and_revalidated_other_profiles_not_run",
+      "source_digests": 23,
+      "source_digests_scope": "current_Claude_runner_prompt_v2_plan"
+    },
+    "jev_live_repository_preflight": {
+      "status": "BLOCKED_network_before_model_dispatch",
+      "source_candidates": 4,
+      "model_dispatch_attempts": 0,
+      "key_validity": "NOT_VERIFIED",
+      "model_entitlement": "NOT_VERIFIED",
+      "actual_cost": "unavailable",
+      "network_draft": "openrouter.ai_saved_not_applied",
+      "checked_at_utc": "2026-10-16T01:44:48.701Z"
+    },
+    "codex_cli_bridge": {
+      "deterministic_tests_passed": 17,
+      "live_probe": "BLOCKED_local_state_unwritable_before_model_events",
+      "oauth_status": "CLI_reports_OAuth_login",
+      "model": "gpt-6.1-sol_requested_not_verified",
+      "reasoning": "xhigh_requested_not_verified",
+      "usage": null,
+      "credential_files_read_or_copied": false,
+      "wall_time_limit_supported_ms": 900000
+    },
+    "zero_lab_runner": {
+      "offline_tests_passed": 17,
+      "implemented_profiles": [
+        "codex-fixed-v1",
+        "zero-retrieval-v1",
+        "claude-fixed-v1",
+        "zero-retrieval-claude-v1",
+        "zero-compact-claude-v1"
+      ],
+      "persistence": "atomic_per_experiment_local_JSON",
+      "cli_processes_started_in_cloud_experiment": 0,
+      "live_generated_apps": "PASS_imported_Claude_pair_revalidated_without_new_model_calls",
+      "pricing": "unavailable_for_subscription_OAuth",
+      "pre_generation_guard": "source_snapshot_CLI_and_local_Docker_image_browser_prerequisites",
+      "active_engine": "claude_subscription",
+      "historical_codex_live_preflight": "BLOCKED_local_state_unwritable",
+      "cloud_auth_checked_during_Claude_integration": false
+    },
+    "zero_lab_evaluator": {
+      "tests_passed": 14,
+      "offline_cases": 13,
+      "real_docker_positive_and_regression_case": 1,
+      "positive_api_cases_passed": 8,
+      "positive_sqlite_row_survives_container_restart": true,
+      "regression_detected": "API_PASS_but_lost_state_after_restart",
+      "quality": "standalone_functional_partial_combined_generated_apps_automated_contract_passed",
+      "scope": "controlled_SQLite_WAL_fixtures_plus_separate_generated_app_revalidation",
+      "evidence": "catalog/zero-lab-wal-checks.json",
+      "wal_regression_case": "PASS_regular_SQLite_PASS_WAL_and_expected_FAIL_in_memory"
+    },
+    "zero_lab_browser": {
+      "tests_passed": 13,
+      "offline_cases": 12,
+      "real_docker_case": 1,
+      "negative_controls": [
+        "broken_keyboard_move",
+        "mobile_horizontal_overflow"
+      ],
+      "evidence": "catalog/zero-lab-browser-checks.json",
+      "browser_version": "154.0.8037.57",
+      "test_assets_bytes": 574600816,
+      "core_footprint_acceptance": false,
+      "paid_model_calls": 0
+    },
+    "zero_lab_combined_acceptance": {
+      "offline_cases_passed": 6,
+      "real_controlled_pipeline": "passed",
+      "api_sqlite_ui_same_source_digest": true,
+      "automated_contract_complete": true,
+      "visual_quality_assessed": false,
+      "evidence": "catalog/zero-lab-acceptance-checks.json",
+      "scope": "controlled_fixture_not_generated_model_application"
+    },
+    "zero_lab_comparison": {
+      "offline_cases_passed": 13,
+      "actual_model_reports_compared": 1,
+      "winner": "not_assessed",
+      "automatic_promotion": false,
+      "scope": "one_imported_prompt_v2_Claude_pair"
+    },
+    "zero_lab_prerequisites": {
+      "offline_cases_passed": 4,
+      "Docker_image_browser_assets": "PASS",
+      "codex_state": "BLOCKED_local_state_unwritable",
+      "model_dispatch_attempts": 0,
+      "selected_engine_support": "Claude_subscription_auth_independent_of_Codex_state"
+    },
+    "claude_cli_bridge": {
+      "offline_tests_passed": 12,
+      "auth_handling": "official_first_party_CLI_no_credential_file_reads",
+      "malformed_jsonl": "fail_closed_bounded_child_termination",
+      "actual_cloud_model_invocations": 0,
+      "imported_model": "claude-sonnet-5-5",
+      "requested_effort": "high",
+      "API_estimate_is_subscription_charge": false
+    },
+    "imported_claude_calibration": {
+      "status": "single_prompt_v2_pair_both_automated_contracts_passed",
+      "raw_packet_integrity": "53_file_hashes_verified_10_existing_source_hashes_match_3_new_paths_absent",
+      "comparison_recomputed": true,
+      "current_generated_app_revalidation": "2_apps_PASS_API8_SQLite_desktop_mobile_same_source_digest",
+      "original_trial_change_percent": -24.742538980518187,
+      "original_coding_change_percent": -18.773938706922813,
+      "original_token_change_percent": -5.541741241798952,
+      "new_model_dispatches_during_integration": 0,
+      "evidence": "catalog/claude-calibration.json",
+      "full_product_runtime_jev_auto": "NOT_RUN"
+    },
+    "claude_handoff_integration_regressions": {
+      "passed": 74,
+      "failed": 0,
+      "skipped": 0,
+      "scopes": {
+        "claude_bridge_offline": 12,
+        "runner_offline": 13,
+        "comparison_offline": 12,
+        "combined_acceptance_offline": 6,
+        "prerequisites_offline": 4,
+        "API_SQLite_Docker": 14,
+        "browser_Docker": 13
+      },
+      "additional_imported_generated_apps_revalidated": 2,
+      "new_model_calls": 0,
+      "scope_date": "prior_handoff_integration_not_rerun_for_cohort_change"
+    },
+    "calibration_cohort_regressions": {
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0,
+      "scopes": {
+        "context_offline": 12,
+        "cohort_offline": 12,
+        "runner_offline": 17,
+        "comparison_offline": 13
+      },
+      "evidence": "catalog/claude-cohort-checks.json",
+      "new_model_calls": 0,
+      "live_repetitions": "NOT_RUN_missing_Claude_CLI_in_cloud",
+      "previous_Docker_checks_rerun": false
+    }
+  },
+  "security_state": {
+    "model_secret_configured": true,
+    "paid_jev_adapter_activated": false,
+    "personal_identity_files_in_git": false,
+    "local_development_secrets_ignored": true,
+    "donation_recipient_configured": false,
+    "model_secret_scope": "private_fast_decision_repo_role_not_global_main_model_env"
+  },
+  "environment_draft": "setup/network draft saved; openrouter.ai addition requires publication; restoration not tested",
+  "notes": [
+    "Historical806/757catalog statistics are a separate source-only snapshot.",
+    "No live Jev or main-model completion: network/startup preflights blocked before model execution.",
+    "Generated design concepts are separate from browser-rendered foundation screenshots.",
+    "No private owner declaration or external timestamp submitted.",
+    "Catalog metadata is separate from on-demand source retrieval and installation; full fetch/build cycle is not yet accepted.",
+    "The optional backend browser smoke removes only its own synthetic account through authenticated deletion hooks; no database reset.",
+    "The finite allocation ledger is a separately verified first slice, not full account binding, provider billing reconciliation, periodic caps, or all-model-path enforcement."
+  ]
+}

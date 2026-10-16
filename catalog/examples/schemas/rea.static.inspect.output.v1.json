@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:superintelligence:rea.static.inspect.output.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report",
+    "facts",
+    "validation_state"
+  ],
+  "properties": {
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "facts": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "source_path",
+          "line_start",
+          "line_end"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string"
+          },
+          "source_path": {
+            "type": "string"
+          },
+          "line_start": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "line_end": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "validation_state": {
+      "enum": [
+        "unverified",
+        "verified",
+        "failed"
+      ]
+    }
+  }
+}

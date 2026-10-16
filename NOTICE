@@ -1,0 +1,8 @@
+RepositoryZero foundation includes a modified Rakazo source snapshot.
+Upstream: https://github.com/elie222/rakazo
+Revision: 7d5e64c886da7d556673f99e4923b013315007a9
+License: Apache License, Version 2.0 (see LICENSE and platform/LICENSE).
+Upstream copyright notices and component licenses are retained.
+Modified areas: RepositoryZero UI branding/theme, discovery catalog and
+search, official website, and a server-only Jev selector prototype.
+This notice does not imply upstream endorsement.

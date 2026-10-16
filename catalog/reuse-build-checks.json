@@ -1,0 +1,53 @@
+{
+  "checkedAtUtc": "2026-10-16T01:27:46.965Z",
+  "stage": "scripted_agent_assisted_reuse_fixture_not_full_mvp",
+  "selection": "actual local repository_search; human-directed fixture and independent assertions",
+  "sourceEvidence": [
+    {
+      "url": "https://raw.githubusercontent.com/honojs/hono/588ec13fa68ea44fed1b5e1b503341db2bf09d70/README.md",
+      "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+      "bytes": 3668,
+      "sha256": "fc9760772486e3672d7b0d8939f4951fefdba3eeb34cfc8523caea703944b961"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/honojs/hono/588ec13fa68ea44fed1b5e1b503341db2bf09d70/LICENSE",
+      "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+      "bytes": 1101,
+      "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+    }
+  ],
+  "runtimePackage": {
+    "name": "hono",
+    "version": "4.13.7",
+    "lockfileSha256": "d1eb27118f1f539f0bf1fe4463e4dd8fc289c3f2067d2a9dcb0e479401e12379",
+    "note": "README Git revision and installed package version are distinct references, not asserted identical commits"
+  },
+  "image": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+  "profile": {
+    "network": "none",
+    "user": "1000:1000",
+    "readOnlyRoot": true,
+    "inputReadOnly": true,
+    "memoryBytes": 536870912,
+    "nanoCpus": 1000000000,
+    "pids": 128
+  },
+  "build": "PASS_esbuild_bundle",
+  "acceptance": {
+    "passed": 6,
+    "failed": 0
+  },
+  "negativeControl": "EXPECTED_FAILURE_detected_list_regression",
+  "artifact": {
+    "path": ".artifacts/reuse-build/app.mjs",
+    "bytes": 61304,
+    "sha256": "f9a12b5b33feeb9bfd63df9984ecc461cad78640d093394278b7edb3b9e8c157"
+  },
+  "paidModelCalls": 0,
+  "limitations": [
+    "No autonomous Jev/main-model planner in this fixture",
+    "Owned synthetic source; not production hostile-code isolation acceptance",
+    "In-memory task API; no persistent DB or generated UI",
+    "Not browser/PDF/coding thirty-task MVP acceptance"
+  ]
+}

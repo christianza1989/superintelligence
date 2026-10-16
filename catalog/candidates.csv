@@ -1,0 +1,797 @@
+repository,category,status,source_revision,readme_read,license_files_read,license_summaries,initial_sample_member,score_total,runtime_status,aliases_checked,archived_notice_observed
+PrimeIntellect-ai/verifiers,agent-evaluation,unscored_discovery,2a3ddf7725f655cb7ea14fc9f10195221fa3ed1a,True,True,MIT text,False,,NOT_RUN,PrimeIntellect-ai/verifiers,False
+eigent-ai/eigent,agent-platform,unscored_discovery,f47482574471ca45cbee51e1e55fa6bbe9657f71,True,True,Apache-2.0 text,False,,NOT_RUN,eigent-ai/eigent,False
+FoundationAgents/OpenManus,agent-platform,unscored_discovery,3309bf4e416fb1c74b008f3e86494439a31bad53,True,True,MIT text,False,,NOT_RUN,FoundationAgents/OpenManus,False
+ag2ai/ag2,agent-runtime,unscored_discovery,2c4194780f642a81763ffff7289d5e13f48c8cfe,True,True,Apache-2.0 text,False,,NOT_RUN,ag2ai/ag2,False
+camel-ai/camel,agent-runtime,unscored_discovery,e5e55256e9446f744bf7309c478b084587dbf985,True,True,Apache-2.0 text,False,,NOT_RUN,camel-ai/camel,False
+google/adk-go,agent-runtime,unscored_discovery,900e2fa4907fa9825f708433ff162f6281069249,True,True,Apache-2.0 text,False,,NOT_RUN,google/adk-go,False
+mcp-use/mcp-use,agent-runtime,unscored_discovery,ad8fbee97af6c39fc95b46486a04142d68644822,True,True,MIT text,False,,NOT_RUN,mcp-use/mcp-use,False
+openai/openai-agents-js,agent-runtime,unscored_discovery,976579eb0785337b4d433afb944781f3901738a8,True,True,MIT text,False,,NOT_RUN,openai/openai-agents-js,False
+NousResearch/atropos,agent-training,unscored_discovery,296a0bc55760e43b9c0743c052f8d6c2732606d1,True,True,MIT text,False,,NOT_RUN,NousResearch/atropos,True
+PrimeIntellect-ai/prime-rl,agent-training,unscored_discovery,0956a8858005019b7b16d26898142063ec1bb5e8,True,True,Apache-2.0 text,False,,NOT_RUN,PrimeIntellect-ai/prime-rl,False
+agenticenv/agent-sdk-go,agents,unscored_discovery,67b2882c7ddbccfc5544cee94d494d9c077c4b84,True,True,Apache-2.0,False,,NOT_RUN,agenticenv/agent-sdk-go,False
+agno-agi/agno,agents,unscored_discovery,c918af5a7c314df7eafca4ee5a23d2105a1c0cc6,True,True,Apache-2.0,False,,NOT_RUN,agno-agi/agno,False
+bytedance/deer-flow,agents,unscored_discovery,6b60903d73d31eee23ed3b52a8c971f0392a1705,True,True,MIT,False,,NOT_RUN,bytedance/deer-flow,False
+Clause-Logic/exoclaw-temporal,agents,unscored_discovery,439c8139dcb75554bc3c8482e3bbd6014b7138ff,True,False,,False,,NOT_RUN,Clause-Logic/exoclaw-temporal,False
+crewAIInc/crewAI,agents,unscored_discovery,912f491b67c0eb24f5198b414849d3298a6bf688,True,True,MIT,False,,NOT_RUN,crewAIInc/crewAI,False
+datallmhub/agentflow4j,agents,unscored_discovery,f9a7353f43f8a760d4f2d589f8d8eaf7e1c9a506,True,True,Apache-2.0,False,,NOT_RUN,datallmhub/agentflow4j,False
+Deuz-AI/Deuz-SDK,agents,unscored_discovery,e9dd7b14c27cd3bb0b3429f0580c444ac63397bc,True,True,MIT,False,,NOT_RUN,Deuz-AI/Deuz-SDK,False
+FoundationAgents/MetaGPT,agents,unscored_discovery,11cdf466d042aece04fc6cfd13b28e1a70341b1f,True,True,MIT,False,,NOT_RUN,geekan/MetaGPT; FoundationAgents/MetaGPT,False
+google/adk-python,agents,unscored_discovery,c2ff63480bf879da70c3b82bb3e4ed06f6842498,True,True,Apache-2.0,False,,NOT_RUN,google/adk-python,False
+huggingface/smolagents,agents,initial_documentary_sample,96f33faaf028479119ec8d34507b47694cf14e34,True,True,Apache-2.0,True,63,NOT_RUN,huggingface/smolagents,False
+JasonWu0080/MemoFlow-Agent,agents,unscored_discovery,7daf131eb62cdfb1a5435aff35c5c202d89edb58,True,True,Apache-2.0,False,,NOT_RUN,JasonWu0080/MemoFlow-Agent,False
+langchain-ai/langchain,agents,unscored_discovery,c088db971097f0f12c7b8c30d473e8dbde09c823,True,True,MIT,False,,NOT_RUN,langchain-ai/langchain,False
+langchain-ai/langgraph,agents,initial_documentary_sample,e77a5cb08c1f3ff306d997dd76fc7169afdab5ea,True,True,MIT,True,62,NOT_RUN,langchain-ai/langgraph,False
+mastra-ai/mastra,agents,unscored_discovery,1924eeed37ebbe25a4945f3887c1d6ecc87954d6,True,True,Apache-2.0,False,,NOT_RUN,mastra-ai/mastra,False
+microsoft/agent-framework,agents,unscored_discovery,deecbcb062198f926516f89b65e5b1676e4514c2,True,True,MIT,False,,NOT_RUN,microsoft/agent-framework,False
+microsoft/autogen,agents,unscored_discovery,027ecf0a379bcc1d09956d46d12d44a3ad9cee14,True,True,LicenseRef-Manual-Review; MIT,False,,NOT_RUN,microsoft/autogen,False
+microsoft/rd-agent,agents,unscored_discovery,484776c211e4fbbeef03e0ec00d6bbee7362a4f4,True,True,MIT,False,,NOT_RUN,microsoft/rd-agent,False
+microsoft/semantic-kernel,agents,unscored_discovery,7e68276a4a85022dd4da255beae3263ab5cbf059,True,True,MIT,False,,NOT_RUN,microsoft/semantic-kernel,False
+morluto/rea,agents,initial_documentary_sample,25c22222abe7a681491bdb4d7316250fdcf32973,True,True,MIT,True,67,NOT_RUN,morluto/rea,False
+open-jarvis/openjarvis,agents,initial_documentary_sample,b94a9b2d35509d47fec25c77f15cd08a672b5328,True,True,Apache-2.0,True,61,NOT_RUN,open-jarvis/openjarvis,False
+openai/openai-agents-python,agents,unscored_discovery,17d994bd3045dae71acda676a4ef4762ed8ecd94,True,True,MIT,False,,NOT_RUN,openai/openai-agents-python,False
+OpenBMB/ChatDev,agents,unscored_discovery,4fb2db0ea90375ce1059f44fe03ffbd191a7a169,True,True,Apache-2.0,False,,NOT_RUN,OpenBMB/ChatDev,False
+paperclipai/paperclip,agents,unscored_discovery,0b62c736a0ca097469e215739e61aa7832f1d3da,True,True,MIT,False,,NOT_RUN,paperclipai/paperclip,False
+pathetichomeless-star/general-agent-framework,agents,unscored_discovery,61b55a7d45726c1ee0e6338480086c2efa4efad8,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,pathetichomeless-star/general-agent-framework,False
+pydantic/pydantic-ai,agents,initial_documentary_sample,9ed9b442d0416b0f20186a30e3b109da9d71a695,True,True,MIT,True,66,NOT_RUN,pydantic/pydantic-ai,False
+Significant-Gravitas/AutoGPT,agents,unscored_discovery,ce4f5929264705bb77260cfccb4b69271823cebc,True,True,MIT outside autogpt_platform; Polyform Shield inside (mixed source-available scope),False,,NOT_RUN,Significant-Gravitas/AutoGPT,False
+Success6666/agent-runtime-governance,agents,unscored_discovery,c9d659f2a4e737a31efa3f2f9e1b101d32370f43,True,True,MIT,False,,NOT_RUN,Success6666/agent-runtime-governance,False
+suhasnu/durable-agent-runtime,agents,unscored_discovery,c84ea048cc338589dbe81d6d4d1a64f1480fca7a,True,True,MIT,False,,NOT_RUN,suhasnu/durable-agent-runtime,False
+superdurable/dex,agents,unscored_discovery,b82b63adee74e3b6a5f01d20aeeb6dff4b4ff223,True,True,LicenseRef-Sustainable-Use,False,,NOT_RUN,superdurable/dex,False
+superdurable/superagent,agents,unscored_discovery,ef6da84b341d003f41e8f763708414d818ef9d3d,True,True,Apache-2.0,False,,NOT_RUN,superdurable/superagent,False
+TransformerOptimus/SuperAGI,agents,unscored_discovery,c3c1982e7bd6a11cfed53c5a193ea502f924b1b6,True,True,MIT,False,,NOT_RUN,TransformerOptimus/SuperAGI,False
+ably/ably-pubsub-python,api-integration,unscored_discovery,e195b3c836dc635180b7161c6bd728f64bebaeb8,True,True,LicenseRef-Manual-Review; Apache-2.0,False,,NOT_RUN,ably/ably-python,False
+better-auth/better-auth,api-integration,unscored_discovery,a1f6f0bf19ba1be85e977d891d0f0ca43723c0a3,True,True,MIT,False,,NOT_RUN,better-auth/better-auth,False
+Fern-API/fern,api-integration,unscored_discovery,d7bf825ecc83c9e1797251449efc334765d4f84b,True,True,Apache-2.0,False,,NOT_RUN,Fern-API/fern,False
+googleapis/google-api-python-client,api-integration,unscored_discovery,6ee20fa2fb4f621bd551ebe305936a70a1184492,True,True,Apache-2.0,False,,NOT_RUN,googleapis/google-api-python-client,False
+googleworkspace/python-samples,api-integration,unscored_discovery,def0f3ea49b648b36e0443f61143987e719c80b9,True,True,Apache-2.0,False,,NOT_RUN,googleworkspace/python-samples,False
+graphile/worker,api-integration,unscored_discovery,4cda192c5df254392a1dff350e5d73f7d2c18a85,True,True,MIT,False,,NOT_RUN,graphile/worker,False
+hashicorp/terraform,api-integration,unscored_discovery,9ec49e06a868cfa161213fac7f74aa03f8937755,True,True,BUSL-1.1,False,,NOT_RUN,hashicorp/terraform,False
+honojs/hono,api-integration,unscored_discovery,588ec13fa68ea44fed1b5e1b503341db2bf09d70,True,True,MIT,False,,NOT_RUN,honojs/hono,False
+Kludex/uvicorn,api-integration,unscored_discovery,07bd5d4c94c093960de94d1c96000fb0fa029f13,True,True,BSD family (inspect clause count),False,,NOT_RUN,encode/uvicorn,False
+microsoft/kiota,api-integration,unscored_discovery,4c8d4285da3bafe5560846a365b3778d5083d718,True,True,MIT,False,,NOT_RUN,microsoft/kiota,False
+microsoftgraph/msgraph-sdk-python,api-integration,unscored_discovery,c27d528ba49f80d2f7efec1092ed295416ebf233,True,True,MIT,False,,NOT_RUN,microsoftgraph/msgraph-sdk-python,False
+opentofu/opentofu,api-integration,unscored_discovery,8535390a14ef99f5f45b622de38a71dde45b0324,True,True,MPL-2.0,False,,NOT_RUN,opentofu/opentofu,False
+prisma/orm,api-integration,unscored_discovery,55dba883a02626a88a2ec1fdf0dfa83cab39ef17,True,True,Apache-2.0,False,,NOT_RUN,prisma/prisma,False
+pulumi/pulumi,api-integration,unscored_discovery,69b077aef18f9b407ccf1b230352486bbefaa904,True,True,Apache-2.0,False,,NOT_RUN,pulumi/pulumi,False
+speakeasy-api/speakeasy,api-integration,unscored_discovery,a8e09c15f1ac8f31d7993d667a770b8a313b6bc1,True,True,Elastic-2.0,False,,NOT_RUN,speakeasy-api/speakeasy,False
+temporalio/sdk-python,api-integration,unscored_discovery,346d4dcd0863657c3a33283c952a296762059339,True,True,MIT,False,,NOT_RUN,temporalio/sdk-python,False
+altic-dev/FluidVoice,audio,unscored_discovery,ad1d1ff0ea0b6c2733bda72150625d3e8928f608,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,altic-dev/FluidVoice,False
+block/buzz,audio,unscored_discovery,cdfc38ecbd4eb1a1cf5d45de9a5e982292574d5d,True,True,Apache-2.0,False,,NOT_RUN,block/buzz,False
+chidiwilliams/buzz,audio,unscored_discovery,851c8b359343db8c9460aa15ee59a40f2ab66aa8,True,True,MIT,False,,NOT_RUN,chidiwilliams/buzz,False
+collabora/WhisperLive,audio,unscored_discovery,f26bdd5294ace7d31020ca00e04e7b14c2b7d954,True,True,MIT,False,,NOT_RUN,collabora/WhisperLive,False
+coqui-ai/TTS,audio,unscored_discovery,dbf1a08a0d4e47fdad6172e433eeb34bc6b13b4e,True,True,MPL-2.0,False,,NOT_RUN,coqui-ai/TTS,False
+debpalash/VoiceStudio,audio,unscored_discovery,ba24165215dc721e903c0f197a4fa19fabce356b,True,True,AGPL-3.0 (inspect exceptions/version); LicenseRef-Manual-Review,False,,NOT_RUN,debpalash/VoiceStudio,False
+ggml-org/whisper.cpp,audio,initial_documentary_sample,0c7be696371069e0baa2515ed7aa08d5a5473aa6,True,True,MIT,True,66,NOT_RUN,ggml-org/whisper.cpp; ggerganov/whisper.cpp,False
+k2-fsa/sherpa-onnx,audio,initial_documentary_sample,fa29eb91c80335fc70af869a7bb459578f90e5ad,True,True,Apache-2.0,True,65,NOT_RUN,k2-fsa/sherpa-onnx,False
+livekit/agents,audio,unscored_discovery,334d336a18b2e4a26ef4a5e2eaae800a8298a43b,True,True,Apache-2.0,False,,NOT_RUN,livekit/agents,False
+myshell-ai/OpenVoice,audio,unscored_discovery,74a1d147b17a8c3092dd5430504bd83ef6c7eb23,True,True,MIT,False,,NOT_RUN,myshell-ai/OpenVoice,False
+OHF-Voice/piper1-gpl,audio,initial_documentary_sample,40ecf92760e0e13a3f9916497d0a1ad5b8075eee,True,True,GPL (inspect exact version/exceptions),True,62,NOT_RUN,OHF-Voice/piper1-gpl,False
+openai/whisper,audio,initial_documentary_sample,86098128c0b4f24f0e2aa2994de830614b474227,True,True,MIT,True,69,NOT_RUN,openai/whisper,False
+pipecat-ai/pipecat,audio,unscored_discovery,f7c191f743807dc9380d8201f387d6767f544a07,True,True,BSD family (inspect clause count),False,,NOT_RUN,pipecat-ai/pipecat,False
+rhasspy/piper,audio,unscored_discovery,73c04d81d5590ecc46e522de3601ce7fb29fc2be,True,True,MIT,False,,NOT_RUN,rhasspy/piper,True
+RVC-Boss/GPT-SoVITS,audio,unscored_discovery,1b47ca07ef43a284e0b8bd7f29d3e1e3ff76082a,True,True,MIT,False,,NOT_RUN,RVC-Boss/GPT-SoVITS,False
+SYSTRAN/faster-whisper,audio,initial_documentary_sample,c45e1739de8f01d042355b540c231cfe219a7127,True,True,MIT,True,65,NOT_RUN,SYSTRAN/faster-whisper,False
+ardour/ardour,audio-music,unscored_discovery,47b1a5b222289fe27a7948fa625c2c1a01f01750,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,ardour/ardour,False
+audacity/audacity,audio-music,unscored_discovery,b482a5e3ee5443c0a438908aaf1caf09250171a9,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,audacity/audacity,False
+coqui-ai/STT,audio-music,unscored_discovery,a562b940501937c0dd1d16e248dc15dc59089626,True,True,MPL-2.0,False,,NOT_RUN,coqui-ai/STT,False
+demucs/demucs,audio-music,address_unresolved,,False,False,,False,,NOT_RUN,demucs/demucs,False
+espnet/espnet,audio-music,unscored_discovery,e6d26103ee3173978f3e07acf471befbbd99e311,True,True,Apache-2.0,False,,NOT_RUN,espnet/espnet,False
+facebookresearch/demucs,audio-music,unscored_discovery,e976d93ecc3865e5757426930257e200846a520a,True,True,MIT,False,,NOT_RUN,facebookresearch/demucs,True
+librosa/librosa,audio-music,unscored_discovery,08e2c0a20d650fe00f10aaf3a1eaa9698ac19641,True,True,ISC,False,,NOT_RUN,librosa/librosa,False
+microsoft/VibeVoice,audio-music,unscored_discovery,16fb2cb1217c9934a886e1948ffb06120caa2df5,True,True,MIT,False,,NOT_RUN,microsoft/VibeVoice,False
+moises-ai/orchestrator,audio-music,address_unresolved,,False,False,,False,,NOT_RUN,moises-ai/orchestrator,False
+QwenAudio/CosyVoice,audio-music,unscored_discovery,074ca6dc9e80a2f424f1f74b48bdd7d3fea531cc,True,True,Apache-2.0,False,,NOT_RUN,FunAudioLLM/CosyVoice,False
+QwenAudio/SenseVoice,audio-music,unscored_discovery,586bbdb2b052f4fe19322581825228b6810a9fb3,True,True,MIT,False,,NOT_RUN,FunAudioLLM/SenseVoice,False
+QwenLM/Qwen3-TTS,audio-music,unscored_discovery,022e286b98fbec7e1e916cb940cdf532cd9f488e,True,True,Apache-2.0,False,,NOT_RUN,QwenLM/Qwen3-TTS,False
+SpeechBrain/speechbrain,audio-music,unscored_discovery,c0241278f93ef02cd5191f03caf4e5f8e1292bf6,True,True,Apache-2.0,False,,NOT_RUN,SpeechBrain/speechbrain,False
+spotify/basic-pitch,audio-music,unscored_discovery,fa5997af0a8210982619003269994a1be25eddf3,True,True,Apache-2.0,False,,NOT_RUN,spotify/basic-pitch,False
+langchain-ai/deepagents,autonomous-engineering,unscored_discovery,0bf167654e5cadca10f46db3c233569d391b673e,True,True,MIT text,False,,NOT_RUN,langchain-ai/deepagents,False
+microsoft/TaskWeaver,autonomous-engineering,unscored_discovery,d44ddef23f90059fb17999d3095db4240e98f955,True,True,MIT text,False,,NOT_RUN,microsoft/TaskWeaver,True
+PrimeIntellect-ai/prime-agent,autonomous-engineering,unscored_discovery,a01c7923cfcb8d130b50d24332db1413b0e7479c,True,True,MIT text,False,,NOT_RUN,PrimeIntellect-ai/prime-agent,False
+HKUDS/AI-Researcher,autonomous-research,unscored_discovery,f9a6f8480860c193afff600eeffe3defcee8a978,True,False,,False,,NOT_RUN,HKUDS/AI-Researcher,False
+karpathy/autoresearch,autonomous-research,unscored_discovery,228791fb499afffb54b46200aca536f79142f117,True,False,,False,,NOT_RUN,karpathy/autoresearch,False
+SakanaAI/AI-Scientist,autonomous-research,unscored_discovery,1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb,True,True,manual classification required,False,,NOT_RUN,SakanaAI/AI-Scientist,False
+SakanaAI/AI-Scientist-v2,autonomous-research,unscored_discovery,96bd51617cfdbb494a9fc283af00fe090edfae48,True,True,manual classification required,False,,NOT_RUN,SakanaAI/AI-Scientist-v2,False
+aigc-apps/VideoX-Fun,avatars-lipsync,unscored_discovery,13bb3c625e8b1e457d7124d92207b49e00e4a6fe,True,True,Apache-2.0,False,,NOT_RUN,aigc-apps/VideoX-Fun,False
+fudan-generative-vision/hallo,avatars-lipsync,unscored_discovery,8fd7c572a3d43c2a9c1a5473219ce4fc1b6e3ed2,True,True,MIT,False,,NOT_RUN,fudan-generative-vision/hallo,False
+fudan-generative-vision/hallo2,avatars-lipsync,unscored_discovery,58a9aa6c9f66817a6e084f3874cfc01ac24fed3e,True,True,MIT,False,,NOT_RUN,fudan-generative-vision/hallo2,False
+HumanAIGC/AnimateAnyone,avatars-lipsync,unscored_discovery,5f9cd82f75a450c650a368f6d5f2a3f867934d42,True,True,Apache-2.0,False,,NOT_RUN,HumanAIGC/AnimateAnyone,False
+HumanAIGC/EMO,avatars-lipsync,unscored_discovery,ffead74c374d10ecb3d075839f866c863d35e941,True,False,,False,,NOT_RUN,HumanAIGC/EMO,False
+KlingAIResearch/LivePortrait,avatars-lipsync,unscored_discovery,9b294b3d0536135442ea73cb01e6cb3ca7029dd3,True,True,MIT,False,,NOT_RUN,KwaiVGI/LivePortrait,False
+OpenTalker/SadTalker,avatars-lipsync,unscored_discovery,cd4c0465ae0b54a6f85af57f5c65fec9fe23e7f8,True,True,Apache-2.0,False,,NOT_RUN,OpenTalker/SadTalker,False
+Rudrabha/Wav2Lip,avatars-lipsync,unscored_discovery,bac9a81e63ecc153202353372e5724b83d9e6322,True,False,,False,,NOT_RUN,Rudrabha/Wav2Lip,False
+TMElyralab/MuseTalk,avatars-lipsync,unscored_discovery,0a89dec45a0192b824e3cf4daf96c239440c5ed8,True,True,MIT,False,,NOT_RUN,TMElyralab/MuseTalk,False
+anthropics/claude-quickstarts,browser,unscored_discovery,9ec32b91df50b0d4906cae64b13c6298055ff40d,True,True,MIT,False,,NOT_RUN,anthropics/anthropic-quickstarts,False
+browser-use/browser-use,browser,initial_documentary_sample,a71d5478e4187cbe5295aab6403dfe7e4a6861a4,True,True,MIT,True,65,NOT_RUN,browser-use/browser-use,False
+browserbase/stagehand,browser,initial_documentary_sample,10418f98831285b3cddca5328c8013a94f22672a,True,True,MIT,True,66,NOT_RUN,browserbase/stagehand,False
+lavague-ai/LaVague,browser,unscored_discovery,9024bb832c40291cd012916757f27ef60469b22d,True,True,Apache-2.0,False,,NOT_RUN,lavague-ai/LaVague,False
+microsoft/OmniParser,browser,unscored_discovery,354021201345a96178360b28733573e27269f2de,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,microsoft/OmniParser,False
+microsoft/playwright,browser,initial_documentary_sample,e139b837c20440925dafe0ca91735a003517a3bc,True,True,Apache-2.0,True,70,NOT_RUN,microsoft/playwright,False
+OSWorld/OSWorld,browser,address_unresolved,,False,False,,False,,NOT_RUN,OSWorld/OSWorld,False
+puppeteer/puppeteer,browser,unscored_discovery,10c43c1b9101ab62835332393f49e3fb426dde88,True,True,Apache-2.0,False,,NOT_RUN,puppeteer/puppeteer,False
+SeleniumHQ/selenium,browser,unscored_discovery,6fc1c2b932c6e115d9b83481e6f2bbc3b340d65d,True,True,Apache-2.0,False,,NOT_RUN,SeleniumHQ/selenium,False
+ServiceNow/BrowserGym,browser,unscored_discovery,e71419aef5759a11cb7896a26c36e5f7e92d82b2,True,True,Apache-2.0,False,,NOT_RUN,ServiceNow/BrowserGym,False
+simular-ai/Agent-S,browser,unscored_discovery,15776a8dc659658b1963816ea006f7af1978e595,True,True,Apache-2.0,False,,NOT_RUN,simular-ai/Agent-S,False
+trycua/cua,browser,initial_documentary_sample,c6cb386cf371fed3580ea1c5a238940ce4911641,True,True,MIT,True,61,NOT_RUN,trycua/cua,False
+xlang-ai/OSWorld,browser,unscored_discovery,b138d348256078fa634fc3b73567a7337c793e6b,True,True,Apache-2.0,False,,NOT_RUN,xlang-ai/OSWorld,False
+activepieces/activepieces,business,initial_documentary_sample,55134042a88da01be2229e06302a78c80f209ea0,True,True,MIT core with separately licensed enterprise scope,True,60,NOT_RUN,activepieces/activepieces,False
+appsmithorg/appsmith,business,unscored_discovery,bf67e301a6ba7a2b19fecba27ea0c2c24f5b3f5d,True,True,Apache-2.0,False,,NOT_RUN,appsmithorg/appsmith,False
+erxes/erxes,business,unscored_discovery,cee3cda1665cfd2a3d1cab1020817ee6b2aba30a,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,erxes/erxes,False
+FlowiseAI/Flowise,business,unscored_discovery,9291856d1ea4a4ceea9f8fef8ce14f4f6c81e8eb,True,True,MIT core with separately licensed enterprise scope,False,,NOT_RUN,FlowiseAI/Flowise,True
+frappe/erpnext,business,initial_documentary_sample,8d60c082960de0934311021c9b8adf281b02e66c,True,True,GPL (inspect exact version/exceptions),True,58,NOT_RUN,frappe/erpnext,False
+frappe/frappe,business,unscored_discovery,4f5ca6e6f3e2c0c4c3000b0d1ae78a91b61d2a38,True,True,MIT,False,,NOT_RUN,frappe/frappe,False
+langflow-ai/langflow,business,unscored_discovery,7866315b72d9ffe187525c41429cfbd56e86e669,True,True,MIT,False,,NOT_RUN,langflow-ai/langflow,False
+makeplane/plane,business,unscored_discovery,ac0d55de30eb2876209016744e025c95647dffe4,True,True,LicenseRef-Manual-Review; AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,makeplane/plane,False
+n8n-io/n8n,business,unscored_discovery,447fc866bb0a841decfa5e8a29fba06057bfc5bc,True,True,LicenseRef-Sustainable-Use; LicenseRef-Manual-Review,False,,NOT_RUN,n8n-io/n8n,False
+nocobase/nocobase,business,unscored_discovery,aab67ac108e0957a0d16b84006b4c70c3be3bdd9,True,True,Apache-2.0; UNKNOWN,False,,NOT_RUN,nocobase/nocobase,False
+nocodb/nocodb,business,unscored_discovery,ad7bb132aa6adb2708297ad57673c001532ecd74,True,True,LicenseRef-Sustainable-Use,False,,NOT_RUN,nocodb/nocodb,False
+node-red/node-red,business,initial_documentary_sample,277bf6e2bf3f14d5759e4bb9e7b345a58f38a258,True,True,Apache-2.0,True,62,NOT_RUN,node-red/node-red,False
+nodered/node-red,business,address_unresolved,,False,False,,False,,NOT_RUN,nodered/node-red,False
+OCA/OCB,business,unscored_discovery,fa259652904a5a05ab8a5e5271e73ebc4aa328d6,True,True,LicenseRef-Manual-Review; LGPL (inspect exact version/exceptions),False,,NOT_RUN,OCA/OCB,False
+odoo/odoo,business,unscored_discovery,eed4c1118b1dc51cf5bab62dbdb41e050ce3e70b,True,True,LicenseRef-Manual-Review; LGPL (inspect exact version/exceptions),False,,NOT_RUN,odoo/odoo,False
+plane-hq/plane,business,address_unresolved,,False,False,,False,,NOT_RUN,plane-hq/plane,False
+ToolJet/ToolJet,business,unscored_discovery,19544d01f998c48c60279f77465a8f9391240d6b,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,ToolJet/ToolJet,False
+twentyhq/twenty,business,unscored_discovery,ca92ea8bfe907d4919c83d585503d619e459acea,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,twentyhq/twenty,False
+airbytehq/airbyte,business-data,unscored_discovery,2b6bd2ff8377c0848d688b785c9ccb8cbdabf315,True,True,Elastic-2.0; LicenseRef-Manual-Review,False,,NOT_RUN,airbytehq/airbyte,False
+appwrite/appwrite,business-data,unscored_discovery,d5fdcee36896bd50214a27952f188edee41a11ab,True,True,BSD family (inspect clause count),False,,NOT_RUN,appwrite/appwrite,False
+baserow/baserow,business-data,unscored_discovery,bfe1b5868d7e6af742a254a99d21d65402104214,True,True,MIT core with separately licensed enterprise scope,False,,NOT_RUN,baserow/baserow,False
+calcom/cal.diy,business-data,unscored_discovery,54343aa685ae8f33159d2f485ec4a57bad5c574a,True,True,MIT,False,,NOT_RUN,calcom/cal.com; calcom/cal.diy,False
+chatwoot/chatwoot,business-data,unscored_discovery,fbb90f753cb04cd6ad96c48bf5202fa18a0b58af,True,True,MIT core with separately licensed enterprise scope,False,,NOT_RUN,chatwoot/chatwoot,False
+crankshaft-org/crankshaft,business-data,address_unresolved,,False,False,,False,,NOT_RUN,crankshaft-org/crankshaft,False
+directus/directus,business-data,unscored_discovery,8e140f94250834cea0a0fb6eb822cac39ed9faec,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,directus/directus,False
+dlt-hub/dlt,business-data,unscored_discovery,ef2f2eeb3f1717a9bff99fa9e5fe5ff5c4d44567,True,True,Apache-2.0,False,,NOT_RUN,dlt-hub/dlt,False
+erpnext/erpnext,business-data,address_unresolved,,False,False,,False,,NOT_RUN,erpnext/erpnext,False
+jitsi/jitsi-meet,business-data,unscored_discovery,3219a7d04ce7b4b24fc684dc488a7a525c77f099,True,True,Apache-2.0,False,,NOT_RUN,jitsi/jitsi-meet,False
+listmonk/listmonk,business-data,address_unresolved,,False,False,,False,,NOT_RUN,listmonk/listmonk,False
+meltano/meltano,business-data,unscored_discovery,74725f2576a73d6442263fb64e3d13b796aee621,True,True,MIT,False,,NOT_RUN,meltano/meltano,False
+mindsdb/mindshub,business-data,unscored_discovery,780bbcbb8b9367c667e9b6af2aecc8277f24c0ad,True,True,MIT,False,,NOT_RUN,mindsdb/mindsdb,False
+planehq/plane,business-data,address_unresolved,,False,False,,False,,NOT_RUN,planehq/plane,False
+posthog/posthog,business-data,unscored_discovery,e08dbbf629b2249cb4efa2f82e8d1ba017a7f8e2,True,True,MIT,False,,NOT_RUN,posthog/posthog,False
+assalas/pcb-designer-ai-agent,cad,unscored_discovery,fc8cfa69bebcb74f9949d20cd0a4f119fa87db40,True,True,MIT core with separately licensed enterprise scope,False,,NOT_RUN,assalas/pcb-designer-ai-agent,False
+beiming183-cloud/AutoCAD-MCP,cad,unscored_discovery,11f7c47e5038796a20451b38b23032e625b5aa26,True,True,MIT,False,,NOT_RUN,beiming183-cloud/AutoCAD-MCP,False
+blender/blender,cad,initial_documentary_sample,e83e9b28fc6480650c4a4d2e89747b521a6eb9a3,True,True,GPL (inspect exact version/exceptions),True,56,NOT_RUN,blender/blender,False
+build123d/build123d,cad,address_unresolved,,False,False,,False,,NOT_RUN,build123d/build123d,False
+CadQuery/cadquery,cad,initial_documentary_sample,5f5bc62b255f62e3512105740025361b6c31eddd,True,True,Apache-2.0,True,60,NOT_RUN,CadQuery/cadquery,False
+CGAL/cgal,cad,unscored_discovery,363e54eaf7ca40786a2116320fb0d803576c9afb,True,True,UNKNOWN,False,,NOT_RUN,CGAL/cgal,False
+CodeToCAD/CodeToCAD,cad,unscored_discovery,cab8585ba176dab38156a8db1312f43766225c14,True,False,,False,,NOT_RUN,CodeToCAD/CodeToCAD,False
+datadrivenconstruction/CAD-BIM-to-Code-Automation-Pipeline-DDC-Workflow-with-LLM-ChatGPT,cad,unscored_discovery,a68dd14a515fbb3371e83e5fdb909fcea731a635,True,True,MIT,False,,NOT_RUN,datadrivenconstruction/CAD-BIM-to-Code-Automation-Pipeline-DDC-Workflow-with-LLM-ChatGPT,False
+djlex83/solidworks-automation-skill,cad,unscored_discovery,522b0d1d340c426e187f0357f45780eac3fd2abd,True,True,MIT,False,,NOT_RUN,djlex83/solidworks-automation-skill,False
+FreeCAD/FreeCAD,cad,initial_documentary_sample,4a1904f8db57d4a31e44cdb1dd984d4c98447c10,True,True,LGPL (inspect exact version/exceptions),True,57,NOT_RUN,FreeCAD/FreeCAD,False
+FreeCAD/FreeCAD-addons,cad,unscored_discovery,9dbf44fbbc7f0260aa07b21468914e531a979416,True,False,,False,,NOT_RUN,FreeCAD/FreeCAD-addons,False
+gumyr/build123d,cad,initial_documentary_sample,c117675ba4c178d46aa044148ad4d27061299024,True,True,Apache-2.0,True,63,NOT_RUN,gumyr/build123d,False
+isl-org/Open3D,cad,unscored_discovery,b6c5e196384ad71e75b6e6f9c5da22d046221f1d,True,True,MIT,False,,NOT_RUN,isl-org/Open3D,False
+Jsweb-Tech/AutoCAD,cad,unscored_discovery,26c2c0a763976ca976e13a69e6c54e46a99fe315,True,True,MIT,False,,NOT_RUN,Jsweb-Tech/AutoCAD,False
+Kitware/VTK,cad,unscored_discovery,3b372b4cba08c22afcf5a4655d18e1138c8002d8,True,True,BSD family (inspect clause count),False,,NOT_RUN,Kitware/VTK,False
+manufino/AutoCAD,cad,unscored_discovery,00f679cf70c89bde21f5d38086c90aaa160d1e74,True,False,,False,,NOT_RUN,manufino/AutoCAD,False
+mikedh/trimesh,cad,initial_documentary_sample,dc8490c825c382d2d58b5bd87ecacc74790ead27,True,True,MIT,True,65,NOT_RUN,mikedh/trimesh,False
+Open-Cascade-SAS/OCCT,cad,unscored_discovery,3d097a0328e71b826377d4814ab05ec3c3d23871,True,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,Open-Cascade-SAS/OCCT,False
+openscad/openscad,cad,initial_documentary_sample,5a864f17b6b022904004704f64e6168d2cfb8435,True,True,LicenseRef-Manual-Review,True,61,NOT_RUN,openscad/openscad,False
+raylanlin/Millwright,cad,unscored_discovery,0e7f9b5332b3d908fa8872eb9958803d6171fc1d,True,True,Apache-2.0,False,,NOT_RUN,raylanlin/Millwright,False
+solvespace/solvespace,cad,unscored_discovery,8ef723e145fbe3f1d19e74667c59df795d9d3479,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,solvespace/solvespace,False
+TE-Academy/cadCAD-GPT,cad,unscored_discovery,001df653d41dbcca570b0f0a159f8fb5e2f3078f,True,True,MIT,False,,NOT_RUN,TE-Academy/cadCAD-GPT,True
+tpaviot/pythonocc-core,cad,unscored_discovery,6c0a2d8abd516b3142d19cb54bc278f6c264b4b0,True,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,tpaviot/pythonocc-core,False
+wzyn20051216/solidworks-automation-skill,cad,unscored_discovery,a3ddc5694161299b50b9e9f688fcd6f0bf815da2,True,True,MIT,False,,NOT_RUN,wzyn20051216/solidworks-automation-skill,False
+AlibabaResearch/AMAP,cinematic-camera-control,address_unresolved,,False,False,,False,,NOT_RUN,AlibabaResearch/AMAP,False
+nju-wins/CameraCtrl,cinematic-camera-control,address_unresolved,,False,False,,False,,NOT_RUN,nju-wins/CameraCtrl,False
+Tencent-Hunyuan/HunyuanVideo-Avatar,cinematic-camera-control,unscored_discovery,8c31d0d489df8418fa36a2a709ebdf0b47c7bf06,True,True,UNKNOWN,False,,NOT_RUN,Tencent-Hunyuan/HunyuanVideo-Avatar,False
+TencentARC/MotionCtrl,cinematic-camera-control,unscored_discovery,6242d55414d3f4ad690bf0934889660f78e81b6e,True,True,Apache-2.0,False,,NOT_RUN,TencentARC/MotionCtrl,False
+THUDM/CameraCtrl2,cinematic-camera-control,address_unresolved,,False,False,,False,,NOT_RUN,THUDM/CameraCtrl2,False
+zhcui/CameraCtrl2,cinematic-camera-control,address_unresolved,,False,False,,False,,NOT_RUN,zhcui/CameraCtrl2,False
+aaif-goose/goose,coding,initial_documentary_sample,0df818175bc854229746c81f01ea154b1c6c5e9e,True,True,Apache-2.0,True,58,NOT_RUN,block/goose,False
+Aider-AI/aider,coding,initial_documentary_sample,5dc9490bb35f9729ef2c95d00a19ccd30c26339c,True,True,Apache-2.0,True,65,NOT_RUN,Aider-AI/aider,False
+anomalyco/opencode,coding,unscored_discovery,a448d5b987d01887e1597269b57ae2f259f5725b,True,True,MIT,False,,NOT_RUN,anomalyco/opencode,False
+anthropics/claude-code,coding,unscored_discovery,03b5892ee77de289bcd5dfa39f541525ade74aff,True,True,UNKNOWN,False,,NOT_RUN,anthropics/claude-code,False
+continuedev/continue,coding,unscored_discovery,5522c6f44ca0ac3528b37244818fbfa39b5af470,True,True,Apache-2.0,False,,NOT_RUN,continuedev/continue,False
+continuing-revolution/sd-webui-segment-anything,coding,address_unresolved,,False,False,,False,,NOT_RUN,continuing-revolution/sd-webui-segment-anything,False
+google-gemini/gemini-cli,coding,unscored_discovery,debf423248af42e5710ccae49380a5031670a94f,True,True,Apache-2.0,False,,NOT_RUN,google-gemini/gemini-cli,False
+Kiln-AI/Kiln,coding,unscored_discovery,6dd7b53ea392fef822e754a71b7308d5c418978e,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,Kiln-AI/Kiln,False
+openai/codex,coding,unscored_discovery,341de32c33fb00b88b5dd50be70610dc59dad045,True,True,Apache-2.0,False,,NOT_RUN,openai/codex,False
+OpenHands/OpenHands,coding,initial_documentary_sample,cb835dd3283b1974b8dc88efe98793eb4c4fd2d0,True,True,MIT,True,58,NOT_RUN,All-Hands-AI/OpenHands; OpenHands/OpenHands; OpenDevin/OpenDevin,False
+plandex-ai/plandex,coding,unscored_discovery,e2d772072efadbe41d2946d97d79be55532dbab5,True,True,MIT,False,,NOT_RUN,plandex-ai/plandex,False
+QwenLM/qwen-code,coding,unscored_discovery,c24e99e9cb74ce616e0b3ff0e0e5b582dbf4b617,True,True,Apache-2.0,False,,NOT_RUN,QwenLM/qwen-code,False
+SWE-agent/SWE-agent,coding,unscored_discovery,3ea751c087f32b16e039a2233dd6eefecef325d5,True,True,MIT,False,,NOT_RUN,SWE-agent/SWE-agent,False
+TabbyML/tabby,coding,unscored_discovery,21b29048d7bcf6b94f9f482f2d0fd05efadfd19f,True,True,Apache-2.0,False,,NOT_RUN,TabbyML/tabby,False
+apache/arrow,data,unscored_discovery,ca5564e007a209e251b9d4648af4bc6a53c68c4f,True,True,Apache-2.0,False,,NOT_RUN,apache/arrow,False
+apache/superset,data,unscored_discovery,6132c01943221740a0bd8c290b823919609280b8,True,True,Apache-2.0,False,,NOT_RUN,apache/superset,False
+dask/dask,data,unscored_discovery,6ce3740fa79bfa051ecc74c3641f8c6a46dfdc30,True,True,BSD family (inspect clause count),False,,NOT_RUN,dask/dask,False
+duckdb/duckdb,data,initial_documentary_sample,e08224d653fcade680e471709e9a9035223989df,True,True,MIT,True,72,NOT_RUN,duckdb/duckdb,False
+evidence-dev/evidence,data,unscored_discovery,9af79d35771401eddb71492cc0ad9364d1ef9c41,True,True,MIT,False,,NOT_RUN,evidence-dev/evidence,False
+getredash/redash,data,unscored_discovery,e170795256ae028930e4760192e5dc3f59bb420c,True,True,BSD family (inspect clause count); UNKNOWN,False,,NOT_RUN,getredash/redash,False
+ipython/ipython,data,unscored_discovery,4e690135c8743988b46c4268ea76a7dfd1c83efc,True,True,LicenseRef-Manual-Review; BSD family (inspect clause count),False,,NOT_RUN,ipython/ipython,False
+jupyterlab/jupyterlab,data,unscored_discovery,5d3ae70270ffd602eac1be77ca24ed7a88ad518a,True,True,BSD family (inspect clause count),False,,NOT_RUN,jupyterlab/jupyterlab,False
+matplotlib/matplotlib,data,unscored_discovery,003c1b52dea2208eade88b74af997b1b065de324,True,False,,False,,NOT_RUN,matplotlib/matplotlib,False
+metabase/metabase,data,unscored_discovery,3f782175f0999d6e90d6df34594d9c4191a9af36,True,True,AGPL-3.0 (inspect exceptions/version); UNKNOWN,False,,NOT_RUN,metabase/metabase,False
+mwaskom/seaborn,data,unscored_discovery,c1cb287835852406691aed60ea0c62710f2c6b18,True,True,BSD family (inspect clause count),False,,NOT_RUN,mwaskom/seaborn,False
+numpy/numpy,data,unscored_discovery,8ecb569a8809644319be5b746911a8b90ccf0737,True,True,BSD family (inspect clause count),False,,NOT_RUN,numpy/numpy,False
+pandas-dev/pandas,data,initial_documentary_sample,1be9260d02e19fd0df616e0ec881d865a9dd56d9,True,True,BSD family (inspect clause count),True,72,NOT_RUN,pandas-dev/pandas,False
+plotly/plotly.py,data,initial_documentary_sample,0b1e5b745efeb6d18e9e7d55678b5b6ee1b33f5c,True,True,MIT,True,72,NOT_RUN,plotly/plotly.py,False
+pola-rs/polars,data,initial_documentary_sample,fecce5a57b0a5ccfdfd2f8784b9b74887da4026e,True,True,MIT,True,66,NOT_RUN,pola-rs/polars,False
+ray-project/ray,data,unscored_discovery,a5caae16a76a504a0b6a301a9a41b8e2efbd179f,True,True,Apache-2.0,False,,NOT_RUN,ray-project/ray,False
+scipy/scipy,data,initial_documentary_sample,8456d92b303e3c7f77fec07c6cf3c14593ee68b3,True,True,BSD family (inspect clause count),True,69,NOT_RUN,scipy/scipy,False
+streamlit/streamlit,data,unscored_discovery,bb8b74914977141b16407967a80155fcffb41d19,True,True,Apache-2.0,False,,NOT_RUN,streamlit/streamlit,False
+bytedance/UI-TARS-desktop,desktop-agent,unscored_discovery,3ac2cb8d946d78d5ff92ad17b318eaafa18c178c,True,True,Apache-2.0 text,False,,NOT_RUN,bytedance/UI-TARS-desktop,False
+camel-ai/owl,desktop-agent,unscored_discovery,fd06a8bf34998ad008160238b5521d97619bd4d4,True,False,,False,,NOT_RUN,camel-ai/owl,False
+microsoft/UFO,desktop-agent,unscored_discovery,eae3c0a8d168c47cb10df0652e293e092eda1078,True,True,MIT text,False,,NOT_RUN,microsoft/UFO,False
+githubnext/desktop-tools,desktop-computer-use,unscored_discovery,73c0513f20c45ef6cc020af55df5ce14e74687cc,True,True,MIT text,False,,NOT_RUN,githubnext/desktop-tools,False
+AppImage/type2-runtime,desktop-packaging,unscored_discovery,8f39b89e2ac31e1640b3d3f7e9a5108e6ce805fa,True,True,MIT text,False,,NOT_RUN,AppImage/type2-runtime,False
+electron-userland/electron-builder,desktop-packaging,unscored_discovery,434f6e98b017c14176be9aaf06891f09624c88fc,True,True,MIT text,False,,NOT_RUN,electron-userland/electron-builder,False
+electron/electron,desktop-packaging,unscored_discovery,2766ef64b6593b647cc69a277e1555855a9de1e0,True,True,MIT text,False,,NOT_RUN,electron/electron,False
+tauri-apps/tauri,desktop-packaging,unscored_discovery,136a28eaa879e8aa706f9b2e05a050c46dcc1f4f,True,True,Apache-2.0 text; MIT text; manual classification required,False,,NOT_RUN,tauri-apps/tauri,False
+janhq/jan,desktop-platform,unscored_discovery,8fa8703a8ae571ead8912dbdbfa02111201137a7,True,True,Apache-2.0 text,False,,NOT_RUN,janhq/jan,False
+sparkle-project/Sparkle,desktop-updates,unscored_discovery,b41aa91142bb752324838a3c4e0cac2e5f942ff4,True,True,MIT text,False,,NOT_RUN,sparkle-project/Sparkle,False
+Squirrel/Squirrel.Mac,desktop-updates,unscored_discovery,4ad097499fab49c34755981aefaa66ffcd608d71,True,True,MIT text,False,,NOT_RUN,Squirrel/Squirrel.Mac,False
+Squirrel/Squirrel.Windows,desktop-updates,unscored_discovery,51f5e2cb01add79280a53d51e8d0cfa20f8c9f9f,True,True,MIT text (normalized whitespace),False,,NOT_RUN,Squirrel/Squirrel.Windows,False
+tauri-apps/plugins-workspace,desktop-updates,unscored_discovery,6c9746e5515491a25c9d8c168c73e43a9edec6bb,True,True,manual classification required; Apache-2.0 text; MIT text,False,,NOT_RUN,tauri-apps/plugins-workspace,False
+velopack/velopack,desktop-updates,unscored_discovery,1cadbfebc5d8584ef7ccafb5ce52cee1b7f5756f,True,True,MIT text (normalized whitespace),False,,NOT_RUN,velopack/velopack,False
+breezedeus/Pix2Text,documents,unscored_discovery,f52e671247c14a29aa59b44e99849e00aee984cd,True,True,MIT,False,,NOT_RUN,breezedeus/Pix2Text,False
+datalab-to/marker,documents,unscored_discovery,ad1b414d846653f4048cdc527993f6c09b829869,True,True,Apache-2.0,False,,NOT_RUN,VikParuchuri/marker,False
+docling-project/docling,documents,initial_documentary_sample,6fadbae317b09c4dd4051c0f1fc1746c6baf04bc,True,True,MIT,True,70,NOT_RUN,docling-project/docling,False
+gitbrent/PptxGenJS,documents,unscored_discovery,3c9ec1b687c174952166f6a34b5e87ebf69fa469,True,True,MIT,False,,NOT_RUN,gitbrent/PptxGenJS,False
+jmcnamara/XlsxWriter,documents,unscored_discovery,5d4606d89a955226d2d0825a0f44309043ae7251,True,True,BSD family (inspect clause count),False,,NOT_RUN,jmcnamara/XlsxWriter,False
+jsvine/pdfplumber,documents,unscored_discovery,4c64b92d5caccd71c645e98e0fabb0c4dba7ff45,True,True,MIT,False,,NOT_RUN,jsvine/pdfplumber,False
+LibreOffice/core,documents,unscored_discovery,91f5f11cb226d3cc1630cac878b71efd1e6f09fe,True,True,GPL (inspect exact version/exceptions); LGPL (inspect exact version/exceptions); MPL-2.0,False,,NOT_RUN,LibreOffice/core,False
+microsoft/markitdown,documents,unscored_discovery,4cc9fa17653d695d64fb9eee5b33d4de55ff84e8,True,True,MIT,False,,NOT_RUN,microsoft/markitdown,False
+mindee/doctr,documents,unscored_discovery,7b9180362a696eb37c4cf916a6ffcffef3aa87ac,True,True,Apache-2.0,False,,NOT_RUN,mindee/doctr,False
+ocrmypdf/OCRmyPDF,documents,initial_documentary_sample,cf0df3da06aef04fe9a5bf91c6feff36370bb3eb,True,True,MPL-2.0,True,66,NOT_RUN,ocrmypdf/OCRmyPDF,False
+opendatalab/MinerU,documents,unscored_discovery,b7f3dd0c5f6e6d66a298239ffd02b328b873918e,True,True,UNKNOWN,False,,NOT_RUN,opendatalab/MinerU,False
+openpyxl/openpyxl,documents,address_unresolved,,False,False,,False,,NOT_RUN,openpyxl/openpyxl,False
+PaddlePaddle/PaddleOCR,documents,unscored_discovery,dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf,True,True,Apache-2.0,False,,NOT_RUN,PaddlePaddle/PaddleOCR,False
+pymupdf/PyMuPDF,documents,initial_documentary_sample,a2fa1fe7c95bac2acb9f9acfb066d79dbcbdbc7b,True,True,AGPL-3.0 (inspect exceptions/version),True,63,NOT_RUN,pymupdf/PyMuPDF,False
+pymupdf/pymupdf4llm,documents,unscored_discovery,d9b212b737dd27550401a2691a5bc1719b2fef2c,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,pymupdf/pymupdf4llm,False
+pypdf/pypdf,documents,address_unresolved,,False,False,,False,,NOT_RUN,pypdf/pypdf,False
+python-openxml/python-docx,documents,initial_documentary_sample,e45454602b53e8e572b179ccf1c91093ec9f4ed7,True,True,MIT,True,68,NOT_RUN,python-openxml/python-docx,False
+scanny/python-pptx,documents,initial_documentary_sample,278b47b1dedd5b46ee84c286e77cdfb0bf4594be,True,True,MIT,True,65,NOT_RUN,scanny/python-pptx,False
+tesseract-ocr/tesseract,documents,initial_documentary_sample,b2544450ca01407259ed53c870b7e5e4c67f7789,True,True,Apache-2.0,True,72,NOT_RUN,tesseract-ocr/tesseract,False
+Unstructured-IO/unstructured,documents,initial_documentary_sample,d4008b99a12f2f417f3270711bd37d89d0d7f1be,True,True,Apache-2.0,True,66,NOT_RUN,Unstructured-IO/unstructured,False
+Unstructured-IO/unstructured-inference,documents,unscored_discovery,158db67ed9f6431e250047f4de07c2cbda4de611,True,True,Apache-2.0,False,,NOT_RUN,Unstructured-IO/unstructured-inference,False
+allenai/olmocr,documents-publishing,unscored_discovery,f7cfe4c22098b154c76b6ec950d1c0a464eecf8d,True,True,Apache-2.0,False,,NOT_RUN,allenai/olmocr,False
+apache/tika,documents-publishing,unscored_discovery,7cb848a1ac9c3374ebaa909225ba2185a54ae074,True,True,Apache-2.0,False,,NOT_RUN,apache/tika,False
+dolanmiu/docx,documents-publishing,unscored_discovery,8b8f5b108367a075d46fedb2aae8f2182a0a7af1,True,True,MIT,False,,NOT_RUN,dolanmiu/docx,False
+exceljs/exceljs,documents-publishing,unscored_discovery,5bed18b45e824f409b08456b59b87430ded023ab,True,True,MIT,False,,NOT_RUN,exceljs/exceljs,False
+grobidOrg/grobid,documents-publishing,unscored_discovery,569ae14aab5da59974bb60db48525f5dfb85eace,True,True,Apache-2.0,False,,NOT_RUN,kermitt2/grobid,False
+jgm/pandoc,documents-publishing,unscored_discovery,2760383352bbfbe4f3c9569cba47ff50c13fb719,True,True,GPL (inspect exact version/exceptions); LicenseRef-Manual-Review,False,,NOT_RUN,jgm/pandoc,False
+jmcnamara/libxlsxwriter,documents-publishing,unscored_discovery,3227eb0c1556ba41d94605a7abee0e097782d10a,True,True,BSD family (inspect clause count),False,,NOT_RUN,jmcnamara/libxlsxwriter,False
+Kozea/CairoSVG,documents-publishing,unscored_discovery,3b7a250c9e955db9c3cdf525d5b5027a9a396201,True,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,Kozea/CairoSVG,False
+Kozea/WeasyPrint,documents-publishing,unscored_discovery,da3eb66e207f40d96be8a9fff05a90a4aae5c1a2,True,True,BSD family (inspect clause count),False,,NOT_RUN,Kozea/WeasyPrint,False
+microsoft/table-transformer,documents-publishing,unscored_discovery,16d124f616109746b7785f03085100f1f6247575,True,True,MIT,False,,NOT_RUN,microsoft/table-transformer,True
+opendatalab/DocLayout-YOLO,documents-publishing,unscored_discovery,32a8ec276b3d79bf40561c4bc4b8e21ef32ac6fd,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,opendatalab/DocLayout-YOLO,False
+pdfcpu/pdfcpu,documents-publishing,unscored_discovery,b41a41d5323f6119ff6a183ad3f287eb4a20a617,True,True,Apache-2.0,False,,NOT_RUN,pdfcpu/pdfcpu,False
+pdfme/pdfme,documents-publishing,unscored_discovery,4c48a60cd0f33d67b81c07b0ac1c0bf61ac6a796,True,True,MIT,False,,NOT_RUN,pdfme/pdfme,False
+quarto-dev/quarto-cli,documents-publishing,unscored_discovery,b09757661f578d2b5cb1c0847c7c62c56993928e,True,True,MIT,False,,NOT_RUN,quarto-dev/quarto-cli,False
+SheetJS/sheetjs,documents-publishing,unscored_discovery,3f44ddd99c704d7ca35ea76fef7b8af2d2d435cb,True,True,Apache-2.0,False,,NOT_RUN,SheetJS/sheetjs,False
+Stirling-Tools/Stirling-PDF,documents-publishing,unscored_discovery,a7e593728dd9aa81e75318a949789d3c2e9ee754,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,Stirling-Tools/Stirling-PDF,False
+tabulapdf/tabula-java,documents-publishing,unscored_discovery,2cdf3b4fd3f7e921dca8cc6814cdd9316be40f0f,True,True,MIT,False,,NOT_RUN,tabulapdf/tabula-java,False
+TectonicTypesetting/tectonic,documents-publishing,address_unresolved,,False,False,,False,,NOT_RUN,TectonicTypesetting/tectonic,False
+typst/typst,documents-publishing,unscored_discovery,bd5ebec285505889e8ff1d4f68804ab147a699f3,True,True,Apache-2.0,False,,NOT_RUN,typst/typst,False
+CadQuery/OCP,engineering-simulation,unscored_discovery,a6d078cfda3e5e695c68d2bfbfe38e91b0ccb566,True,True,Apache-2.0,False,,NOT_RUN,CadQuery/OCP,False
+calculix/ccx,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,calculix/ccx,False
+ElmerCSC/elmerfem,engineering-simulation,unscored_discovery,66cdc3ea3241a59e927e9b91496856272313c6d1,False,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,ElmerCSC/elmerfem,False
+FEniCS/dolfinx,engineering-simulation,unscored_discovery,56daf3fdabc692535450ff2ccaad045b7acf81eb,True,True,GPL (inspect exact version/exceptions); LGPL (inspect exact version/exceptions),False,,NOT_RUN,FEniCS/dolfinx,False
+gmsh/gmsh,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,gmsh/gmsh,False
+godotengine/godot,engineering-simulation,unscored_discovery,4d10419cacd6d3009976e8f9fd3abd970fd58018,True,True,LicenseRef-Manual-Review; MIT,False,,NOT_RUN,godotengine/godot,False
+KiCad/kicad-source-mirror,engineering-simulation,unscored_discovery,6c0f8150791d84d0e25e2031851c5ced96a24ed2,True,True,GPL (inspect exact version/exceptions); BSD family (inspect clause count); Apache-2.0; MIT,False,,NOT_RUN,KiCad/kicad-source-mirror,False
+kikit/kikit,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,kikit/kikit,False
+meshio/meshio,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,meshio/meshio,False
+OpenFOAM/OpenFOAM-dev,engineering-simulation,unscored_discovery,f21e4bbf104def2c7507fe15ebee9c6e007fc556,False,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,OpenFOAM/OpenFOAM-dev,False
+precice/precice,engineering-simulation,unscored_discovery,adf286a3140c16e3ab32e72050e56387757cd886,False,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,precice/precice,False
+pygmsh/pygmsh,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,pygmsh/pygmsh,False
+pyvista/pyvista,engineering-simulation,unscored_discovery,58a7d1f3c654a5078e1c64221b4508c64ad28b23,True,True,MIT,False,,NOT_RUN,pyvista/pyvista,False
+qucs/qucs_s,engineering-simulation,address_unresolved,,False,False,,False,,NOT_RUN,qucs/qucs_s,False
+sfepy/sfepy,engineering-simulation,unscored_discovery,615e22a39cea1fc3bd44935ec7d7465c25d1b718,True,True,BSD family (inspect clause count),False,,NOT_RUN,sfepy/sfepy,False
+ApodexAI/AgentHarness,evaluation,unscored_discovery,7cc9e3bfca12ec44930073f20ee3f0732a7950da,True,True,Apache-2.0,False,,NOT_RUN,ApodexAI/AgentHarness,False
+benchflow-ai/skillsbench,evaluation,unscored_discovery,f860ecf02ef53412a030f8661c83d644b739ff01,True,True,Apache-2.0,False,,NOT_RUN,benchflow-ai/skillsbench,False
+bigcode-project/bigcode-evaluation-harness,evaluation,unscored_discovery,8fc5bae6479c4fbbb28c3f8b644f6a15b3f3b5bd,True,True,Apache-2.0,False,,NOT_RUN,bigcode-project/bigcode-evaluation-harness,False
+braintrustdata/braintrust-sdk-javascript,evaluation,unscored_discovery,5a8b3c58f069d250ad625d0fc1defdf88f56f505,True,True,Apache-2.0,False,,NOT_RUN,braintrustdata/braintrust-sdk,False
+confident-ai/deepeval,evaluation,initial_documentary_sample,82896b93b1503f8082806df2803846ab9062f613,True,True,Apache-2.0,True,66,NOT_RUN,confident-ai/deepeval,False
+EleutherAI/lm-evaluation-harness,evaluation,unscored_discovery,d6de81643928d653435c431bae19945d41d32520,True,True,MIT,False,,NOT_RUN,EleutherAI/lm-evaluation-harness,False
+ethz-spylab/agentdojo,evaluation,initial_documentary_sample,089ed468cf3ed0322acc66b0211f26d9d90dbf60,True,True,MIT,True,61,NOT_RUN,ethz-spylab/agentdojo,False
+evalplus/evalplus,evaluation,unscored_discovery,26d6d00bb1fd0fa37f39c99d5290da67891d1c5e,True,True,Apache-2.0,False,,NOT_RUN,evalplus/evalplus,False
+gameworld-project/GameWorld,evaluation,unscored_discovery,679b1b6917be841e35ee557f83c9c10b81141085,True,False,,False,,NOT_RUN,gameworld-project/GameWorld,False
+harveyai/harvey-labs,evaluation,unscored_discovery,a15650fe74bb20b86f160aaabdad75b87a91b6e8,True,True,MIT,False,,NOT_RUN,harveyai/harvey-labs,False
+huggingface/lighteval,evaluation,unscored_discovery,7fa19dc6f53a713ba8bb6541e7ed66dad2e24fd7,True,True,MIT,False,,NOT_RUN,huggingface/lighteval,False
+mlflow/mlflow,evaluation,unscored_discovery,f566a42d64fce8997fe187edb5229221ace09713,True,True,Apache-2.0,False,,NOT_RUN,mlflow/mlflow,False
+openai/evals,evaluation,unscored_discovery,8eac7a7de5215c907fbddc30efdaf316913eccdd,True,True,MIT,False,,NOT_RUN,openai/evals,False
+promptfoo/promptfoo,evaluation,initial_documentary_sample,132a2d38b1b0adc953b0db650f950d573bc113c4,True,True,MIT,True,66,NOT_RUN,promptfoo/promptfoo,False
+pytest-dev/pytest,evaluation,initial_documentary_sample,c9c19f8e62c12834ad83193a1869cc82fe9c700e,True,True,MIT,True,70,NOT_RUN,pytest-dev/pytest,False
+run-llama/ParseBench,evaluation,unscored_discovery,d423e529ae329317bcd33c650b367acfb60e6620,True,True,Apache-2.0,False,,NOT_RUN,run-llama/ParseBench,False
+sierra-research/tau-bench,evaluation,unscored_discovery,59a200c6d575d595120f1cb70fea53cef0632f6b,True,True,MIT,False,,NOT_RUN,sierra-research/tau-bench,False
+sierra-research/tau2-bench,evaluation,initial_documentary_sample,5ade54e282a4555e4d6c52d6b9b861ea8872afa6,True,True,MIT,True,65,NOT_RUN,sierra-research/tau2-bench,False
+stanford-crfm/helm,evaluation,unscored_discovery,63754d05db6f874e41a395880fb573890a13e791,True,True,Apache-2.0,False,,NOT_RUN,stanford-crfm/helm,False
+SWE-bench/SWE-bench,evaluation,initial_documentary_sample,02e7a74ffd0b707aab73d203fe87bdc7c76afc8e,True,True,MIT,True,61,NOT_RUN,SWE-bench/SWE-bench,False
+Tencent/AICGSecEval,evaluation,unscored_discovery,94428ebf45141bf4ecd365a51d596dcd51caa690,True,True,Apache-2.0,False,,NOT_RUN,Tencent/AICGSecEval,False
+tester-army/e2e,evaluation,unscored_discovery,b41afa262ec32a7e90d065a4624f69f8f4a22e4f,True,True,Apache-2.0,False,,NOT_RUN,tester-army/e2e,False
+THUDM/AgentBench,evaluation,unscored_discovery,d1e4a10db08c87075c78972e48ecc182be03e2d5,True,True,Apache-2.0,False,,NOT_RUN,THUDM/AgentBench,False
+UKGovernmentAISI/inspect_ai,evaluation,address_unresolved,,False,False,,False,,NOT_RUN,UKGovernmentAISI/inspect_ai,False
+UKGovernmentBEIS/inspect_ai,evaluation,initial_documentary_sample,65447aa49aaae4aa36755ea4b9fe7fa798bed518,True,True,MIT,True,69,NOT_RUN,UKGovernmentBEIS/inspect_ai,False
+UKGovernmentBEIS/inspect_evals,evaluation,unscored_discovery,d2d3aac91a37a8c7c8ed3de8b4e899c2594f24a9,True,True,MIT,False,,NOT_RUN,UKGovernmentBEIS/inspect_evals,False
+zhangxjohn/LLM-Agent-Benchmark-List,evaluation,unscored_discovery,e0f5146545c2e08cbc4d6ce9d8182f6786ca164e,True,True,Apache-2.0,False,,NOT_RUN,zhangxjohn/LLM-Agent-Benchmark-List,False
+SWE-agent/mini-swe-agent,follow-up-maintenance,initial_documentary_sample,04d809ceab9df28f9adaed044884180159172930,True,True,MIT,True,54,NOT_RUN,SWE-agent/mini-swe-agent,False
+ajv-validator/ajv,foundation,unscored_discovery,f177fe323420ccb23e1a79445fd470cbf80aee7c,True,True,MIT,False,,NOT_RUN,ajv-validator/ajv,False
+anchore/syft,foundation,initial_documentary_sample,30200f1d691d4e7e9f78a55e7e7298aeb2672216,True,True,LicenseRef-Manual-Review; Apache-2.0,True,69,NOT_RUN,anchore/syft,False
+aquasecurity/trivy,foundation,initial_documentary_sample,032ac48ccfa5c06d96e6ed1add07456231b5ed9a,True,True,Apache-2.0,True,69,NOT_RUN,aquasecurity/trivy,False
+astral-sh/ruff,foundation,unscored_discovery,c79af4610339a3acd37c94c938f5546bb39fffe4,True,True,MIT,False,,NOT_RUN,astral-sh/ruff,False
+fastapi/fastapi,foundation,initial_documentary_sample,0b919816378eaa773df7ce4204414c712c9fdbea,True,True,MIT,True,73,NOT_RUN,fastapi/fastapi,False
+json-schema-org/JSON-Schema-Test-Suite,foundation,unscored_discovery,55719286c33ae0d1823bfb65fea10338a19bc37c,True,True,MIT,False,,NOT_RUN,json-schema-org/JSON-Schema-Test-Suite,False
+Kludex/starlette,foundation,unscored_discovery,7b2948fe7b7fff28bb018607d54cd4dfa518910e,True,True,BSD family (inspect clause count),False,,NOT_RUN,encode/starlette,False
+ossf/scorecard,foundation,unscored_discovery,f746d2ee21e51551c391d37dd946d257d9b68b66,True,True,Apache-2.0,False,,NOT_RUN,ossf/scorecard,False
+postgres/postgres,foundation,unscored_discovery,294d2196c7abec253fd3959d3ca4c6dcae3068d6,True,True,PostgreSQL,False,,NOT_RUN,postgres/postgres,False
+pydantic/pydantic,foundation,initial_documentary_sample,5adfeaaaea947f81f0f01868604f219084ec151a,True,True,MIT,True,73,NOT_RUN,pydantic/pydantic,False
+python-jsonschema/jsonschema,foundation,unscored_discovery,c497561ea0a95f5aac09cd63d15eb1420eb7bbec,True,True,MIT,False,,NOT_RUN,python-jsonschema/jsonschema,False
+sbt/sbt,foundation,unscored_discovery,009daf52dd7a7332937517727bf340161457752c,True,True,Apache-2.0,False,,NOT_RUN,sbt/sbt,False
+sigstore/cosign,foundation,initial_documentary_sample,63d9aa14a70c03e73c7b2a2a9a6501566194f5f4,True,True,Apache-2.0,True,65,NOT_RUN,sigstore/cosign,False
+sqlalchemy/sqlalchemy,foundation,initial_documentary_sample,262c0f0ef49a46fbc4c58df167a858d58313032b,True,True,MIT,True,70,NOT_RUN,sqlalchemy/sqlalchemy,False
+sqlite/sqlite,foundation,unscored_discovery,14913b9e281d8fad7ec6a3e76e3d59c411caa06e,True,True,Public-domain/Unlicense (inspect),False,,NOT_RUN,sqlite/sqlite,False
+theupdateframework/python-tuf,foundation,initial_documentary_sample,2c771a035620b29c6e5f90030f501ae92d64cf83,True,True,Apache-2.0; MIT,True,65,NOT_RUN,theupdateframework/python-tuf,False
+bokeh/bokeh,geospatial,unscored_discovery,82c3a7a5e3f5ac3144364dc2c6c34fd65f125a8f,True,True,BSD family (inspect clause count),False,,NOT_RUN,bokeh/bokeh,False
+geopandas/geopandas,geospatial,unscored_discovery,ee889bb6365319dee15b43ad001539ef10b090f0,True,True,BSD family (inspect clause count),False,,NOT_RUN,geopandas/geopandas,False
+holoviz/datashader,geospatial,unscored_discovery,385fb0b976356459d59deac8c1b23d14eee15dc2,True,True,BSD family (inspect clause count),False,,NOT_RUN,holoviz/datashader,False
+holoviz/panel,geospatial,unscored_discovery,0de13cc9738f0303294b71519c461b5ac0b79f3d,True,True,BSD family (inspect clause count),False,,NOT_RUN,holoviz/panel,False
+OSGeo/gdal,geospatial,unscored_discovery,9780d91c6e4f13950b90af8d30aab8cf68f9e9d6,True,True,MIT,False,,NOT_RUN,OSGeo/gdal,False
+pyproj4/pyproj,geospatial,unscored_discovery,5e644eaf07982c20be6c251b71b4320294138a1a,True,True,MIT,False,,NOT_RUN,pyproj4/pyproj,False
+python-visualization/folium,geospatial,unscored_discovery,4819f3403d6a213a7a82b2b632ee17232037c746,True,True,MIT,False,,NOT_RUN,python-visualization/folium,False
+qgis/QGIS,geospatial,unscored_discovery,91bc12f77d9d9c33c01ff7aae776388917627550,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,qgis/QGIS,False
+rasterio/rasterio,geospatial,unscored_discovery,c2c0a9692e00abbabc92f95c6dc36db92c207e64,True,True,BSD family (inspect clause count),False,,NOT_RUN,rasterio/rasterio,False
+shapely/shapely,geospatial,unscored_discovery,737cc734ca238216ddb29b933e24b710e82765c7,True,True,BSD family (inspect clause count),False,,NOT_RUN,shapely/shapely,False
+black-forest-labs/flux2,image-editing-consistency,unscored_discovery,50fe5162777813d869182b139e83b10743caef15,True,True,Apache-2.0,False,,NOT_RUN,black-forest-labs/flux2,False
+bmaltais/kohya_ss,image-editing-consistency,unscored_discovery,45088f04af78e11cec5407ff4652ea3ed2c14422,True,True,Apache-2.0,False,,NOT_RUN,bmaltais/kohya_ss,False
+deepseek-ai/Janus,image-editing-consistency,unscored_discovery,1daa72fa409002d40931bd7b36a9280362469ead,True,True,MIT; LicenseRef-Manual-Review,False,,NOT_RUN,deepseek-ai/Janus,False
+huggingface/peft,image-editing-consistency,unscored_discovery,e8e8a7c40af177652ad88a3682d64e0480f5f919,True,True,Apache-2.0,False,,NOT_RUN,huggingface/peft,False
+ostris/ai-toolkit,image-editing-consistency,unscored_discovery,12395a103fd0ca499c631dc6f460a8778e11490d,True,True,MIT,False,,NOT_RUN,ostris/ai-toolkit,False
+QwenLM/Qwen-Image,image-editing-consistency,unscored_discovery,6b5e1f5cec987d404be5ac6657db3b9aacb56a89,True,True,Apache-2.0,False,,NOT_RUN,QwenLM/Qwen-Image,False
+QwenLM/Qwen-Image-Layered,image-editing-consistency,unscored_discovery,54c4fe47e76d745775e03fc66ee38457280ed9ea,True,True,Apache-2.0,False,,NOT_RUN,QwenLM/Qwen-Image-Layered,False
+stepfun-ai/Step1X-Edit,image-editing-consistency,unscored_discovery,4cca05dfcd6c32dc810d0b4db84c2bf0682a5aeb,True,True,Apache-2.0,False,,NOT_RUN,stepfun-ai/Step1X-Edit,False
+Acly/krita-ai-diffusion,images,unscored_discovery,828b70c33c5c97f326e03170cd693beef798231e,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,Acly/krita-ai-diffusion,False
+AUTOMATIC1111/stable-diffusion-webui,images,unscored_discovery,82a973c04367123ae98bd9abdf80d9eda9b910e2,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,AUTOMATIC1111/stable-diffusion-webui,False
+black-forest-labs/flux,images,unscored_discovery,802fb4713906133fcbd0d8dc5351620ca4773036,True,True,Apache-2.0,False,,NOT_RUN,black-forest-labs/flux,False
+Comfy-Org/ComfyUI,images,initial_documentary_sample,29e28e2b488e7739c351c331d73da25aa435da5c,True,True,GPL (inspect exact version/exceptions),True,56,NOT_RUN,comfyanonymous/ComfyUI,False
+GNOME/gimp,images,initial_documentary_sample,d8d30252dd7b3dace58233a1b8cfc87cabcd1a63,True,True,GPL (inspect exact version/exceptions),True,55,NOT_RUN,GNOME/gimp,False
+hao-ai-lab/FastVideo,images,unscored_discovery,ba371e33ed080e51f1884ae166baf7c4447a66fe,True,True,Apache-2.0,False,,NOT_RUN,hao-ai-lab/FastVideo,False
+huggingface/diffusers,images,initial_documentary_sample,7ecb1e1b4fe500be7fb7381a7bb79a24d7fa3941,True,True,Apache-2.0,True,56,NOT_RUN,huggingface/diffusers,False
+inkscape/inkscape,images,unscored_discovery,1232eac68aff12978b208ff3ebfbbcc3ecbd7022,True,False,,False,,NOT_RUN,inkscape/inkscape,False
+InvokeAI/InvokeAI,images,address_unresolved,,False,False,,False,,NOT_RUN,InvokeAI/InvokeAI,False
+KDE/krita,images,initial_documentary_sample,2568c1a0ec2a5af697f89c15cc373a490ae7c70d,True,True,GPL (inspect exact version/exceptions); BSD family (inspect clause count),True,58,NOT_RUN,KDE/krita,False
+lllyasviel/ControlNet,images,unscored_discovery,ed85cd1e25a5ed592f7d8178495b4483de0331bf,True,True,Apache-2.0,False,,NOT_RUN,lllyasviel/ControlNet,False
+lllyasviel/Fooocus,images,unscored_discovery,ae05379cc97bc4361ec8b4ec90193dab21be763f,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,lllyasviel/Fooocus,False
+Tencent-Hunyuan/HunyuanImage-3.0,images,unscored_discovery,6e9113a692a27a0751d82aba3b2015a876646c03,True,True,UNKNOWN,False,,NOT_RUN,Tencent-Hunyuan/HunyuanImage-3.0,False
+webui-dev/stable-diffusion-webui,images,address_unresolved,,False,False,,False,,NOT_RUN,webui-dev/stable-diffusion-webui,False
+astral-sh/uv,infrastructure,initial_documentary_sample,b8993e0a3b15f37e6b523bc5d02d2e7128713cad,True,True,Apache-2.0; MIT,True,73,NOT_RUN,astral-sh/uv,False
+codesandbox/sandpack,infrastructure,unscored_discovery,7d60a4334980eef304d53b1c3df371ed6dbcf491,True,True,Apache-2.0,False,,NOT_RUN,codesandbox/sandpack,False
+containerd/containerd,infrastructure,unscored_discovery,f09d4e24d975f58987ff5739a3705b64c679df6a,True,True,Apache-2.0,False,,NOT_RUN,containerd/containerd,False
+containerd/nerdctl,infrastructure,unscored_discovery,477a85e9f6f9caddfacc236963ea5d7b82c61967,True,True,Apache-2.0,False,,NOT_RUN,containerd/nerdctl,False
+containers/bubblewrap,infrastructure,initial_documentary_sample,1fb0aa26d3eb66254f7742e704add7f82f41a582,True,True,LGPL (inspect exact version/exceptions); UNKNOWN,True,59,NOT_RUN,containers/bubblewrap,False
+daytonaio/daytona,infrastructure,unscored_discovery,ec4c21b2d597091ac09ecc278f3bcc172575a987,True,False,,False,,NOT_RUN,daytonaio/daytona,True
+docker/compose,infrastructure,unscored_discovery,7b36d08dd0d30da3abc1e646baec8751f0bcb0b2,True,True,Apache-2.0,False,,NOT_RUN,docker/compose,False
+e2b-dev/E2B,infrastructure,unscored_discovery,62a17dfc3f11439d1d06bfb9bb515eadc5adfcd3,True,True,Apache-2.0,False,,NOT_RUN,e2b-dev/E2B,False
+firecracker-microvm/firecracker,infrastructure,initial_documentary_sample,f6d38ae3de8fbfdec7849f5bf75bede57d5bb834,True,True,Apache-2.0,True,65,NOT_RUN,firecracker-microvm/firecracker,False
+google/gvisor,infrastructure,initial_documentary_sample,c6112880b448df3cd3c939dbbcf65e8d78836eb2,True,True,Apache-2.0,True,62,NOT_RUN,google/gvisor,False
+google/nsjail,infrastructure,initial_documentary_sample,4ff54a6e0d5b65a0e1633d6e2fd1425ba6c882ce,True,True,Apache-2.0,True,58,NOT_RUN,google/nsjail,False
+kata-containers/kata-containers,infrastructure,unscored_discovery,ecca92615872d727c2e428660ec84cc1191d96d8,True,True,Apache-2.0,False,,NOT_RUN,kata-containers/kata-containers,False
+kubernetes/kubernetes,infrastructure,unscored_discovery,63eee90da226b6a813e58b2dac53c2fc2236481d,True,True,Apache-2.0,False,,NOT_RUN,kubernetes/kubernetes,False
+Lima-vm/lima,infrastructure,unscored_discovery,5e86a5fc98ae6311f9fe6419220e3fe1529ebb1c,True,True,Apache-2.0,False,,NOT_RUN,Lima-vm/lima; lima-vm/lima,False
+moby/moby,infrastructure,initial_documentary_sample,06cd4a813d76a06f1c0f24b0b079e7cb8773824e,True,True,Apache-2.0,True,65,NOT_RUN,moby/moby,False
+apache/lucene,knowledge-search,unscored_discovery,8476457b8752be2fd8094eaf5cd9bf0cea9594ae,True,True,Apache-2.0,False,,NOT_RUN,apache/lucene,False
+elastic/elasticsearch-py,knowledge-search,unscored_discovery,ba53123a99f31797a5e438e4563dbfc5c3568713,True,True,Apache-2.0,False,,NOT_RUN,elastic/elasticsearch-py,False
+FalkorDB/FalkorDB,knowledge-search,unscored_discovery,0f45a8685aa8d542f026b4f5f6bcaa0fbb43c1c9,True,True,SSPL-1.0,False,,NOT_RUN,FalkorDB/FalkorDB,False
+kuzu-db/kuzu,knowledge-search,address_unresolved,,False,False,,False,,NOT_RUN,kuzu-db/kuzu,False
+meilisearch/meilisearch,knowledge-search,unscored_discovery,541dd6e94c5d6101684610b1af1b50c5aa4e2915,True,True,BUSL-1.1; MIT,False,,NOT_RUN,meilisearch/meilisearch,False
+neo4j/neo4j,knowledge-search,unscored_discovery,54a7dcf7c2501b31866199143364c5332da8936f,False,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,neo4j/neo4j,False
+opensearch-project/opensearch-py,knowledge-search,unscored_discovery,f09f8b04e82191e911c7a1097e338036d089cc6d,True,True,Apache-2.0,False,,NOT_RUN,opensearch-project/opensearch-py,False
+quickwit-oss/quickwit,knowledge-search,unscored_discovery,4c2c51ea8342afdd9f72e9eb69bb116419c26335,True,True,Apache-2.0; LicenseRef-Manual-Review,False,,NOT_RUN,quickwit-oss/quickwit,False
+quickwit-oss/tantivy,knowledge-search,unscored_discovery,e1acb3e0112f2b4819946aa4ea5742bf429853d8,True,True,MIT,False,,NOT_RUN,tantivy-search/tantivy,False
+simonw/datasette,knowledge-search,unscored_discovery,c435a800306987ef1d034f84f685b826153b55a5,True,True,Apache-2.0,False,,NOT_RUN,simonw/datasette,False
+simonw/sqlite-utils,knowledge-search,unscored_discovery,9c66bafa52ae23d40499c74b0db3b635bcddb876,True,True,Apache-2.0,False,,NOT_RUN,simonw/sqlite-utils,False
+sqlitebrowser/sqlitebrowser,knowledge-search,unscored_discovery,ea751049a0c42e51063c3ee2b56d1cf472491d3a,True,True,GPL (inspect exact version/exceptions); MIT; MPL-2.0,False,,NOT_RUN,sqlitebrowser/sqlitebrowser,False
+typesense/typesense,knowledge-search,unscored_discovery,a2bb5261f4305507b7b6430efd7def7a9e1a63f3,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,typesense/typesense,False
+Fannovel16/ComfyUI-Frame-Interpolation,media-postproduction,unscored_discovery,26545cc2dd95bc3d27f056016300673bdeee78f5,True,True,MIT,False,,NOT_RUN,Fannovel16/ComfyUI-Frame-Interpolation,False
+hzwer/ECCV2022-RIFE,media-postproduction,unscored_discovery,5d8adbdd40e12c2c8f91930eff838aebe561c086,True,True,MIT,False,,NOT_RUN,hzwer/ECCV2022-RIFE,False
+jianchang512/pyvideotrans,media-postproduction,unscored_discovery,f9f35d102a2bd7393285eee1e3eaaa69744dab11,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,jianchang512/pyvideotrans,False
+kijai/ComfyUI-LTXVideo,media-postproduction,unscored_discovery,548a39373bc2fdb880a233944e4621efb1a8950e,True,True,UNKNOWN,False,,NOT_RUN,kijai/ComfyUI-LTXVideo,False
+kijai/ComfyUI-WanVideoWrapper,media-postproduction,unscored_discovery,088128b224242e110d3906c6750e9a3a348a659b,True,True,Apache-2.0,False,,NOT_RUN,kijai/ComfyUI-WanVideoWrapper,False
+kkroening/ffmpeg-python,media-postproduction,unscored_discovery,df129c7ba30aaa9ffffb81a48f53aa7253b0b4e6,True,True,Apache-2.0,False,,NOT_RUN,kkroening/ffmpeg-python,False
+lightx2v/lightx2v,media-postproduction,address_unresolved,,False,False,,False,,NOT_RUN,lightx2v/lightx2v,False
+mifi/lossless-cut,media-postproduction,unscored_discovery,2610158c7861e0b96e2020cebcdd3c539ff33830,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,mifi/lossless-cut,False
+sczhou/ProPainter,media-postproduction,unscored_discovery,e870e79321c31b733e2031af5aa2fb1fe3ac7eec,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,sczhou/ProPainter,False
+vllm-project/vllm-omni,media-postproduction,unscored_discovery,96274a06f3a3e36c899bc4b74eb8d4d9a492e5ae,True,True,Apache-2.0,False,,NOT_RUN,vllm-project/vllm-omni,False
+xinntao/Real-ESRGAN,media-postproduction,unscored_discovery,a4abfb2979a7bbff3f69f58f58ae324608821e27,True,True,BSD family (inspect clause count),False,,NOT_RUN,xinntao/Real-ESRGAN,False
+ad-srvn/MicCheck,media-search-followup,unscored_discovery,599dc0e03edab2415ac829787c3ed8a6a417ddf3,True,True,MIT,False,,NOT_RUN,ad-srvn/MicCheck,False
+ajay-sainy/Wav2Lip-GFPGAN,media-search-followup,unscored_discovery,a4e7ee24b73b64f4ccd48daf23c884884e731e1b,True,False,,False,,NOT_RUN,ajay-sainy/Wav2Lip-GFPGAN,False
+AKCodez/higgsfield-claude-skills,media-search-followup,unscored_discovery,f6698ab7a87223b67a76ce748ca1b936a8b5d399,True,False,,False,,NOT_RUN,AKCodez/higgsfield-claude-skills,False
+Anil-matcha/Open-Generative-AI,media-search-followup,unscored_discovery,0668c210ebfe893f16c5149405a08d00b9ae90df,True,True,MIT,False,,NOT_RUN,Anil-matcha/Open-Generative-AI,False
+api-evangelist/rev-ai,media-search-followup,unscored_discovery,a638d26d053a841f314b0ff3f00ccbbea32ac66f,True,False,,False,,NOT_RUN,api-evangelist/rev-ai,False
+api-evangelist/runware,media-search-followup,unscored_discovery,217cb05a362498a93fd4e44bafd132ba445f428a,True,False,,False,,NOT_RUN,api-evangelist/runware,False
+api-evangelist/runway,media-search-followup,unscored_discovery,16e25a9997465b17b152957d2aa86f6ec112bb63,True,False,,False,,NOT_RUN,api-evangelist/runway,False
+AsifiweAfisa/darkmind-auto,media-search-followup,unscored_discovery,cf19701111786deebc3fce58e47ccbb0614d0572,True,False,,False,,NOT_RUN,AsifiweAfisa/darkmind-auto,False
+babysor/MockingBird,media-search-followup,unscored_discovery,28dc5e14f12d7c754612af2fde8e78a4b03f8616,True,True,MIT,False,,NOT_RUN,babysor/MockingBird,False
+beshuaxian/higgsfield-seedance2-jineng,media-search-followup,unscored_discovery,83dcb10ee38c9694ac0f455ec55a62f2be3b8a14,True,False,,False,,NOT_RUN,beshuaxian/higgsfield-seedance2-jineng,False
+bridgmain11/Otsav-Dj-Full-Version,media-search-followup,unscored_discovery,315281d6131045084e585703615772f49eb5c41c,True,True,MIT,False,,NOT_RUN,bridgmain11/Otsav-Dj-Full-Version,False
+brycedrennan/imaginAIry,media-search-followup,unscored_discovery,1c79db1d78f480bb37641f266e9ac1489a46fe8c,True,True,MIT,False,,NOT_RUN,brycedrennan/imaginAIry,False
+bytedance/LatentSync,media-search-followup,unscored_discovery,a229c3948406bc2cf6eaf4873e662e70c6a04746,True,True,Apache-2.0,False,,NOT_RUN,bytedance/LatentSync,False
+cclank/lanshu-awesome-ai-video-kit,media-search-followup,unscored_discovery,f4c1bbd09800a0002a169465d14060e3b6a88f1e,True,True,MIT,False,,NOT_RUN,cclank/lanshu-awesome-ai-video-kit,False
+cemeka497/Dragon-Professional-Individual-Full-Version,media-search-followup,unscored_discovery,55ec23f3b813a43dc7e4eec0d18538f4e34923af,True,True,MIT,False,,NOT_RUN,cemeka497/Dragon-Professional-Individual-Full-Version,False
+cjpais/Handy,media-search-followup,unscored_discovery,9e57a0d7929fcc6417ea0d6e54c1b57f62635edd,True,True,MIT,False,,NOT_RUN,cjpais/Handy,False
+CollaborativeVideoDiffusion/CVD,media-search-followup,unscored_discovery,107f299bd75c7a37158c52427de473cec86c649a,True,True,Apache-2.0,False,,NOT_RUN,CollaborativeVideoDiffusion/CVD,False
+CorentinJ/Real-Time-Voice-Cloning,media-search-followup,unscored_discovery,890f3a03187195b9829db2079b75c2ba2ab0405c,True,True,MIT,False,,NOT_RUN,CorentinJ/Real-Time-Voice-Cloning,False
+cth9191/motion-design,media-search-followup,unscored_discovery,b1a35f44c069591476d0dbd8a11559ce843a3890,True,False,,False,,NOT_RUN,cth9191/motion-design,False
+customdiffusion360/custom-diffusion360,media-search-followup,unscored_discovery,1a23f972274e7275fdeaa3197f5d22118aa228bb,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,customdiffusion360/custom-diffusion360,False
+DanielSWolf/rhubarb-lip-sync,media-search-followup,unscored_discovery,9b9573cd21b253c9ba58739bbd1aa0b50b991bff,False,True,MIT,False,,NOT_RUN,DanielSWolf/rhubarb-lip-sync,False
+darshmahadevia/Voco,media-search-followup,unscored_discovery,6c9a796e10604d2b8e081e549af5abdbce1c8f11,True,True,MIT,False,,NOT_RUN,darshmahadevia/Voco,False
+derafeha249/Edimakor,media-search-followup,unscored_discovery,0f131665bb77873a25de906624f9d580a9965bee,True,True,MIT,False,,NOT_RUN,derafeha249/Edimakor,False
+DrewThomasson/ebook2audiobook,media-search-followup,unscored_discovery,0a98ac313ec43a470ee1e5feb13dd881ffb3e969,True,True,Apache-2.0,False,,NOT_RUN,DrewThomasson/ebook2audiobook,False
+duixcom/Duix-Avatar,media-search-followup,unscored_discovery,1328feb5871448c8fa3d0e45b3bbc87e7c1d458a,True,True,UNKNOWN,False,,NOT_RUN,duixcom/Duix-Avatar,False
+EnVision-Research/DualCamCtrl,media-search-followup,unscored_discovery,f4f064f39c84b0e9597e99979ec56361570d8bef,True,False,,False,,NOT_RUN,EnVision-Research/DualCamCtrl,False
+Eyeline-Labs/Virtually-Being,media-search-followup,unscored_discovery,9663b2c4bdfd2a17a3551ed6171cd83206ae0491,True,True,Apache-2.0,False,,NOT_RUN,Eyeline-Labs/Virtually-Being,False
+FlexMonkey/MetalKit-ReactionDiffusion,media-search-followup,unscored_discovery,878b7fe5d5cff708392b6e52bb638002e3f51b40,True,False,,False,,NOT_RUN,FlexMonkey/MetalKit-ReactionDiffusion,False
+fudan-zvg/WoVoGen,media-search-followup,unscored_discovery,fc6f134557af6aa1b8108f7dc7af879cec9220f1,True,True,Apache-2.0,False,,NOT_RUN,fudan-zvg/WoVoGen,False
+gulucaptain/CameraNoise,media-search-followup,unscored_discovery,58fdd394eafd41065b0c47606a2ea936bf2eeafc,True,False,,False,,NOT_RUN,gulucaptain/CameraNoise,False
+hasanarasinal/ai-video-generation-cost-forecast,media-search-followup,unscored_discovery,ff472a5ee46b0fccf9d82bfac500cf711921492e,True,False,,False,,NOT_RUN,hasanarasinal/ai-video-generation-cost-forecast,False
+HBAI-Ltd/Toonflow-app,media-search-followup,unscored_discovery,d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d,True,True,MIT,False,,NOT_RUN,HBAI-Ltd/Toonflow-app,False
+hecomi/uLipSync,media-search-followup,unscored_discovery,060587907655235dba86dc7052d0b395c8ecd840,True,True,MIT,False,,NOT_RUN,hecomi/uLipSync,False
+higgsfield-ai/cli,media-search-followup,unscored_discovery,dc7e2d2eac0b1fdad255de24d87552d1ba479037,True,True,MIT,False,,NOT_RUN,higgsfield-ai/cli,False
+higgsfield-ai/higgsfield,media-search-followup,unscored_discovery,d12a36e66024a93d33ec61826a77d5a346c16869,True,True,Apache-2.0,False,,NOT_RUN,higgsfield-ai/higgsfield,False
+HKUDS/ViMax,media-search-followup,unscored_discovery,fd4b72e7731be6e5f88486206d25ea59849b0285,True,True,MIT,False,,NOT_RUN,HKUDS/ViMax,False
+ipsin/discokeyframe,media-search-followup,unscored_discovery,ce5dc196aebace8223c64bef2c02a6d6a637445a,True,True,MIT,False,,NOT_RUN,ipsin/discokeyframe,False
+jamiepine/voicebox,media-search-followup,unscored_discovery,8af7efe62fab8d33e2a5dfbedabaa45f68a5184f,True,True,MIT,False,,NOT_RUN,jamiepine/voicebox,False
+jinwoo1601/VoXR-Speech-Recognition,media-search-followup,unscored_discovery,66610ded6c4b8af8ebf4e6b52b0ccd739200d786,True,True,Apache-2.0; UNKNOWN,False,,NOT_RUN,jinwoo1601/VoXR-Speech-Recognition,False
+joonson/syncnet_python,media-search-followup,unscored_discovery,907c0b579c2e2d83f0eae1b2ac9e720cde4e5623,True,True,MIT,False,,NOT_RUN,joonson/syncnet_python,False
+k1ngofdarks/Automatic-Speech-Recognition,media-search-followup,unscored_discovery,f851b7eac9e4c1db6a168b2f9e1ee93099c3e619,True,True,MIT,False,,NOT_RUN,k1ngofdarks/Automatic-Speech-Recognition,False
+k2-fsa/OmniVoice,media-search-followup,unscored_discovery,08be0b4ccbac3e13e374e86fbfead4b4cac343e2,True,True,Apache-2.0,False,,NOT_RUN,k2-fsa/OmniVoice,False
+kingofarms989/Mgba,media-search-followup,unscored_discovery,da6ed9a658a73709c6ba029a7f591e9714903ff1,True,True,MIT,False,,NOT_RUN,kingofarms989/Mgba,False
+kisonecat/times-tables-outloud,media-search-followup,unscored_discovery,eec944bb68322666d697c538d1a64afc8f2066b0,True,False,,False,,NOT_RUN,kisonecat/times-tables-outloud,False
+krizaka/orazaka-worker-media,media-search-followup,unscored_discovery,6517baf10119838906b5705b3e415dae8a087fc7,True,True,Apache-2.0,False,,NOT_RUN,krizaka/orazaka-worker-media,False
+MeiGen-AI/InfiniteTalk,media-search-followup,unscored_discovery,50aa0a94184315407a991ae804d9b58d6d311ba8,True,True,Apache-2.0,False,,NOT_RUN,MeiGen-AI/InfiniteTalk,False
+met4citizen/TalkingHead,media-search-followup,unscored_discovery,2afe6d79779313db8909badebf46f9805a6c7b70,True,True,MIT,False,,NOT_RUN,met4citizen/TalkingHead,False
+moonshine-ai/moonshine,media-search-followup,unscored_discovery,234f60faa0eb388b01cdf7e60aca232af37aefda,True,True,MIT,False,,NOT_RUN,moonshine-ai/moonshine,False
+mozilla/DeepSpeech,media-search-followup,unscored_discovery,6913ae817bc09159c64def7f130708682c197ba3,True,True,MPL-2.0,False,,NOT_RUN,mozilla/DeepSpeech,True
+open-mmlab/mmagic,media-search-followup,unscored_discovery,0a560bba9b79ebe78574e1d4cbbdd0e798e63568,True,True,Apache-2.0,False,,NOT_RUN,open-mmlab/mmagic,False
+orylite/lindyson-ai,media-search-followup,unscored_discovery,7017cd9b18578a43760249b05a93104a25443406,True,True,Apache-2.0,False,,NOT_RUN,orylite/lindyson-ai,False
+OSideMedia/higgsfield-ai-prompt-skill,media-search-followup,unscored_discovery,70754977d1884794963ac0a748eaaa85b6e9c82a,True,True,MIT,False,,NOT_RUN,OSideMedia/higgsfield-ai-prompt-skill,False
+PaddlePaddle/PaddleSpeech,media-search-followup,unscored_discovery,6b25a400008d393f9c3af837b3c692b17f29ee1a,True,True,Apache-2.0,False,,NOT_RUN,PaddlePaddle/PaddleSpeech,False
+rany2/edge-tts,media-search-followup,unscored_discovery,bd44c1d1aaebdc1db7f47456ee12431b42ec7cac,True,True,MIT,False,,NOT_RUN,rany2/edge-tts,False
+rediumvex/ai-video-generator-claude,media-search-followup,unscored_discovery,ffdad7d515f6579780749d1a90d9ed0945e3a4ac,True,True,MIT,False,,NOT_RUN,rediumvex/ai-video-generator-claude,False
+SegFault42/HeliosGen,media-search-followup,unscored_discovery,99dd5b12c05d5e883e03e9c9ea5a8e88120bf273,True,False,,False,,NOT_RUN,SegFault42/HeliosGen,False
+ShmuelRonen/ComfyUI-LatentSyncWrapper,media-search-followup,unscored_discovery,360d5283d7276aee68b4237b1387e594e4ce640e,True,False,,False,,NOT_RUN,ShmuelRonen/ComfyUI-LatentSyncWrapper,False
+Shoebaislam/Technician-reviewed-vehicle-inspection-reporting-with-local-speech-recognition-and-n8n-automation,media-search-followup,source_revision_unresolved,,False,False,,False,,NOT_RUN,Shoebaislam/Technician-reviewed-vehicle-inspection-reporting-with-local-speech-recognition-and-n8n-automation,False
+snap-research/ac3d,media-search-followup,unscored_discovery,fe40a8d2dee163b951e6405d8cf1a2c14ecc68eb,True,True,Apache-2.0,False,,NOT_RUN,snap-research/ac3d,False
+timoncool/speech-studio,media-search-followup,unscored_discovery,7c74a3e5c183e4e3fb04c52eb5bcb43c54d5acca,True,True,MIT,False,,NOT_RUN,timoncool/speech-studio,False
+uni-halle/ts-api,media-search-followup,unscored_discovery,9d50fe6d1d4d59f0b7aa6756b0b96385a68fc448,True,False,,False,,NOT_RUN,uni-halle/ts-api,False
+valetchampions/Zune-Full-Version-Unlocked,media-search-followup,unscored_discovery,222613670ef5189e3ed04c9068db743dcf66b502,True,True,MIT,False,,NOT_RUN,valetchampions/Zune-Full-Version-Unlocked,False
+wide-trace/open-higgsfield,media-search-followup,unscored_discovery,b16a0efe4d7e2707b56f8ccb02387fd2a9d2eddf,True,False,,False,,NOT_RUN,wide-trace/open-higgsfield,False
+wladradchenko/wunjo.wladradchenko.ru,media-search-followup,unscored_discovery,8ed05f3e9e9b07a3c395d066a4b1e37730bab1a6,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,wladradchenko/wunjo.wladradchenko.ru,False
+ZGCTroy/CamI2V,media-search-followup,unscored_discovery,c5d7b2fcdeb89a1ce9a0ef376909d9539b95639f,True,True,MIT,False,,NOT_RUN,ZGCTroy/CamI2V,False
+Zz-ww/SadTalker-Video-Lip-Sync,media-search-followup,unscored_discovery,131466ed3b544b403d3fdaa1f79213562d3a17fc,True,False,,False,,NOT_RUN,Zz-ww/SadTalker-Video-Lip-Sync,False
+chroma-core/chroma,memory,unscored_discovery,fd725c5cd3b2919dc733cca517ecb4062286cb16,True,True,Apache-2.0,False,,NOT_RUN,chroma-core/chroma,False
+deepset-ai/haystack,memory,initial_documentary_sample,aca9fc25d9d20816facdb9bd347d7eae7636d4b2,True,True,Apache-2.0; LicenseRef-Manual-Review,True,66,NOT_RUN,deepset-ai/haystack,False
+facebookresearch/faiss,memory,unscored_discovery,a55e0b2af6fc5c26c68cae363c6e4c734f0f2981,True,True,MIT,False,,NOT_RUN,facebookresearch/faiss,False
+getzep/graphiti,memory,unscored_discovery,d50741d1bf463cbe3859eb73914cbff1b66839e6,True,True,Apache-2.0,False,,NOT_RUN,getzep/graphiti,False
+HKUDS/LightRAG,memory,unscored_discovery,aaebfe1bb8d55deb6a4304d357a3bf4c92fcd40a,True,True,MIT,False,,NOT_RUN,HKUDS/LightRAG,False
+infiniflow/ragflow,memory,unscored_discovery,26ec6912865fa0553f0d3ad2f30b887c7966c873,True,True,Apache-2.0,False,,NOT_RUN,infiniflow/ragflow,False
+letta-ai/letta,memory,unscored_discovery,5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a,True,True,Apache-2.0,False,,NOT_RUN,letta-ai/letta,False
+mem0ai/mem0,memory,unscored_discovery,0724291bd864cf807e88ee8981c8226644e8fb42,True,True,Apache-2.0,False,,NOT_RUN,mem0ai/mem0,False
+milvus-io/milvus,memory,unscored_discovery,1306ae0816245f79e2b6137e66e4f90d55a9fa6e,True,True,Apache-2.0,False,,NOT_RUN,milvus-io/milvus,False
+pgvector/pgvector,memory,initial_documentary_sample,f37c13f68b57d2c3472b2214fbcff699d6d34876,True,True,PostgreSQL,True,65,NOT_RUN,pgvector/pgvector,False
+qdrant/fastembed,memory,unscored_discovery,de502ca83baa2b81922cb5a46acf689f5e2c72a1,True,True,Apache-2.0,False,,NOT_RUN,qdrant/fastembed,False
+qdrant/qdrant,memory,initial_documentary_sample,016542aa5deb6c66380bb137badf73d54f742bde,True,True,Apache-2.0,True,66,NOT_RUN,qdrant/qdrant,False
+run-llama/llama_index,memory,initial_documentary_sample,619d74664e8404612038bc15a1a40c686037277c,True,True,MIT,True,69,NOT_RUN,run-llama/llama_index,False
+stanford-oval/storm,memory,unscored_discovery,fb951af7744dab086e34962e9bc6fe878e145f83,True,True,MIT,False,,NOT_RUN,stanford-oval/storm,False
+topoteretes/cognee,memory,unscored_discovery,f154b32a9e544dac73e7ddf2010327cf9988edcd,True,True,Apache-2.0,False,,NOT_RUN,topoteretes/cognee,False
+VectifyAI/PageIndex,memory,unscored_discovery,216d7c1f996a7c43ccd1168b31a541c83cd6e3bf,True,True,MIT,False,,NOT_RUN,VectifyAI/PageIndex,False
+weaviate/weaviate,memory,unscored_discovery,3ea41a468974661a97097b41e71493cfa11fd291,True,True,LicenseRef-Manual-Review; BSD family (inspect clause count),False,,NOT_RUN,weaviate/weaviate,False
+zilliztech/fastembed,memory,address_unresolved,,False,False,,False,,NOT_RUN,zilliztech/fastembed,False
+BentoML/BentoML,models,unscored_discovery,517b343b81aeb0b01bbd908e58e53ad9c12ef7eb,True,True,Apache-2.0,False,,NOT_RUN,BentoML/BentoML,False
+BerriAI/litellm,models,unscored_discovery,46913be92b785f7cb3cbc0cdc9dde354572cbb2f,True,True,MIT core with separately licensed enterprise scope; BSD family (inspect clause count),False,,NOT_RUN,BerriAI/litellm,False
+ggml-org/llama.cpp,models,initial_documentary_sample,b76b13379d3b7d67ab0bc424516bb6fd2522bd8e,True,True,MIT,True,63,NOT_RUN,ggml-org/llama.cpp,False
+huggingface/text-generation-inference,models,unscored_discovery,b4adbf2f6e2e721280bd0ea5f91d70f7d033f5ed,True,True,Apache-2.0,False,,NOT_RUN,huggingface/text-generation-inference,True
+huggingface/transformers,models,unscored_discovery,b0cdc61e607f39403e248b11c35aef4edfa7d216,True,True,Apache-2.0,False,,NOT_RUN,huggingface/transformers,False
+lm-sys/FastChat,models,unscored_discovery,587d5cfa1609a43d192cedb8441cac3c17db105d,True,True,Apache-2.0,False,,NOT_RUN,lm-sys/FastChat,False
+microsoft/BitNet,models,unscored_discovery,0b341e582afbf9e1011f24744b554c96a3477eb5,True,True,MIT,False,,NOT_RUN,microsoft/BitNet,False
+ml-explore/mlx,models,initial_documentary_sample,36969c094354086e15d2a327a9c50feb20b9cf11,True,True,MIT,True,63,NOT_RUN,ml-explore/mlx,False
+modular/modular,models,unscored_discovery,9211931f64da60717dc77886ad99496f52720517,True,True,Apache-2.0,False,,NOT_RUN,modular/modular,False
+NousResearch/hermes-agent,models,initial_documentary_sample,60f56a6b13c8eb9a9e088c6fc1165257c92f7e11,True,True,MIT,True,58,NOT_RUN,NousResearch/Hermes-Agent,False
+NVIDIA/TensorRT-LLM,models,unscored_discovery,cb7bb1fb4f957984bde862e4eb35a5fd13ba9159,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,NVIDIA/TensorRT-LLM,False
+ollama/ollama,models,initial_documentary_sample,e77773acc1761844f6a395ff8fc66392d7494e83,True,True,MIT,True,64,NOT_RUN,ollama/ollama,False
+sgl-project/sglang,models,initial_documentary_sample,877be2974aa151a984e52822c028276c2b1e9303,True,True,Apache-2.0,True,56,NOT_RUN,sgl-project/sglang,False
+vllm-project/vllm,models,initial_documentary_sample,f8460ef23659afd69046a81529ec2295e4c3f686,True,True,Apache-2.0,True,59,NOT_RUN,vllm-project/vllm,False
+xorbitsai/inference,models,unscored_discovery,0f915fb047dcfed869f92036b88158c271042248,True,True,Apache-2.0,False,,NOT_RUN,xorbitsai/inference,False
+docker/mcp-registry,module-registry,unscored_discovery,49b643ce3fc73e6ee80bb962719b6e2990e3d397,True,True,MIT text,False,,NOT_RUN,docker/mcp-registry,False
+modelcontextprotocol/registry,module-registry,unscored_discovery,11b7b0e274d518b6f449c5ee3518a6151d9848b9,True,True,Apache-2.0 text,False,,NOT_RUN,modelcontextprotocol/registry,False
+astral-sh/python-build-standalone,module-runtime,unscored_discovery,c253d7c31726bf560341ec186ae9064b588af291,True,True,MPL text; scope review required; BSD-family text; clause review required; manual classification required,False,,NOT_RUN,astral-sh/python-build-standalone,False
+prefix-dev/pixi,module-runtime,unscored_discovery,d14c4eebf60589b9d35df7b3a3ce207e703b1210,True,True,BSD-family text; clause review required,False,,NOT_RUN,prefix-dev/pixi,False
+modelcontextprotocol/ext-apps,module-ui,unscored_discovery,82221c0c8ce7661efa6771c9d461511b1650495f,True,True,Apache-2.0 text,False,,NOT_RUN,modelcontextprotocol/ext-apps,False
+Azure/artifact-signing-action,native-signing,unscored_discovery,29de24bf030cfee71b1ad0207ab4d69e74514a42,True,True,MIT text,False,,NOT_RUN,Azure/artifact-signing-action,False
+Arize-ai/phoenix,observability,unscored_discovery,c8846a8196e7ed6a9261ea6ca5aa4af3c010b3f9,True,True,Elastic-2.0,False,,NOT_RUN,Arize-ai/phoenix,False
+elastic/elasticsearch,observability,unscored_discovery,2e5bb9d2aa580efa7184614446cc2e0f768cc62e,False,True,Elastic-2.0,False,,NOT_RUN,elastic/elasticsearch,False
+getsentry/sentry,observability,unscored_discovery,1a439fe78432842d983fca217e976e4b23149dd0,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,getsentry/sentry,False
+grafana/grafana,observability,initial_documentary_sample,b5a80f066164bdbbe3738064683ffa6b834d0d3f,True,True,AGPL-3.0 (inspect exceptions/version),True,64,NOT_RUN,grafana/grafana,False
+helicone/helicone,observability,unscored_discovery,067d9290acb4f1fc9320e902fc67b4b399b50363,True,True,Apache-2.0,False,,NOT_RUN,helicone/helicone,False
+jaegertracing/jaeger,observability,unscored_discovery,e664e31780240e475377abc7dc1135df3d06cf8e,True,True,Apache-2.0,False,,NOT_RUN,jaegertracing/jaeger,False
+langfuse/langfuse,observability,unscored_discovery,0690d7d268c4cfa7bd7dfa3b1d7976bb37a9fd25,True,True,MIT,False,,NOT_RUN,langfuse/langfuse,False
+open-telemetry/opentelemetry-python,observability,initial_documentary_sample,c9777ab5ffac09f92a9fdc7f4de146fff2adaec6,True,True,Apache-2.0,True,70,NOT_RUN,open-telemetry/opentelemetry-python,False
+openlit/openlit,observability,initial_documentary_sample,d1156bd612f8c374ea4a6721607673bb2e9de82a,True,True,Apache-2.0,True,66,NOT_RUN,openlit/openlit,False
+opensearch-project/OpenSearch,observability,unscored_discovery,b1e2871ed77c8f1136f0bcdee14359c398c4db00,True,True,Apache-2.0,False,,NOT_RUN,opensearch-project/OpenSearch,False
+prometheus/prometheus,observability,initial_documentary_sample,466be3beb37099c28804608966f894b0dbad9993,True,True,Apache-2.0,True,69,NOT_RUN,prometheus/prometheus,False
+SigNoz/signoz,observability,unscored_discovery,60bc6ac96f7bd0dff8a1c2fd86948a535db411cc,True,True,MIT core with separately licensed enterprise scope,False,,NOT_RUN,SigNoz/signoz,False
+traceloop/openllmetry,observability,unscored_discovery,94d3f04bd9a7eec0804562fe8126c01a4f342b18,True,True,Apache-2.0,False,,NOT_RUN,traceloop/openllmetry,False
+flatpak/flatpak,os-package-management,unscored_discovery,ddbee83f4664b63f6e15ae563f52e4cc73ade185,True,True,LGPL text; version/scope review required,False,,NOT_RUN,flatpak/flatpak,False
+microsoft/winget-cli,os-package-management,unscored_discovery,3d9083c062c1e7a7086e05becb414d4e005e4ab6,True,True,MIT text,False,,NOT_RUN,microsoft/winget-cli,False
+aboutcode-org/scancode-toolkit,permission-supply-chain,unscored_discovery,022019a663e2b589cfda2aef37c22cda24d9bb83,True,False,,False,,NOT_RUN,aboutcode-org/scancode-toolkit,False
+cedar-policy/cedar,permission-supply-chain,unscored_discovery,bf172ec5359b1d542b80be95ceb5372bc694e414,True,True,Apache-2.0,False,,NOT_RUN,cedar-policy/cedar,False
+chainguard-dev/apko,permission-supply-chain,unscored_discovery,003bf8b88bd33594f48f6de6f1726281c65c9814,True,True,Apache-2.0,False,,NOT_RUN,chainguard-dev/apko,False
+CycloneDX/cyclonedx-cli,permission-supply-chain,unscored_discovery,b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246,True,True,Apache-2.0,False,,NOT_RUN,CycloneDX/cyclonedx-cli,False
+fsfe/reuse-tool,permission-supply-chain,unscored_discovery,76c399d9f941cdad857c88fcdda4fdc89cbca134,True,False,,False,,NOT_RUN,fsfe/reuse-tool,False
+github/codeql,permission-supply-chain,unscored_discovery,94ee16dff8fa2f5ebf73a96873421c82af0a559f,True,True,MIT,False,,NOT_RUN,github/codeql,False
+gitleaks/gitleaks,permission-supply-chain,unscored_discovery,b58d3f102cf3a2c84cb7f923d05c25c9b1aed84b,True,True,MIT,False,,NOT_RUN,gitleaks/gitleaks,False
+in-toto/in-toto,permission-supply-chain,unscored_discovery,e352b43ad7cb8915d84c36d791aa61346152a0a3,True,True,Apache-2.0,False,,NOT_RUN,in-toto/in-toto,False
+keycloak/keycloak,permission-supply-chain,unscored_discovery,28e42082bd322a29d49ec025eb54525da25a6f5a,True,True,Apache-2.0,False,,NOT_RUN,keycloak/keycloak,False
+open-policy-agent/opa,permission-supply-chain,unscored_discovery,fdf6011f57fdc25f01de1982e296bb402cf37625,True,True,Apache-2.0,False,,NOT_RUN,open-policy-agent/opa,False
+openfga/openfga,permission-supply-chain,unscored_discovery,fb8e7df866742a0c947e3066919ee59ac9e70eea,True,True,Apache-2.0,False,,NOT_RUN,openfga/openfga,False
+ory/kratos,permission-supply-chain,unscored_discovery,b86338da04a040247a07f46100a86dcfb3875909,True,True,Apache-2.0,False,,NOT_RUN,ory/kratos,False
+ossf/package-analysis,permission-supply-chain,unscored_discovery,c5c45008da694036d701ba76fe9567fc8a5b9675,True,True,Apache-2.0,False,,NOT_RUN,ossf/package-analysis,False
+Permify/permify,permission-supply-chain,unscored_discovery,43ce9031bea71957faded91f35bebb91d7ae5e96,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,Permify/permify,False
+pypa/pip-audit,permission-supply-chain,unscored_discovery,828e77a4d4aa6bee8d315681db6928771d951a7c,True,True,Apache-2.0,False,,NOT_RUN,pypa/pip-audit,False
+semgrep/semgrep,permission-supply-chain,unscored_discovery,51602ad27f09ef9342a5620601de5ef8f572fbc6,True,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,semgrep/semgrep,False
+sigstore/rekor,permission-supply-chain,unscored_discovery,774b191f9f761b3def5808bcd54b48ad88de5f89,True,True,Apache-2.0,False,,NOT_RUN,sigstore/rekor,False
+slsa-framework/slsa-github-generator,permission-supply-chain,unscored_discovery,bb91a05077afa6601a3d7538c4cbbdbf0abe7ed9,True,True,Apache-2.0,False,,NOT_RUN,slsa-framework/slsa-github-generator,False
+smallstep/certificates,permission-supply-chain,unscored_discovery,74be79c6f93c8f1b30212551b4d9d12fb12e48be,True,True,Apache-2.0,False,,NOT_RUN,smallstep/certificates,False
+spdx/tools-python,permission-supply-chain,unscored_discovery,cef432adee09dbff2eedf7e33e4aa8be7c11ccfd,True,True,Apache-2.0,False,,NOT_RUN,spdx/tools-python,False
+trufflesecurity/trufflehog,permission-supply-chain,unscored_discovery,feea7f94e0994eca3159e1edffa943fa60271021,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,trufflesecurity/trufflehog,False
+996icu/996.ICU,popularity-discovery,unscored_discovery,f5e35f48d769bf92ed885888bfe911d3e5b5a63d,True,True,LicenseRef-Manual-Review; UNKNOWN,False,,NOT_RUN,996icu/996.ICU,False
+addyosmani/agent-skills,popularity-discovery,unscored_discovery,aeac41d4d005999432bb7312f7ff06383a91d59d,True,True,MIT,False,,NOT_RUN,addyosmani/agent-skills,False
+affaan-m/ECC,popularity-discovery,unscored_discovery,76aaa77df6adc5b889e689007bf99b9a4f74af34,True,True,MIT,False,,NOT_RUN,affaan-m/ECC,False
+alibaba/page-agent,popularity-discovery,unscored_discovery,9eb6b6646500264d9034dd466a4270cb9fc1ef1e,True,True,MIT,False,,NOT_RUN,alibaba/page-agent,False
+anthropics/skills,popularity-discovery,unscored_discovery,dbd4588f9e1033efb41dad4bef2f7947c8993d44,True,False,,False,,NOT_RUN,anthropics/skills,False
+awesome-selfhosted/awesome-selfhosted,popularity-discovery,unscored_discovery,7244a1dd8f2011f4c062bd435a88fb6f089ea105,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,awesome-selfhosted/awesome-selfhosted,False
+codecrafters-io/build-your-own-x,popularity-discovery,unscored_discovery,aa17439b62f384511a5561ce308e9598b94d8989,True,False,,False,,NOT_RUN,codecrafters-io/build-your-own-x,False
+datawhalechina/hello-agents,popularity-discovery,unscored_discovery,36f583c233ea5cee4537ef93455702b55053af18,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,datawhalechina/hello-agents,False
+deepseek-ai/deepseek-harness,popularity-discovery,unscored_discovery,86a402200d95fecef4529d969836f1fe13c6cb0d,True,True,MIT,False,,NOT_RUN,deepseek-ai/deepseek-harness,False
+DietrichGebert/ponytail,popularity-discovery,unscored_discovery,84740e3d344b69b4a133201fa519eb37a62a2b2a,True,True,MIT,False,,NOT_RUN,DietrichGebert/ponytail,False
+DigitalPlatDev/FreeDomain,popularity-discovery,unscored_discovery,9c7c54110705760267b07b6e6a6d406d1172a1bf,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,DigitalPlatDev/FreeDomain,False
+donnemartin/system-design-primer,popularity-discovery,unscored_discovery,ae9bbd7b02d90b9866215de185217d33f39ab733,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,donnemartin/system-design-primer,False
+earendil-works/pi,popularity-discovery,unscored_discovery,4954d760504c11df9b2cbdc040346107b6a8153d,True,True,MIT,False,,NOT_RUN,earendil-works/pi,False
+earthtojake/text-to-cad,popularity-discovery,unscored_discovery,24573128ceaab564f497d7c12f995c41784c9539,True,True,MIT,False,,NOT_RUN,earthtojake/text-to-cad,False
+EbookFoundation/free-programming-books,popularity-discovery,unscored_discovery,012801db4af50ecba77cffa1378ee08e7ab9ad9c,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,EbookFoundation/free-programming-books,False
+f/prompts.chat,popularity-discovery,unscored_discovery,7a507e2afc6157f40295624b3e86596362e14368,True,True,UNKNOWN; LicenseRef-Manual-Review; MIT,False,,NOT_RUN,f/prompts.chat,False
+farion1231/cc-switch,popularity-discovery,unscored_discovery,0a8d064591461717947390715be4a8090fdc202d,True,True,MIT,False,,NOT_RUN,farion1231/cc-switch,False
+freeCodeCamp/freeCodeCamp,popularity-discovery,unscored_discovery,24d648f8fc58c29a4789ba2d476c10d835633e62,True,True,BSD family (inspect clause count),False,,NOT_RUN,freeCodeCamp/freeCodeCamp,False
+github/spec-kit,popularity-discovery,unscored_discovery,f6e72bc8523de8ec8368129cbdea78d45f27cef8,True,True,MIT,False,,NOT_RUN,github/spec-kit,False
+Graphify-Labs/graphify,popularity-discovery,unscored_discovery,10130e79ed9caf8f60d998073e097531eaa1a395,True,True,Apache-2.0; MIT,False,,NOT_RUN,Graphify-Labs/graphify,False
+hacksider/Deep-Live-Cam,popularity-discovery,unscored_discovery,a92427518a8bf89fee2432a9fccd0a61fb4c2654,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,hacksider/Deep-Live-Cam,False
+harry0703/MoneyPrinterTurbo,popularity-discovery,unscored_discovery,4b7b9657647bdb149715354269eec7e4dbad4a7a,True,True,MIT,False,,NOT_RUN,harry0703/MoneyPrinterTurbo,False
+heygen-com/hyperframes,popularity-discovery,initial_documentary_sample,cea8aa8a7dee9d669e47e4b488213008bbe305cd,True,True,Apache-2.0,True,63,NOT_RUN,heygen-com/hyperframes,False
+hiyouga/LlamaFactory,popularity-discovery,unscored_discovery,1fded918ac4723ac9966363f51ed4500866c5d1d,True,True,Apache-2.0,False,,NOT_RUN,hiyouga/LlamaFactory,False
+HKUDS/nanobot,popularity-discovery,unscored_discovery,31b193236f5fc272cca256b58c1c28ec6bcfac68,True,True,MIT,False,,NOT_RUN,HKUDS/nanobot,False
+JuliusBrussee/caveman,popularity-discovery,unscored_discovery,d262ab3882952a59312ff3537cd86d894523c5ab,True,True,Apache-2.0; MIT,False,,NOT_RUN,JuliusBrussee/caveman,False
+jwasham/coding-interview-university,popularity-discovery,unscored_discovery,717298bf219a30d7fb0671285c5f057b1bb74b27,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,jwasham/coding-interview-university,False
+koala73/worldmonitor,popularity-discovery,unscored_discovery,6fb284fa2af8224859ac00b42a10657714b1b14f,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,koala73/worldmonitor,False
+langgenius/dify,popularity-discovery,unscored_discovery,310ce87f9d78313966e5d17753ad36b9725b280b,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,langgenius/dify,False
+mattpocock/skills,popularity-discovery,unscored_discovery,49dd158d1076134a641b33efb035946536778336,True,True,MIT,False,,NOT_RUN,mattpocock/skills,False
+microsoft/generative-ai-for-beginners,popularity-discovery,unscored_discovery,d45da91247ecb91e5346caacdd5a5fb9c5b9d85e,True,True,MIT,False,,NOT_RUN,microsoft/generative-ai-for-beginners,False
+mlabonne/llm-course,popularity-discovery,unscored_discovery,7abd96e8284bfae232048fdb77b52397a2114847,True,True,Apache-2.0,False,,NOT_RUN,mlabonne/llm-course,False
+msitarzewski/agency-agents,popularity-discovery,unscored_discovery,652b2692f8d8ec2b1f1a38e559073e287dfdc469,True,True,MIT,False,,NOT_RUN,msitarzewski/agency-agents,False
+multica-ai/andrej-karpathy-skills,popularity-discovery,unscored_discovery,2c606141936f1eeef17fa3043a72095b4765b9c2,True,False,,False,,NOT_RUN,multica-ai/andrej-karpathy-skills,False
+nexu-io/open-design,popularity-discovery,unscored_discovery,7abd6fc2b11987c3940eb4ffc461478ff37c0b33,True,True,Apache-2.0,False,,NOT_RUN,nexu-io/open-design,False
+nilbuild/developer-roadmap,popularity-discovery,unscored_discovery,1252af9a2a2e1006bba6d933dd39e294c15259c1,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,nilbuild/developer-roadmap,False
+obra/superpowers,popularity-discovery,unscored_discovery,bb92a77741419a4ab5f06e711a283343f1ada0c3,True,True,MIT,False,,NOT_RUN,obra/superpowers,False
+openclaw/openclaw,popularity-discovery,initial_documentary_sample,48737801f74d6b7aabb71ee10dcc5f0b19a8494d,True,True,MIT,True,62,NOT_RUN,openclaw/openclaw,False
+ossu/computer-science,popularity-discovery,unscored_discovery,33d44a44e3526ede8e862bf1ad50ae5ae7a2f112,True,True,MIT,False,,NOT_RUN,ossu/computer-science,False
+practical-tutorials/project-based-learning,popularity-discovery,unscored_discovery,4a680a837c99a3b2037f55f455bf9626fd134655,True,True,MIT,False,,NOT_RUN,practical-tutorials/project-based-learning,False
+public-apis/public-apis,popularity-discovery,unscored_discovery,065455eda4bec6b61984e98b85a585851f7b8cbd,True,True,MIT,False,,NOT_RUN,public-apis/public-apis,False
+punkpeye/awesome-mcp-servers,popularity-discovery,unscored_discovery,8a8b37d9a4c1c5e4fda88e6a56ba23d7755f6236,True,True,MIT,False,,NOT_RUN,punkpeye/awesome-mcp-servers,False
+ranxianglei/billion-context,popularity-discovery,unscored_discovery,6ee4a2ac98fddeb3106d1646faa433ae4d1bec41,True,True,MIT text plus additional product-attribution term; manual scope review,False,,NOT_RUN,ranxianglei/billion-context,False
+rasbt/LLMs-from-scratch,popularity-discovery,unscored_discovery,cdbd33e6d57a71e20ea31434841095fac50cecd8,True,True,Apache-2.0,False,,NOT_RUN,rasbt/LLMs-from-scratch,False
+rtk-ai/rtk,popularity-discovery,unscored_discovery,f16becacd2f40616839333b3e0e281e40a0bc823,True,True,Apache-2.0,False,,NOT_RUN,rtk-ai/rtk,False
+shadcn-ui/ui,popularity-discovery,unscored_discovery,c2477f311c19982ef6e246085438e6cfec3e35ea,True,True,MIT,False,,NOT_RUN,shadcn-ui/ui,False
+shareAI-lab/learn-claude-code,popularity-discovery,unscored_discovery,ce8f9f186058939da54c9d6fead78dfb5d0fd6c3,True,True,MIT,False,,NOT_RUN,shareAI-lab/learn-claude-code,False
+Shubhamsaboo/awesome-llm-apps,popularity-discovery,unscored_discovery,4bf51ab704fb2c5b3803cd5191b30d7dcdb51dc2,True,True,Apache-2.0,False,,NOT_RUN,Shubhamsaboo/awesome-llm-apps,False
+sindresorhus/awesome,popularity-discovery,unscored_discovery,bc98e517ddca672f55f9857d714fc3ea3c3540b2,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,sindresorhus/awesome,False
+Snailclimb/JavaGuide,popularity-discovery,unscored_discovery,7f5bcc7f7e45629d9b1d13de30c670aaee8db5de,True,True,Apache-2.0,False,,NOT_RUN,Snailclimb/JavaGuide,False
+supabase/supabase,popularity-discovery,unscored_discovery,991653aa36a727f009f72d75fc2388c135b4d242,True,True,Apache-2.0,False,,NOT_RUN,supabase/supabase,False
+TauricResearch/TradingAgents,popularity-discovery,unscored_discovery,1394a3f72aa4393e1a98f51b382434c4b4c2d972,True,True,Apache-2.0,False,,NOT_RUN,TauricResearch/TradingAgents,False
+tensorflow/tensorflow,popularity-discovery,unscored_discovery,d36d9ee22b674850ccfee310e289f981b5b3773d,True,True,Apache-2.0,False,,NOT_RUN,tensorflow/tensorflow,False
+TheAlgorithms/Python,popularity-discovery,unscored_discovery,e1a2a8b016001309a73d5fec4818c35cca139795,True,True,MIT,False,,NOT_RUN,TheAlgorithms/Python,False
+thedotmack/claude-mem,popularity-discovery,unscored_discovery,b8fc2ef9bab0dd1438d6cc8699c6884445ad409b,True,True,Apache-2.0,False,,NOT_RUN,thedotmack/claude-mem,False
+torvalds/linux,popularity-discovery,unscored_discovery,62f482ff73bf3ae88b0c899115527752cf9cbf13,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,torvalds/linux,False
+trimstray/the-book-of-secret-knowledge,popularity-discovery,unscored_discovery,7d37069a361d3fd9f214480755f7969744e866fa,True,True,MIT,False,,NOT_RUN,trimstray/the-book-of-secret-knowledge,False
+tt-a1i/archify,popularity-discovery,unscored_discovery,d0c8c7e9f4e06f303389f804208d387f27019ef5,True,True,MIT,False,,NOT_RUN,tt-a1i/archify,False
+ultraworkers/claw-code,popularity-discovery,unscored_discovery,6d7412d958ebc338722e112d08c5e46d7cd458e1,True,True,MIT,False,,NOT_RUN,ultraworkers/claw-code,False
+unslothai/unsloth,popularity-discovery,unscored_discovery,6d7afe0587da67a30a403cec730720cd4b30bcb4,True,True,AGPL-3.0 (inspect exceptions/version); Apache-2.0,False,,NOT_RUN,unslothai/unsloth,False
+vinta/awesome-python,popularity-discovery,unscored_discovery,4b445a2cadbc49155eb65e14b2fdf59917e415ef,True,True,UNKNOWN,False,,NOT_RUN,vinta/awesome-python,False
+VoltAgent/awesome-design-md,popularity-discovery,unscored_discovery,3b605329240ce735b510037cca322f1831fdd7f8,True,True,MIT,False,,NOT_RUN,VoltAgent/awesome-design-md,False
+vuejs/vue,popularity-discovery,unscored_discovery,9e88707940088cb1f4cd7dd210c9168a50dc347c,True,True,MIT,False,,NOT_RUN,vuejs/vue,False
+x1xhlol/system-prompts-and-models-of-ai-tools,popularity-discovery,unscored_discovery,162db92f54d717d8ebd12292e155aeef32bb4b3c,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,x1xhlol/system-prompts-and-models-of-ai-tools,False
+x64dbg/x64dbg,popularity-discovery,unscored_discovery,4fc92664f0ea63136c07c68ea848a994ea2749c6,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,x64dbg/x64dbg,False
+open-webui/mcpo,protocol-adapter,unscored_discovery,788ff92e5288a899a743a252edd5748f4ad4ab1f,True,True,MIT text,False,,NOT_RUN,open-webui/mcpo,False
+ComposioHQ/composio,protocols,unscored_discovery,79c2d1d283984eeea3bd402782070667f14e4f66,True,True,MIT,False,,NOT_RUN,ComposioHQ/composio,False
+encode/httpx,protocols,unscored_discovery,b5addb64f0161ff6bfe94c124ef76f6a1fba5254,True,True,BSD family (inspect clause count),False,,NOT_RUN,encode/httpx,False
+expressjs/express,protocols,unscored_discovery,a419aa7350389a275ab45fde2e849ed1f02449ef,True,True,MIT,False,,NOT_RUN,expressjs/express,False
+fastify/fastify,protocols,unscored_discovery,37df44a421817e7bb048fce834bf691abb0999d6,True,True,MIT,False,,NOT_RUN,fastify/fastify,False
+get-convex/agent,protocols,unscored_discovery,1ca51761534a9ecfb6ecff7563a81a73b1fcab71,True,True,Apache-2.0,False,,NOT_RUN,get-convex/agent,False
+grpc/grpc,protocols,unscored_discovery,3d72bc5824e97920d2fe13fa224f7749ffd9ab31,True,True,Apache-2.0,False,,NOT_RUN,grpc/grpc,False
+microsoft/mcp-for-beginners,protocols,unscored_discovery,988d27caf01c030d028215544cd52a94fb52f61b,True,True,MIT,False,,NOT_RUN,microsoft/mcp-for-beginners,False
+modelcontextprotocol/python-sdk,protocols,initial_documentary_sample,754254c08fe1c3eda18b69da3d336106fe8d72d6,True,True,MIT,True,70,NOT_RUN,modelcontextprotocol/python-sdk,False
+modelcontextprotocol/servers,protocols,unscored_discovery,bbb701e7ac1e57f3edd1c2836b94c5457eaf7b9c,True,True,Apache-2.0,False,,NOT_RUN,modelcontextprotocol/servers,False
+modelcontextprotocol/typescript-sdk,protocols,initial_documentary_sample,9bc40e903fde15534ec06ff4c1347d47000dbe16,True,True,Apache-2.0,True,66,NOT_RUN,modelcontextprotocol/typescript-sdk,False
+OpenAPITools/openapi-generator,protocols,unscored_discovery,7cbff76f02287dd76df6baa53e9c95656d735605,True,True,Apache-2.0,False,,NOT_RUN,OpenAPITools/openapi-generator,False
+PrefectHQ/fastmcp,protocols,unscored_discovery,e2fcc412001ff7414095c5dc282f94c70299a612,True,True,Apache-2.0,False,,NOT_RUN,PrefectHQ/fastmcp; jlowin/fastmcp,False
+psf/requests,protocols,unscored_discovery,611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60,True,True,Apache-2.0,False,,NOT_RUN,psf/requests,False
+punkpeye/fastmcp,protocols,unscored_discovery,913aa06de58abc651a64382fe2c17ccf7f1e85cf,True,True,MIT,False,,NOT_RUN,punkpeye/fastmcp,False
+KoljaB/RealtimeSTT,realtime-voice,unscored_discovery,5b0764226720a8568b029897e4dd47235ce5504f,True,True,MIT,False,,NOT_RUN,KoljaB/RealtimeSTT,False
+KoljaB/RealtimeTTS,realtime-voice,unscored_discovery,ea9005cd0a13c8d1e274d0e990546dd949cc9548,True,True,MIT,False,,NOT_RUN,KoljaB/RealtimeTTS,False
+pyannote/pyannote-core,realtime-voice,unscored_discovery,f8f0465a6d9f08843b8b498e2296601d1cc2fe28,True,True,MIT,False,,NOT_RUN,pyannote/pyannote-core,False
+snakers4/silero-vad,realtime-voice,unscored_discovery,1e261b036686cd0017d500ee96acd1c4ba572a9d,True,True,MIT,False,,NOT_RUN,snakers4/silero-vad,False
+speechmatics/speechmatics-python-sdk,realtime-voice,unscored_discovery,1efa9a1a2ccc9658a3b6fdd4a0e0437057494052,True,True,MIT,False,,NOT_RUN,speechmatics/speechmatics-python-sdk,False
+TEN-framework/ten-framework,realtime-voice,unscored_discovery,82d2cd560e8177b0972fc37a9127e73731ffd9a5,True,True,Apache-2.0,False,,NOT_RUN,TEN-framework/ten-framework,False
+TEN-framework/ten-vad,realtime-voice,unscored_discovery,d68ab71c8d5fbd8f98e97ae7c9986af76b5d72b1,True,True,Apache-2.0,False,,NOT_RUN,TEN-framework/ten-vad,False
+wiseman/py-webrtcvad,realtime-voice,unscored_discovery,e283ca41df3a84b0e87fb1f5cb9b21580a286b09,True,True,MIT,False,,NOT_RUN,wiseman/py-webrtcvad,False
+agentgateway/agentgateway,registry-gateway,unscored_discovery,66d25b7e63452af4938112a8bb9b99cb2bf1d8de,True,True,Apache-2.0 text,False,,NOT_RUN,agentgateway/agentgateway,False
+agentic-community/mcp-gateway-registry,registry-gateway,unscored_discovery,786452322edcae3ea795f8e60740fe1ca65ba735,True,True,Apache-2.0 text,False,,NOT_RUN,agentic-community/mcp-gateway-registry,False
+archestra-ai/archestra,registry-gateway,unscored_discovery,b406a2f5ccd3e69883cd6b90c71b728fa65ba1a6,True,True,manual classification required; AGPL text; version/scope review required,False,,NOT_RUN,archestra-ai/archestra,False
+docker/mcp-gateway,registry-gateway,unscored_discovery,a34df45d4ec0e941a9853ad768c4f6cd818966b3,True,True,MIT text,False,,NOT_RUN,docker/mcp-gateway,False
+IBM/mcp-context-forge,registry-gateway,unscored_discovery,e84e8bb9dbe55c8f54cfd9b8011284e826f8276e,True,True,Apache-2.0 text; Public-domain/Unlicense text; scope review required,False,,NOT_RUN,IBM/mcp-context-forge,False
+stacklok/toolhive,registry-gateway,unscored_discovery,87ed79d94429279aa65060872cc052358626ed96,True,True,Apache-2.0 text,False,,NOT_RUN,stacklok/toolhive,False
+HKUDS/DeepTutor,research-assistant,unscored_discovery,6cf793bd868ba5ecbe64722936d4be8fab5a01df,True,True,Apache-2.0 text,False,,NOT_RUN,HKUDS/DeepTutor,False
+angr/angr,reverse,unscored_discovery,ae9f5786fd94410ca400063bf21719aa8b564d3e,True,True,LicenseRef-Manual-Review; BSD family (inspect clause count),False,,NOT_RUN,angr/angr,False
+ast-grep/ast-grep,reverse,initial_documentary_sample,14934d690a547abce8576baff9a1856a10ae7da8,True,True,MIT,True,69,NOT_RUN,ast-grep/ast-grep,False
+capstone-engine/capstone,reverse,unscored_discovery,c3fbb86aa1232e3777b38e294d864a5c9fbe71c1,True,False,,False,,NOT_RUN,capstone-engine/capstone,False
+frida/frida,reverse,unscored_discovery,b9239753e4d496a8885145e98351bbcdc60d8d51,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,frida/frida,False
+jadx-decompiler/jadx,reverse,address_unresolved,,False,False,,False,,NOT_RUN,jadx-decompiler/jadx,False
+mitmproxy/mitmproxy,reverse,initial_documentary_sample,77355977e5ea540b51ed029a40ed1dc2f1c2ba7b,True,True,MIT,True,65,NOT_RUN,mitmproxy/mitmproxy,False
+NationalSecurityAgency/ghidra,reverse,initial_documentary_sample,61f664ff30d9bd7d5501956751d46553728c5f6b,True,True,Apache-2.0,True,65,NOT_RUN,NationalSecurityAgency/ghidra,False
+radareorg/radare2,reverse,unscored_discovery,ce9526c60f66848ea0b0ef400b8bae3f6f9ac318,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,radareorg/radare2,False
+rizinorg/cutter,reverse,unscored_discovery,d7f11b220884a6cc8549da955b744bd318645103,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,rizinorg/cutter,False
+rizinorg/rizin,reverse,unscored_discovery,ed5bdc944cf4926b3fb16ce9d8d5401a670f1b89,True,True,GPL (inspect exact version/exceptions); LGPL (inspect exact version/exceptions),False,,NOT_RUN,rizinorg/rizin,False
+SeanPesce/JSRETK,reverse,unscored_discovery,f66cd21e6ad8af2a27ab5b2fc90b9c119dd2ba68,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,SeanPesce/JSRETK,False
+skylot/jadx,reverse,unscored_discovery,c4c45fde27b4f3386dc2ff016ff187229a60a716,True,True,Apache-2.0,False,,NOT_RUN,skylot/jadx,False
+SteakEnthusiast/Supplementary-AST-Based-Deobfuscation-Materials,reverse,unscored_discovery,37092955c2ad361364a2162149df9119045de3d0,True,True,MIT,False,,NOT_RUN,SteakEnthusiast/Supplementary-AST-Based-Deobfuscation-Materials,False
+tree-sitter/tree-sitter,reverse,initial_documentary_sample,8ca548849fc8dbefd699edcec26546bb14112820,True,True,MIT,True,69,NOT_RUN,tree-sitter/tree-sitter,False
+wheresryan22/anatomy,reverse,unscored_discovery,e9488296a44211c42701ff71705b7901470ec78f,True,True,MIT,False,,NOT_RUN,wheresryan22/anatomy,False
+Xmader/retidy,reverse,unscored_discovery,6990b7f2514b905a6a2422cbacab3a2624856bf4,True,True,MIT,False,,NOT_RUN,Xmader/retidy,False
+bulletphysics/bullet3,robotics,unscored_discovery,d3afe76132fc76b0f9b2359cbaef47a3766e7fbb,True,True,UNKNOWN,False,,NOT_RUN,bulletphysics/bullet3,False
+google-deepmind/mujoco,robotics,unscored_discovery,0d1406da61670d085bb0bcec47b502899b188a03,True,True,Apache-2.0,False,,NOT_RUN,google-deepmind/mujoco,False
+huggingface/lerobot,robotics,unscored_discovery,297774fca4e3ad0aa34e7425fbf937111637e77b,True,True,Apache-2.0,False,,NOT_RUN,huggingface/lerobot,False
+moveit/moveit2,robotics,unscored_discovery,a9004a43151b7d1fd50d462b8db6d4d280b0cc21,True,True,BSD family (inspect clause count),False,,NOT_RUN,ros-planning/moveit2,False
+mujoco/mujoco,robotics,address_unresolved,,False,False,,False,,NOT_RUN,mujoco/mujoco,False
+PeterCorke/robotics-toolbox-python,robotics,unscored_discovery,dcb79824e825510364301c8ef23dc74f26638f14,True,True,MIT,False,,NOT_RUN,PeterCorke/robotics-toolbox-python,False
+pydrake/pydrake,robotics,address_unresolved,,False,False,,False,,NOT_RUN,pydrake/pydrake,False
+roboflow/inference,robotics,unscored_discovery,150577969c6dbe5c0da854942c5961fe3f293088,True,True,MIT core with separately licensed enterprise scope; Apache-2.0,False,,NOT_RUN,roboflow/inference,False
+RobotLocomotion/drake,robotics,unscored_discovery,0e9b5ea162ef3c06bb213562989ec6b95a701579,True,True,BSD family (inspect clause count),False,,NOT_RUN,RobotLocomotion/drake,False
+ros2/ros2,robotics,unscored_discovery,eb184ca025af36a5968bb2111e52db5d4a2a926b,True,False,,False,,NOT_RUN,ros2/ros2,False
+cvxpy/cvxpy,science-optimization,unscored_discovery,ccf24bf121a2b4c5ffa5df0d4a8e0ac1e26fb813,True,True,Apache-2.0,False,,NOT_RUN,cvxpy/cvxpy,False
+google/or-tools,science-optimization,unscored_discovery,100f66e6242ab8bf8d32feb8f3bf086db66ae2b5,True,True,Apache-2.0,False,,NOT_RUN,google/or-tools,False
+igraph/python-igraph,science-optimization,unscored_discovery,6188691e703fd7463e8b07076bff896fb6eae8a1,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,igraph/python-igraph,False
+joblib/joblib,science-optimization,unscored_discovery,af712fc9a97cca4f7d859eef832905756d685072,True,True,BSD family (inspect clause count),False,,NOT_RUN,joblib/joblib,False
+jupyter/nbclient,science-optimization,unscored_discovery,0811ff44c63c9853c4d6ba7265d7042ca7f8742a,True,True,BSD family (inspect clause count),False,,NOT_RUN,jupyter/nbclient,False
+jupyter/nbconvert,science-optimization,unscored_discovery,e681152f214b65387f875aad96a4726994533a0b,True,True,BSD family (inspect clause count),False,,NOT_RUN,jupyter/nbconvert,False
+kedro-org/kedro,science-optimization,unscored_discovery,4b62b059cad668b45c4b21234ad2616b846020c9,True,True,Apache-2.0,False,,NOT_RUN,kedro-org/kedro,False
+networkx/networkx,science-optimization,unscored_discovery,6da4704cbf32ba6f50f6d9c46cc0a071e3a87985,True,True,BSD family (inspect clause count),False,,NOT_RUN,networkx/networkx,False
+numba/numba,science-optimization,unscored_discovery,ff39bbcbab42fec755806f2ff1c0604a8a235c7b,True,True,BSD family (inspect clause count); MIT,False,,NOT_RUN,numba/numba,False
+optuna/optuna,science-optimization,unscored_discovery,35ffe9bab76ab0bc37b504a0514d5d2ebbcaaaa5,True,True,MIT; BSD family (inspect clause count),False,,NOT_RUN,optuna/optuna,False
+pint/pint,science-optimization,address_unresolved,,False,False,,False,,NOT_RUN,pint/pint,False
+pydantic/pydantic-settings,science-optimization,unscored_discovery,f651a7a57a0e3b26147da02f2fda2d05f8c34cce,True,True,MIT,False,,NOT_RUN,pydantic/pydantic-settings,False
+pydata/xarray,science-optimization,unscored_discovery,7cd0f184dc58cf7096a3de82d0e0c8d17a6ecaf0,True,True,Apache-2.0,False,,NOT_RUN,pydata/xarray,False
+pymc-devs/pymc,science-optimization,unscored_discovery,91e6da316d1139aff21dc6b7dd2e562b62cca311,True,True,Apache-2.0,False,,NOT_RUN,pymc-devs/pymc,False
+scikit-learn/scikit-learn,science-optimization,unscored_discovery,d0e22aee7bbef7b310a2f08227c214ff6df9a526,True,True,BSD family (inspect clause count),False,,NOT_RUN,scikit-learn/scikit-learn,False
+scipy/meson-python,science-optimization,address_unresolved,,False,False,,False,,NOT_RUN,scipy/meson-python,False
+stan-dev/cmdstan,science-optimization,unscored_discovery,0c4945ce4d7c1cc18ae2d84cf77292e3b47e2567,True,True,BSD family (inspect clause count),False,,NOT_RUN,stan-dev/cmdstan,False
+statsmodels/statsmodels,science-optimization,unscored_discovery,283253007bde6dd60b48420c47c64d635e96be34,True,True,BSD family (inspect clause count),False,,NOT_RUN,statsmodels/statsmodels,False
+sympy/sympy,science-optimization,unscored_discovery,9350380769d772f6fb320052214afc2d488a41a3,True,True,BSD family (inspect clause count),False,,NOT_RUN,sympy/sympy,False
+AgentToolkit/altk-evolve,self-improvement,unscored_discovery,a1ec95163700840cc5c008b00c9e8393990fbced,True,True,Apache-2.0 text,False,,NOT_RUN,AgentToolkit/altk-evolve,False
+microsoft/agent-lightning,self-improvement,unscored_discovery,69f5a40b36d9bff646b8e7a5532e8b78bd41eaf9,True,True,MIT text,False,,NOT_RUN,microsoft/agent-lightning,False
+SakanaAI/ShinkaEvolve,self-improvement,unscored_discovery,8adc053a2ce4511ad2ac310e004c530a73fb974a,True,True,Apache-2.0 text,False,,NOT_RUN,SakanaAI/ShinkaEvolve,False
+secure-systems-lab/securesystemslib,signed-updates,unscored_discovery,e13bac299ebe9064592787c761e865bc0c5a78bd,True,True,MIT text,False,,NOT_RUN,secure-systems-lab/securesystemslib,False
+theupdateframework/go-tuf,signed-updates,unscored_discovery,45ad19f5a821abbcdbd1ba10b994362d12d39965,True,True,Apache-2.0 text,False,,NOT_RUN,theupdateframework/go-tuf,False
+apache/airflow,state,unscored_discovery,5941f0c19e08db0b206a725c93667dc445bca0ed,True,True,Apache-2.0,False,,NOT_RUN,apache/airflow,False
+celery/celery,state,unscored_discovery,ef37e616ef6726a2e08126635c000f3eacffcbc2,True,True,BSD family (inspect clause count),False,,NOT_RUN,celery/celery,False
+dagster-io/dagster,state,unscored_discovery,c97898c3e4a8a3cc5e32fcc2ca97aea810342ed9,True,True,Apache-2.0,False,,NOT_RUN,dagster-io/dagster,False
+dbos-inc/dbos-transact-py,state,initial_documentary_sample,61426cb95bcd749dd18137b4eb483d02b9975d7d,True,True,MIT,True,58,NOT_RUN,dbos-inc/dbos-transact-py,False
+inngest/inngest,state,unscored_discovery,5bfb55256528292076c5d04bbe46d6fcc3ae764a,True,True,SSPL-1.0,False,,NOT_RUN,inngest/inngest,False
+nats-io/nats-server,state,unscored_discovery,b55d969381aa05a7a59c563797b454d1b6b5fa37,True,True,Apache-2.0,False,,NOT_RUN,nats-io/nats-server,False
+PrefectHQ/prefect,state,initial_documentary_sample,d8c84c2acfff796ba0698977ab09a09690b0ac39,True,True,Apache-2.0,True,62,NOT_RUN,PrefectHQ/prefect,False
+rabbitmq/rabbitmq-server,state,unscored_discovery,0d5290868729ad42a76e8554cb65617082ee837b,True,True,UNKNOWN; Apache-2.0; MPL-2.0,False,,NOT_RUN,rabbitmq/rabbitmq-server,False
+redis/redis,state,unscored_discovery,4e4c65bc71dd63c1d2dbe999b3d3d86d49772cc5,True,True,SSPL-1.0,False,,NOT_RUN,redis/redis,False
+rq/rq,state,unscored_discovery,73add0bd3411536b95ecce605fcde52e0c5148e0,True,True,BSD family (inspect clause count),False,,NOT_RUN,rq/rq,False
+taskiq-python/taskiq,state,unscored_discovery,f08a54ab3a8e4e16045c84379cf26eb4fa83d4b2,True,True,MIT,False,,NOT_RUN,taskiq-python/taskiq,False
+temporalio/temporal,state,initial_documentary_sample,b2fa32d430b79e912b56ed362fc0dd649f200915,True,True,MIT,True,62,NOT_RUN,temporalio/temporal,False
+triggerdotdev/trigger.dev,state,unscored_discovery,d468ee285a37f7b63d5e12c59c7e852c02c1c1ca,True,True,Apache-2.0,False,,NOT_RUN,triggerdotdev/trigger.dev,False
+valkey-io/valkey,state,unscored_discovery,d379883ae8d7573a7f2b364f7d787643c3414731,True,True,BSD family (inspect clause count),False,,NOT_RUN,valkey-io/valkey,False
+ahmetoner/whisper-asr-webservice,stt-asr-diarization,unscored_discovery,ec32cd50b508412e0b8ebe81c26cd7a7dc900b7a,True,False,,False,,NOT_RUN,ahmetoner/whisper-asr-webservice,False
+alphacep/vosk-api,stt-asr-diarization,unscored_discovery,4ab9821510b488efb7740094714a130bd3545e90,True,True,Apache-2.0,False,,NOT_RUN,alphacep/vosk-api,False
+facebookresearch/fairseq,stt-asr-diarization,unscored_discovery,3d262bb25690e4eb2e7d3c1309b1e9c406ca4b99,True,True,MIT,False,,NOT_RUN,facebookresearch/fairseq,True
+facebookresearch/seamless_communication,stt-asr-diarization,unscored_discovery,9a081e935c29c6b1e0e05bcbf3fcb623ad306524,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,facebookresearch/seamless_communication,False
+k2-fsa/icefall,stt-asr-diarization,unscored_discovery,1c388ad9be94c0ee9de76f7a6ed45b1cff677d13,True,True,Apache-2.0,False,,NOT_RUN,k2-fsa/icefall,False
+k2-fsa/sherpa,stt-asr-diarization,unscored_discovery,c02f72ca1540163a54019e845127fa52d5de175b,True,True,Apache-2.0,False,,NOT_RUN,k2-fsa/sherpa,False
+m-bain/whisperX,stt-asr-diarization,unscored_discovery,771b4a14a9486f8fd5aef18ef49e35d639523dd3,True,True,BSD family (inspect clause count),False,,NOT_RUN,m-bain/whisperX,False
+modelscope/FunASR,stt-asr-diarization,unscored_discovery,f793eae5778eae93854646f9b4b9c42a23584651,True,True,MIT,False,,NOT_RUN,modelscope/FunASR,False
+OpenNMT/CTranslate2,stt-asr-diarization,unscored_discovery,8d91aa08225004755360daa43deb62b35b1ed65d,True,True,MIT,False,,NOT_RUN,OpenNMT/CTranslate2,False
+pyannote/pyannote-audio,stt-asr-diarization,unscored_discovery,b749285c5cdd4636b2edc7f766f1352c8dde9369,True,True,MIT,False,,NOT_RUN,pyannote/pyannote-audio,False
+QwenAudio/Fun-ASR,stt-asr-diarization,unscored_discovery,c0a20e2bb698bbad11d143bdccd6c0760e9d6e5b,True,True,Apache-2.0,False,,NOT_RUN,FunAudioLLM/Fun-ASR,False
+QwenLM/Qwen3-ASR,stt-asr-diarization,unscored_discovery,7c6daf77a2421100f5fb066495372c00129d39ff,True,True,Apache-2.0,False,,NOT_RUN,QwenLM/Qwen3-ASR,False
+sigstore/fulcio,supply-chain,unscored_discovery,78da569beb478103bf24d8b5085dd33f8ac33c7e,True,True,Apache-2.0 text,False,,NOT_RUN,sigstore/fulcio,False
+sigstore/gitsign,supply-chain,unscored_discovery,e7452e150df7e772332e76af39bdf3c21bd44c89,True,True,Apache-2.0 text,False,,NOT_RUN,sigstore/gitsign,False
+sigstore/sigstore-python,supply-chain,unscored_discovery,fb47d2f9d264a28b9d30a62a1f307de902caea50,True,True,Apache-2.0 text,False,,NOT_RUN,sigstore/sigstore-python,False
+boson-ai/higgs-audio,tts-voice-generation,unscored_discovery,05a145bb490501b534563bf51bf2f7aa2326b271,True,True,Apache-2.0,False,,NOT_RUN,boson-ai/higgs-audio,False
+canopyai/Orpheus-TTS,tts-voice-generation,unscored_discovery,e64661fe6d02c414fc77c53578c9d64082614861,True,True,Apache-2.0,False,,NOT_RUN,canopyai/Orpheus-TTS,False
+fishaudio/fish-speech,tts-voice-generation,unscored_discovery,541566932abbaebcb0a40e562a1f846738383f38,True,True,UNKNOWN,False,,NOT_RUN,fishaudio/fish-speech,False
+hexgrad/kokoro,tts-voice-generation,unscored_discovery,dfb907a02bba8152ca444717ca5d78747ccb4bec,True,True,Apache-2.0,False,,NOT_RUN,hexgrad/kokoro,False
+idiap/coqui-ai-TTS,tts-voice-generation,unscored_discovery,aeb064d41b5d3377354e0bf7a1a247add738f069,True,True,MPL-2.0,False,,NOT_RUN,idiap/coqui-ai-TTS,False
+index-tts/index-tts,tts-voice-generation,unscored_discovery,d9e41aac89fd00b3d71497fddb287b7f24613712,True,True,UNKNOWN,False,,NOT_RUN,index-tts/index-tts,False
+myshell-ai/MeloTTS,tts-voice-generation,unscored_discovery,209145371cff8fc3bd60d7be902ea69cbdb7965a,True,True,MIT,False,,NOT_RUN,myshell-ai/MeloTTS,False
+nari-labs/dia,tts-voice-generation,unscored_discovery,876125e461a03b157ec905b0fe8b57a0f8b9e7a0,True,True,Apache-2.0,False,,NOT_RUN,nari-labs/dia,False
+neonbjb/tortoise-tts,tts-voice-generation,unscored_discovery,8a2563ecabe93c4fb626f876dd0c52c966edef2f,True,True,Apache-2.0,False,,NOT_RUN,neonbjb/tortoise-tts,False
+NVIDIA-NeMo/Speech,tts-voice-generation,unscored_discovery,218d0b443441b7d8aa1c832f47df310f186cf0a4,True,True,Apache-2.0,False,,NOT_RUN,NVIDIA/NeMo; NVIDIA-NeMo/Speech,False
+OpenBMB/VoxCPM,tts-voice-generation,unscored_discovery,cce58a5b59303c9bd63d12f23afe6a49a4a80c59,True,True,Apache-2.0,False,,NOT_RUN,OpenBMB/VoxCPM,False
+OuteAI/OuteTTS,tts-voice-generation,address_unresolved,,False,False,,False,,NOT_RUN,OuteAI/OuteTTS,False
+resemble-ai/chatterbox,tts-voice-generation,unscored_discovery,5de7a54aa4e5e2baadb0182dde554908b48b85c2,True,True,MIT,False,,NOT_RUN,resemble-ai/chatterbox,False
+resemble-ai/Perth,tts-voice-generation,unscored_discovery,ff1c8ac55a976971245cdd53c18d6131ca00d993,True,True,MIT,False,,NOT_RUN,resemble-ai/Perth,False
+SparkAudio/Spark-TTS,tts-voice-generation,unscored_discovery,2f1ea9082400547242641f5271b6f941c9f439d1,True,True,Apache-2.0,False,,NOT_RUN,SparkAudio/Spark-TTS,False
+suno-ai/bark,tts-voice-generation,unscored_discovery,f4f32d4cd480dfec1c245d258174bc9bde3c2148,True,True,MIT,False,,NOT_RUN,suno-ai/bark,False
+SWivid/F5-TTS,tts-voice-generation,unscored_discovery,2f866649b779881af8bd644e76b9a6d95053da29,True,True,MIT,False,,NOT_RUN,SWivid/F5-TTS,False
+yl4579/StyleTTS2,tts-voice-generation,unscored_discovery,5cedc71c333f8d8b8551ca59378bdcc7af4c9529,True,True,MIT,False,,NOT_RUN,yl4579/StyleTTS2,False
+assistant-ui/assistant-ui,ui,initial_documentary_sample,a46d6634e7a75eddd85d51415b1a615886d4ad0e,True,True,MIT,True,70,NOT_RUN,assistant-ui/assistant-ui,False
+Chainlit/chainlit,ui,unscored_discovery,190ea74239d9e84b26e7c91bc2882dd038942564,True,True,Apache-2.0,False,,NOT_RUN,Chainlit/chainlit,True
+excalidraw/excalidraw,ui,initial_documentary_sample,4c37956ba5f04ec342a9d9d5891a38f22c5b7b4e,True,True,MIT,True,69,NOT_RUN,excalidraw/excalidraw,False
+gradio-app/gradio,ui,unscored_discovery,c270f35d91995d3f33b77b9504567d6d1c9b7216,True,True,Apache-2.0,False,,NOT_RUN,gradio-app/gradio,False
+huggingface/chat-ui,ui,unscored_discovery,48b52b1a91e7fca03f99015857e526d5ac3ef16b,True,True,Apache-2.0,False,,NOT_RUN,huggingface/chat-ui,False
+LibreChat-AI/LibreChat,ui,unscored_discovery,e1dfc10449ff713faffacd60273fddcfe2c0a698,True,True,MIT,False,,NOT_RUN,danny-avila/LibreChat,False
+lobehub/lobehub,ui,unscored_discovery,a84bcff49e295a88990da9023848ca5fc831a509,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,lobeHub/lobe-chat; lobehub/lobehub,False
+mintplex-labs/anything-llm,ui,unscored_discovery,d7d68e75c422d10384b8aa30f72d6d032fcc555e,True,True,MIT,False,,NOT_RUN,mintplex-labs/anything-llm,False
+open-webui/open-webui,ui,unscored_discovery,6a18585ff4c2e5f6805f682222cfbc46dc669ef8,True,True,LicenseRef-Open-WebUI; BSD family (inspect clause count),False,,NOT_RUN,open-webui/open-webui,False
+react/react,ui,initial_documentary_sample,098d2e87a1f7142947418d15f63f975b58c4685b,True,True,MIT,True,73,NOT_RUN,facebook/react,False
+tldraw/tldraw,ui,unscored_discovery,9bbecbe7973d0b6103adc441410662f04d2658e9,True,True,LicenseRef-tldraw,False,,NOT_RUN,tldraw/tldraw,False
+vercel/ai,ui,unscored_discovery,57924a9ba6abd703da82a53054daab60a5bfcbd3,True,True,Apache-2.0,False,,NOT_RUN,vercel/ai,False
+vercel/next.js,ui,unscored_discovery,edd8011d30b78ebf71a7d85534fe1ecd14f090fc,True,True,MIT,False,,NOT_RUN,vercel/next.js,False
+zylon-ai/private-gpt,ui,unscored_discovery,71060ce82a88883ef81cc1ac65952dfb0b27bc73,True,True,Apache-2.0,False,,NOT_RUN,zylon-ai/private-gpt,False
+elie222/rakazo,user-discovery,initial_documentary_sample,7d5e64c886da7d556673f99e4923b013315007a9,True,True,Apache-2.0,True,59,NOT_RUN,elie222/rakazo,False
+elie222/inbox-zero,user-discovery-email,license_blocked_reference_only,f482190a12aa5708f67d64a4f088b96d7029741f,True,True,LicenseRef-Inbox-Zero-commercial-enterprise-restricted (AGPL text plus restrictions),False,,NOT_RUN,elie222/inbox-zero,False
+3b1b/manim,video,unscored_discovery,fafa083a4fb274bba9cabde0b6e2f50ba6da0622,True,True,MIT,False,,NOT_RUN,3b1b/manim,False
+Aegisub/Aegisub,video,unscored_discovery,6f546951b4f004da16ce19ba638bf3eedefb9f31,True,False,,False,,NOT_RUN,Aegisub/Aegisub,False
+FFmpeg/FFmpeg,video,initial_documentary_sample,513df1ccdd8266cf32ab68403f7065718f91bf7b,True,True,GPL (inspect exact version/exceptions); LGPL (inspect exact version/exceptions),True,62,NOT_RUN,FFmpeg/FFmpeg,False
+ManimCommunity/manim,video,initial_documentary_sample,622520d34190062f32d68af066c80f1c937fc8bf,True,True,MIT,True,65,NOT_RUN,ManimCommunity/manim,False
+mltframework/mlt,video,unscored_discovery,a5639e5efc525c3754feae98791f8be8a4298428,True,True,LGPL (inspect exact version/exceptions),False,,NOT_RUN,mltframework/mlt,False
+mltframework/shotcut,video,unscored_discovery,4078c6b9795331a9b70e06d78ef06186d331a770,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,mltframework/shotcut,False
+OpenCut-app/OpenCut,video,unscored_discovery,e668010778568641babef2cc40be4703ae6916d6,True,True,MIT,False,,NOT_RUN,OpenCut-app/OpenCut,False
+OpenShot/openshot-qt,video,unscored_discovery,d6f9d126e4c05f14ee6dfa5b039ea1f861a664d9,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,OpenShot/openshot-qt,False
+remotion-dev/remotion,video,unscored_discovery,dba10e61a8971220c6dc83ebef379e0d3bf87525,True,True,LicenseRef-Remotion,False,,NOT_RUN,remotion-dev/remotion,False
+SubtitleEdit/subtitleedit,video,unscored_discovery,414533d553f4670f119c6e41ef52fe80f628e6ea,True,True,MIT,False,,NOT_RUN,SubtitleEdit/subtitleedit,False
+Zulko/moviepy,video,initial_documentary_sample,211e4b15f6ce4f34a6a9efbfff40590e43a68f77,True,True,MIT,True,69,NOT_RUN,Zulko/moviepy,False
+AILab-CVC/VideoCrafter,video-generation,unscored_discovery,f6c7f7f28f71d3069a9ee0e002d2f4b019eb78f6,True,True,Apache-2.0,False,,NOT_RUN,AILab-CVC/VideoCrafter,False
+genmoai/mochi,video-generation,unscored_discovery,674ce8814ed07a7a0fd62ce5abd077f9ea8f41ab,True,True,Apache-2.0,False,,NOT_RUN,genmoai/mochi,False
+guoyww/AnimateDiff,video-generation,unscored_discovery,e92bd5671ba62c0d774a32951453e328018b7c5b,True,True,Apache-2.0,False,,NOT_RUN,guoyww/AnimateDiff,False
+hpcaitech/Open-Sora,video-generation,unscored_discovery,7ad6a96a135feb81f755c84fb391818718f6beb2,True,True,Apache-2.0,False,,NOT_RUN,hpcaitech/Open-Sora,False
+Lightricks/LTX-2,video-generation,unscored_discovery,be6d6d0a69d11a0a399c462ed92606692e5f8697,True,True,UNKNOWN,False,,NOT_RUN,Lightricks/LTX-2,False
+Lightricks/LTX-Video,video-generation,unscored_discovery,4b2d053057623ddd4d0a1d3e9cd28890e9ef487f,True,True,Apache-2.0,False,,NOT_RUN,Lightricks/LTX-Video,False
+PKU-YuanGroup/Open-Sora-Plan,video-generation,unscored_discovery,f7fa604f4e3a523d6b973e4c89a5620ed1aff65a,True,True,MIT,False,,NOT_RUN,PKU-YuanGroup/Open-Sora-Plan,False
+showlab/Show-1,video-generation,unscored_discovery,35a71b6b107d7b73b730d26eeaacf64aa0e58d39,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,showlab/Show-1,False
+Tencent-Hunyuan/HunyuanVideo,video-generation,unscored_discovery,4eda9cb44c3be82a6b9c4261897cb6bd3cfb084e,True,True,UNKNOWN,False,,NOT_RUN,Tencent-Hunyuan/HunyuanVideo,False
+Tencent-Hunyuan/HunyuanVideo-1.5,video-generation,unscored_discovery,60783e704160023913bee78f0b47036d393d4dfa,True,True,UNKNOWN,False,,NOT_RUN,Tencent-Hunyuan/HunyuanVideo-1.5,False
+Vchitect/Vchitect-2.0,video-generation,unscored_discovery,be56767f1107b4fd6ba7652fe92ec0e7032878fe,True,True,Apache-2.0,False,,NOT_RUN,Vchitect/Vchitect-2.0,False
+Wan-Video/Wan2.1,video-generation,unscored_discovery,9737cba9c1c3c4d04b33fcad41c111989865d315,True,True,Apache-2.0,False,,NOT_RUN,Wan-Video/Wan2.1,False
+Wan-Video/Wan2.2,video-generation,unscored_discovery,1ea34ff48f87168174e12956e200b1d908b1c5ff,True,True,Apache-2.0,False,,NOT_RUN,Wan-Video/Wan2.2,False
+Wan-Video/Wan2.5,video-generation,address_unresolved,,False,False,,False,,NOT_RUN,Wan-Video/Wan2.5,False
+zai-org/CogVideo,video-generation,unscored_discovery,7a1af7154511e0ce4e4be8d62faa8c5e5a3532d2,True,True,Apache-2.0,False,,NOT_RUN,THUDM/CogVideo; zai-org/CogVideo,False
+facebookresearch/detectron2,vision,unscored_discovery,1e3e13bbf607b54f62205c4c33922521822fb298,True,True,Apache-2.0,False,,NOT_RUN,facebookresearch/detectron2,False
+facebookresearch/sam2,vision,unscored_discovery,2b90b9f5ceec907a1c18123530e92e794ad901a4,True,True,Apache-2.0; BSD family (inspect clause count),False,,NOT_RUN,facebookresearch/sam2,False
+facebookresearch/segment-anything,vision,unscored_discovery,dca509fe793f601edb92606367a655c15ac00fdf,True,True,Apache-2.0,False,,NOT_RUN,facebookresearch/segment-anything,False
+IDEA-Research/GroundingDINO,vision,unscored_discovery,856dde20aee659246248e20734ef9ba5214f5e44,True,True,Apache-2.0,False,,NOT_RUN,IDEA-Research/GroundingDINO,False
+opencv/opencv,vision,unscored_discovery,25091848c53d09823b0574e57de8611933d18940,True,True,LicenseRef-Manual-Review; Apache-2.0,False,,NOT_RUN,opencv/opencv,False
+opencv/opencv-python,vision,unscored_discovery,031876bd46b781b8f4db2075327e5a78a53dff63,True,True,Apache-2.0; MIT,False,,NOT_RUN,opencv/opencv-python,False
+PaddlePaddle/PaddleDetection,vision,unscored_discovery,b25522a0f4bde8c80603f3ba5e3472059972e3b5,True,True,Apache-2.0,False,,NOT_RUN,PaddlePaddle/PaddleDetection,False
+roboflow/supervision,vision,unscored_discovery,cdf2c3d146c4e05d9ecf91fd7a02a2ad2c4e65e4,True,True,MIT,False,,NOT_RUN,roboflow/supervision,False
+scikit-image/scikit-image,vision,unscored_discovery,b700edc8005e4ee9e74fc83259f09e8df3213f15,True,True,LicenseRef-Manual-Review,False,,NOT_RUN,scikit-image/scikit-image,False
+ultralytics/ultralytics,vision,unscored_discovery,ea4b3829ad46748b6335d8641b6e5ac00d3e6095,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,ultralytics/ultralytics,False
+1121926857/crawl4ai,web,address_unresolved,,False,False,,False,,NOT_RUN,1121926857/crawl4ai,False
+adbar/trafilatura,web,initial_documentary_sample,e2f85c965662c7df26b73290ef175b2c2a5fdca6,True,True,Apache-2.0,True,72,NOT_RUN,adbar/trafilatura,False
+browserless/browserless,web,unscored_discovery,24b29b9b2ced74ccfffdd95367093bde5cc00278,True,True,UNKNOWN,False,,NOT_RUN,browserless/browserless,False
+codelucas/newspaper,web,unscored_discovery,f8e3cb63c87ff53080fab77f4bafef2ecf8179f7,True,True,MIT,False,,NOT_RUN,codelucas/newspaper,False
+D4Vinci/Scrapling,web,initial_documentary_sample,7a684934907a8c7feaafe9ff1ccfd9d45cc26faf,True,True,BSD family (inspect clause count),True,69,NOT_RUN,D4Vinci/Scrapling,False
+firecrawl/firecrawl,web,initial_documentary_sample,c31e88c07afe941bfd8aebde61684eeba042abb5,True,True,AGPL-3.0 (inspect exceptions/version),True,59,NOT_RUN,mendableai/firecrawl,False
+itamarst/warcprox,web,address_unresolved,,False,False,,False,,NOT_RUN,itamarst/warcprox,False
+jina-ai/reader,web,unscored_discovery,1574bfd380d249c86c82db4dace0d9c8fe17e2b1,True,True,Apache-2.0,False,,NOT_RUN,jina-ai/reader,False
+omkarcloud/botasaurus,web,unscored_discovery,6c9260de12d71b9dc0c3b3a019d2698a9af38433,True,True,MIT,False,,NOT_RUN,omkarcloud/botasaurus,False
+reworkd/AgentGPT,web,unscored_discovery,18b073ab05b2902e1d052c3d2799786d8623b5e5,True,True,GPL (inspect exact version/exceptions),False,,NOT_RUN,reworkd/AgentGPT,True
+scrapinghub/splash,web,unscored_discovery,ab28b0233c245461189881f1f5656b96371a4b40,True,True,BSD family (inspect clause count),False,,NOT_RUN,scrapinghub/splash,False
+scrapy/scrapy,web,initial_documentary_sample,fbfc89ae7b72531a97fb4ef6d65ef3af392aa45c,True,True,BSD family (inspect clause count),True,69,NOT_RUN,scrapy/scrapy,False
+searxng/searxng,web,unscored_discovery,b00212a8366131936856b726ed4dd9bd281e4d7e,True,True,AGPL-3.0 (inspect exceptions/version),False,,NOT_RUN,searxng/searxng,False
+tavily-ai/tavily-python,web,unscored_discovery,46505f119e6ac0f30d63a4dce0ed9f923705ad97,True,True,MIT,False,,NOT_RUN,tavily-ai/tavily-python,False
+unclecode/crawl4ai,web,initial_documentary_sample,94b67888ca8b335ff2121423a50e06dd27661922,True,True,Apache-2.0,True,69,NOT_RUN,unclecode/crawl4ai,False
+vibrantlabsai/ragas,web,unscored_discovery,298b68274234c060deacab3cf5fb52aa3a20e885,True,True,Apache-2.0,False,,NOT_RUN,explodinggradients/ragas,False

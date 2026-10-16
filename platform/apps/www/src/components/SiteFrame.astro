@@ -1,0 +1,7 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+type Props = { title: string; description: string; index?: boolean };
+---
+<BaseLayout {...Astro.props}><div class="container"><Header /><main id="main"><slot /></main><Footer /></div></BaseLayout>
