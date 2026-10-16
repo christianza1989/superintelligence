@@ -121,6 +121,17 @@
       "modelDispatchAttempts": null,
       "performanceMeasured": false,
       "timingDisturbed": true
+    },
+    "jevHttp": {
+      "status": "completed",
+      "completedPairs": 3,
+      "acceptedTrials": 6,
+      "cliInvocationAttempts": 6,
+      "modelDispatchAttempts": null,
+      "preparationDispatchAttempts": 1,
+      "allCandidateStaticLibraryImports": true,
+      "allSeededAssetsUnchanged": true,
+      "target50PercentReached": false
     }
   }
 }
