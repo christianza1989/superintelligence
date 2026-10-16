@@ -6,7 +6,7 @@
 
 - Debian Linux x64 per WSL2, Node.js24/npm ir projektas Linux failų sistemoje, pavyzdžiui `~/projects/repositoryzero`.
 - Docker Desktop su tos WSL distribucijos integracija; `docker info` turi veikti. Evaluator naudoja vietinį `/var/run/docker.sock`.
-- Linux Chromium `/usr/lib/chromium/chromium`, glibc bibliotekos ir DejaVu Sans; tikrintas Chromium154.0.8037.57 ir Playwright1.63.0. Debian paketus paruošia `sudo apt-get update` ir `sudo apt-get install chromium fonts-dejavu-core`. Windows Chrome ar Ubuntu Snap nėra šio profilio dalis.
+- Linux Chromium `/usr/lib/chromium/chromium`, glibc bibliotekos ir DejaVu Sans; naujausioje vietinėje regresijoje tikrintas Chromium 155.0.8059.79 ir Playwright 1.63.0. Debian paketus paruošia `sudo apt-get update` ir `sudo apt-get install chromium fonts-dejavu-core`. Windows Chrome ar Ubuntu Snap nėra šio profilio dalis.
 - Oficialus Claude CLI tame pačiame WSL naudotojuje; vietiniame bandyme versija2.1.292. Prisijungimas per `claude auth login --claudeai`. Adapteris per oficialų `claude --safe-mode auth status` priima tik `claude.ai` first-party prisijungimą; credential failų neskaito ir jų neperkelia. API raktų nereikia.
 
 CLI coding teisės `dontAsk` nėra OS izoliacija. Dvi coding darbo vietos atskiros, bet tas pats naudotojas gali jas perskaityti; abiem sesijoms galioja vienodas draudimas skaityti kitos pusės rezultatą. Generuotos programos vertinamos atskiruose non-root, network-none, ribotų resursų Docker konteineriuose. Chromium turi atskirą konteinerį ir nenaudoja host naršyklės; tai kontroliuojamo vietinio kodo profilis, ne hostile upstream PR izoliacija.
@@ -28,6 +28,8 @@ npm run lab:run -- --engine claude --prompt-version 2
 ```
 
 Paskutinė komanda yra **dry-run**: paruošia du promptus ir not-run ataskaitą, modelių nekviečia. `lab:prepare -- --engine claude` patikrina pasirinktą prenumeratos CLI, vietinį Docker, pinned Node image ir naršyklės failus. Prireikus atsisiunčia tik pinned image; modelio nekviečia. Trūkstant CLI/auth/Docker/image/browser, gyvas runneris sustoja prieš coding kvietimą. Naudojant Claude šiam keliui nereikia Codex writable state ar Codex prisijungimo.
+
+Auth prerequisite PASS patvirtina prenumeratos prisijungimą, tačiau negarantuoja prieigos prie pasirinkto modelio. 2026-10-16 abu vietiniai gyvi etapai sustojo su `model_unavailable` modeliui `claude-sonnet-5-5`; trys pilnos poros neužbaigtos. [Ataskaita ir ribos](CLAUDE-CALIBRATION.md#nauji-vietiniai-paleidimai-modelis-neprieinamas).
 
 Failų prerequisite PASS dar neįrodo, kad Node/Chromium image iš tikro veikia. Vienkartinės runtime regresijos be modelių:
 
@@ -78,7 +80,7 @@ npm run lab:cohort -- --mode compact --live
 
 Čia abu variantai gauna tą patį Claude modelį ir užduotį: `zero-retrieval-claude-v1` prieš `zero-compact-claude-v1`. Senasis profilis ir prompto baitai nepakeisti. Kandidatas naudoja tas pačias tris paieškas, bet riboja rinkinį iki5kandidatų ir3000baitų; išsaugo SHA, licencijas, būsenas, šaltinių kilmę ir originalias instrukcijas. Tai deterministinė atranka/formatas; Jev nedalyvauja.
 
-Dabartinis katalogo payload3614→2234baitai (−38,18%), kandidatai6→5. Tiems patiems likusiems kandidatams formatas3202→2234baitai (−30,23%). Tai baitai, **ne išmatuotas modelio tokenų ar laiko sutaupymas**. Pakeistas ir rinkinio dydis, ir formatas, todėl jų atskiros naudos iš šio A/B neišvesime. Gyvos kokybės ir tokenų poveikis dar NOT_RUN; niekas automatiškai nepakeičia numatyto profilio.
+Dabartinis katalogo payload3614→2234baitai (−38,18%), kandidatai6→5. Tiems patiems likusiems kandidatams formatas3202→2234baitai (−30,23%). Tai baitai, **ne išmatuotas modelio tokenų ar laiko sutaupymas**. Pakeistas ir rinkinio dydis, ir formatas, todėl jų atskiros naudos iš šio A/B neišvesime. Atskiras gyvas `compact` etapas paleistas, bet sustojo su `model_unavailable` prieš pirmą užbaigtą programą; kokybės ir tokenų poveikis neišmatuotas. Niekas automatiškai nepakeičia numatyto profilio.
 
 ## Ataskaitos ir palyginimas
 

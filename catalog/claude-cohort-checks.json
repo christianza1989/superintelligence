@@ -80,12 +80,12 @@
       "shortlist_limit"
     ],
     "legacy_prompt_unchanged": true,
-    "live_quality": "NOT_RUN",
-    "live_token_savings": "NOT_RUN"
+    "live_quality": "BLOCKED_MODEL_UNAVAILABLE",
+    "live_token_savings": "NOT_MEASURED"
   },
   "limits": [
     "Byte reduction is not token savings or quality evidence",
-    "Only one historical successful Claude pair exists; new repetitions are not executed",
+    "Only one historical successful Claude pair exists; both new live cohorts stopped before a complete pair with model_unavailable",
     "Three repetitions of one task are not cross-task validation",
     "Unknown subscription charges remain null",
     "Coding CLI directories are not mutually unreadable OS sandboxes",
@@ -93,5 +93,15 @@
   ],
   "new_model_calls": 0,
   "general_winner": "not_assessed",
-  "full_product_runtime_jev_auto": "NOT_RUN"
+  "full_product_runtime_jev_auto": "NOT_RUN",
+  "liveExecutionEvidence": {
+    "path": "catalog/claude-cohort-live-2026-10-16.json",
+    "repeatStatus": "stopped_shared_prerequisite",
+    "compactStatus": "stopped_shared_prerequisite",
+    "reason": "model_unavailable",
+    "completePairsPerMode": 0,
+    "cliInvocationAttemptsPerMode": 1,
+    "modelDispatchAttempts": null,
+    "performanceMeasured": false
+  }
 }

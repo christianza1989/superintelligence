@@ -1,0 +1,411 @@
+{
+  "version": 1,
+  "kind": "claude_live_cohort_blocked_evidence_not_model_performance",
+  "checkedAtUtc": "2026-10-16T17:07:43.956Z",
+  "sourceCommit": "7542de48b07766e5ec0c18abf014a162c7b48548",
+  "environment": {
+    "platform": "linux",
+    "arch": "x64",
+    "nodeVersion": "24.19.0",
+    "claudeCliVersion": "2.1.292",
+    "chromiumVersion": "155.0.8059.79",
+    "playwrightVersion": "1.63.0",
+    "subscriptionAuthReady": true,
+    "dockerReady": true,
+    "pinnedImageReady": true,
+    "browserPrerequisitesReady": true,
+    "browserAssetsBytes": 461392285
+  },
+  "regressions": {
+    "offline": {
+      "tests": 93,
+      "passed": 93,
+      "failed": 0,
+      "skipped": 0
+    },
+    "docker": {
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    "totalPassed": 120,
+    "totalFailed": 0,
+    "totalSkipped": 0,
+    "codingModelCalls": 0,
+    "codexBridgeTestsOfflineOnly": true
+  },
+  "requestedModel": "claude-sonnet-5-5",
+  "requestedReasoning": "high",
+  "promptVersion": 2,
+  "cohorts": [
+    {
+      "mode": "repeat",
+      "cohortId": "2026-10-16T17-05-41-973Z-db2e5e4c6864",
+      "status": "stopped_shared_prerequisite",
+      "plannedPairs": 3,
+      "recordedPairReports": 1,
+      "completedPairs": 0,
+      "acceptedTrials": 0,
+      "cliInvocationAttempts": 1,
+      "modelDispatchAttempts": null,
+      "startedAtUtc": "2026-10-16T17:05:41.976Z",
+      "finishedAtUtc": "2026-10-16T17:05:51.958Z",
+      "cohortReport": ".artifacts/zero-lab/cohorts/2026-10-16T17-05-41-973Z-db2e5e4c6864/cohort.json",
+      "cohortReportSha256": "768be34f56fc40276b69ae7802326090f204085ef455800927621a27beeddb25",
+      "sourceDigests": {
+        "benchmarks/zero-lab.v1.json": "b9f59f1bfa007d8a0ca2caa4f731f6216f9dd512274603136d7ebd61f999b564",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-claude-cli.mjs": "417fef3c4602a6289ec7eeb222d045cc1192954c27fbed31ce241729f3939216",
+        "platform/scripts/zero-lab-config.mjs": "992b475126bd10962849ce880ec4f3b20f28f01407e418aa502f406337d198bc",
+        "platform/scripts/zero-lab-run.mjs": "fa1f21ed84ea935aa3664c0aca28fee249f41dd5167a0ab80a64751a65d23a1b",
+        "platform/scripts/zero-lab-cohort.mjs": "9cc21d1bcb02a948b26ed6d686a4e5ea85ad54749de29bc540de1b3e9af79d7c",
+        "platform/scripts/zero-lab-compare.mjs": "953add1f190bd9564e31bad5343704e3f86a531e7b4ecc5d62d42cd9bd7ebbd4",
+        "platform/scripts/zero-lab-context.mjs": "615de70d3a74867cefab78690df699aee6dfb89c2747ab397f873ef024f06bbc",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-evaluate.mjs": "ad5157a91a98841f82afefe5178ae63b01dd8829ff80ae73d4f4ea9c0d0ef5c4",
+        "platform/scripts/zero-lab-acceptance.mjs": "c4b0e65b952b8fef9af50811777204faae5f3ed4af4962c7a2029ad0670e6ab7",
+        "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+        "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-model-selector.ts": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "benchmarks/sprintdesk-v1/PROMPT.md": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+        "benchmarks/sprintdesk-v1/acceptance.mjs": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/testkit/src/evals/report.ts": "c612ccf0dd62a3cad72e237a04c713557d30adfaa70e330f32d2d3316db38f4b",
+        "platform/packages/testkit/src/evals/measurement.ts": "0ffd0c08d9e7473eb8aeab39470a7adabdc5ae1975390693a83825d4ab6d6c03",
+        "benchmarks/sprintdesk-v1/PROMPT.v2.md": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb"
+      },
+      "sourceHashCount": 23,
+      "sourceDigestsVerifiedAfterRun": true,
+      "summary": {
+        "status": "not_comparable",
+        "reasons": [
+          "planned_pairs_incomplete",
+          "pair_contract_or_runtime_incompatible",
+          "not_all_planned_trials_accepted",
+          "cohort_interrupted_or_source_unverified"
+        ],
+        "plannedPairs": 3,
+        "recordedPairs": 1,
+        "baselineProfile": "claude-fixed-v1",
+        "candidateProfile": "zero-retrieval-claude-v1",
+        "pairs": [
+          {
+            "number": 1,
+            "comparisonStatus": "not_comparable",
+            "reasons": [
+              "missing_completed_generation"
+            ],
+            "quality": {
+              "status": "not_assessed",
+              "scope": "declared_automated_checks_not_subjective_product_quality"
+            },
+            "deltas": null,
+            "outcomes": [
+              {
+                "profile": "claude-fixed-v1",
+                "outcome": "generation_failed"
+              },
+              {
+                "profile": "zero-retrieval-claude-v1",
+                "outcome": "not_run"
+              }
+            ]
+          }
+        ],
+        "measurements": null,
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "evidenceLevel": "same_task_calibration_not_general_advantage",
+        "limitations": [
+          "Order alternates but provider cache and service load remain uncontrolled",
+          "Coding, grading and total trial time are separate measurements",
+          "Unknown subscription price remains null",
+          "All failures remain visible; no selective successful-pair speed claim"
+        ],
+        "usage": {
+          "baselineTokens": 0,
+          "candidateTokens": null,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "members": [
+        {
+          "pair": 1,
+          "profiles": [
+            "claude-fixed-v1",
+            "zero-retrieval-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T17-05-41-973Z-db2e5e4c6864/pair-1/2026-10-16T17-05-42-006Z-540b4917c309/report.json",
+          "reportSha256": "d1d115737800cc6fcef7ef78008841a0202d0ca91a564a43add9566d6794fcba",
+          "status": "completed_with_failures_or_incomplete_checks",
+          "cliInvocationAttempts": 1,
+          "modelDispatchAttempts": null,
+          "elapsedMs": 9936,
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 3
+          },
+          "trials": [
+            {
+              "profile": "claude-fixed-v1",
+              "status": "failed",
+              "outcome": "generation_failed",
+              "reason": "model_unavailable",
+              "promptDigest": "8f74b934bd4b1fb6a8d952c439e2f14c9ebe625e108a4bb6c2390496853b108f",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 4497,
+              "contextBytes": 0,
+              "timings": {
+                "retrievalMs": 0,
+                "codingMs": 8541,
+                "gradingMs": null
+              },
+              "trialElapsedMs": 8553,
+              "qualityComplete": false,
+              "generation": {
+                "status": "failed",
+                "reason": "model_unavailable",
+                "requestedModel": "claude-sonnet-5-5",
+                "requestedReasoning": "high",
+                "actualModel": null,
+                "elapsedMs": 8541,
+                "usage": {
+                  "inputTokens": 0,
+                  "outputTokens": 0,
+                  "cachedInputTokens": 0,
+                  "cacheCreationInputTokens": 0,
+                  "uncachedInputTokens": 0,
+                  "totalTokens": 0
+                },
+                "toolActions": 0,
+                "toolFailures": 0,
+                "reportedTurns": 1,
+                "exitCode": 1,
+                "actualCostUsd": null,
+                "apiEquivalentCostEstimateUsd": 0
+              },
+              "evaluation": null
+            },
+            {
+              "profile": "zero-retrieval-claude-v1",
+              "status": "not-run",
+              "outcome": "not_run",
+              "reason": "Stopped after shared runtime prerequisite failed",
+              "promptDigest": "7a061d65da731ba120e9fa4e7a8a299433e41326376d05c5a1735ac20d03874c",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 8165,
+              "contextBytes": 3614,
+              "timings": {
+                "retrievalMs": 3,
+                "codingMs": null,
+                "gradingMs": null
+              },
+              "trialElapsedMs": 0,
+              "qualityComplete": false,
+              "generation": null,
+              "evaluation": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "compact",
+      "cohortId": "2026-10-16T17-06-34-533Z-2f5cfc8356b8",
+      "status": "stopped_shared_prerequisite",
+      "plannedPairs": 3,
+      "recordedPairReports": 1,
+      "completedPairs": 0,
+      "acceptedTrials": 0,
+      "cliInvocationAttempts": 1,
+      "modelDispatchAttempts": null,
+      "startedAtUtc": "2026-10-16T17:06:34.534Z",
+      "finishedAtUtc": "2026-10-16T17:06:45.570Z",
+      "cohortReport": ".artifacts/zero-lab/cohorts/2026-10-16T17-06-34-533Z-2f5cfc8356b8/cohort.json",
+      "cohortReportSha256": "77f2c85ca13ad4dc276f90322515f2fcfb1d0af91fc15d8d91e0758fe22de4d9",
+      "sourceDigests": {
+        "benchmarks/zero-lab.v1.json": "b9f59f1bfa007d8a0ca2caa4f731f6216f9dd512274603136d7ebd61f999b564",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-claude-cli.mjs": "417fef3c4602a6289ec7eeb222d045cc1192954c27fbed31ce241729f3939216",
+        "platform/scripts/zero-lab-config.mjs": "992b475126bd10962849ce880ec4f3b20f28f01407e418aa502f406337d198bc",
+        "platform/scripts/zero-lab-run.mjs": "fa1f21ed84ea935aa3664c0aca28fee249f41dd5167a0ab80a64751a65d23a1b",
+        "platform/scripts/zero-lab-cohort.mjs": "9cc21d1bcb02a948b26ed6d686a4e5ea85ad54749de29bc540de1b3e9af79d7c",
+        "platform/scripts/zero-lab-compare.mjs": "953add1f190bd9564e31bad5343704e3f86a531e7b4ecc5d62d42cd9bd7ebbd4",
+        "platform/scripts/zero-lab-context.mjs": "615de70d3a74867cefab78690df699aee6dfb89c2747ab397f873ef024f06bbc",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-evaluate.mjs": "ad5157a91a98841f82afefe5178ae63b01dd8829ff80ae73d4f4ea9c0d0ef5c4",
+        "platform/scripts/zero-lab-acceptance.mjs": "c4b0e65b952b8fef9af50811777204faae5f3ed4af4962c7a2029ad0670e6ab7",
+        "platform/scripts/zero-lab-browser.mjs": "322439af750fb2319359bf8bc4dfc952b8caaf091835acfb35d4e41d17672a06",
+        "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs": "bf1f8ef8228e9bb192b2a8f2ac3ce78669bbf1f1183b693a23fdb7f7b0510f70",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-model-selector.ts": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "benchmarks/sprintdesk-v1/PROMPT.md": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+        "benchmarks/sprintdesk-v1/acceptance.mjs": "e045a4564f9ffc0d97dc4b99c7294d1ad42d83da7bfa2d21686c1dd9ff759af3",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/testkit/src/evals/report.ts": "c612ccf0dd62a3cad72e237a04c713557d30adfaa70e330f32d2d3316db38f4b",
+        "platform/packages/testkit/src/evals/measurement.ts": "0ffd0c08d9e7473eb8aeab39470a7adabdc5ae1975390693a83825d4ab6d6c03",
+        "benchmarks/sprintdesk-v1/PROMPT.v2.md": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb"
+      },
+      "sourceHashCount": 23,
+      "sourceDigestsVerifiedAfterRun": true,
+      "summary": {
+        "status": "not_comparable",
+        "reasons": [
+          "planned_pairs_incomplete",
+          "pair_contract_or_runtime_incompatible",
+          "not_all_planned_trials_accepted",
+          "cohort_interrupted_or_source_unverified"
+        ],
+        "plannedPairs": 3,
+        "recordedPairs": 1,
+        "baselineProfile": "zero-retrieval-claude-v1",
+        "candidateProfile": "zero-compact-claude-v1",
+        "pairs": [
+          {
+            "number": 1,
+            "comparisonStatus": "not_comparable",
+            "reasons": [
+              "missing_completed_generation"
+            ],
+            "quality": {
+              "status": "not_assessed",
+              "scope": "declared_automated_checks_not_subjective_product_quality"
+            },
+            "deltas": null,
+            "outcomes": [
+              {
+                "profile": "zero-retrieval-claude-v1",
+                "outcome": "generation_failed"
+              },
+              {
+                "profile": "zero-compact-claude-v1",
+                "outcome": "not_run"
+              }
+            ]
+          }
+        ],
+        "measurements": null,
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "evidenceLevel": "same_task_calibration_not_general_advantage",
+        "limitations": [
+          "Order alternates but provider cache and service load remain uncontrolled",
+          "Coding, grading and total trial time are separate measurements",
+          "Unknown subscription price remains null",
+          "All failures remain visible; no selective successful-pair speed claim"
+        ],
+        "usage": {
+          "baselineTokens": 0,
+          "candidateTokens": null,
+          "actualSubscriptionCostUsd": null
+        }
+      },
+      "members": [
+        {
+          "pair": 1,
+          "profiles": [
+            "zero-retrieval-claude-v1",
+            "zero-compact-claude-v1"
+          ],
+          "report": ".artifacts/zero-lab/cohorts/2026-10-16T17-06-34-533Z-2f5cfc8356b8/pair-1/2026-10-16T17-06-34-561Z-701eba3e0ada/report.json",
+          "reportSha256": "98c28069e10485aa114452b845c7f3273e2a7e0d1f8a01c1752ad321e242b6f6",
+          "status": "completed_with_failures_or_incomplete_checks",
+          "cliInvocationAttempts": 1,
+          "modelDispatchAttempts": null,
+          "elapsedMs": 10991,
+          "sourceIntegrity": {
+            "status": "passed",
+            "checks": 3
+          },
+          "trials": [
+            {
+              "profile": "zero-retrieval-claude-v1",
+              "status": "failed",
+              "outcome": "generation_failed",
+              "reason": "model_unavailable",
+              "promptDigest": "7a061d65da731ba120e9fa4e7a8a299433e41326376d05c5a1735ac20d03874c",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 8165,
+              "contextBytes": 3614,
+              "timings": {
+                "retrievalMs": 4,
+                "codingMs": 9684,
+                "gradingMs": null
+              },
+              "trialElapsedMs": 9699,
+              "qualityComplete": false,
+              "generation": {
+                "status": "failed",
+                "reason": "model_unavailable",
+                "requestedModel": "claude-sonnet-5-5",
+                "requestedReasoning": "high",
+                "actualModel": null,
+                "elapsedMs": 9684,
+                "usage": {
+                  "inputTokens": 0,
+                  "outputTokens": 0,
+                  "cachedInputTokens": 0,
+                  "cacheCreationInputTokens": 0,
+                  "uncachedInputTokens": 0,
+                  "totalTokens": 0
+                },
+                "toolActions": 0,
+                "toolFailures": 0,
+                "reportedTurns": 1,
+                "exitCode": 1,
+                "actualCostUsd": null,
+                "apiEquivalentCostEstimateUsd": 0
+              },
+              "evaluation": null
+            },
+            {
+              "profile": "zero-compact-claude-v1",
+              "status": "not-run",
+              "outcome": "not_run",
+              "reason": "Stopped after shared runtime prerequisite failed",
+              "promptDigest": "a43d92d035b0fa019350ee14739a0ebc8f9a69ed27c967c93744d7d969ecc4d7",
+              "taskDigest": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+              "promptBytes": 6785,
+              "contextBytes": 2234,
+              "timings": {
+                "retrievalMs": 5,
+                "codingMs": null,
+                "gradingMs": null
+              },
+              "trialElapsedMs": 0,
+              "qualityComplete": false,
+              "generation": null,
+              "evaluation": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "totalCliInvocationAttempts": 2,
+  "totalModelDispatchAttempts": null,
+  "totalReportedTokens": 0,
+  "completedGenerations": 0,
+  "measurements": null,
+  "winner": "not_assessed",
+  "automaticPromotion": false,
+  "actualSubscriptionCostUsd": null,
+  "limits": [
+    "Both explicitly requested modes stopped at their first invocation with model_unavailable; no complete pair was generated",
+    "Zero reported tokens describe failed CLI receipts and are not evidence of efficiency or free subscription cost",
+    "Model dispatch count is unknown because generation did not complete",
+    "No coding speed, grading speed, subjective quality or cache advantage was measured",
+    "Prompt, profile and all 23 source digests remained unchanged in each cohort",
+    "Historical successful evidence is not pooled with these cohorts",
+    "Full RepositoryZero runtime, Jev and Auto were not exercised",
+    "Raw reports, prompts and failures remain in ignored private artifacts"
+  ],
+  "nextAction": "Restore access to the exact requested model, or explicitly choose a different model and start new frozen cohorts; preserve both failed cohorts",
+  "promptDigestsVerifiedAfterRun": 4
+}

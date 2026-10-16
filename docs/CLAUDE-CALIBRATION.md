@@ -2,7 +2,7 @@
 
 2026-10-16. **Importuotas vietinis Claude CLI bandymas, perskaičiuotas palyginimas ir pakartotinai patikrintos abi sugeneruotos programos.** Tai to paties Claude CLI su statiniu Zero katalogo kontekstu ir be jo palyginimas. Pilnas RepositoryZero runtime, Jev ir Auto šiame bandyme nedalyvavo.
 
-Mašininė santrauka: [catalog/claude-calibration.json](../catalog/claude-calibration.json). Naudotas `claude-sonnet-5-5`, effort `high`, oficialus Claude CLI2.1.292 su first-party prenumeratos prisijungimu, Node24/Linux x64. CLI įrašytas modelis nėra nepriklausoma provider attestation.
+Mašininė santrauka: [catalog/claude-calibration.json](../catalog/claude-calibration.json). Naudotas `claude-sonnet-5-5`, effort `high`, oficialus Claude CLI 2.1.292 su first-party prenumeratos prisijungimu, Node24/Linux x64. CLI įrašytas modelis nėra nepriklausoma provider attestation.
 
 ## Antra pora: promptas v2
 
@@ -38,11 +38,24 @@ Importuotas archyvas, originalūs reportai, programos ir screenshotai išlaikyti
 - [x] Atskiras `zero-compact-claude-v1` kandidatas; senasis profilis išlaikytas.3614→2234payload baitai apima ir6→5kandidatų pokytį; tas pats retained rinkinys3202→2234. Tai nėra tokenų ar kokybės naudos matavimas.
 
 - [ ] Su ta pačia nauja source/grader versija atlikti3papildomas v2 poras: baseline→Zero, Zero→baseline, baseline→Zero. Daugiausia6naujos coding sesijos; kiekvienai15minučių ir60stebimų tool veiksmų slenkstis. Šis planas modelių pats nepaleidžia.
-- [ ] Prieš pirmą naujos kohortos sesiją užfiksuoti source/prompt/profile hash; tarp porų nekeisti routerio, prompto ar graderio. Visi failure/cancel/unsupported įrašai paliekami. Naujo CLI parserio hardening naudos senieji skaičiai nematuoja.
+- [x] Prieš pirmą naujos kohortos sesiją užfiksuoti source/prompt/profile hash; visi 23 source hash patikrinti ir po abiejų žemiau aprašytų etapų. Promptas ir tikrintuvas nepakeisti, nesėkmės išsaugotos. Naujo CLI parserio hardening naudos senieji skaičiai nematuoja.
 - [ ] Kodavimo, tikrinimo ir viso trial laikus, cache read/write bei faktinės kainos nežinomybę analizuoti atskirai. Naujo adapterio/grader hash nesutampančių kohortų nelyginti apeinant comparator vartus.
 - [ ] Parengti kitą užduotį: vietinis CSV importas, validacija, dublių aptikimas, SQLite išlikimas ir export. Pirma patvirtinti užduoties tekstą, nepriklausomą graderį ir jo negative control, tik tada generuoti abi programas.
 - [ ] Kelių užduočių validavimas ir atskiras holdout prieš bendresnį kokybės/greičio teiginį.
 
-[Vienos komandos paleidimas ir atskiras compact etapas](LOCAL-LAB.md#trys-poros-viena-komanda). Naujos kohortos gyvas statusas **NOT_RUN**: cloud neturi Claude CLI, todėl pirmas preflight sustojo su0coding/modelio kvietimų. Reikia vykdyti paruoštame naudotojo WSL. [Paruošimo įrodymai](../catalog/claude-cohort-checks.json).
+## Nauji vietiniai paleidimai: modelis neprieinamas
+
+2026-10-16 iš švaraus `main` commit `7542de4` vykdyti abu atskiri etapai. Claude CLI 2.1.292 first-party prenumeratos prisijungimas, Docker, pinned image ir naršyklės prerequisite patikros praėjo. Praėjo 93 offline bei 27 Docker regresijos, iš viso 120; tarp jų tikras SQLite/WAL, duomenų praradimo negative control ir desktop/mobile klaviatūros bei layout patikros. Naudota Node 24.19.0, Chromium 155.0.8059.79 ir Playwright 1.63.0.
+
+| Etapas | Planuotos pilnos poros | Užbaigtos pilnos poros | CLI bandymai | Rezultatas |
+|---|---:|---:|---:|---|
+| `npm run lab:cohort -- --live` |3|0|1|`model_unavailable`|
+| `npm run lab:cohort -- --mode compact --live` |3|0|1|`model_unavailable`|
+
+Abu runneriai sustojo po pirmos nesėkmingos sesijos su `stopped_shared_prerequisite`; likusių sesijų nevykdė. CLI prašytas tik `claude-sonnet-5-5` / `high`, modelis automatiškai nekeistas. Pirmas atmetimas truko 8541 ms, antro atskiro etapo 9684 ms. Tai nesėkmingų kvietimų trukmės, ne programos kūrimo rezultatai. Nei viena programa nesukurta, tikrinimo etapų ir kokybės rezultatų nėra. CLI receipt rodo 0 input/output/cache tokenų, o modelio dispatch skaičius ir faktinė prenumeratos kaina lieka nežinomi (`null`). Greičio, tokenų ar cache pranašumas nevertinamas; `measurements: null`, `winner: not_assessed`.
+
+Abiejų kohortų originalūs reportai, promptai ir nesėkmės išsaugoti atskiruose ignoruojamuose `.artifacts/zero-lab/cohorts/` aplankuose. Vieša [gyvų bandymų santrauka](../catalog/claude-cohort-live-2026-10-16.json) turi reportų SHA256, visas 23 source digest ir abiejų etapų būsenas be vietinių paskyrų duomenų. Ankstesni artefaktai išsaugoti; sėkminga istorinė pora su naujais bandymais nesujungta.
+
+Trys poros kiekvienam etapui lieka **neužbaigtos**. Tęsti naujomis kohortomis galima atkūrus prieigą prie tikslaus modelio arba aiškiai pasirinkus kitą modelį. Ankstesnio cloud preflight ir konteksto baitų patikros išlieka [paruošimo įrodymais](../catalog/claude-cohort-checks.json), ne nauju modelio našumo rezultatu. [Paleidimo komandos](LOCAL-LAB.md#trys-poros-viena-komanda).
 
 Aktyvi kryptis — Claude prenumerata. Codex auth ir OpenRouter lenktynės atidėtos. [Vietinis paleidimas](LOCAL-LAB.md), [kalibravimo metodas](CALIBRATION.md), [Zero Lab modulis](ZERO-LAB.md).
