@@ -124,7 +124,9 @@ test("the real default is a frozen three-pair dry run with zero CLI or auth invo
 test("a bounded live orchestration passes the frozen sources, quality evaluation and isolated artifact roots to each member", async t => {
   const calls = [], artifactRoot = await temporary(t);
   const { directory, report } = await runLabCohort({ artifactRoot, live: true }, {
-    runPair: async options => { const index = calls.length; calls.push(options); return { directory: path.join(options.artifactRoot, "controlled"), report: fixture(index, options.frozenSourceDigests) }; },
+    runPair: async options => { const index = calls.length; calls.push(options);
+      assert.equal(JSON.parse(await readFile(path.join(path.dirname(options.artifactRoot), "cohort.json"), "utf8")).status, "running");
+      return { directory: path.join(options.artifactRoot, "controlled"), report: fixture(index, options.frozenSourceDigests) }; },
   });
   assert.equal(calls.length, 3); assert.ok(calls.every(c => c.engine === "claude" && c.promptVersion === 2 && c.evaluate && c.live));
   assert.equal(new Set(calls.map(c => c.artifactRoot)).size, 3);

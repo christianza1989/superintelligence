@@ -37,6 +37,16 @@ test("normalizes fresh, cache-write and cache-read tokens once while keeping est
   assert.equal(r.actualModel, CLAUDE_MODEL); assert.equal(r.apiEquivalentCostEstimateUsd, 0.012);
   assert.equal(r.actualCostUsd, undefined);
 });
+test("synthetic error model placeholders do not hide quota, auth or network failures", () => {
+  for (const [message, expected] of [["You've hit your limit", "usage_limit"], ["You have reached your usage limit", "usage_limit"],
+    ["Authentication required", "auth_required"], ["Network connection unavailable", "network_unavailable"]]) {
+    const placeholder = { type: "assistant", message: { model: "<synthetic>", content: [{ type: "text", text: message }] } };
+    const failed = { ...result(), subtype: "error_during_execution", is_error: true, result: message, modelUsage: {} };
+    const parsed = parse([placeholder, failed]); assert.equal(parsed.valid, false); assert.equal(parsed.failure, expected); assert.equal(parsed.actualModel, null);
+  }
+  const placeholderSuccess = { type: "assistant", message: { model: "<synthetic>", content: [] } };
+  assert.equal(parse([placeholderSuccess, result()]).failure, "model_unavailable");
+});
 
 test("rejects missing/duplicate receipts, malformed usage, unintended models and failed turns", () => {
   for (const events of [[], [result(), result()], [{ ...result(), usage: { input_tokens: "3", output_tokens: 7 } }],

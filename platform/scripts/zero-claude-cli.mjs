@@ -25,7 +25,7 @@ export function claudeArguments({ tools = CLAUDE_TOOLS } = {}) {
 function failure(text) {
   if (/unauthorized|not logged in|authentication|401\b/i.test(text)) return "auth_required";
   if (/model.{0,100}(not supported|not available|unsupported|not found|does not exist)/i.test(text)) return "model_unavailable";
-  if (/rate.limit|usage.limit|limit reached|out of.{0,20}usage|429\b/i.test(text)) return "usage_limit";
+  if (/rate.limit|usage.limit|limit reached|(?:hit|reached)\s+(?:(?:your|the)\s+)?(?:usage\s+)?limit\b|out of.{0,20}usage|429\b/i.test(text)) return "usage_limit";
   if (/network|connection|dns|timed out/i.test(text)) return "network_unavailable";
   return "cli_failure";
 }
@@ -81,7 +81,8 @@ export function createClaudeEventParser(options = {}) {
             Object.entries(event.modelUsage).some(([name, usage]) => !name || name.length > 128 || !record(usage))))) {
         invalidate(); return;
       }
-      if (event.is_error || event.subtype !== "success") {
+      const errorResult = event.is_error || event.subtype !== "success";
+      if (errorResult) {
         const errorText = JSON.stringify(event.errors ?? event.result ?? "");
         reportedFailure = event.subtype === "error_max_turns" ? "turn_limit" : failure(errorText);
       }
@@ -92,7 +93,9 @@ export function createClaudeEventParser(options = {}) {
       const input = u.input_tokens + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
       if (!count(input + u.output_tokens) || typeof event.result !== "string" || Buffer.byteLength(event.result) > 65536) { invalidate(); return; }
       for (const name of Object.keys(event.modelUsage ?? {})) models.add(name);
-      if ([...models].some(name => name !== CLAUDE_MODEL)) reportedFailure = "model_unavailable";
+      // Error placeholders are not a provider model identity. Preserve the actual
+      // auth/quota/network failure instead of replacing it with model_unavailable.
+      if (!errorResult && [...models].some(name => name !== CLAUDE_MODEL)) reportedFailure = "model_unavailable";
       receipt = {
         usage: { inputTokens: input, outputTokens: u.output_tokens, cachedInputTokens: u.cache_read_input_tokens ?? 0,
           cacheCreationInputTokens: u.cache_creation_input_tokens ?? 0, uncachedInputTokens: u.input_tokens, totalTokens: input + u.output_tokens },

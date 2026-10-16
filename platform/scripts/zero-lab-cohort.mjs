@@ -151,6 +151,7 @@ export async function runLabCohort(options = {}, deps = {}) {
   const deadline = options.live ? AbortSignal.timeout(report.maximumCohortMs) : null;
   const signal = deadline ? (options.signal ? AbortSignal.any([options.signal, deadline]) : deadline) : options.signal;
   try {
+    if (options.live) { report.status = "running"; await save(); }
     for (let index = 0; index < pairs; index++) {
       if (signal?.aborted) { report.status = "cancelled"; break; }
       if (canonical((await getPlan()).sourceDigests) !== canonical(plan.sourceDigests)) { report.status = "stopped_source_changed"; break; }
@@ -175,7 +176,7 @@ export async function runLabCohort(options = {}, deps = {}) {
         report.status = "stopped_shared_prerequisite"; break;
       }
     }
-    if (report.status === "prepared_not_run" && options.live) report.status = members.length === pairs ? "completed" : "incomplete";
+    if (report.status === "running" && options.live) report.status = members.length === pairs ? "completed" : "incomplete";
   } catch {
     report.status = signal?.aborted ? "cancelled" : "harness_error";
     report.reason = "cohort_stage_unavailable_without_raw_diagnostics";
