@@ -19,6 +19,7 @@ afterEach(async () => {
 
 function handlers(overrides: Partial<BackgroundJobHandlers> = {}): BackgroundJobHandlers {
   return {
+    "zero.jev-tool.execute": vi.fn(async () => undefined),
     "zero.csv.prepare": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),

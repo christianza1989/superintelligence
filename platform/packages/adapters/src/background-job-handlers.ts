@@ -23,9 +23,12 @@ import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-d
 import { expireTaughtSkillTeaching } from "./teaching-session.js";
 import type { ZeroCsvAuthorize } from "./zero-csv-preparation.js";
 import { runZeroCsvPreparation } from "./zero-csv-preparation.js";
+import type { ZeroJevWorkerDependencies } from "./zero-jev-worker.js";
+import { runZeroJevTool } from "./zero-jev-worker.js";
 
 export function createBackgroundJobHandlers(deps: {
   artifacts?: ArtifactStore;
+  zeroJev?: Pick<ZeroJevWorkerDependencies, "pool" | "resolve" | "fetch">;
   authorizeZeroCsv?: ZeroCsvAuthorize;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
@@ -58,6 +61,13 @@ export function createBackgroundJobHandlers(deps: {
   };
 
   return {
+    "zero.jev-tool.execute": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("Routing artifact store unavailable");
+      await runZeroJevTool(
+        { ...deps.zeroJev, prisma: deps.prisma, artifacts: deps.artifacts },
+        requestArtifactId,
+      );
+    },
     "zero.csv.prepare": async ({ requestArtifactId }) => {
       if (!deps.artifacts) throw new Error("CSV artifact store unavailable");
       await runZeroCsvPreparation(

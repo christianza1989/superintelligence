@@ -1,4 +1,5 @@
 /** Server-only OpenRouter SystemOne transport. A decision never grants execution permission. */
+import type { AgentRuntimeEvent } from "@rakazo/adapter-kit";
 import { z } from "zod";
 import { readBodyCapped, withAbort } from "./web-ssrf.js";
 
@@ -11,7 +12,15 @@ export type SystemOneConfig = Readonly<{
   model: string;
   timeoutMs: number;
 }>;
+export type SystemOneUsageEvent = Extract<AgentRuntimeEvent, { type: "usage" }> & {
+  requestId?: string;
+  rawUsage?: { input_tokens: number; output_tokens: number; cost?: number };
+  reportedModel?: string;
+  reportedProvider?: string;
+};
 export type SystemOneDependencies = {
+  /** Single awaited cost authority. Unknown usage remains null, never a guessed zero. */
+  onUsage?: (event: SystemOneUsageEvent) => Promise<void>;
   fetch?: typeof fetch;
   /** Trusted composition must reserve finite account/lane caps atomically before dispatch. */
   reserve: (invocationId: string) => Promise<SystemOneReservation | null>;
@@ -19,7 +28,12 @@ export type SystemOneDependencies = {
   authorizeDispatch: (invocationId: string, generation: number) => Promise<boolean>;
 };
 type JsonValue =
-  string | number | boolean | null | readonly JsonValue[] | { readonly [key: string]: JsonValue };
+  | string
+  | number
+  | boolean
+  | null
+  | readonly JsonValue[]
+  | { readonly [key: string]: JsonValue };
 const description = z.string().max(1_000).nullable();
 const instructions = z.string().trim().min(1).max(2_000);
 const label = z.string().regex(/^[a-zA-Z0-9_.:-]{1,80}$/);
@@ -216,6 +230,10 @@ export async function requestSystemOneDecision(
     ? AbortSignal.any([request.signal, AbortSignal.timeout(config.timeoutMs)])
     : AbortSignal.timeout(config.timeoutMs);
 
+  let dispatched = false;
+  let usage: z.infer<typeof responseSchema>["usage"];
+  let requestId: string | undefined;
+  let reported: { model?: string; provider?: string } | undefined;
   const performDecision = async (): Promise<SystemOneDecision> => {
     try {
       if (boundedSignal.aborted)
@@ -231,6 +249,7 @@ export async function requestSystemOneDecision(
         return { status: "blocked", reason: "recipient_or_data_grant_changed" };
       boundedSignal.throwIfAborted();
       // One fixed endpoint, one dispatch, one deadline for headers AND body. No SDK retries.
+      dispatched = true;
       const pending = (dependencies.fetch ?? fetch)(ENDPOINT, {
         method: "POST",
         redirect: "error",
@@ -258,7 +277,17 @@ export async function requestSystemOneDecision(
       }
       if (!response.body) return { status: "unknown", reason: "empty_provider_response" };
       const bytes = await readBodyCapped(response, MAX_BYTES, boundedSignal);
-      const parsed = responseSchema.safeParse(JSON.parse(new TextDecoder().decode(bytes)));
+      const raw: unknown = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+      // Preserve valid spend even when a separate answer field is malformed.
+      const spend = responseSchema.pick({ usage: true }).safeParse(raw);
+      if (spend.success) {
+        usage = spend.data.usage;
+      }
+      const identity = responseSchema.pick({ id: true }).safeParse(raw);
+      if (identity.success) requestId = identity.data.id;
+      const provenance = responseSchema.pick({ model: true, provider: true }).safeParse(raw);
+      if (provenance.success) reported = provenance.data;
+      const parsed = responseSchema.safeParse(raw);
       if (!parsed.success) return { status: "unknown", reason: "invalid_provider_schema" };
       const result = parsed.data;
       if (
@@ -314,7 +343,29 @@ export async function requestSystemOneDecision(
       };
     }
   };
-  const decision = await performDecision();
+  let decision = await performDecision();
+  if (dispatched && dependencies.onUsage) {
+    try {
+      await dependencies.onUsage({
+        type: "usage",
+        provider: "openrouter",
+        model: config.model,
+        callId: request.invocationId,
+        operationKind: "retrieval",
+        inputTokens: usage?.input_tokens ?? null,
+        outputTokens: usage?.output_tokens ?? null,
+        costUsd: usage?.cost ?? null,
+        costSource: usage?.cost === undefined ? null : "provider",
+        usageSource: usage ? "provider" : "unknown",
+        ...(requestId === undefined ? {} : { requestId }),
+        ...(usage === undefined ? {} : { rawUsage: usage }),
+        ...(reported?.model === undefined ? {} : { reportedModel: reported.model }),
+        ...(reported?.provider === undefined ? {} : { reportedProvider: reported.provider }),
+      });
+    } catch {
+      decision = { status: "unknown", reason: "usage_receipt_requires_reconciliation" };
+    }
+  }
   try {
     // No expiry or refund: even cancellation/invalid responses may already cost money.
     await hold();

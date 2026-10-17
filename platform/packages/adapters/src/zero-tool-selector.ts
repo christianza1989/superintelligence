@@ -1,5 +1,9 @@
 /** Server-side only. Repo discovery is separate from this tool selector. */
-import type { SystemOneConfig, SystemOneReservation } from "./zero-systemone.js";
+import type {
+  SystemOneConfig,
+  SystemOneReservation,
+  SystemOneUsageEvent,
+} from "./zero-systemone.js";
 import { requestSystemOneDecision } from "./zero-systemone.js";
 
 export type ToolProfile = Readonly<{
@@ -22,6 +26,7 @@ export type ToolSelection =
 export type ToolSelectorConfig = SystemOneConfig;
 export type ToolSelectorDependencies = {
   fetch?: typeof fetch;
+  onUsage?: (event: SystemOneUsageEvent) => Promise<void>;
   /** Must atomically enforce the shared account, routing and invocation caps. Null means denied. */
   reserve: (invocationId: string) => Promise<RoutingReservation | null>;
   /** Recheck provider/account and permission to send this task data immediately before dispatch. */
@@ -82,6 +87,7 @@ export async function selectToolWithJev(
     {
       fetch: dependencies.fetch,
       reserve: dependencies.reserve,
+      onUsage: dependencies.onUsage,
       authorizeDispatch: async (invocationId, generation) => {
         if (!(await dependencies.authorizeDispatch(invocationId, generation))) return false;
         for (const tool of tools) {

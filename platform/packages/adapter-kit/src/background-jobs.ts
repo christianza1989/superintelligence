@@ -7,6 +7,7 @@ import type {
 } from "./types.js";
 
 const payloadSchemas = {
+  "zero.jev-tool.execute": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.csv.prepare": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "run.continue": z.object({ runId: z.string().min(1) }),
   "routine.wakeup": z.object({
