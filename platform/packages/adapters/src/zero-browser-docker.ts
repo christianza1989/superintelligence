@@ -375,13 +375,22 @@ export async function runZeroBrowserDocker(
           : "browser_boundary_rejected";
   } finally {
     if (started) {
-      const cleanup = await invoke(
+      const cleanupSignal = AbortSignal.timeout(ZERO_BROWSER_DOCKER_LIMITS.cleanupMs);
+      await invoke(
         ["rm", "--force", name],
         "",
-        AbortSignal.timeout(ZERO_BROWSER_DOCKER_LIMITS.cleanupMs),
+        cleanupSignal,
         ZERO_BROWSER_DOCKER_LIMITS.cleanupMs,
       );
-      if (cleanup.code === 0) result.runtime.cleanup = "force_removed";
+      const absence = await invoke(
+        ["ps", "--all", "--quiet", "--filter", `name=^/${name}$`],
+        "",
+        cleanupSignal,
+        ZERO_BROWSER_DOCKER_LIMITS.cleanupMs,
+      );
+      if (absence.code === 0 && !absence.reason && absence.stdout.trim() === "") {
+        if (result.runtime.cleanup !== "container_exited") result.runtime.cleanup = "force_removed";
+      } else result.runtime.cleanup = "unknown";
       if (result.runtime.cleanup === "unknown") {
         await discard();
         result.outcome = "unknown";

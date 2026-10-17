@@ -94,6 +94,78 @@ describe("sealed browser boundary (offline)", () => {
       runtime: { cleanup: "not_started" },
     });
   });
+  it.each(["listed", "failure", "absent"] as const)(
+    "requires affirmative daemon absence after rm returns zero: %s",
+    async (mode) => {
+      const f = await fixture();
+      const executable = path.join(f.root, "synthetic-docker");
+      const program = [
+        `#!${process.execPath}`,
+        'const fs=require("fs");const args=process.argv.slice(2);',
+        "fs.appendFileSync(" +
+          JSON.stringify(path.join(f.root, "calls.jsonl")) +
+          ',JSON.stringify(args)+"\\n");',
+        'if(args.includes("image"))console.log(' +
+          JSON.stringify(
+            JSON.stringify([
+              {
+                Id: f.config.imageId,
+                Size: 1,
+                Config: {
+                  User: "1000:1000",
+                  Labels: {
+                    "org.repositoryzero.browser.profile": "zero-browser-shell-image-v1",
+                    "org.repositoryzero.browser.input-lock-sha256": f.config.buildInputLockSha256,
+                  },
+                },
+              },
+            ]),
+          ) +
+          ");",
+        'else if(args.includes("run"))process.exitCode=9;',
+        'else if(args.includes("ps")){if(' +
+          JSON.stringify(mode) +
+          '==="listed")console.log("synthetic-container-id");if(' +
+          JSON.stringify(mode) +
+          '==="failure")process.exitCode=1}',
+      ].join("\n");
+      await writeFile(executable, program, { mode: 0o700 });
+      const result = await runZeroBrowserDocker(
+        { ...f.config, dockerExecutable: executable },
+        { taskId: "article-fact" },
+        f.context,
+        f.artifacts,
+      );
+      expect(result).toMatchObject(
+        mode === "absent"
+          ? {
+              outcome: "blocked",
+              reason: "browser_container_failed",
+              runtime: { cleanup: "force_removed" },
+            }
+          : {
+              outcome: "unknown",
+              reason: "browser_cleanup_unconfirmed",
+              runtime: { cleanup: "unknown" },
+            },
+      );
+      const calls = (await readFile(path.join(f.root, "calls.jsonl"), "utf8"))
+        .trim()
+        .split("\n")
+        .map((line) => JSON.parse(line) as string[]);
+      const launch = calls.find((args) => args.includes("run"))!;
+      const name = launch[launch.indexOf("--name") + 1]!;
+      expect(calls.find((args) => args.includes("ps"))).toEqual([
+        "--host",
+        "unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--filter",
+        `name=^/${name}$`,
+      ]);
+    },
+  );
   it("pins the finite launch policy and rejects interpolated operator arguments", () => {
     const args = zeroBrowserDockerRunArguments(
       `sha256:${"a".repeat(64)}`,
@@ -226,7 +298,7 @@ const s=net.createConnection({host:"192.0.2.1",port:9});s.on("error",e=>{r.netwo
   it("actually exhausts bounded tmpfs without growing writable image layers", async () => {
     const f = await fixture();
     const result = await raw(f, {
-      code: `const fs=require("fs");let bytes=0;const fd=fs.openSync("/tmp/fill","w");try{for(let i=0;i<140;i++){fs.writeSync(fd,Buffer.alloc(1048576));bytes+=1048576}}catch(e){console.log(JSON.stringify({reason:e.code,bytes}))}finally{fs.closeSync(fd)}`,
+      code: `const fs=require("fs");let bytes=0;try{for(let i=0;i<140;i++){fs.writeFileSync("/tmp/fill-"+i,Buffer.alloc(1048576));bytes+=1048576}}catch(e){console.log(JSON.stringify({reason:e.code,bytes}))}`,
     });
     await save("resource-tmpfs", result);
     expect(result.code).toBe(0);
@@ -244,7 +316,7 @@ const s=net.createConnection({host:"192.0.2.1",port:9});s.on("error",e=>{r.netwo
   it("bounds PID creation and reaps the owned container", async () => {
     const f = await fixture();
     const result = await raw(f, {
-      code: `const {spawn}=require("child_process");const children=[];let pending=0;let failure;for(let i=0;i<150;i++){const c=spawn("/bin/sleep",["2"]);children.push(c);pending++;c.on("error",e=>{failure=e.code;if(--pending===0)end()});c.on("exit",()=>{if(--pending===0)end()})}function end(){console.log(JSON.stringify({failure,children:children.length}))}`,
+      code: `const {spawn}=require("child_process");const children=[];let pending=0;let failure;for(let i=0;i<150;i++){const c=spawn("/bin/sleep",["2"],{stdio:"ignore"});children.push(c);pending++;c.on("error",e=>{failure=e.code;if(--pending===0)end()});c.on("exit",()=>{if(--pending===0)end()})}function end(){console.log(JSON.stringify({failure,children:children.length}))}`,
     });
     await save("resource-pids", result);
     expect(result.code).toBe(0);
