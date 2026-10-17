@@ -12,8 +12,8 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type * as Descriptor from "./file-handle-path.js";
-import { fileHandlePath } from "./file-handle-path.js";
+import type * as Descriptor from "./zero-operator-file-path.js";
+import { fileHandlePath } from "./zero-operator-file-path.js";
 import {
   createZeroProjectPolicy,
   readZeroOperatorFile,
@@ -22,7 +22,7 @@ import {
   zeroProjectPolicyFromEnv,
 } from "./zero-project-policy.js";
 
-vi.mock("./file-handle-path.js", async (original) => {
+vi.mock("./zero-operator-file-path.js", async (original) => {
   const actual = await original<typeof Descriptor>();
   return { ...actual, fileHandlePath: vi.fn(actual.fileHandlePath) };
 });
@@ -42,7 +42,7 @@ async function fixture(value: unknown = { version: 1, grants: [grant()] }) {
   return { root, file, policy: createZeroProjectPolicy(file) };
 }
 beforeEach(async () => {
-  const actual = await vi.importActual<typeof Descriptor>("./file-handle-path.js");
+  const actual = await vi.importActual<typeof Descriptor>("./zero-operator-file-path.js");
   vi.mocked(fileHandlePath).mockReset().mockImplementation(actual.fileHandlePath);
 });
 afterEach(async () => {
@@ -230,7 +230,7 @@ describe.skipIf(process.platform !== "linux")("trusted operator project policy",
 
   it("rejects pathname replacement after opening the original descriptor", async () => {
     const { root, file, policy } = await fixture();
-    const actual = await vi.importActual<typeof Descriptor>("./file-handle-path.js");
+    const actual = await vi.importActual<typeof Descriptor>("./zero-operator-file-path.js");
     vi.mocked(fileHandlePath).mockImplementationOnce(async (fd) => {
       const opened = await actual.fileHandlePath(fd);
       await rename(file, path.join(root, "old-policy.json"));
@@ -244,7 +244,7 @@ describe.skipIf(process.platform !== "linux")("trusted operator project policy",
 
   it("rejects a permission change during descriptor validation", async () => {
     const { file, policy } = await fixture();
-    const actual = await vi.importActual<typeof Descriptor>("./file-handle-path.js");
+    const actual = await vi.importActual<typeof Descriptor>("./zero-operator-file-path.js");
     vi.mocked(fileHandlePath).mockImplementationOnce(async (fd) => {
       const opened = await actual.fileHandlePath(fd);
       await chmod(file, 0o644);

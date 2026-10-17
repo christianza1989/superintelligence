@@ -9,7 +9,7 @@ import {
 } from "./zero-application-transport.js";
 import { zeroCsvArtifactPageSchema } from "./zero-csv-application-client.js";
 import { ZERO_JEV_LIMITS } from "./zero-jev-worker.js";
-import { readZeroOperatorFile } from "./zero-project-policy.js";
+import { readZeroOperatorFile } from "./zero-operator-file.js";
 
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
