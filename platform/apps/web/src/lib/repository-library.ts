@@ -57,7 +57,9 @@ export function parseLibraryFilters(
     return choices.includes(value as T) ? (value as T) : fallback;
   };
   return {
-    query: (params.get("q") ?? "").slice(0, 256),
+    // Retain one overflow character so shared retrieval rejects the whole
+    // request instead of accepting a prefix that lost a hard constraint.
+    query: (params.get("q") ?? "").slice(0, 257),
     category: choice("category", repositoryCategories, ""),
     source: choice("source", ["", "available", "unavailable"], ""),
     license: choice("license", ["", "known", "unknown"], ""),

@@ -73,11 +73,18 @@ describe("independent human Library", () => {
     );
     expect(filters).toEqual({
       ...DEFAULT_LIBRARY_FILTERS,
-      query: "x".repeat(256),
+      query: "x".repeat(257),
     });
     expect(parseLibraryFilters("repo=kde%2FKRITA").repository).toBe(
       "KDE/krita",
     );
+  });
+  it("never drops an overlong URL constraint before shared retrieval", () => {
+    const query = "image editor" + " ".repeat(245) + "Windows";
+    const filters = parseLibraryFilters(new URLSearchParams({ q: query }));
+    expect(filters.query).toHaveLength(257);
+    expect(libraryRepositories(filters, [])).toEqual([]);
+    expect(parseLibraryFilters(librarySearchParams(filters))).toEqual(filters);
   });
   it("persists only canonical Saved IDs between independent reads", () => {
     const local = storage();
