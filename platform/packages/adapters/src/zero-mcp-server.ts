@@ -4,16 +4,20 @@ import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import {
   getRepositoryMetadata,
+  preparedProfiles,
   repositoryCategories,
   repositoryMetadataSnapshot,
   repositorySnapshot,
   repositorySourceUrl,
 } from "@rakazo/core/repositoryzero";
 import { z } from "zod";
-import { repositorySearchFromTool } from "./zero-repository-tools.js";
+import {
+  REPOSITORY_SEARCH_EVALUATION,
+  repositorySearchFromTool,
+} from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.5.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.5.0";
+export const ZERO_MCP_SERVER_VERSION = "0.6.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.6.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -99,9 +103,46 @@ const metadataSchema = z.strictObject({
     reason: z.string().max(256).optional(),
   }),
 });
+const csvProfile = preparedProfiles[0]!;
+const preparedProfileSchema = z.strictObject({
+  profileId: z.literal(csvProfile.profileId),
+  repository: z.literal(csvProfile.repository),
+  category: z.literal(csvProfile.category),
+  capability: z.literal(csvProfile.capability),
+  packageName: z.literal(csvProfile.packageName),
+  packageVersion: z.literal(csvProfile.packageVersion),
+  source: z.literal(csvProfile.source),
+  sourceFiles: z.strictObject({
+    "src/csv.js": z.literal(csvProfile.sourceFiles["src/csv.js"]),
+    "src/dsv.js": z.literal(csvProfile.sourceFiles["src/dsv.js"]),
+    LICENSE: z.literal(csvProfile.sourceFiles.LICENSE),
+  }),
+  licenseSource: z.literal(csvProfile.licenseSource),
+  entrypoint: z.literal(csvProfile.entrypoint),
+  limits: z.strictObject({
+    inputBytes: z.literal(csvProfile.limits.inputBytes),
+    rows: z.literal(csvProfile.limits.rows),
+    columns: z.literal(csvProfile.limits.columns),
+    cellChars: z.literal(csvProfile.limits.cellChars),
+    artifactBytes: z.literal(csvProfile.limits.artifactBytes),
+    runtimeMs: z.literal(csvProfile.limits.runtimeMs),
+    outstandingJobsPerScope: z.literal(csvProfile.limits.outstandingJobsPerScope),
+  }),
+  conformance: z.strictObject({
+    status: z.literal(csvProfile.conformance.status),
+    scope: z.literal(csvProfile.conformance.scope),
+    evidence: z.tuple([
+      z.literal(csvProfile.conformance.evidence[0]!),
+      z.literal(csvProfile.conformance.evidence[1]!),
+    ]),
+    holdout: z.literal("NOT_RUN"),
+  }),
+});
 const searchOutput = z.strictObject({
   ...commonOutput,
-  status: z.enum(["source_candidates", "missing"]),
+  evaluation: z.literal(REPOSITORY_SEARCH_EVALUATION),
+  status: z.enum(["prepared_profiles", "source_candidates", "missing"]),
+  preparedProfiles: z.array(preparedProfileSchema).max(1),
   candidates: z.array(candidateSchema).max(5),
 });
 const inspectOutput = z.strictObject({
@@ -250,7 +291,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_search",
     {
       description:
-        "Search the bundled source catalog for up to five candidates. Lexical matches are not verified fit; an empty result means no local match. No install or execution permission.",
+        "Search one bounded prepared CSV profile before the bundled source catalog. Returns scoped development-conformance facts separately from up to five source candidates. An empty result means no local match. No install or execution grant, host integration or benefit is established.",
       inputSchema: z.strictObject(
         {
           query: z
@@ -275,8 +316,9 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
         {
           schemaVersion: ZERO_MCP_SCHEMA_VERSION,
           researchDate: repositorySnapshot.researchDate,
-          evaluation,
+          evaluation: REPOSITORY_SEARCH_EVALUATION,
           status: result.status,
+          preparedProfiles: result.preparedProfiles,
           candidates: result.candidates?.map((candidate) => ({
             candidateId: candidate.repository,
             ...candidate,

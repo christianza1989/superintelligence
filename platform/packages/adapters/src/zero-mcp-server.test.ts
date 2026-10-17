@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { repositorySnapshot } from "@rakazo/core/repositoryzero";
+import { preparedProfiles, repositorySnapshot, searchRepositories } from "@rakazo/core/repositoryzero";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createZeroMcpServer,
@@ -79,6 +79,10 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(tools[0]?.outputSchema?.properties?.candidates).toMatchObject({
       maxItems: 5,
     });
+    expect(tools[0]?.outputSchema?.properties?.preparedProfiles).toMatchObject({
+      maxItems: 1,
+      items: { additionalProperties: false },
+    });
     expect(tools[1]?.inputSchema.properties?.candidateId).toMatchObject({
       maxLength: 256,
     });
@@ -97,6 +101,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
       status: "source_candidates",
       researchDate: repositorySnapshot.researchDate,
       schemaVersion: ZERO_MCP_SCHEMA_VERSION,
+      preparedProfiles: [],
     });
     expect(result.candidates).toEqual(
       expected.candidates?.map((candidate) => ({
@@ -108,6 +113,76 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(result.candidates).toEqual([
       expect.objectContaining({ licenseApproved: false, runtimeTested: false }),
     ]);
+  });
+
+  it("returns bounded strict-profile facts over the SDK without fabricating a catalog candidate", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network forbidden"));
+    const result = content(
+      await call("zero_search", { query: "Reikia CSV lentelių nuskaitymo" }),
+      ZERO_MCP_OUTPUT_LIMITS.search,
+    );
+    expect(result).toMatchObject({
+      status: "prepared_profiles", candidates: [], preparedProfiles,
+      schemaVersion: "1.6.0",
+    });
+    expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
+    const profile = (result.preparedProfiles as Array<Record<string, unknown>>)[0]!;
+    expect(profile).toMatchObject({
+      profileId: "d3-dsv-3.0.1/strict-table-v1",
+      entrypoint: "src/csv.js#csvParseRows",
+      packageVersion: "3.0.1",
+      sourceFiles: { LICENSE: expect.stringMatching(/^[a-f0-9]{64}$/u) },
+      limits: { inputBytes: 16384, rows: 512, columns: 64 },
+      licenseSource: "ISC",
+      conformance: { status: "development-conformance", holdout: "NOT_RUN" },
+    });
+    for (const key of ["candidateId", "runtimeTested", "runtimeReady", "licenseApproved", "grant"])
+      expect(profile).not.toHaveProperty(key);
+    expect(result.evaluation).toMatch(/scoped.*development conformance.*untrusted data/u);
+    expect((await client.listTools()).tools).toHaveLength(3);
+    expect(content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status)).toMatchObject({
+      server: { version: "0.6.0" }, profile: "discovery-only", backend: "unavailable",
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each(["CSV TSV", "CSV windows", "CSV OCR", "approved license CSV", "CSV unknown"])(
+    "preserves prepared no-fit through the SDK for %s", async (query) => {
+      expect(content(await call("zero_search", { query }), ZERO_MCP_OUTPUT_LIMITS.search)).toMatchObject({
+        status: "missing", preparedProfiles: [], candidates: [],
+      });
+    },
+  );
+
+  it("keeps prepared profiles outside catalog inspection and respects category filters", async () => {
+    expect(content(await call("zero_search", { query: "CSV", category: "documents" }),
+      ZERO_MCP_OUTPUT_LIMITS.search)).toMatchObject({ status: "missing", preparedProfiles: [] });
+    for (const candidateId of ["d3/d3-dsv", preparedProfiles[0]!.profileId])
+      expect(content(await call("zero_inspect", { candidateId }), ZERO_MCP_OUTPUT_LIMITS.inspect))
+        .toMatchObject({ status: "missing", candidate: null, readiness: "source-only" });
+  });
+
+  it("keeps source flags independent when a synthetic source capability also matches", async () => {
+    const entry = repositorySnapshot.records[0]!;
+    const original = entry.capability;
+    try {
+      entry.capability = "CSV parser";
+      const result = content(
+        await call("zero_search", { query: "CSV parser" }),
+        ZERO_MCP_OUTPUT_LIMITS.search,
+      );
+      expect(result.status).toBe("prepared_profiles");
+      expect(result.preparedProfiles).toEqual(preparedProfiles);
+      expect(result.candidates).toEqual([
+        expect.objectContaining({
+          candidateId: entry.repository,
+          runtimeTested: entry.runtimeTested,
+          licenseApproved: entry.licenseApproved,
+        }),
+      ]);
+    } finally {
+      entry.capability = original;
+    }
   });
 
   it("caps broad queries at five and respects the catalog category filter", async () => {
