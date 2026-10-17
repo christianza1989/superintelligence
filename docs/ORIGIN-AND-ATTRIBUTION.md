@@ -1,5 +1,7 @@
 # Projekto kilmė ir autorystės įrodymai
 
+> **Kilmės ir licencijų nuorodos · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16 UTC. Šis dokumentas padeda užfiksuoti konkrečių medžiagų kilmę. **Tai nėra nepriklausoma laiko žyma, registracija, tapatybės patvirtinimas ar teisinės išimtinės teisės į bendrą idėją suteikimas.**
 
 ## Ką galima pagrįsti

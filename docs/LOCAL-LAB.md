@@ -1,13 +1,15 @@
 # Vietinis Zero Lab su Claude prenumerata
 
-2026-10-17. Aktyvus naujos užduoties pasirinkimas — **oficialus Claude CLI 2.1.301, Haiku 5.5/high ir Claude prenumerata**, vienodai abiem pusėms. [StockDesk eiga ir rezultatai](STOCKDESK-CALIBRATION.md). Ankstesni [Sonnet bandymai](CLAUDE-CALIBRATION.md) išsaugoti atskirai. Codex auth ir OpenRouter coding lenktynes praleidžiame; Jev atranka turi atskirą bendrą 1 USD biudžetą.
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+2026-10-17. Naujausias pasirinktas eksperimentų profilis — **oficialus Claude CLI 2.1.301, Haiku 5.5/high ir Claude prenumerata**, vienodai abiem pusėms. [StockDesk eiga ir rezultatai](experiments/STOCKDESK-CALIBRATION.md). Ankstesni [Sonnet bandymai](experiments/CLAUDE-CALIBRATION.md) išsaugoti atskirai. Codex auth ir OpenRouter coding lenktynes praleidžiame; Jev atranka turi atskirą bendrą 1 USD biudžetą.
 
 ## Pradinės sąlygos
 
 - Debian Linux x64 per WSL2, Node.js24/npm ir projektas Linux failų sistemoje, pavyzdžiui `~/projects/repositoryzero`.
 - Docker Desktop su tos WSL distribucijos integracija; `docker info` turi veikti. Evaluator naudoja vietinį `/var/run/docker.sock`.
 - Linux Chromium `/usr/lib/chromium/chromium`, glibc bibliotekos ir DejaVu Sans; naujausioje vietinėje regresijoje tikrintas Chromium 155.0.8059.79 ir Playwright 1.63.0. Debian paketus paruošia `sudo apt-get update` ir `sudo apt-get install chromium fonts-dejavu-core`. Windows Chrome ar Ubuntu Snap nėra šio profilio dalis.
-- Oficialus Claude CLI tame pačiame WSL naudotojuje; vietiniame bandyme versija2.1.292. Prisijungimas per `claude auth login --claudeai`. Adapteris per oficialų `claude --safe-mode auth status` priima tik `claude.ai` first-party prisijungimą; credential failų neskaito ir jų neperkelia. API raktų nereikia.
+- Oficialus Claude CLI tame pačiame WSL naudotojuje; ankstyvame bandyme versija 2.1.292; naujausiame palaikomame profilyje 2.1.301. Prisijungimas per `claude auth login --claudeai`. Adapteris per oficialų `claude --safe-mode auth status` priima tik `claude.ai` first-party prisijungimą; credential failų neskaito ir jų neperkelia. API raktų nereikia.
 
 CLI coding teisės `dontAsk` nėra OS izoliacija. Dvi coding darbo vietos atskiros, bet tas pats naudotojas gali jas perskaityti; abiem sesijoms galioja vienodas draudimas skaityti kitos pusės rezultatą. Generuotos programos vertinamos atskiruose non-root, network-none, ribotų resursų Docker konteineriuose. Chromium turi atskirą konteinerį ir nenaudoja host naršyklės; tai kontroliuojamo vietinio kodo profilis, ne hostile upstream PR izoliacija.
 
@@ -29,7 +31,7 @@ npm run lab:run -- --engine claude --prompt-version 2
 
 Paskutinė komanda yra **dry-run**: paruošia du promptus ir not-run ataskaitą, modelių nekviečia. `lab:prepare -- --engine claude` patikrina pasirinktą prenumeratos CLI, vietinį Docker, pinned Node image ir naršyklės failus. Prireikus atsisiunčia tik pinned image; modelio nekviečia. Trūkstant CLI/auth/Docker/image/browser, gyvas runneris sustoja prieš coding kvietimą. Naudojant Claude šiam keliui nereikia Codex writable state ar Codex prisijungimo.
 
-Auth prerequisite PASS patvirtina prenumeratos prisijungimą, tačiau negarantuoja prieigos prie pasirinkto modelio. 2026-10-16 du ankstesni gyvi etapai sustojo su `model_unavailable`; jų nesėkmės išsaugotos. Vėliau tas pats Sonnet 5.5 veikė ir naujoje pakartojimų kohortoje užbaigtos visos 3 poros, 6/6 PASS. [Naujausi rezultatai ir ribos](CLAUDE-CALIBRATION.md#trys-naujos-poros-katalogo-kontekstas).
+Auth prerequisite PASS patvirtina prenumeratos prisijungimą, tačiau negarantuoja prieigos prie pasirinkto modelio. 2026-10-16 du ankstesni gyvi etapai sustojo su `model_unavailable`; jų nesėkmės išsaugotos. Vėliau tas pats Sonnet 5.5 veikė ir naujoje pakartojimų kohortoje užbaigtos visos 3 poros, 6/6 PASS. [Naujausi rezultatai ir ribos](experiments/CLAUDE-CALIBRATION.md#trys-naujos-poros-katalogo-kontekstas).
 
 Failų prerequisite PASS dar neįrodo, kad Node/Chromium image iš tikro veikia. Vienkartinės runtime regresijos be modelių:
 
@@ -50,7 +52,7 @@ npm run lab:run -- --engine claude --prompt-version 2 --profiles claude-fixed-v1
 
 Tai aiškiai įjungia daugiausia dvi coding sesijas: baseline ir tas pats Claude CLI su statiniu Zero katalogo kontekstu. Modelis `claude-sonnet-5-5`, effort `high`; kiekvienai15minučių ir60stebimų tool veiksmų slenkstis. Slenkstis gali sustabdyti tik jau pastebėtą veiksmą, todėl tai nėra strict pre-dispatch cap. Papildomi agentai, customizations ir MCP šiam profiliui išjungti. Jev/Auto ir pilnas RepositoryZero runtime nedalyvauja.
 
-Kitoje poroje sukeisk tik `--profiles` tvarką į `zero-retrieval-claude-v1,claude-fixed-v1`. Nekeisk užduoties/graderio tarp tos pačios kohortos bandymų. Pradiniame manifeste viena pora; pakartotinai paleista komanda kuria naują run ir naujas sesijas. [Kito etapo limitai](CLAUDE-CALIBRATION.md#kitas-ribotas-etapas).
+Kitoje poroje sukeisk tik `--profiles` tvarką į `zero-retrieval-claude-v1,claude-fixed-v1`. Nekeisk užduoties/graderio tarp tos pačios kohortos bandymų. Pradiniame manifeste viena pora; pakartotinai paleista komanda kuria naują run ir naujas sesijas. [Kito etapo limitai](experiments/CLAUDE-CALIBRATION.md#kitas-ribotas-etapas).
 
 Runtime paketas turi būti prebuilt Node24 su `npm start`, be deklaruotų external npm dependencies; subundlintas kodas su notices leidžiamas. Nėra dependency install/build. Nepalaikomas artefaktas yra unsupported. API/SQLite restart ir desktop1440×900/mobile390×844 keyboard/create/move/API readback/reload/overflow/runtime patikros yra ribota automatinė atitiktis; subjektyvi kokybė nevertinama. SQLite WAL/journal tikrinami iki64MiB kopijoje atskirame tmpfs, originalus tūris lieka read-only. App restart nėra host/daemon power-loss patvarumo įrodymas.
 
@@ -104,12 +106,12 @@ Cloud sesija turi savo vykdymo aplinką; Full access pats nesukuria Windows/WSL 
 
 ## Naujausias patvirtintas opt-in variantas
 
-`npm run lab:cohort -- --mode lean-low --live` palygina pradinį Sonnet 5.5/high su Sonnet 5.5/low, trumpu fiksuotu sisteminiu promptu ir keturiais vietiniais įrankiais. Naujoje trijų porų kohortoje 6/6 PASS: trial laikų suma −61,61 %, trial mediana −48,95 %, CLI API kainos ekvivalentas −68,69 %. Tai vienos SprintDesk užduoties visos konfigūracijos matavimas, ne prenumeratos sąskaitos ar individualios Jev/reuse naudos įrodymas. Numatytoji repeat konfigūracija nepakeista. [Protokolas](LEAN-CALIBRATION.md), [visi rezultatai ir nesėkmės](CLAUDE-CALIBRATION.md).
+`npm run lab:cohort -- --mode lean-low --live` palygina pradinį Sonnet 5.5/high su Sonnet 5.5/low, trumpu fiksuotu sisteminiu promptu ir keturiais vietiniais įrankiais. Naujoje trijų porų kohortoje 6/6 PASS: trial laikų suma −61,61 %, trial mediana −48,95 %, CLI API kainos ekvivalentas −68,69 %. Tai vienos SprintDesk užduoties visos konfigūracijos matavimas, ne prenumeratos sąskaitos ar individualios Jev/reuse naudos įrodymas. Numatytoji repeat konfigūracija nepakeista. [Protokolas](experiments/LEAN-CALIBRATION.md), [visi rezultatai ir nesėkmės](experiments/CLAUDE-CALIBRATION.md).
 
 Paskutinį kombinuoto Jev/bibliotekos/low patvirtinimą nutraukė generacijų klaidos; vėlesnė diagnostika patvirtino Claude sesijos kvotą (CLI nurodė 00:40 UTC; pagal diagnostikos laiką kitas atsinaujinimas yra 2026-10-17). Adapterio klaidos klasifikacija ir stop-after-first taisyklė ištaisyta; nauja gyva kohorta po taisymo dar nevykdyta. Prieš vėlesnį Jev bandymą paruošti naują planą aktualiems source hash ir naudoti tą patį bendrą biudžeto ledger.
 
 ## StockDesk su vienodu Haiku
 
-[Užduoties tekstas v2](../benchmarks/stockdesk-v1/PROMPT.v2.md), [protokolas ir komandos](../benchmarks/stockdesk-v1/README.md), [matavimai](../catalog/stockdesk-results-2026-10-17.json). Įgyvendinti atskiri API/CSV, tikro SQLite restart ir desktop/mobile darbo eigų tikrintuvai bei aštuoni tyčiniai gedimai. Testai praėjo prieš modelių generavimą. Pirmoje A/C poroje abu programų variantai PASS; tai viena atranka su senesniu CLI 2.1.292, ne pakartojamas Jev pranašumas. Jev neparinko bibliotekų. Šios poros kainos įvertis nevaliduotas, nes oficialus Haiku 5.5 atpažinimas atsirado CLI 2.1.293. Po poros įdiegtas ir naujiems etapams fiksuojamas 2.1.301, tikrinamas versioned executable SHA256. Prieš naują etapą reikia naujo frozen paruošimo, naudojant tą patį 1 USD ledger; senos kohortos neperrašomos ir nesujungiamos su naujos CLI rezultatais. [Detali analizė ir kokybės ribos](STOCKDESK-CALIBRATION.md).
+[Užduoties tekstas v2](../benchmarks/stockdesk-v1/PROMPT.v2.md), [protokolas ir komandos](../benchmarks/stockdesk-v1/README.md), [matavimai](../catalog/stockdesk-results-2026-10-17.json). Įgyvendinti atskiri API/CSV, tikro SQLite restart ir desktop/mobile darbo eigų tikrintuvai bei aštuoni tyčiniai gedimai. Testai praėjo prieš modelių generavimą. Pirmoje A/C poroje abu programų variantai PASS; tai viena atranka su senesniu CLI 2.1.292, ne pakartojamas Jev pranašumas. Jev neparinko bibliotekų. Šios poros kainos įvertis nevaliduotas, nes oficialus Haiku 5.5 atpažinimas atsirado CLI 2.1.293. Po poros įdiegtas ir naujiems etapams fiksuojamas 2.1.301, tikrinamas versioned executable SHA256. Prieš naują etapą reikia naujo frozen paruošimo, naudojant tą patį 1 USD ledger; senos kohortos neperrašomos ir nesujungiamos su naujos CLI rezultatais. [Detali analizė ir kokybės ribos](experiments/STOCKDESK-CALIBRATION.md).
 
 StockDesk promptas v2 atskirai patikslina lowStock=false ir null semantiką; CSV eksporto tikrintuvas lygina išparsintus duomenis. Naujos kontrolinės regresijos18/18PASS. Abi ankstesnės v1 kohortos išsaugotos atskirai; jų greičio/kainos statistika nejungiama su nauja atranka ar patvirtinimu.

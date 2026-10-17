@@ -1,6 +1,8 @@
 # Atviras UI pagrindas ir Rakazo / OpenCode hibridas
 
-2026-10-16. Dviejų agentų šaltinių ir dizaino peržiūra. **Pasirinkta projektavimo kryptis: realiai adaptuojamas Rakazo React workspace, papildytas OpenCode UX principais.** Galutinį source fork ir backend pasirinkimą patvirtina ribotas P0.0/P0.28 bandymas; šaltinių peržiūros metu install/build/runtime buvo **NOT_RUN**. Vėliau pasirinkta Rakazo adaptacija, web build ir pirmi UI testai praėjo; pilnas backend dar nepriimtas. [Aktuali įgyvendinimo būsena](IMPLEMENTATION.md). [Nepriklausoma kritika](reviews/ui-foundation-review.md), [įrodymų registras](../catalog/ui-foundations.json).
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+2026-10-16. Dviejų agentų šaltinių ir dizaino peržiūra. **Pasirinkta projektavimo kryptis: realiai adaptuojamas Rakazo React workspace, papildytas OpenCode UX principais.** Galutinį source fork ir backend pasirinkimą patvirtina ribotas P0.0/P0.28 bandymas; šaltinių peržiūros metu install/build/runtime buvo **NOT_RUN**. Vėliau pasirinkta Rakazo adaptacija, web build ir pirmi UI testai praėjo; pilnas backend dar nepriimtas. [Aktuali įgyvendinimo būsena](IMPLEMENTATION.md). [Nepriklausoma kritika](quarantine/2026-10-17/docs/reviews/ui-foundation-review.md.snapshot.txt), [įrodymų registras](../catalog/ui-foundations.json).
 
 ## 1. Ką reiškia hibridas
 

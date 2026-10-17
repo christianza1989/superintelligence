@@ -1,6 +1,8 @@
 # RepositoryZero Video Hub
 
-Plano 0.2 papildymas, 2026-10-16. Naudotojo reikalavimas: prisijungęs žmogus pateikia su projektu susijusį YouTube video; sistema patikrina tinkamumą, paskelbia kataloge ir leidžia balsuoti. **Būsena: suprojektuota, NOT_RUN; nėra account sistemos, veikiančio katalogo, API kvietimų ar tikrų balsų.** [Kritinė peržiūra](reviews/video-hub-review.md), [kūrėjų augimo programa](GROWTH-AND-OUTREACH.md).
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+Plano 0.2 papildymas, 2026-10-16. Naudotojo reikalavimas: prisijungęs žmogus pateikia su projektu susijusį YouTube video; sistema patikrina tinkamumą, paskelbia kataloge ir leidžia balsuoti. **Būsena: suprojektuota, NOT_RUN; nėra account sistemos, veikiančio katalogo, API kvietimų ar tikrų balsų.** [Kritinė peržiūra](quarantine/2026-10-17/docs/reviews/video-hub-review.md.snapshot.txt), [kūrėjų augimo programa](GROWTH-AND-OUTREACH.md).
 
 ## 1. Naudotojo kelias
 

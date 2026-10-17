@@ -1,5 +1,7 @@
 # Dešimt projektuojamų užduočių
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Data: **2026-10-16, Europe/Kiev**. Visų scenarijų būsena **NOT_RUN / NEBANDYTA**. Tai architektūros patikrinimas mintiniu vykdymo keliu; repo programos šiame tyrime neįdiegtos ir užduotys realiai neatliktos. PASS bus galimas tik išsaugojus tikro bandymo įrodymus.
 
 ## Bendros planavimo prielaidos
@@ -146,4 +148,4 @@ Cache ir modelio thinking tokenai apskaitomi pagal providerio sutartį. Vietinis
 
 ## Aštuoni bendro tobulinimo gedimo scenarijai
 
-Pilni keliai, įrodymai ir būsimi acceptance kriterijai pateikti [antros peržiūros lentelėje](reviews/architecture-independent.md#9-aštuoni-privalomi-sai-gedimo-scenarijai): nešvarūs privatūs PDF duomenys, du autoriai vienai klaidai, upstream lūžis, vienos srities pagreitėjimas kitos sąskaita, naujas repo, didelis modelis, bandymas pakeisti vertinimo taisykles ir regresinio atnaujinimo atšaukimas. Jų bendra dabartinė būsena taip pat NOT_RUN.
+Pilni keliai, įrodymai ir būsimi acceptance kriterijai pateikti [antros peržiūros lentelėje](quarantine/2026-10-17/docs/reviews/architecture-independent.md.snapshot.txt): nešvarūs privatūs PDF duomenys, du autoriai vienai klaidai, upstream lūžis, vienos srities pagreitėjimas kitos sąskaita, naujas repo, didelis modelis, bandymas pakeisti vertinimo taisykles ir regresinio atnaujinimo atšaukimas. Jų bendra dabartinė būsena taip pat NOT_RUN.

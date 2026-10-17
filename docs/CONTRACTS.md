@@ -1,5 +1,7 @@
 # Modulių ir vykdymo kontraktai
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 **Siūlomas standartas 0.1; neįgyvendintas vykdiklis.** JSON pavyzdžiai yra plano artefaktai. Tikras Docling ir REA upstream SHA patikrintas šaltiniuose; adapterio vardai ir testinių objektų ID yra būsimo įgyvendinimo pavyzdžiai. `activation.allowed=false` blokuoja abu modulius.
 
 ## Versijuotas modulio manifestas

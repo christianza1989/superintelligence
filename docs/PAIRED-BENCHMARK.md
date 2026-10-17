@@ -1,6 +1,8 @@
 # Tas pats promptas: coding CLI ir Zero katalogo kontekstas
 
-2026-10-16. **Pirma Claude prenumeratos pora atlikta ir importuoti artefaktai patikrinti.** Lyginamas tas pats oficialus Claude CLI su statiniu Zero katalogo kontekstu ir be jo. Pilno RepositoryZero runtime, Jev ir Auto palyginimas lieka NOT_RUN. [Rezultatai ir pirmos poros nesėkmės](CLAUDE-CALIBRATION.md).
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+2026-10-17. **Pirma Claude prenumeratos pora ir vėlesni atskirų profilių pakartojimai atlikti.** Kiekviena kohorta turi savo užšaldytą protokolą; statinio konteksto bandymai atskirti nuo Jev/HTTP ir lean. Pilno produkto worker, gyvo Jev ToolSelector ir Auto palyginimas lieka neatliktas. [Rezultatai ir pirmos poros nesėkmės](experiments/CLAUDE-CALIBRATION.md).
 
 ## Vienodos pradinės sąlygos
 

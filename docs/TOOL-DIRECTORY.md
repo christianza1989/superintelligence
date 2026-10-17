@@ -1,5 +1,7 @@
 # AI naudojamų įrankių katalogas, kategorijos ir paieška
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Projekto V1 dokumentacijos papildymas, 2026-10-16. Naudotojo reikalavimas: pagal kategoriją ar užduotį, pavyzdžiui, „reikia crypto boto“, rasti tinkamiausius įrankius ir matyti, kuriuos platformos AI jau gali naudoti. **Tai numatytas produkto veikimas; pilnas kandidatų semantinis sužymėjimas, paieškos UI ir runtime įrankių reitingai dar neįgyvendinti.** [Bendra produkto dokumentacija](PROJECT-V1.md).
 
 ## 1. Katalogo principas

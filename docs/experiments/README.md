@@ -1,0 +1,9 @@
+# Istorinių eksperimentų ataskaitos
+
+Šios ataskaitos išsaugo konkrečias modelio/CLI/prompt/grader epochas ir nesėkmes. Jos nėra nurodymas tęsti seną „aktyvią“ kohortą. Aktualus [kalibravimo metodas](../CALIBRATION.md), [produkto būsena](../IMPLEMENTATION.md).
+
+- [Claude / Sonnet / SprintDesk](CLAUDE-CALIBRATION.md).
+- [Lean konfigūracija](LEAN-CALIBRATION.md).
+- [Haiku / StockDesk](STOCKDESK-CALIBRATION.md).
+
+Metodikos dokumentai ir benchmark fixture originalai nekeičiami kohortos viduje. V1 grader klaidos lieka ataskaitoje; v2 kontrolė yra nauja epocha. Masininių JSON rezultatų ir originalių source hash neperrašyti dėl dokumentų pervadinimo.

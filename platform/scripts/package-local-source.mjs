@@ -28,9 +28,11 @@ const excluded = new Set([
 ]);
 const entries = [
   ".gitignore",
+  ".rgignore",
   "LICENSE",
   "NOTICE",
   "README.md",
+  "AGENTS.md",
   "PLAN.md",
   "ROADMAP.md",
   "MVP-ROADMAP.md",

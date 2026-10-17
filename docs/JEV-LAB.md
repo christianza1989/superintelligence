@@ -1,6 +1,8 @@
 # Jev ir tikras HTTP bibliotekos pernaudojimas
 
-Šie atskiri kalibravimo profiliai lygina tą patį Claude Sonnet 5.5 / high iš tuščios darbo vietos su Jev šaltinių bei įrankių atranka ir bendros HTTP bibliotekos pernaudojimu. `zero-jev-reuse-claude-v1` biblioteką pateikia tik pasiekus Jev slenkstį. `zero-jev-http-claude-v1` naudoja iš anksto operatoriaus pasirinktą, patikrintą HTTP pagrindą, o Jev atrenka papildomus šaltinius ir įrankius. Užduotis, tikrintuvas, prenumeratos prisijungimas ir laiko ribos vienodi. Bendras profilis nenustato atskirų šių pakeitimų poveikių. Pilnas produkto runtime ir Auto nedalyvauja.
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+Šis runbook aprašo istorinius SprintDesk/Sonnet profilius; naujausiam Haiku StockDesk taikomas [atskiras profilis](experiments/STOCKDESK-CALIBRATION.md), planų ir modelių nemaišyti. Šie atskiri kalibravimo profiliai lygina tą patį Claude Sonnet 5.5 / high iš tuščios darbo vietos su Jev šaltinių bei įrankių atranka ir bendros HTTP bibliotekos pernaudojimu. `zero-jev-reuse-claude-v1` biblioteką pateikia tik pasiekus Jev slenkstį. `zero-jev-http-claude-v1` naudoja iš anksto operatoriaus pasirinktą, patikrintą HTTP pagrindą, o Jev atrenka papildomus šaltinius ir įrankius. Užduotis, tikrintuvas, prenumeratos prisijungimas ir laiko ribos vienodi. Bendras profilis nenustato atskirų šių pakeitimų poveikių. Pilnas produkto runtime ir Auto nedalyvauja.
 
 ## Paruošimas
 

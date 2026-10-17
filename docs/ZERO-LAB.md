@@ -1,12 +1,14 @@
 # Zero Lab: daugkartinis kalibravimo modulis
 
-2026-10-16. **Veikia CLI runneris, izoliuotas tikrintuvas ir reportų palyginimas. Importuota Claude prenumeratos pora: abu prompt-v2 variantai PASS; pilnas RepositoryZero runtime, Jev/Auto ir Lab UI dar nepriimti.** Zero Lab bus bendras pakartojamų RepositoryZero eksperimentų ir regresijų patikros modulis. [Kalibravimo metodas](CALIBRATION.md), [porinių lenktynių taisyklės](PAIRED-BENCHMARK.md).
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+2026-10-17. **Veikia CLI runneris, izoliuoti API/SQLite/browser tikrintuvai, cohort/compact režimai ir reportų palyginimas. Atlikti Sonnet pakartojimai bei pirmi Haiku StockDesk bandymai; pilnas produkto worker reuse kelias, Jev ToolSelector ir Lab UI dar nepriimti.** [Dabartinis metodas ir rezultatų indeksas](CALIBRATION.md), [porinių bandymų taisyklės](PAIRED-BENCHMARK.md).
 
 ## Naudotojo eiga
 
 **Pasirinkti užduočių rinkinį → baseline ir kandidatą → limitus → paleisti → palyginti → pakeisti profilį → kartoti.**
 
-Dabartinis baseline `claude-fixed-v1`, kandidatas `zero-retrieval-claude-v1`: tas pats Sonnet5.5/high ir promptas, papildomas tik statinis Zero katalogo kontekstas. [Viena patikrinta pora](CLAUDE-CALIBRATION.md) nėra viso produkto pranašumo įrodymas. Jev/Auto lieka atskiri būsimi profiliai.
+Istorinis SprintDesk baseline `claude-fixed-v1` ir kandidatas `zero-retrieval-claude-v1` naudoja tą patį Sonnet 5.5/high, papildant tik statiniu katalogo kontekstu. Vėlesni Jev/HTTP ir lean profiliai yra atskiros konfigūracijos; naujausi StockDesk bandymai — Haiku 5.5/high. Visi [rezultatai ir jų ribos](CALIBRATION.md#išsaugoti-rezultatai) atskirti; nė vienas nepatvirtina viso produkto pranašumo.
 
 Vėlesniam UI numatyta viena Lab vieta darbo erdvėje: Suites, Profiles, Runs ir Compare vaizdai, naudojant bendrus UI primitives ir lokalizacijos keys. Naujas nepriklausomas agentų scheduler nekuriamas. UI siunčia pageidavimą; serveris tikrina teises, leistiną profilį ir likusį bendrą biudžetą. CLI ir UI naudoja tą patį būsimą eval servisą.
 
@@ -65,7 +67,7 @@ Modulis priklauso bendrai MVP eval krypčiai. Po pirmos veikiančios programos p
 
 [Vietinis Claude/WSL2 kelias](LOCAL-LAB.md). `npm run lab:prepare -- --engine claude` tikrina pasirinktą CLI, Docker, pinned Node image ir naršyklės failus. `npm run lab:run -- --engine claude --prompt-version 2` paruošia A/B be modelių; tik pridėjus `--live --evaluate` vykdomos coding sesijos. Codex auth ir OpenRouter lenktynės šiuo metu atidėtos. Jev/Auto lane neprijungti; nėra tylaus fallback.
 
-Ankstesnis cloud Codex preflight grąžino `local_state_unwritable`; tai istorinis aplinkos blokas. Dabartinė pasirinkta kryptis yra Claude prenumerata. [Importo santrauka](../catalog/claude-calibration.json) fiksuoja53paketo failų atitiktį,20round2source digest ir perskaičiuotą vienos poros rezultatą; abi tikros sugeneruotos programos papildomai perėjo API/SQLite/UI šiame checkout be naujų modelių kvietimų. [Pirmos poros nesėkmės ir ribos](CLAUDE-CALIBRATION.md) išsaugotos atskirai.
+Ankstesnis cloud Codex preflight grąžino `local_state_unwritable`; tai istorinis aplinkos blokas. Dabartinė pasirinkta kryptis yra Claude prenumerata. [Importo santrauka](../catalog/claude-calibration.json) fiksuoja53paketo failų atitiktį,20round2source digest ir perskaičiuotą vienos poros rezultatą; abi tikros sugeneruotos programos papildomai perėjo API/SQLite/UI šiame checkout be naujų modelių kvietimų. [Pirmos poros nesėkmės ir ribos](experiments/CLAUDE-CALIBRATION.md) išsaugotos atskirai.
 
 Pirmas evaluator priima prebuilt Node24 runtime be deklaruotų external npm priklausomybių. Source ir grader atskirti, 64MiB invocation-only tmpfs, non-root, network none, jokių modelio raktų ar host socket konteineriuose. Tikras SQLite row tikrinamas po app stop; v2 SQLite/WAL/journal iki64MiB kopijuojami į atskirą ribotą tmpfs, kad WAL recovery nekeistų originalaus read-only tūrio. Tai nėra VM hostile-code ar host power-loss patvarumo acceptance. Atskiras API/persistence evaluator išlieka partial; bendras evaluator patikrina abiejų source snapshot digest ir prideda desktop/mobile UI. Jo automatedContractComplete/qualityComplete reiškia tik deklaruoto automatinio kontrakto atitiktį; visualQualityAssessed=false. UI regresija turi atskirą quality_failed baigtį; unsupported, cancellation ir cleanup error nesumaišomi su kokybės balu.
 
@@ -79,6 +81,6 @@ Naršyklės13scenarijų rinkinys turi12offline kontrakto ir prerequisite patikr�
 
 ## Pirma tikra Claude pora ir kitas etapas
 
-Pakartojimų kodas jau veikia: `lab:cohort` paruošia1–3poras, `-- --live` vykdo, kaitaliodamas profilius ir stabdydamas source drift ar bendrą prerequisite gedimą. Medianos atskiria coding/grading/trial, o visų bandymų tokenai lieka matomi. Naujų gyvų porų cloud nebuvo — Claude CLI čia nėra. Atskiras `--mode compact` profilis patikrina trumpesnį katalogo kontekstą nepakeisdamas seno profilio. [Paleidimas ir ribos](LOCAL-LAB.md#trys-poros-viena-komanda), [offline/dry-run įrodymai](../catalog/claude-cohort-checks.json). L3 kelių užduočių ir patvarios produkcinės istorijos vartas lieka atviras.
+Pakartojimų kodas jau veikia: `lab:cohort` paruošia1–3poras, `-- --live` vykdo, kaitaliodamas profilius ir stabdydamas source drift ar bendrą prerequisite gedimą. Medianos atskiria coding/grading/trial, o visų bandymų tokenai lieka matomi. Ankstesnėje cloud aplinkoje CLI nebuvo; vėliau vietiniame WSL atliktos visos trys catalog poros (6/6 PASS), atskiras compact etapas (5/6 bendras, compact 2/3) ir kiti datuoti profiliai. Tai jau atlikti eksperimentai, ne dabartinis aplinkos blokas. Atskiras `--mode compact` profilis patikrina trumpesnį katalogo kontekstą nepakeisdamas seno profilio. [Paleidimas ir ribos](LOCAL-LAB.md#trys-poros-viena-komanda), [offline/dry-run įrodymai](../catalog/claude-cohort-checks.json). L3 kelių užduočių ir patvarios produkcinės istorijos vartas lieka atviras.
 
-Prompt-v2 poroje visas trial266351→200449ms (−24,74%), coding200251→162656ms (−18,77%), tokenai376019→355181 (−5,54%). Gradinglatency skyrėsi28286ms. Tai vieno atvejo kryptinis rezultatas su nekontroliuotu provider cache ir nežinoma prenumeratos kaina. [Išsamūs rezultatai, source kilmė, v1 nesėkmės ir trijų papildomų porų planas](CLAUDE-CALIBRATION.md).
+Prompt-v2 poroje visas trial266351→200449ms (−24,74%), coding200251→162656ms (−18,77%), tokenai376019→355181 (−5,54%). Gradinglatency skyrėsi28286ms. Tai vieno atvejo kryptinis rezultatas su nekontroliuotu provider cache ir nežinoma prenumeratos kaina. [Išsamūs rezultatai, source kilmė, v1 nesėkmės ir trijų papildomų porų planas](experiments/CLAUDE-CALIBRATION.md).

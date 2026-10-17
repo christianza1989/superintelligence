@@ -1,5 +1,7 @@
 # Kaip iš žmogaus prašymo kuriamas naujas projektas
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. **Pilna projekto kūrimo eiga dar NOT_RUN; vietinis katalogas ir agento read-only paieškos įrankis jau įgyvendinti.** Pagrindinė idėja — AI pirmiausia panaudoja tai, ką žmonės jau sukūrė ir išbandė, tada kuria trūkstamą dalį. Tai pagrindinis RepositoryZero vertės scenarijus: **atrasti → palyginti → pasirinkti pagrindą → papildyti → sukurti → patikrinti**. [Produkto V1](PROJECT-V1.md), [įrankių registras](AGENT-CAPABILITIES.md), [modulių atranka](MODULE-SELECTION.md), [įgyvendinimo faktai](IMPLEMENTATION.md).
 
 ## 0. Katalogas nėra visų repo atsisiuntimas

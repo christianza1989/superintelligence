@@ -1,5 +1,7 @@
 # Oficiali RepositoryZero agentų tapatybė
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. Naudotojo reikalavimas: sistemos parengti PR visur turi būti atpažįstami kaip **RepositoryZero agentų darbas**. **Tai būsimo publikavimo specifikacija: oficialus GitHub App/bot account dar nesukurtas, jokio išorinio PR šiame darbe nepateikta.**
 
 ## Vienas oficialus publisher

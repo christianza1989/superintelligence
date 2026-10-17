@@ -1,0 +1,23 @@
+> repositoryzero@0.0.1 test:foundation
+> node scripts/platform.mjs exec vitest run packages/core/src/zero-catalog.test.ts packages/adapters/src/zero-tool-selector.test.ts packages/adapters/src/zero-systemone.test.ts packages/adapters/src/zero-model-selector.test.ts packages/adapters/src/zero-repository-selector.test.ts packages/adapters/src/zero-repository-tools.test.ts packages/ui-tokens/src/appearance.test.ts apps/web/src/lib/ui-appearance.test.ts apps/web/src/lib/ui-locale.test.ts packages/adapters/src/pi-runtime-tool-schema.test.ts
+
+npm warn Unknown project config "strict-peer-dependencies". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown project config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+ RUN  v4.1.11 <checkout>/platform
+
+ ✓ packages/adapters/src/zero-repository-tools.test.ts (2 tests) 29ms
+ ✓ packages/core/src/zero-catalog.test.ts (3 tests) 58ms
+ ✓ packages/ui-tokens/src/appearance.test.ts (11 tests) 61ms
+ ✓ apps/web/src/lib/ui-locale.test.ts (8 tests) 36ms
+ ✓ apps/web/src/lib/ui-appearance.test.ts (3 tests) 13ms
+ ✓ packages/adapters/src/zero-tool-selector.test.ts (9 tests) 98ms
+ ✓ packages/adapters/src/zero-model-selector.test.ts (14 tests) 94ms
+ ✓ packages/adapters/src/zero-repository-selector.test.ts (10 tests) 112ms
+ ✓ packages/adapters/src/zero-systemone.test.ts (25 tests) 337ms
+ ✓ packages/adapters/src/pi-runtime-tool-schema.test.ts (13 tests) 39ms
+
+ Test Files  10 passed (10)
+      Tests  98 passed (98)
+   Start at  10:22:01
+   Duration  5.99s (transform 11.00s, setup 484ms, import 19.00s, tests 877ms, environment 4ms)

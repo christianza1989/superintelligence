@@ -1,6 +1,8 @@
 # RepositoryZero augimas: integracijų kūrėjai, ženkleliai ir YouTube
 
-Plano 0.2 papildymas, 2026-10-16. Naudotojo pageidaujamas viešas vardas šiame pasiūlyme – **RepositoryZero**; GitHub repo tebėra `superintelligence`, domeno/trademark sprendimas nepriimtas. **Būsena: planas ir parengti šablonai; joks laiškas, išorinis PR, social post, mokama reklama ar creator sandoris šiame darbe nesukurtas ir neišsiųstas.** [Žinučių šablonai](OUTREACH-TEMPLATES.md), [antro agento kritika](reviews/growth-review.md).
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+Plano 0.2 papildymas, 2026-10-16. Naudotojo pageidaujamas viešas vardas šiame pasiūlyme – **RepositoryZero**; GitHub repo tebėra `superintelligence`, domeno/trademark sprendimas nepriimtas. **Būsena: planas ir parengti šablonai; joks laiškas, išorinis PR, social post, mokama reklama ar creator sandoris šiame darbe nesukurtas ir neišsiųstas.** [Žinučių šablonai](OUTREACH-TEMPLATES.md), [antro agento kritika](quarantine/2026-10-17/docs/reviews/growth-review.md.snapshot.txt).
 
 ## 1. Pagrindinė augimo idėja
 

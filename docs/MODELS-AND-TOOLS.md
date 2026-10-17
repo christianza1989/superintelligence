@@ -1,6 +1,8 @@
 # Modelių prisijungimai, OpenCode ir treg.to
 
-Plano 0.2 reikalavimai, 2026-10-16. **Tai projektuojami adapteriai; login, tikrų paskyrų užklausos ir runtime integracijos šiame darbe neatlikti.** Šaltinių peržiūra: [antro agento patikra](reviews/provider-auth-review.md). Šis dokumentas atskiria modelio inferenciją, įrankių prieigą ir GitHub contribution tapatybę.
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
+Plano 0.2 reikalavimai, 2026-10-16. **Tai projektuojami adapteriai; login, tikrų paskyrų užklausos ir runtime integracijos šiame darbe neatlikti.** Šaltinių peržiūra: [antro agento patikra](quarantine/2026-10-17/docs/reviews/provider-auth-review.md.snapshot.txt). Šis dokumentas atskiria modelio inferenciją, įrankių prieigą ir GitHub contribution tapatybę.
 
 ## 1. Kaip veikia OpenCode ir ką perimame
 

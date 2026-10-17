@@ -1,23 +1,5 @@
 ---
 import SiteFrame from "../components/SiteFrame.astro";
-const documents = [
-  { id: "local-lab", title: "Run locally with WSL2", copy: "Use your Claude subscription, prepare Docker and run a controlled CLI comparison." },
-  { id: "zero-lab", title: "Zero Lab", copy: "CLI runner, isolated application checks and report comparison. One Claude pair is recorded; the full product runtime and Lab UI remain open." },
-  { id: "calibration", title: "Calibration method", copy: "Versioned prompts, retrieval, routing and model profiles evaluated against quality, time and total cost." },
-  { id: "claude-calibration", title: "First Claude calibration pair", copy: "One task, both generated apps checked. Coding and grading times, cache tokens, failed attempts and the limits of the result." },
-  { id: "paired-benchmark", title: "Baseline versus Zero context", copy: "The same task and coding model, independent acceptance and recorded limits. Full RepositoryZero runtime, Jev and Auto are separate experiments." },
-  { id: "hosted-and-byok", title: "Model connections and billing", copy: "BYOK and supported OAuth, with planned hosted credits and transparent pricing." },
-  { id: "why-repozero", title: "Why RepoZero", copy: "Why reuse matters, where it costs more and how to test its value." },
-  { id: "self-reuse", title: "Building RepoZero with reuse", copy: "Recorded local discovery and reused components. Full autonomous project creation remains planned." },
-  { id: "jev-applications", title: "Jev applications", copy: "Offline-tested source, tool and model selectors. Live Jev and savings remain unverified." },
-  { id: "community-quality", title: "Community quality", copy: "Planned usage evidence and upstream contributions. The shared quality registry is not implemented." },
-  { id: "agent-identity", title: "Official agent identity", copy: "Planned GitHub publishing identity, permissions and attribution. No official bot is configured." },
-  { id: "project-v1", title: "Product documentation V1", copy: "What the product is for, how it works and what remains a future goal." },
-  { id: "mvp-roadmap", title: "Focused MVP roadmap", copy: "The first durable task cycle and three real workflows." },
-  { id: "full-roadmap", title: "Full roadmap", copy: "Checkboxes, acceptance gates, later modules and platform milestones." },
-  { id: "architecture", title: "Architecture plan", copy: "The core, contracts, autonomy and implementation decisions." },
-  { id: "project-creation", title: "Reuse-first project creation", copy: "Choose an existing foundation and build only the missing part." },
-  { id: "ui-foundations", title: "UI foundation", copy: "Real Rakazo code reuse, OpenCode UX patterns and the limits of a hybrid." },
-];
+import { documentation as documents } from "../project-data";
 ---
-<SiteFrame title="Documentation — RepositoryZero" description="Source documents and implementation roadmaps for RepositoryZero."><section class="page-intro"><span class="eyebrow">THE SOURCE OF THE PLAN</span><h1>Know what we're building.<br /><span>And what's still unproven.</span></h1><p>These Markdown documents are included from the repository at build time. The original planning text is Lithuanian; EN/RU technical guides and additional quickstarts are planned.</p></section><div class="document-grid">{documents.map((document) => <a class="document-card" href={"/docs/" + document.id + ".md"}><span class="tiny-label">MARKDOWN </span><h2>{document.title}</h2><p>{document.copy}</p></a>)}</div></SiteFrame>
+<SiteFrame title="Documentation — RepositoryZero" description="Source documents and implementation roadmaps for RepositoryZero."><section class="page-intro"><span class="eyebrow">THE SOURCE OF THE PLAN</span><h1>Know what we're building.<br /><span>And what's still unproven.</span></h1><p>These Markdown documents are included from the repository at build time. Start with implementation status and accepted decisions. Specifications and historical experiments are labelled; EN/RU technical guides remain planned.</p></section><div class="document-grid">{documents.map((document) => <a class="document-card" href={"/docs/" + document.id + ".md"}><span class="tiny-label">MARKDOWN </span><h2>{document.title}</h2><p>{document.copy}</p></a>)}</div></SiteFrame>

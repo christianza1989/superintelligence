@@ -1,5 +1,7 @@
 # Daug nuorodų, ribotas AI biudžetas
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Plano 0.2 papildymas, 2026-10-16. Reikalavimas:100,1000ar2000pateiktų repo/video nuorodų per dieną neturi automatiškai sukelti tiek pat mokamų AI analizių. **Tai projektuojama eiga, NOT_RUN.** Ji papildo [repo portalą](CONTRIBUTOR-PORTAL.md), [Video Hub](VIDEO-HUB.md) ir bendrą [autonomijos grafiką](AUTONOMY-AND-UPDATES.md#4-konkreti-darbo-politika-ir-periodiškumas).
 
 ## 1. Kaskada: pirma taisyklės ir cache, tik tada modelis

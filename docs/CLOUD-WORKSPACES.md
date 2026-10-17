@@ -1,5 +1,7 @@
 # Projektai debesyje ir Google Drive
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. Naudotojo reikalavimas: kurti projektą debesyje, nelaikant jo savo kompiuterio diske, su galimybe prijungti Google Drive. **Pradinė architektūros specifikacija; remote compute ir Drive OAuth integracija dar neįgyvendinti.**
 
 ## Darbo vieta ir failų saugykla

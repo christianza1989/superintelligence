@@ -1,5 +1,7 @@
 # Kodėl verta kurti RepoZero
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. Šiame tekste RepoZero yra trumpas RepositoryZero projekto vardas. Aprašoma kuriamo produkto nauda ir jos patikrinimo būdas. Veikiantis pirmasis pjūvis dar nėra visas pažadėtas produktas; dabartinius įrodymus atskirai pateikia [įgyvendinimo būsena](IMPLEMENTATION.md).
 
 Programinės įrangos pasaulyje jau sukurta daugybė gerų sprendimų, tačiau rasti tinkamą savo užduočiai tebėra sunku. Paieškos rezultatai maišo bibliotekas, pilnus produktus, demonstracijas ir mokamas paslaugas. Populiarus projektas gali netikti pasirinktai platformai, licencijai ar biudžetui. Mažiau žinomas įrankis gali išspręsti būtent tą problemą, kuriai žmogus ruošiasi skirti savaitę. RepoZero vertė prasidėtų nuo gebėjimo šį skirtumą paaiškinti ir patikrinti.

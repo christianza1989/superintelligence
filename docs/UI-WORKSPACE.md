@@ -1,5 +1,7 @@
 # RepositoryZero darbo erdvė
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. Naudotojo pateikta Codex ekrano nuotrauka yra darbo struktūros atskaitos taškas. **Tai dizaino planas, ne jau sukurta sąsaja.** Naudojame pažįstamą projektų/pokalbio/rezultato struktūrą ir savą RepositoryZero identitetą.
 
 ## Pagrindinis vaizdas
@@ -59,8 +61,8 @@ Temos paketas deklaratyvus — nepaleidžia savavališko JS, neskaito secrets ir
 
 ## Imagegen dizaino maketai po tarpusavio kritikos
 
-- [Darbo erdvė: kuriama buhalterinės programos demonstracija](assets/ui/workspace-accounting-concept.png).
-- [Įrankių katalogas ir kandidato detalės](assets/ui/tool-directory-concept.png).
+- [Darbo erdvė: kuriama buhalterinės programos demonstracija](quarantine/2026-10-17/docs/assets/ui/workspace-accounting-concept.png).
+- [Įrankių katalogas ir kandidato detalės](quarantine/2026-10-17/docs/assets/ui/tool-directory-concept.png).
 
 Tai generuoti ateities dizaino vaizdai su pavyzdiniais įrašais, sąnaudomis ir statusais; ne veikiančios programos screenshotai. EN pasirinktas vaizdų tekstui, o produkto locale planas lieka8kalbų. Juoda/salotinė pakeičia ankstesnę mint kryptį. Maketai nėra galutinis pixel-perfect ar accessibility acceptance.
 

@@ -1,12 +1,50 @@
-# Roadmap su checkboxais ir priėmimo vartais
+# RepositoryZero pilnas roadmapas
 
+**Atnaujinta 2026-10-17.** Vienintelis checkboxų ir norminių vartų autoritetas. [MVP-ROADMAP](MVP-ROADMAP.md) yra generuojama tų pačių užduočių ištrauka. `[x]` reiškia konkrečiai atliktą darbą jo nurodytoje apimtyje; dokumentas, mockup ir foundation PASS neuždaro gyvo produkto acceptance.
 
-Aktualūs faktai, komandos ir neužbaigti vartai: [įgyvendinimo būsena](docs/IMPLEMENTATION.md). Rakazo adaptacija pasirinkta įgyvendinimui; pilnas backend/live-model acceptance dar laukia.
-Versija: planas 0.2, **2026-10-16, Europe/Kiev**. Checkbox `[x]` reiškia šiame darbe atliktą tyrimą arba parengtą dokumentą. `[ ]` reiškia dar neįgyvendintą darbą. Pilno produkto acceptance dar nepriimame; atskirų atliktų pjūvių įrodymai yra [įgyvendinimo būsenoje](docs/IMPLEMENTATION.md).
+Priimta bazė — Rakazo, ne naujas Python/CLI produktas. [Sprendimai](docs/DECISIONS.md), [dabartiniai faktai](docs/IMPLEMENTATION.md), [pilnas dokumentų indeksas](docs/README.md). Terminų savaitėmis atsisakyta, kol nėra įgyvendinimo matavimų. Originalūs R0/P0–P7/P1E ID išsaugoti; nauji darbai detalizuoja, o ne ištrina ankstesnius vartus.
 
-Šaltinis ir bendri sprendimai: [PLAN.md](PLAN.md), [dviejų agentų kritika](docs/reviews/architecture-independent.md). Darbų ID skirti backlogui; GitHub issues ar PR šiame etape nesukurti.
+| Stadija | Priėmimas |
+|---|---|
+| Techninis preview | TP0/TP1/TP2; leidžiamas aiškiai pažymėtas emuliuotas modelis |
+| Techninis MVP | G0/G1 + pasirinkto profilio OBS2/J0–J2 (OBS3, jei fallback/child įjungti) + L1–L5 + browser/PDF/coding ir P2.14 + G2 30 užduočių + esami UI/locale/naujo žmogaus reikalavimai |
+| Vieša beta | MVP ir visi taikomi platesni G2, REA G3B, Treg P2.11–P2.13, G3A/G3C/G3D/G4; tikra supported matrica |
+| Native / portfelis / plati autonomija | P4D, P5, P6, P7 atskiri vartai |
 
-Produkto paskirtis ir naudotojų vertė [V1 dokumentacijoje](docs/PROJECT-V1.md); pirmas ribotas techninis pjūvis [atskirame MVP roadmape](MVP-ROADMAP.md). Techninis MVP, viešos beta vartai ir ilgalaikė vizija yra atskiros parengties stadijos.
+MVP apimtis neatšaukia platesnių P2/beta reikalavimų. Jev J3 matavimas ir naudos įrodymas atskiri; fiksuoto 50% ar pasaulio geriausio produkto teiginio be palyginamų įrodymų nėra.
+
+## Artimiausia įgyvendinimo seka
+
+Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai detalizuoja mažą pirmą pjūvį; nepakeičia P0/P1/G1. OBS ir J darbai detalizuoja P0.23/P0.26/P1.8/P1D.7. L darbai papildo žmogaus Library pagal naudotojo patikslinimą.
+
+- [x] DOC.1 Priimtas Astra auditas, aptartos ir susiaurintos rekomendacijos, sutvarkytas dabarties indeksas ir karantinas; tai dokumentų, ne produkto kokybės rezultatas.
+- [ ] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Dokumentų CI vienas to neuždaro.
+- [ ] OBS1 Request-scoped observer per AgentRunRequest; tas pats callId beforeCall/usage/reservation. Du lygiagretūs runs nesumaišo observer, atsisakymas duoda 0 dispatch. Jokio global mutable currentRun ar DB migracijos vien dėl jungties.
+- [ ] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Emuliuotas modelis aiškiai pažymėtas; galima vykdyti lygiagrečiai OBS darbams.
+- [ ] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti; nuo TP1. Tai siaura aprėptis, ne visas G1.
+- [ ] NEED1 Poreikių ir fit/no-fit retrieval rinkinys su hard constraints bei LT/EN sinonimais. Užfiksuoti dev/holdout atskyrimą; 48 užklausos (24/24) pradinis pasiūlymas, o ne įrodytas optimumas. Singleton netinkamas source negali būti rekomenduotas vien dėl to, kad vienintelis.
+- [ ] PREP1 Vienas ribotas source/package preparer su exact pin/lock, source kilme, tikru entrypoint/runtime/license/permissions patikrinimu ir reuse receipt. Inspectable ir execution-ready atskiri; neprivalomas didelis universalus variklis.
+- [ ] TRACE1 Backend runner ir verifier susieja poreikio/atrankos/paruošimo/invocation/artifact revision/verification receipts; pradžiai bounded JSON artefaktai. Nepriklausomas panaudojimo ir outcome įrodymas, modelio PASS nepakanka.
+- [ ] OBS2 Vieno live profilio trusted connection/account mapping ir atominis account + routing lane rezervas. Vienas callId, existing onUsage autoritetas; unknown hold, cap0 neleidžia dispatch. Priklauso nuo OBS1; mokami fallback/child išjungti iki OBS3.
+- [ ] OBS3 Jei profilis leidžia fallback/paid child, kiekvienas actual target turi teisingą account/model/callID ir rezervą, įskaitant helpers/repair. Iki kvalifikacijos šie keliai turi būti išjungti, o ne tyliai paveldėti primary account.
+- [ ] J0 Pasirinkto ToolSelector adapterio offline conformance ir worker kontraktas; esami offline primitives tik dalis vartų.
+- [ ] J1 Užrakintas ir realiai pasiekiamas pasirinktas Jev API/model/auth/connection profilis su baigtiniu cap; nuo OBS2.
+- [ ] J2 Gyvas Jev per esamą worker teisingai pasirenka ir realiai panaudoja leistiną tool, no-fit abstain ir schema/timeout/grant/cap atvejai turi receipts. Baseline ar visi abstain neuždaro; nuo J0/J1 ir veikiančio tool.
+- [ ] J3 Atliktas užšaldytas B prieš tą patį B+Jev C palyginimas: kokybė, aprėptis, klaidingi pasirinkimai, visas laikas/kaina ir sąžininga išvada. „Atliktas“ nereiškia „nauda įrodyta“; nuo J2/NEED1.
+
+**Pirmo techninio preview vartai:** TP0 + TP1 + TP2 ir aiškus emuliacijos žymėjimas. Tai neuždaro gyvo modelio, Jev, trijų modulių ar beta.
+
+## L. Savarankiška repo biblioteka — techninio MVP dalis
+
+- [ ] L1 Nuolatinis Library navigacijos įėjimas be AI užduoties; paieška pagal repo/paskirtį/aprašą/capability, filtrai kategorijai, žinomai kalbai, licencijos faktams ir patikros būsenai. Unknown ir archived matomi, search/filter išlieka grįžus; 0 mokamų LLM.
+- [ ] L2 Tikri stars su source ir nuskaitymo data; „Daugiausia stars“ / „Neseniai įtraukta į mūsų indeksą“. Missing nėra 0, aprėptis nėra visas GitHub. Esamą popularity snapshot susieti canonical repo ID ir timestamp offset, nesėkmingas refresh neapsimeta nauju.
+- [ ] L3 Repo detalės rodo panaudojimą/upstream/license source/metadata datą ir atskirus source/pin/tested/runtime-ready faktus. Source-only gali būti naršomas; populiarumas nėra patikros ženklas.
+- [ ] L4 Vietinis Saved išlieka tarp sesijų; browse/save nieko neįdiegia ir nereikalauja cloud paskyros.
+- [ ] L5 Start project perduoda konkretų repo ir faktus esamam project srautui kaip foundation/component/reference; source-only pirma tiriamas ir paruošiamas. Ne vien tuščias composer; priklauso nuo projekto kelio P2.14.
+- [ ] L6 Compare 2–3 repo pagal tuos pačius turimus faktus, be LLM; maža vėlesnė iteracija, ne L1–L5 blokas.
+- [ ] L7 Trending rodo datuotą source rank arba tikrą palyginamą augimo intervalą ir aprėptį; bendri stars nėra 7 d. augimas. Collections/personalizacija tik pagal poreikį, po L1–L5.
+
+**Library vartai:** L1–L5 naudojami žmogaus be AI pokalbio; L5 perduoda pasirinktą repo veikiančiam projekto keliui. Naršymas gali būti įgyvendinamas lygiagrečiai offline worker, net kai live profilis blocked.
 
 ## Bendra darbų seka
 
@@ -29,9 +67,9 @@ flowchart LR
     C --> W[Platesnė autonomija pagal įrodymus]
 ```
 
-Planavimo prielaida: 2 patyrę įgyvendintojai, palaikomi agentų, ir paskirtas žmogus prižiūrėtojas; tai ne šiame pokalbyje įrodyta tiekimo sparta. Išplėstam localhost beta su P3C/P3D orientyras 12–22 kalendorinės savaitės nuo realaus įgyvendinimo pradžios; desktop matrica yra atskiras vėlesnis etapas. Tai ne pažadas; modelių, VM, auth, licencijų ir peržiūros kliūtys gali jį pakeisti. Po pirmų dviejų savaičių pervertinti pagal faktą. Kiekvieno etapo priėmimo vartai svarbesni už datą. Platus media portfelis neįtrauktas į pirmos beta pažadą.
+Darbai skaidomi pagal priklausomybes ir tikrą priėmimą. Kalendorinę prognozę skelbti tik po pirmų išmatuotų vertikalių; ankstesnė 12–22 savaičių prielaida liko istoriniame snapshote, ne dabartiniame plane.
 
-## R0. Tyrimas ir projekto kryptis — šio darbo rezultatas
+## R0. Atlikto pradinio tyrimo istorija
 
 - [x] R0.1 Perskaityti visą naudotojo viziją, patikrinti tuščią repo ir atskirti tyrimą nuo įgyvendinimo.
 - [x] R0.2 Sukurti antrą Codex agentą; apsikeisti architektūros kritika ir įrašyti pakeistus sprendimus.
@@ -60,27 +98,27 @@ Planavimo prielaida: 2 patyrę įgyvendintojai, palaikomi agentų, ir paskirtas 
 - [x] R0.23 Imagegen darbo erdvės ir katalogo konceptai, tarpusavio kritikos pataisos, juoda/salotinė default kryptis ir temų pagrindo specifikacija; ne programos screenshotai.
 - [x] R0.24 Aiškiai aprašytas reuse-first naujo projekto kelias: žmonių sukurtas/patikrintas pagrindas ir papildantys komponentai, kūrimas bei patikra.
 
-**Vartai:** dokumentų faktai turi šaltinį arba pasiūlymo žymą; visi runtime bandymai NOT_RUN; nėra mokamų bandymų, integracijų ar publikavimo.
+**R0 laikotarpio riba:** šie checkboxai žymi 2026-10-16 tyrimus ir parengtus planus. Vėlesni runtime/CLI rezultatai yra IMPLEMENTATION; R0 teiginys „tuomet NOT_RUN“ nėra dabarties statusas.
 
-## P0. Ankstyvas architektūros falsifikavimas — 1–2 savaitės
+## P0. Ankstyvas architektūros falsifikavimas
 
 Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI ir adapterių.
 
-- [ ] P0.0 **Privalomas build-vs-adapt ADR:** pirmiausia Rakazo adaptation/fork, alternatyva minimalus Python. Palyginti3tuos pačius vertikalius fixtures, footprint su host/runtime/DB, artifact/effect/lease atkūrimą, policy/grant ir restart-persisted budgets, hostile lane, licenses, atnaujinimų/upstream priežiūros bei SAI papildymo kainą. Įvertinti bent vieną patvarumo fault case; source claims nepakeičia bandymų. Pasirinkti vieną scheduler ir UI.
+- [ ] P0.0 Kvalifikuoti pasirinktą Rakazo adaptaciją tais pačiais vertikaliais fixtures: visas footprint, artifact/effect/lease atkūrimas, policy/grant ir restart-persisted budgets, hostile lane, licenses bei upstream priežiūros kaina. Bazė pasirinkta (ADR34/A01); buvęs reikalavimas dar kartą rinktis Python ar Rakazo pakeistas, kvalifikacijos vartai nesumažinti. Jei pasirinktas profilis netinka, naujas ADR su faktiniais alternatyvų matavimais.
 - [ ] P0.1 Paskirti maintainer, įgyvendinimo ir nepriklausomų patikrų atsakomybes; patvirtinti palaikomą pirmą platformą Linux x86_64.
 - [ ] P0.2 Užfiksuoti branduolio licenciją, priklausomybių platinimo scope ir source/model/data atskyrimą.
 - [ ] P0.3 Suformuoti 30 nekintamų testinių užduočių: po 10 browser/research, PDF ir coding; synthetic fixtures su expected outputs. Tai kūrimo ir provisional produkto vartų rinkinys. Atskirai paskirti maintainer valdomą, agento kūrimo procesui neprieinamą holdout duomenų ir grader versiją viešiems palyginimams.
 - [ ] P0.4 Parengti vieną aiškiai pažymėtą test-only adapterio klaidą SAI demonstracijai; jos nevadinti upstream klaida.
 - [ ] P0.5 Užfiksuoti ModuleManifest, ToolCall, ToolResult, TaskEvent, ArtifactRef, EffectIntent ir ImprovementProposal schemas.
 - [ ] P0.6 Pasirinkti leidimų modelį: failų šaknys, tinklo tikslai, paskyros, side effects, pinigų rezervas ir atšaukimas.
-- [ ] P0.7 Švariame host pamatuoti pasirenkamų bazių pilną įdiegimo delta: B variante minimali Python/React bazė, A variante esamas Rakazo web/API/worker/PostgreSQL profilis.
+- [ ] P0.7 Švariame host pamatuoti pasirinkto Rakazo web/API/worker/PostgreSQL profilio pilną įdiegimo delta: runtime, DB, images, browser, cache, steady ir peak diską bei RAM. Alternatyvų matavimai tik naujam ADR, jei profilis netinka.
 - [ ] P0.8 Atskira maža Docling spike: 10 sintetinių PDF, lentelių skaičiai, pirmas modelių download, diskas ir peak RSS.
 - [ ] P0.9 Atskira Playwright spike: vienas browser, 10 savo bandomųjų puslapių, offline fixtures, trace, download limitai.
 - [ ] P0.10 Kodo workerio spike: disposable VM prieinamumas, rootless trusted lane ir aiškus hostile lane atsisakymas jei VM nėra.
 - [ ] P0.11 REA spike planas: patikrinti `rea-agents@6.5.0` publikaciją, tarball integrity, tikrą published tarball source/tag mapping, Node engines ir visų production/transityvinių lifecycle hooks inventorių. Vienodas package.json version neįrodo source atitikties.
-- [ ] P0.12 Pasirinktos DB spike: vienas autoritetingas scheduler,2 workeriai, lease lenktynės, crash tarp event/outbox ir disk-full. B variante SQLite vienas writer; A variante tikrinti jau esančio PostgreSQL/Graphile koordinavimo semantiką.
+- [ ] P0.12 Esamos PostgreSQL/Graphile DB kvalifikacija: vienas autoritetingas scheduler, 2 workeriai, lease lenktynės, crash tarp event/outbox, disk-full ir koordinavimo semantika.
 - [ ] P0.13 Pasirinkti vieną modelį ir kainos šaltinį / lokalų endpoint; patikrinti jau turimas credential bindings neatskleidžiant reikšmių.
-- [ ] P0.14 Paskelbti sprendimų ADR: kas patvirtinta, kas atmetama ir kokiomis sąlygomis renkamasi alternatyva.
+- [x] P0.14 Paskelbti priimti architektūros sprendimai ir pakeistų alternatyvų ribos: [DECISIONS](docs/DECISIONS.md). Tai dokumentinis vartas, ne G0/G1 runtime PASS.
 - [ ] P0.15 [Provider/auth matrica](docs/MODELS-AND-TOOLS.md): OpenAI API ir galimas oficialus ChatGPT metodas, Anthropic API, OpenRouter, lokalus endpointas; klientui leistinas OAuth, billing, capability ir credential-store pasirinkimas. Jokio universalaus subscription OAuth pažado.
 - [ ] P0.16 Treg kilmė/terms ir auth spike: MCP/HTTP schemos, faktinis katalogo count, allowlist, token revoke, call/day ir kaina; BYO account atskirti nuo hosted resale. Privalomas planuojamas adapteris, ne automatiškai visos teisės.
 - [ ] P0.17 Packaging/updater ADR: Rakazo ar alternatyvos runtime/bootstrap, loopback auth, nepriklausomas supervisor, Windows/macOS/Linux package savininkai, trust roots, code signing ir data-schema suderinamumas. Minimalus blogo naujos app starto recovery prototipas.
@@ -99,7 +137,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Didžiausias neapibrėžtumas:** faktinis parserių ir izoliacijos footprint. **Ankstyvas patikrinimas:** P0.7–P0.12 prieš bendrą platformos plėtrą.
 
-- [ ] P0.28 [UI reuse ADR](docs/UI-FOUNDATIONS.md): Rakazo React-first workspace su OpenCode UX palyginti su visu OpenCode UI adaptavimu; trys vienodi srautai, konkretus source inventorius, vienas runtime/transportas, notices, locale/theme mapping ir išmatuota fork kaina.
+- [ ] P0.28 Kvalifikuoti pasirinktą Rakazo React UI reuse ir OpenCode UX idėjas: trys vienodi srautai, source inventorius, vienas runtime/transportas, notices, locale/theme mapping ir išmatuota fork kaina. Visą OpenCode UI adaptavimą svarstyti nauju ADR tik esamam keliui netikus.
 - [ ] P0.29 [Reuse-first projekto ADR](docs/PROJECT-CREATION.md): brief → viena bazė/papildymai; bendruomenės įrodymų source/versija/data, mūsų integracijos statusas, licencijų/API/duomenų suderinamumas ir vienas candidate/child/retry biudžetas.
 
 - [ ] P0.30 [Cloud workspace / Google Drive ADR](docs/CLOUD-WORKSPACES.md): remote compute ir file snapshot atskirai, identity/OAuth/scopes, revisions/conflicts, quota/cost, preview origin, secrets ir restore.
@@ -112,7 +150,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 - [ ] P0W.4 Mobile/accessibility/links/privacy ir preview testai, atskiras publish tapatybės žingsnis; tikras public URL po pasirinkto domeno/hostingo konfigūracijos.
 - [ ] P0W.5 Vizitinės kortelės prototipas: tamsus gaublys ir išZeroaugantis gyvas tinklas pagal naudotojo plitimo metaforą; modulio/changelog nuorodos, tikri skaitikliai atskirti nuo dekoracijos, reduced-motion/mobile/staticfallback.
 
-**Vartai GW0:** oficialus ankstyvas public puslapis tiksliai rodo research/planning stadiją ir veikiančius source/contribute kelius. Svetainė nelaukia produkto beta; donation checkout nėra laikomas veikiančiu be patikrintos tikros gavėjo paskyros. [Visa specifikacija](docs/PUBLIC-WEBSITE.md).
+**Vartai GW0:** oficialus ankstyvas public puslapis tiksliai rodo foundation / MVP dar nepriimtą stadiją ir veikiančius source/contribute kelius. Svetainė nelaukia produkto beta; donation checkout nėra laikomas veikiančiu be patikrintos tikros gavėjo paskyros. [Visa specifikacija](docs/PUBLIC-WEBSITE.md).
 
 ## P0M. Partnerystės ir marketingo pasirengimas — anksti, be išorinių siuntų
 
@@ -123,7 +161,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai GM0:** paruošti peržiūrimi gavėjų draft, ne išsiųstos žinutės; jokio badge be techninio scope ir jokio tariamo endorsement. [Augimo planas](docs/GROWTH-AND-OUTREACH.md), [šablonai](docs/OUTREACH-TEMPLATES.md).
 
-## P1. Vienas veikiantis branduolys — 2–3 savaitės po bazės pasirinkimo
+## P1. Vienas veikiantis branduolys
 
 - [ ] P1.1 Pasirinktos bazės repo struktūra ir upstream tracking; aiškūs core/API/UI/contracts/adapters/evals sluoksniai. Rakazo variante pirmiausia pernaudoti ir tikrinti esamus sluoksnius; lockfiles ir pinned build toolchain.
 - [ ] P1.2 Projekto, užduoties, žingsnio ir attempt duomenų modelio trūkstamos dalys su migracijomis; Rakazo Artifact/ExternalEffect/Lease modelius pirmiausia pernaudoti ir fault-testinti.
@@ -203,7 +241,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai GW1:** routine atnaujinimas automatiškai pasirodo su teisinga būsena ir šaltiniu; neleistini duomenys nepaskelbti, blogas build atstatomas. Pirmo produkto release santrauka remiasi realiu release, o ne pažymėtu roadmap checkbox.
 
-## P2. Trys pasirenkami moduliai ir naudojamas MVP — 2–4 savaitės
+## P2. Trys pasirenkami moduliai ir naudojamas MVP
 
 - [ ] P2.1 Playwright: browser/research adapteris, URL allowlist, šaltinių registras, screenshot, deterministic assertions.
 - [ ] P2.2 Docling: PDF ArtifactRef į struktūrinį JSON/CSV, puslapių provenance, numerinių duomenų validatorius.
@@ -254,7 +292,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 - [ ] P2.14 [Naujo projekto reuse vertikalus pjūvis](docs/PROJECT-CREATION.md): brief → faktinis pagrindo/komponento pasirinkimas → izoliuotas pin/lock build → veikiantis app preview → nepriklausomas testas → perdavimas. Source-only/nesuderinamas profilis, missing ir cap0 turi aiškią baigtį; nėra pilnos ERP reikalavimo techniniam MVP.
 
-## P3A. Vienas pilnas Shared Autonomous Improvement ciklas — 2–3 savaitės
+## P3A. Vienas pilnas Shared Autonomous Improvement ciklas
 
 - [ ] P3A.1 A/B režimų UI, aiškus įjungimas ir baigtinis laiko/pinigų/PR biudžetas.
 - [ ] P3A.2 Finding fingerprint, esamos versijos ir jau pateiktų radinių patikra, sintetinių įrodymų paketas.
@@ -269,13 +307,13 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 - [ ] P3A.11 Canary diegimas antros testinės instaliacijos aplinkoje, to paties reproducer pakartojimas.
 - [ ] P3A.12 Tyčinė regresija: automatinis tolesnio rollout sustabdymas, pasirinktas rollback ir vartotojo duomenų išsaugojimas.
 - [ ] P3A.13 Private prompt/document/canary-secret testas patvirtina, kad į viešą paketą nepateko privatūs duomenys.
-- [ ] P3A.14 Aštuoni privalomi [SAI gedimo scenarijai](docs/reviews/architecture-independent.md#9-aštuoni-privalomi-sai-gedimo-scenarijai) įtraukti į įrodymų paketą.
+- [ ] P3A.14 Aštuoni privalomi [SAI gedimo scenarijai](docs/quarantine/2026-10-17/docs/reviews/architecture-independent.md.snapshot.txt) įtraukti į įrodymų paketą.
 
 **Vartai G3A:** stebimas visas tikras ciklas `seeded reproducer → patch → independent checks → PR → maintainer merge → release → antros instaliacijos update → verified result`, atskirai parodytas rollback. Jei GitHub teisių dar nėra, galima tik vietinė ciklo dalis ir G3A lieka nepriimtas. Mokamo ar viešo veiksmo tylėjimas neautorizuoja.
 
 **Neapibrėžtumas:** peržiūros pajėgumas ir acceptance gaming. **Ankstyvas patikrinimas:** bandymas pakeisti patikrų politiką turi patekti į atskirą maintainer review ir negauti automatinio priėmimo.
 
-## P3B. REA — privalomas reverse-engineering modulis — 1–2 savaitės, lygiagrečiai su P3A
+## P3B. REA
 
 - [ ] P3B.1 Pinned upstream SHA, npm6.5.0 tarball ir provenance atitiktis, licencijos/NOTICE bei transityvinių paketų patikra.
 - [ ] P3B.2 Node engines matrica, Linux `ps/procps` ir static profilio pirmo paleidimo reikalavimai.
@@ -290,7 +328,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai G3B:** veikia viena atkartojama REA statinės analizės užduotis su teisinga struktūra, faktų kilme, atskiru lyginamuoju tikrintoju ir realiais išlaidų/resursų matavimais. REA privalomas planui; jo parengties žymą lemia šie testai.
 
-## P3C. Ankstyvas ribotas auto PR ir modulio priėmimas — 2–3 savaitės po G3A
+## P3C. Ankstyvas ribotas auto PR ir modulio priėmimas
 
 - [ ] P3C.1 Vienas operatoriaus konfigūruotas trusted-base policy profilis: kategorijos, keliai, dydis, grant/budget ir išimtys; nėra teisių išsiplėtimo iš PR turinio.
 - [ ] P3C.2 Shadow pilotas su tinkamais ir tyčia netinkamais PR: testų / gate silpninimas, naujos permissions/deps, senas HEAD, base pasikeitimas, dubliuoti webhook ir neprieinamas runner.
@@ -308,7 +346,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai G3C:** bent vienas leistinas tikras PR automatiškai priimtas ir išleistas testiniame projekte, visi apibrėžti netinkami PR atmesti, peržiūros author negali pakeisti savo gate. Pirminis lane neskuba į auto dependency bump: jam vėliau reikia atskiro P5.11 profilio. Pradėti bendrą autonominį priėmimą galima tik turint realias projekto teises ir operatoriaus pasirinktas taisykles; šis planas jų nekonfigūruoja.
 
-## P3D. Valdomas localhost update ir upstream priežiūra — 2–3 savaitės, dalis lygiagrečiai
+## P3D. Valdomas localhost update ir upstream priežiūra
 
 - [ ] P3D.1 Managed release katalogai atskirti nuo dev checkout ir user data; vienas nepriklausomas launcher/supervisor, versijos ir active pointer žurnalas.
 - [ ] P3D.2 TUF tipo metadata/signatures, expiry/anti-replay, platform target ir compatibility plan; staging byte cap, disk reserve ir offline/backoff.
@@ -323,7 +361,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai G3D:** vienas realus managed-local install → signed update → nesėkmingo starto recovery ciklas, išsaugoti nauji user duomenys ir užduočių pins; upstream suderinamas ir breaking bump parodyti su teisinga sklaida/bloku. Tai dar ne visų3 desktop OS palaikymas.
 
-## P4. Beta ir viešas v0.1 — 2–3 savaitės
+## P4. Beta ir viešas v0.1
 
 - [ ] P4.1 5 nepriklausomi bandomieji naudotojai, kiekvienas baigia bent vieną tikrą sutartą užduotį švarioje aplinkoje.
 - [ ] P4.2 EN/RU pagrindiniai docs/quickstart ir deklaruotų UI locale trumpi guide, trumpas produkto paaiškinimas, supported/unsupported matrica, pamatuoti dydžiai ir sąnaudų metodas.
@@ -338,7 +376,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 ## P4D. Desktop platinimas — atskiras etapas po managed-local piloto
 
-- [ ] P4D.1 Pasirinktas vienas desktop wrapper pagal P0 ADR; Rakazo Electron pernaudoti, jei bazė pasirenkama. Branduolio naudotojui nereikia rankiniu būdu konfigūruoti Python/Node; engine/VM prerequisites deklaruoti ir pamatuoti.
+- [ ] P4D.1 Kvalifikuotas esamas Rakazo Electron wrapper su vienu shared web produktu. Naudotojui nereikia rankiniu būdu konfigūruoti runtime; Node/engine/VM prerequisites deklaruoti ir pamatuoti, native OS atskirai.
 - [ ] P4D.2 Windows11 x64 pasirašytas per-user `.exe` installer ir pasirinktas update formatas; locked files, UAC riba, data-preserving uninstall ir pirmas paleidimas.
 - [ ] P4D.3 macOS arm64 signed/notarized `.app` / `.dmg`, Gatekeeper, Keychain, permissions, install/update/rollback realiame Mac runner.
 - [ ] P4D.4 Linux x64 user-owned AppImage/portable profilis; `.deb`/`.rpm` vėliau per OS package manager. Electron native updater nevadinamas Linux sprendimu.
@@ -354,13 +392,13 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 - [ ] P5.3 Kiekvienam naujam moduliui bent 3 domeno užduotys, failure/cancel/resource testai, licencijų ir dydžio ataskaita.
 - [ ] P5.4 Išplėsti ankstyvą P1C repository onboarding pagal naujus tinkamus profilius; private/selected-repo prieiga tik atskirame ADR ir grant, automatinio „verified“ iš README nėra.
 - [ ] P5.5 Pasirinkti vieną RAG ir vieną model-serving kelią pagal matavimą, paliekant alternatyvas atskirais profiliais.
-- [ ] P5.6 Prieš multi-scheduler/remote shared workers/multi-tenant/HA B variante migruoti į PostgreSQL, A variante patikrinti esamos PostgreSQL/Graphile bazės tinkamumą; abiem pakartoti izoliuotos prieigos bei fault testus.
+- [ ] P5.6 Prieš multi-scheduler/remote shared workers/multi-tenant/HA kvalifikuoti esamą PostgreSQL/Graphile koordinavimą, izoliuotą prieigą, resursų ribas ir fault testus. Antro DB/scheduler nepridėti vien dėl worker skaičiaus.
 - [ ] P5.7 Įvertinti Temporal prieš DBOS, jei nuosavo orchestration išlaikymo kaina pateisina keitimą; išlaikyti vieną autoritetingą vykdiklį.
 - [ ] P5.8 Prieš viešą paskirstytą SAI įgyvendinti bendrą contribution coordinator, atomines globalias leases, expiry, fencing ir kelių klientų lenktynių bandymus.
 - [ ] P5.9 El. pašto profilis: sintetinis inbox → read → draft; Inbox Zero tik išsprendus custom licencijos tinkamumą arba nuosavas Gmail/Graph adapteris, send atskirai.
 - [ ] P5.10 Prižiūrėtojų queue limitai, contribution rate limits, lease atlaisvinimas ir neaktyvių modulių deprecation.
 - [ ] P5.11 Atskirai shadow-testintas suderinamų upstream dependency bump auto-accept profilis: source/package provenance, transityvinis diff, hooks ir permissions, regression/resource/cost/canary; patch semver nepakanka. Major/terms/privilege pokyčiai išimtyje.
-- [ ] P5.12 Pagal [media programą](docs/research/MEDIA-CANDIDATES.md) palyginti bent TTS, STT ir vieną kinematografinį pipeline; LT kokybė, kamera, identity ir reali GPU/API kaina prieš recommended žymą.
+- [ ] P5.12 Pagal [media programą](docs/quarantine/2026-10-17/docs/research/MEDIA-CANDIDATES.md.snapshot.txt) palyginti bent TTS, STT ir vieną kinematografinį pipeline; LT kokybė, kamera, identity ir reali GPU/API kaina prieš recommended žymą.
 - [ ] P5.13 Version/profile-specific adapterių palyginimai ir atskirai patikrinta default/routing keitimo politika; canary, grants/data/account ribos, aktyvių darbų pins ir deprecation/migration/rollback; jokių naujų teisių iš vien geresnio benchmark.
 
 **Vartai G5:** modulių skaičius skaičiuojamas pagal gebėjimų ir prižiūrėtojo testų matricą;30 katalogo eilučių nėra30 patikrintų gebėjimų. Kiekvienas recommended modulis turi atkartojamą acceptance paketą, pinned artifacts ir žinomą operatorių.
@@ -392,22 +430,6 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 
 **Vartai G7:** prižiūrėtojo sprendimas remiantis įrodymais ir aiškia atšaukimo politika. Sistema negali pati įjungti didesnės autonomijos.
 
-## Pirmas įgyvendinimo backlogas
-
-| Eilė | Darbas | Priklauso nuo | Atsakingas vaidmuo | Peržiūri |
-|---|---|---|---|---|
-| 1 | P0 schemas,30 fixtures ir vertinimo protokolas | Šis planas | Kontraktų/vertinimo įgyvendintojas | Kitas įgyvendintojas + maintainer |
-| 2 | P0.7–P0.12 feasibility ir matavimai | Pirmų schemas projektas | Platformos/adapterių įgyvendintojas | Kitas įgyvendintojas |
-| 2W | P0W oficialus puslapis/donate, tada P1W faktų publish | Public facts ir domain/hosting sprendimas | UI/content įgyvendintojas | Kitas agentas ir savininkas finansiniam profiliui |
-| 3 | P1 state/outbox/effect ledger | 1–2 | Platformos įgyvendintojas | Reliability peržiūrėtojas |
-| 4 | P1 UI ir artefaktų vertikalus pjūvis | API kontraktas | UI/adapterių įgyvendintojas | Nepriklausomas testų naudotojas |
-| 5 | P2 trys moduliai | G1 | Abu įgyvendintojai, padalinti pagal modulius | Domeno validatoriai |
-| 6 | P3A SAI ir P3B REA | G2 | Abu įgyvendintojai atskirose darbo srityse | Maintainer ir nepriklausomos patikros |
-| 7 | P3C auto PR/registry ir P3D upstream/update | G3A, P0 packaging/auth tyrimas; dalis lygiagrečiai | Platformos/contribution įgyvendintojai | Nepriklausomas evaluator ir release operatorius |
-| 8 | P4 localhost beta, vėliau P4D desktop matrica | G3A–G3D | Produkto ir platformos įgyvendintojai | Nauji beta naudotojai / OS runneriai |
-
-Kiekvieno darbo užbaigimas: source/config pin + atkūrimo receptas + patikros ataskaita + artefaktai + sąnaudos/resursai + žinomos ribos. Nepavykęs bandymas yra saugomas rezultatas; checkboxas lieka atviras, kol priėmimo kriterijai įrodyti.
-
 ## P1E. Zero Lab — daugkartinis kalibravimas
 
 [Modulio planas](docs/ZERO-LAB.md), [metodas](docs/CALIBRATION.md), [pirma užduotis](benchmarks/sprintdesk-v1/README.md). Tai pirmiausia esamo eval/testkit išplėtimas, su tuo pačiu produkto runtime.
@@ -415,7 +437,7 @@ Kiekvieno darbo užbaigimas: source/config pin + atkūrimo receptas + patikros a
 - [x] P1E.1 Aprašyti Suite/Profile/Experiment/Trial/Evaluation/Comparison kontraktus ir esamo eval kodo pernaudojimą.
 - [x] P1E.2 Pirmas versijuotas manifestas, SprintDesk prompt/API grader, offline lab:plan, šaltinių digest ir not-run ataskaita be modelių call.
 - [x] P1E.3 Prijungti oficialų Claude prenumeratos CLI ir baseline/retrieval lanes; CLI modelio/effort/usage įrodymai, atskiros coding darbo vietos ir baigtinės vykdymo ribos. Bendras produkcinis account broker/cap lieka atskiras atviras vartas; Codex auth atidėtas.
-- [x] P1E.4 Importuota viena Claude v2 coding pora: prebuilt runtime/API/restart/SQLite/UI PASS abiem, tikslūs source/prompt hash ir failures išsaugoti; abi programos pakartotinai patikrintos. Pilno dependency install/build ir produkto runtime tai nepatvirtina.
+- [x] P1E.4 Importuota ir nepriklausomai patikrinta pirma Claude v2 pora; vėliau užbaigti catalog/compact/lean ir pirmi StockDesk eksperimentai. Skirtingos epochų sąlygos, compact ir StockDesk v1 nesėkmės bei v2 kontrolės išsaugotos [ataskaitose](docs/experiments/README.md). V2 live StockDesk, kelių užduočių kokybė ir pilnas worker runtime dar nepriimti.
 - [ ] P1E.5 Kelių užduočių LT/EN rinkiniai, kartojimai, baseline/candidate profiliai, cold/warm ir laikomas validavimo rinkinys.
 - [ ] P1E.6 Patvarus palyginimo servisas ir Lab UI; quality/time/whole-task-cost kompromisai, regressions ir atsargus promotion proposal.
 - [ ] P1E.7 Biudžetu apribotas periodinis kalibravimas ir tik opt-in nuasmenintų rezultatų rodymas svetainėje.

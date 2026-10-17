@@ -1,0 +1,2025 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent_architecture_audit",
+  "createdAtUtc": "2026-10-17T11:01:00.712Z",
+  "language": "lt",
+  "snapshot": {
+    "repository": "https://github.com/christianza1989/superintelligence.git",
+    "root": "<checkout>",
+    "commit": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+    "originMain": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+    "clean": true,
+    "fetchPerformedByThisAudit": false,
+    "fetchNote": "Parent reported a successful fetch before delegation; this audit independently verified the local snapshot only.",
+    "finalSnapshotVerified": true
+  },
+  "scope": {
+    "analysisAndAuthorizedDesignOnly": true,
+    "productFilesModified": 0,
+    "gitMutations": 0,
+    "newExternalPaidApiCalls": 0,
+    "newCliGenerations": 0,
+    "electronE2ERuns": 0,
+    "subagentsCreated": 0,
+    "externalSourceExecuted": false,
+    "secretFilesRead": false,
+    "builtinImagegenCalls": 11,
+    "builtinImagegenCost": "not_measured",
+    "limitations": [
+      "Targeted code audit, not exhaustive source/security audit.",
+      "102 documentation files inventoried; inventory is not full content review.",
+      "No new paid SystemOne or coding benchmark.",
+      "No new provider invoice/pricing audit.",
+      "No public install/update qualification, native REA execution or full app equivalence proof.",
+      "No fresh review of all external catalog repositories.",
+      "No type/build rerun; prior documented results are not reported as new.",
+      "Authorized built-in image generation is a separate UI addendum, not included in the zero external API/coding experiment count."
+    ]
+  },
+  "summary": {
+    "trackedFiles": 2223,
+    "markdownFiles": 102,
+    "documentationCoverage": {
+      "full_content_read_across_calls": 23,
+      "targeted_content_read": 7,
+      "inventory_and_headings_only": 72
+    },
+    "apps": 6,
+    "packages": 12,
+    "catalog": {
+      "records": 796,
+      "capabilityNonempty": 158,
+      "sourceAvailable": 757,
+      "pinned": 756,
+      "runtimeTested": 0,
+      "licenseApproved": 0
+    },
+    "catalogInterpretation": "Source availability and pins are catalog flags. Zero runtimeTested/licenseApproved flags do not mean no source is legally usable or no hand-prepared lab component was tested."
+  },
+  "checks": [
+    {
+      "id": "T01",
+      "command": "npm run test:foundation",
+      "cwd": "<checkout>",
+      "exitCode": 0,
+      "testFiles": 10,
+      "testsPassed": 98,
+      "testsFailed": 0,
+      "log": "foundation.log.txt",
+      "classification": "new_local_offline_test",
+      "warning": "npm printed unknown-config notices; tests passed."
+    },
+    {
+      "id": "T02",
+      "command": "node scripts/platform.mjs exec vitest run packages/testkit/src/history-context.test.ts packages/adapters/src/context-selection.test.ts packages/adapters/src/runtime-context.test.ts",
+      "cwd": "<checkout>",
+      "exitCode": 0,
+      "testFiles": 3,
+      "testsPassed": 49,
+      "testsFailed": 0,
+      "log": "context.log.txt",
+      "classification": "new_local_offline_test_with_loopback_emulator"
+    },
+    {
+      "id": "P01",
+      "command": "node scripts/platform.mjs exec tsx <local-artifacts>/astra-architecture-audit-20261017/probe.mjs",
+      "exitCode": 0,
+      "artifact": "probe-results.json",
+      "classification": "new_diagnostic_not_recall_benchmark",
+      "searchProbes": [
+        {
+          "query": "csv",
+          "results": []
+        },
+        {
+          "query": "csv import",
+          "results": []
+        },
+        {
+          "query": "inventory",
+          "results": []
+        },
+        {
+          "query": "warehouse",
+          "results": []
+        },
+        {
+          "query": "sandėlio",
+          "results": []
+        },
+        {
+          "query": "importuoti CSV",
+          "results": []
+        },
+        {
+          "query": "sqlite",
+          "results": [
+            "simonw/sqlite-utils",
+            "sqlite/sqlite",
+            "sqlitebrowser/sqlitebrowser"
+          ]
+        },
+        {
+          "query": "database",
+          "results": []
+        },
+        {
+          "query": "spreadsheet",
+          "results": []
+        },
+        {
+          "query": "tabular data",
+          "results": []
+        },
+        {
+          "query": "agent platform",
+          "results": [
+            "FoundationAgents/OpenManus",
+            "bytedance/UI-TARS-desktop",
+            "eigent-ai/eigent",
+            "elie222/rakazo"
+          ]
+        },
+        {
+          "query": "pdf tables",
+          "results": []
+        },
+        {
+          "query": "docling",
+          "results": [
+            "docling-project/docling"
+          ]
+        },
+        {
+          "query": "honojs/hono",
+          "results": [
+            "honojs/hono"
+          ]
+        },
+        {
+          "query": "image editor",
+          "results": []
+        },
+        {
+          "query": "photo editing",
+          "results": []
+        },
+        {
+          "query": "photoshop",
+          "results": []
+        },
+        {
+          "query": "remove background",
+          "results": []
+        },
+        {
+          "query": "pdf",
+          "results": [
+            "jsvine/pdfplumber",
+            "ocrmypdf/OCRmyPDF",
+            "pdfcpu/pdfcpu",
+            "pdfme/pdfme",
+            "pymupdf/PyMuPDF"
+          ]
+        },
+        {
+          "query": "FFmpeg",
+          "results": [
+            "FFmpeg/FFmpeg",
+            "kkroening/ffmpeg-python"
+          ]
+        },
+        {
+          "query": "reverse engineering",
+          "results": [
+            "morluto/rea"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P02",
+      "artifact": "probe-results.json",
+      "classification": "new_advisory_semantic_negative_control",
+      "singleton": {
+        "result": {
+          "status": "recommended",
+          "repository": "example/unrelated",
+          "sourceRevision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "generation": 1,
+          "engine": "single_eligible",
+          "evidence": "source_only"
+        },
+        "networkDispatches": 0,
+        "interpretation": "Source eligibility is not semantic suitability. This helper is advisory, not an execution grant."
+      },
+      "archived": {
+        "status": "missing",
+        "reason": "no_current_pinned_source"
+      }
+    },
+    {
+      "id": "T03",
+      "command": "git grep direct named selector calls excluding tests",
+      "artifact": "symbol-wiring.log",
+      "classification": "new_static_search"
+    },
+    {
+      "id": "H01",
+      "classification": "historical_document_read_not_rerun",
+      "sources": [
+        "docs/STOCKDESK-CALIBRATION.md",
+        "docs/CLAUDE-CALIBRATION.md",
+        "platform/docs/evals/history-findings.md"
+      ],
+      "note": "Preserved failures and cohort/source differences retained; no causal reuse/Jev benefit asserted."
+    },
+    {
+      "id": "H02",
+      "classification": "historical_local_schema_review_read_not_rerun",
+      "sources": [
+        {
+          "path": "<local-artifacts>/gemini-contract-review-20261017/contract-final-reviewed.ts",
+          "sha256": "a5b4a263b21aff94687e7d3194d1061ca96da373e129856430551867a009d25e",
+          "bytes": 12475,
+          "modifiedByAudit": false,
+          "executedByAudit": false
+        },
+        {
+          "path": "<local-artifacts>/gemini-contract-review-20261017/review-results.json",
+          "sha256": "5c4f856b0a29d6b569345b0f2e45b1357db2f02918787c76d41275ac42286a36",
+          "bytes": 3472,
+          "modifiedByAudit": false,
+          "executedByAudit": false
+        }
+      ],
+      "note": "Original type-check failure, reviewed z.record arity correction, six supplied tests and 22 controls are previous-review evidence, not new product architecture tests."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F01",
+      "confidence": "high_for_implementation_and_probe",
+      "evidence": [
+        "E09",
+        "E10",
+        "P01"
+      ],
+      "recommendation": "Task/capability retrieval first; benchmark lexical before embeddings."
+    },
+    {
+      "id": "F02",
+      "confidence": "high_reproduced_advisory_issue",
+      "evidence": [
+        "E11",
+        "P02"
+      ],
+      "recommendation": "Separate inspect-candidate from ready profile; do not require Jev for every singleton."
+    },
+    {
+      "id": "F03",
+      "confidence": "high_for_scoped_lab_code_and_documented_limits",
+      "evidence": [
+        "E12",
+        "E13",
+        "H01"
+      ],
+      "recommendation": "Measure actual use and utility, not staged assets."
+    },
+    {
+      "id": "F04",
+      "confidence": "high_for_direct_symbol_wiring_and_adapter_contract",
+      "evidence": [
+        "E14",
+        "E15"
+      ],
+      "recommendation": "Compose bounded decisions in worker and preserve decision receipts."
+    },
+    {
+      "id": "F05",
+      "confidence": "high_for_interface_gap",
+      "evidence": [
+        "E01",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08"
+      ],
+      "recommendation": "Request-scoped observer plus trusted target identity and shared call ID; avoid double accounting."
+    },
+    {
+      "id": "F06",
+      "confidence": "high_static_and_prior_controls",
+      "evidence": [
+        "E16",
+        "H02"
+      ],
+      "recommendation": "Keep prototype as reference; implement producer authority and artifact-bound verification."
+    },
+    {
+      "id": "F07",
+      "confidence": "high_for_documented_historical_failure",
+      "evidence": [
+        "E17",
+        "T02"
+      ],
+      "recommendation": "Do not treat offline pass as paid final-source qualification."
+    },
+    {
+      "id": "F08",
+      "confidence": "high_for_file_locations_and_manifests",
+      "evidence": [
+        "E18",
+        "E19",
+        "W12"
+      ],
+      "recommendation": "Add narrow root CI and qualify owned release/install channels before public packaging."
+    }
+  ],
+  "codeAndLocalEvidence": [
+    {
+      "id": "E01",
+      "claim": "Worker composes one existing runtime/executor stack; PiAgentRuntime is constructed without modelCallObserver.",
+      "sources": [
+        {
+          "path": "platform/apps/worker/src/index.ts",
+          "sha256": "efda2dfc18c0322c21720d983b64158533724950253659fd8237925416b60eef",
+          "bytes": 12047,
+          "lines": 323,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 94,
+              "end": 101,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/worker/src/index.ts#L94-L101"
+            },
+            {
+              "start": 111,
+              "end": 120,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/worker/src/index.ts#L111-L120"
+            },
+            {
+              "start": 157,
+              "end": 211,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/worker/src/index.ts#L157-L211"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "claim": "Existing persistent Run/Attempt/ExternalEffect/ComputerExecutionLease and versioned Artifact primitives.",
+      "sources": [
+        {
+          "path": "platform/packages/db/prisma/schema.prisma",
+          "sha256": "fa3b206226209cdb2f1daefb768d8eb9fc14b248a0162be27ccf2f9f5dbe57a6",
+          "bytes": 53605,
+          "lines": 1527,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 662,
+              "end": 715,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L662-L715"
+            },
+            {
+              "start": 741,
+              "end": 753,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L741-L753"
+            },
+            {
+              "start": 792,
+              "end": 812,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L792-L812"
+            },
+            {
+              "start": 1060,
+              "end": 1108,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L1060-L1108"
+            },
+            {
+              "start": 1111,
+              "end": 1145,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L1111-L1145"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "claim": "Executor already resolves scoped models/tools/effect approval and injects repository_search guidance.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/executor.ts",
+          "sha256": "c6736e7047b3225481dd99f45e85c608d62137c2252c9086cf09d7006c2e93f6",
+          "bytes": 347360,
+          "lines": 8950,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 2952,
+              "end": 3058,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L2952-L3058"
+            },
+            {
+              "start": 3822,
+              "end": 3889,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L3822-L3889"
+            },
+            {
+              "start": 4045,
+              "end": 4170,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L4045-L4170"
+            },
+            {
+              "start": 5257,
+              "end": 5259,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L5257-L5259"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "claim": "Run-scoped request has IDs/onUsage/fallback resolvers; constructor observer metadata lacks this scope; default context is retrieval.",
+      "sources": [
+        {
+          "path": "platform/packages/adapter-kit/src/types.ts",
+          "sha256": "51f879f0c2bf5bbc352056913d4135fbf90644cbbc01a30002da352b3cc7c97f",
+          "bytes": 30273,
+          "lines": 1045,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 406,
+              "end": 474,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapter-kit/src/types.ts#L406-L474"
+            },
+            {
+              "start": 524,
+              "end": 563,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapter-kit/src/types.ts#L524-L563"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "claim": "Shared Pi observer, per-target fallback stream, and child stream hook; trusted connection identity must remain target-specific.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/pi-runtime.ts",
+          "sha256": "dfb26cca378a3dcab10263a1085675d0ae5c8a6f0c0eb7183531b6bd55929a5f",
+          "bytes": 113972,
+          "lines": 3008,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 141,
+              "end": 158,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/pi-runtime.ts#L141-L158"
+            },
+            {
+              "start": 310,
+              "end": 375,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/pi-runtime.ts#L310-L375"
+            },
+            {
+              "start": 1395,
+              "end": 1432,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/pi-runtime.ts#L1395-L1432"
+            },
+            {
+              "start": 2491,
+              "end": 2537,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/pi-runtime.ts#L2491-L2537"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E06",
+      "claim": "observedPiStream generates callId, reserves before call, awaits producer usage, settles observer; guarded SDK retries disabled.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/pi-usage.ts",
+          "sha256": "567be0a1ad1a663d8b286ecfc9ffe28133906091e8701db8b589587dbb16adb2",
+          "bytes": 15218,
+          "lines": 389,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 210,
+              "end": 359,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/pi-usage.ts#L210-L359"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E07",
+      "claim": "Usage deduplication and producer/consumer guard already exist; preserve them when adding financial settlement.",
+      "sources": [
+        {
+          "path": "platform/packages/db/src/usage.ts",
+          "sha256": "571436e660cf2f80108353876cb3da197b626ae876e121a380ecf6248c811547",
+          "bytes": 2285,
+          "lines": 66,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 16,
+              "end": 62,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/src/usage.ts#L16-L62"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/adapters/src/executor.ts",
+          "sha256": "c6736e7047b3225481dd99f45e85c608d62137c2252c9086cf09d7006c2e93f6",
+          "bytes": 347360,
+          "lines": 8950,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 6498,
+              "end": 6514,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L6498-L6514"
+            },
+            {
+              "start": 7009,
+              "end": 7017,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/executor.ts#L7009-L7017"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/db/prisma/schema.prisma",
+          "sha256": "fa3b206226209cdb2f1daefb768d8eb9fc14b248a0162be27ccf2f9f5dbe57a6",
+          "bytes": 53605,
+          "lines": 1527,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 1111,
+              "end": 1145,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/prisma/schema.prisma#L1111-L1145"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E08",
+      "claim": "Budget has finite insert-only allocation, atomic account/lane reservation and conservative hold, not a complete settlement/refund implementation.",
+      "sources": [
+        {
+          "path": "platform/packages/db/src/zero-budget.ts",
+          "sha256": "2e218d4b780d928e4af2664d68b3d330e243c466a5d635f908a051a5e58eb0ac",
+          "bytes": 6980,
+          "lines": 188,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 46,
+              "end": 75,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/src/zero-budget.ts#L46-L75"
+            },
+            {
+              "start": 112,
+              "end": 187,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/db/src/zero-budget.ts#L112-L187"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E09",
+      "claim": "Repository retrieval is all-term substring matching with simple name score and alphabetical tie-break.",
+      "sources": [
+        {
+          "path": "platform/packages/core/src/zero-catalog.ts",
+          "sha256": "dbdb32330a61e65781e28a17d7124acdbbbb6f149f6e855b73a857464140277e",
+          "bytes": 1847,
+          "lines": 48,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 13,
+              "end": 38,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/core/src/zero-catalog.ts#L13-L38"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E10",
+      "claim": "repository_search gives bounded untrusted source candidates, not installation permission.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/zero-repository-tools.ts",
+          "sha256": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+          "bytes": 2895,
+          "lines": 60,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 1,
+              "end": 59,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-repository-tools.ts#L1-L59"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E11",
+      "claim": "Source/pin/not-archived filters and singleton return do not establish semantic fit; source_only remains advisory.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/zero-repository-selector.ts",
+          "sha256": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+          "bytes": 6759,
+          "lines": 180,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 48,
+              "end": 179,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-repository-selector.ts#L48-L179"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E12",
+      "claim": "Real pinned HTTP library preparation and bounded staging exist but are hardcoded to Hono/node-server; component smoke is not target-app reuse evidence.",
+      "sources": [
+        {
+          "path": "platform/scripts/zero-lab-reuse.mjs",
+          "sha256": "798dd87303a86b12e130d001ad6bcf584a7b6a80048e12733caf0b22f496ea6b",
+          "bytes": 10780,
+          "lines": 130,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 12,
+              "end": 17,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/scripts/zero-lab-reuse.mjs#L12-L17"
+            },
+            {
+              "start": 32,
+              "end": 59,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/scripts/zero-lab-reuse.mjs#L32-L59"
+            },
+            {
+              "start": 73,
+              "end": 125,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/scripts/zero-lab-reuse.mjs#L73-L125"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E13",
+      "claim": "StockDesk preparation uses hand-selected search queries and generic HTTP pack; runner records copied asset integrity, not complete dynamic reuse proof.",
+      "sources": [
+        {
+          "path": "platform/scripts/zero-stockdesk-prepare.mjs",
+          "sha256": "4505df01c1d3ecb2a5c12a3cb15e0c2f71ce2c2d4258848f810733865dea881d",
+          "bytes": 7994,
+          "lines": 37,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 13,
+              "end": 32,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/scripts/zero-stockdesk-prepare.mjs#L13-L32"
+            }
+          ]
+        },
+        {
+          "path": "platform/scripts/zero-stockdesk-run.mjs",
+          "sha256": "94855301e32ec18e419137a97cce8d535d74dd5955c497921a67b82eb2b4c6fb",
+          "bytes": 14579,
+          "lines": 56,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 34,
+              "end": 48,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/scripts/zero-stockdesk-run.mjs#L34-L48"
+            }
+          ]
+        },
+        {
+          "path": "docs/STOCKDESK-CALIBRATION.md",
+          "sha256": "474f2a21d4ed1e25a480055c9e85eae0de0fe2201b21920808336917cab02d54",
+          "bytes": 8813,
+          "lines": 73,
+          "readMode": "full_content_read",
+          "ranges": []
+        }
+      ]
+    },
+    {
+      "id": "E14",
+      "claim": "Direct named tool/model Jev selector calls were absent outside definitions/tests in searched product directories; repository selector also used by standalone verification script. This is a symbol-search result, not proof about all conceivable dynamic invocations.",
+      "artifact": "symbol-wiring.log",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/zero-tool-selector.ts",
+          "sha256": "1d2e57e7394477364f48a401b716169c8aaf6e8e73a57e8accac76e840dfa3eb",
+          "bytes": 5310,
+          "lines": 142,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 33,
+              "end": 141,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-tool-selector.ts#L33-L141"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/adapters/src/zero-model-selector.ts",
+          "sha256": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+          "bytes": 10328,
+          "lines": 254,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 134,
+              "end": 253,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-model-selector.ts#L134-L253"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E15",
+      "claim": "SystemOne adapter has typed/size/authorization/budget gates; selectors return a narrower decision without the full receipt/probability evidence.",
+      "sources": [
+        {
+          "path": "platform/packages/adapters/src/zero-systemone.ts",
+          "sha256": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+          "bytes": 12582,
+          "lines": 331,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 26,
+              "end": 90,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-systemone.ts#L26-L90"
+            },
+            {
+              "start": 108,
+              "end": 161,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-systemone.ts#L108-L161"
+            },
+            {
+              "start": 196,
+              "end": 329,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-systemone.ts#L196-L329"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/adapters/src/zero-tool-selector.ts",
+          "sha256": "1d2e57e7394477364f48a401b716169c8aaf6e8e73a57e8accac76e840dfa3eb",
+          "bytes": 5310,
+          "lines": 142,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 119,
+              "end": 141,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-tool-selector.ts#L119-L141"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/adapters/src/zero-model-selector.ts",
+          "sha256": "ecd6f887cafa2d415df8dd94d16c0f4fc779b511f8bf9a0f408b1f293e674a6b",
+          "bytes": 10328,
+          "lines": 254,
+          "readMode": "full_content_read",
+          "ranges": [
+            {
+              "start": 241,
+              "end": 253,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapters/src/zero-model-selector.ts#L241-L253"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E16",
+      "claim": "Standalone schema checks internal declarations but does not authenticate actual execution or independent verification; declared FAIL remains accepted regardless of otherwise positive declarations.",
+      "localSources": [
+        "../gemini-contract-review-20261017/contract-final-reviewed.ts",
+        "../gemini-contract-review-20261017/review-results.json"
+      ],
+      "readMode": "full_content_read",
+      "rerun": false,
+      "ranges": [
+        {
+          "path": "contract-final-reviewed.ts",
+          "start": 7,
+          "end": 50
+        },
+        {
+          "path": "contract-final-reviewed.ts",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "path": "contract-final-reviewed.ts",
+          "start": 121,
+          "end": 158
+        }
+      ]
+    },
+    {
+      "id": "E17",
+      "claim": "History default is retrieval; preserved later-source paid qualification is 53/54. New offline tests do not close that historical qualification gate.",
+      "sources": [
+        {
+          "path": "platform/docs/evals/history-findings.md",
+          "sha256": "3f58494e44d04a50bb9725f944522bfdad5d80920a77aa670b9e771a46dd6d13",
+          "bytes": 10834,
+          "lines": 173,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 1,
+              "end": 19,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/docs/evals/history-findings.md#L1-L19"
+            },
+            {
+              "start": 50,
+              "end": 106,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/docs/evals/history-findings.md#L50-L106"
+            }
+          ]
+        },
+        {
+          "path": "platform/packages/adapter-kit/src/types.ts",
+          "sha256": "51f879f0c2bf5bbc352056913d4135fbf90644cbbc01a30002da352b3cc7c97f",
+          "bytes": 30273,
+          "lines": 1045,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 441,
+              "end": 446,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/adapter-kit/src/types.ts#L441-L446"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E18",
+      "claim": "No tracked root workflows; 12 nested workflows; inherited ci includes publishing and production deployment.",
+      "artifact": "probe-results.json",
+      "sources": [
+        {
+          "path": "platform/.github/workflows/ci.yml",
+          "sha256": "db2fb5be872b414e14b6ad951ae57da029b63f70ee5f6b0e6313198d6cc2ffcf",
+          "bytes": 10428,
+          "lines": 315,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 121,
+              "end": 126,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/.github/workflows/ci.yml#L121-L126"
+            },
+            {
+              "start": 272,
+              "end": 285,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/.github/workflows/ci.yml#L272-L285"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E19",
+      "claim": "Desktop product/app/publish and Compose image defaults still point to upstream Rakazo identity/channels.",
+      "sources": [
+        {
+          "path": "platform/apps/desktop/package.json",
+          "sha256": "ee0924699212c8c4b3c1e1822d6265a34b3fe037dbc65a7eebc5b5a9ccc1b71f",
+          "bytes": 2277,
+          "lines": 89,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 1,
+              "end": 3,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/desktop/package.json#L1-L3"
+            },
+            {
+              "start": 31,
+              "end": 31,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/desktop/package.json#L31-L31"
+            },
+            {
+              "start": 80,
+              "end": 87,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/apps/desktop/package.json#L80-L87"
+            }
+          ]
+        },
+        {
+          "path": "platform/infra/compose/docker-compose.images.yml",
+          "sha256": "9dda37fe884abf73297b8b0477523e69404de16424ab9265e305faac09225f66",
+          "bytes": 10001,
+          "lines": 277,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 35,
+              "end": 54,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/infra/compose/docker-compose.images.yml#L35-L54"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E20",
+      "claim": "Current UI catalog projection lacks stars/language/popularity fields; human discovery library needs metadata as well as UI work.",
+      "sources": [
+        {
+          "path": "platform/packages/core/src/zero-catalog-data.json",
+          "sha256": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+          "bytes": 378481,
+          "lines": 9559,
+          "readMode": "schema_keys_and_selected_records_read",
+          "ranges": []
+        }
+      ]
+    },
+    {
+      "id": "E21",
+      "claim": "Shared semantic dark/light/system tokens already exist; proposed concept palette is a design change, not an applied code change.",
+      "sources": [
+        {
+          "path": "platform/packages/ui-tokens/src/index.ts",
+          "sha256": "ebe2440479505a5682d7764ea42a91246e394f7929d1ec7ccd04696564198c13",
+          "bytes": 6434,
+          "lines": 229,
+          "readMode": "targeted_ranges",
+          "ranges": [
+            {
+              "start": 1,
+              "end": 140,
+              "url": "https://github.com/christianza1989/superintelligence/blob/fe14bdd4fb9cd8805938e1169a4bd2d13961bb86/platform/packages/ui-tokens/src/index.ts#L1-L140"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "webSources": [
+    {
+      "id": "W01",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "revision": null,
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Vendor capability/calibration claims; not RepositoryZero performance evidence.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W02",
+      "url": "https://github.com/OpenRouterTeam/typescript-sdk/blob/4200d11265efd9e27916989f0ac013f64ef949d0/docs/sdks/systemone/README.mdx",
+      "revision": "4200d11265efd9e27916989f0ac013f64ef949d0",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "SystemOne state/questions and supported typed question forms.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W03",
+      "url": "https://github.com/typesafe-ai/typesafe-sdk-js/blob/b844cd1aca12855a5d24a2df52a1401c86e7d37a/README.md",
+      "revision": "b844cd1aca12855a5d24a2df52a1401c86e7d37a",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Direct SDK experimental image/box profiles; OpenRouter parity not established.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W04",
+      "url": "https://github.com/typesafe-ai/typesafe-sdk-js/blob/b844cd1aca12855a5d24a2df52a1401c86e7d37a/src/types.ts",
+      "revision": "b844cd1aca12855a5d24a2df52a1401c86e7d37a",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Choice probabilities, noul probability, fractional expected ordinal score; default retry policy.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W05",
+      "url": "https://github.com/OpenRouterTeam/typescript-sdk/blob/4200d11265efd9e27916989f0ac013f64ef949d0/src/funcs/systemOneCreate.ts",
+      "revision": "4200d11265efd9e27916989f0ac013f64ef949d0",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "SystemOne transport request shape and retry fallback.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W06",
+      "url": "https://github.com/morluto/rea",
+      "revision": null,
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Repository identity page only; live HEAD not attested.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W07",
+      "url": "https://github.com/morluto/rea/blob/0e1f0bf2d06943e59253b8a66923a1ae6005e81e/README.md",
+      "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Declared analysis profiles, not runtime qualification.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W08",
+      "url": "https://github.com/morluto/rea/blob/0e1f0bf2d06943e59253b8a66923a1ae6005e81e/package.json",
+      "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "rea-agents 6.5.0, Node engine, CLI/MCP entrypoints.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W09",
+      "url": "https://github.com/morluto/rea/blob/0e1f0bf2d06943e59253b8a66923a1ae6005e81e/docs/mcp-contracts.md",
+      "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Normalized Evidence, identity, coverage and limitations; targeted first 121 lines.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W10",
+      "url": "https://github.com/morluto/rea/blob/0e1f0bf2d06943e59253b8a66923a1ae6005e81e/docs/browser-observation.md",
+      "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Passive CDP observation and comparison are not general browser automation.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W11",
+      "url": "https://github.com/morluto/rea/blob/0e1f0bf2d06943e59253b8a66923a1ae6005e81e/docs/process-capture.md",
+      "revision": "0e1f0bf2d06943e59253b8a66923a1ae6005e81e",
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Process capture is not sandbox; native Windows PTY capture unsupported in this snapshot; targeted lines 1-121.",
+      "runtimeTested": false
+    },
+    {
+      "id": "W12",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "revision": null,
+      "accessedDate": "2026-10-17",
+      "method": "web_read_only",
+      "scope": "Workflow files belong in repository .github/workflows.",
+      "runtimeTested": false
+    }
+  ],
+  "documentation": [
+    {
+      "path": "MVP-ROADMAP.md",
+      "sha256": "a1103a6ecc59b8c1604c252de9532a1078fd478db1662bdb7829362b1fb926c4",
+      "bytes": 11531,
+      "lines": 102,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "PLAN.md",
+      "sha256": "b7cf90d589b691977e9960c18be002a07d1b3bfe23c796c5ca8bf66caa8caa49",
+      "bytes": 36790,
+      "lines": 233,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "README.md",
+      "sha256": "d6c1059f306cdad2994f17250cfba08f52d5ccffcd995ddd5e499957284e50f1",
+      "bytes": 8899,
+      "lines": 84,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "08c177f98482c7c885c28ccd7374fa2f04b5c970b9992930b6ce226d3710e0a8",
+      "bytes": 56702,
+      "lines": 425,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/PROMPT.md",
+      "sha256": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+      "bytes": 3786,
+      "lines": 24,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/PROMPT.v2.md",
+      "sha256": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+      "bytes": 4098,
+      "lines": 24,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/README.md",
+      "sha256": "ddfe422930ae5d1fb03ea82dbf5e8e0a1d46cb47465c9e985cdf3fbda617a4a4",
+      "bytes": 2579,
+      "lines": 14,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/PROMPT.md",
+      "sha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+      "bytes": 9556,
+      "lines": 59,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/PROMPT.v2.md",
+      "sha256": "6179cdcc2a24f4b6f83ee3384bcd335a0bf9ae7f13452f0e69ead20522ec98a1",
+      "bytes": 10102,
+      "lines": 59,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/README.md",
+      "sha256": "31c91a4658abae4e396aedfe73b7c018f2eac3ed531a785b57650c19bc3aebee",
+      "bytes": 12654,
+      "lines": 73,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/AGENT-CAPABILITIES.md",
+      "sha256": "a7f9fb5ddbafade6c65eef5fe883bbef5a40df345fe0a6347db3e3d4f7cc5f20",
+      "bytes": 12877,
+      "lines": 110,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/AGENT-IDENTITY.md",
+      "sha256": "91d67ce52a42d04dbad80d6178e2e0a371507bcbc05220f511c91385cb84492a",
+      "bytes": 3841,
+      "lines": 36,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/AUTONOMY-AND-UPDATES.md",
+      "sha256": "4bac0ff4fb4750e96382dcc4f808bd625d010c4797f61a12720160d27117e069",
+      "bytes": 33385,
+      "lines": 218,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/BUDGET-FOUNDATION.md",
+      "sha256": "5651ab33e95b5cc27b6907e572f0967311ae7abc243256603c625e08ccb711a6",
+      "bytes": 4231,
+      "lines": 42,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/CALIBRATION.md",
+      "sha256": "a2467ee3bdbff9d1e613d62d78948ba9f1455bca8e451f9c4670b73aa705d160",
+      "bytes": 9896,
+      "lines": 76,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/CAPABILITIES.md",
+      "sha256": "66a74f477d686363b2868ce5e3cb72256eb4b9876963775b026b3ba084ae9b53",
+      "bytes": 8448,
+      "lines": 85,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/CLAUDE-CALIBRATION.md",
+      "sha256": "03279ffd090896a41404583e9cea7cacd0076e7a574218f7b3c6dacc0c5dff78",
+      "bytes": 21133,
+      "lines": 179,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/CLOUD-WORKSPACES.md",
+      "sha256": "f35b18366e4809f4ec627b7d45ec3ab544817444205ab6fcb96b716f46067f80",
+      "bytes": 3287,
+      "lines": 26,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/COMMUNITY-QUALITY.md",
+      "sha256": "797f0221343572e3cfe5c723fd88690c9b13edad0ba6ce7b60a47a8ea00430f0",
+      "bytes": 13834,
+      "lines": 106,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/CONTRACTS.md",
+      "sha256": "a41a0571c858e5f1aaa5ee73b3e5753bebb40bdcc8bf81f5d50b17b78866a670",
+      "bytes": 13583,
+      "lines": 109,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/CONTRIBUTOR-PORTAL.md",
+      "sha256": "0c767a81d2f259d762742b3c20425bd9264beea9eabaeae4dda5b5e0e5e31d2e",
+      "bytes": 11307,
+      "lines": 83,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/DECISIONS.md",
+      "sha256": "90ddf86e77afa92a7a16ee62a0b80e649e3ecf84c99ed4502d2d8a6729f4ec73",
+      "bytes": 14131,
+      "lines": 68,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/GROWTH-AND-OUTREACH.md",
+      "sha256": "ab404c54c3ab20516217312c6969241f5c42d01a24775d6b23ce8af0822d244c",
+      "bytes": 21321,
+      "lines": 157,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/HOSTED-AND-BYOK.md",
+      "sha256": "47c7807de34c8f5a3182b02e445d29fcab180ef59efaf59492b556ed84026826",
+      "bytes": 5057,
+      "lines": 37,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/IMPLEMENTATION.md",
+      "sha256": "d236c66fe4323e5f24012220392fe31568faac466511c58965ed176619fd60f3",
+      "bytes": 12019,
+      "lines": 98,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/INTAKE-AND-BUDGETS.md",
+      "sha256": "643994ba476a44efc298f28c5ae743d8cc744ebed39b531ed854e25e7400ecb5",
+      "bytes": 13329,
+      "lines": 89,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/JEV-APPLICATIONS.md",
+      "sha256": "4116c945f38ee9778a39dc054e6778bb347960da20ddb08458be755dcf31fc9d",
+      "bytes": 11491,
+      "lines": 80,
+      "mode": "targeted_content_read",
+      "note": "Core application and readiness sections; one output was slightly truncated."
+    },
+    {
+      "path": "docs/JEV-LAB.md",
+      "sha256": "1af3131eced9c3a65f5caa39271f9b30e238651725a0aad3c2101c3689fc501a",
+      "bytes": 5395,
+      "lines": 44,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/LANGUAGES.md",
+      "sha256": "8cfb0637d9252a6dfde8b01240176c33a32a8dcb903701fecac15c649de859bc",
+      "bytes": 4793,
+      "lines": 39,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/LEAN-CALIBRATION.md",
+      "sha256": "99f0b3de91d0cd909ca8386eb324dd4021aed18c6dc7a594863058ecc533d597",
+      "bytes": 3873,
+      "lines": 24,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/LOCAL-LAB.md",
+      "sha256": "372b6d112d5595623d74cb0d3bcf2aa8a3d6e1589186af9ca878359ae19b91df",
+      "bytes": 12820,
+      "lines": 116,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/MODELS-AND-TOOLS.md",
+      "sha256": "c847ccd1184b7558cfc4132e6974b1e2e9bac8b9e1c43f6974742dd5065c200c",
+      "bytes": 11703,
+      "lines": 78,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/MODULE-SELECTION.md",
+      "sha256": "c6fbe38c3a6be34724772eef6decef853ee7c8955d7127243be4bec57e72c603",
+      "bytes": 14703,
+      "lines": 102,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/ORIGIN-AND-ATTRIBUTION.md",
+      "sha256": "c88f7736a23d69472450716406f4b9049f776c49112345edfeb1161b627a7177",
+      "bytes": 5854,
+      "lines": 44,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/OUTREACH-TEMPLATES.md",
+      "sha256": "27e9adb3e90bcd4780493f9f286d3da4392a1f0a3f9a68387412c426e9861674",
+      "bytes": 6363,
+      "lines": 88,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/PAIRED-BENCHMARK.md",
+      "sha256": "e97d4e773ad7e234fe0ce0c926d9f5e3f6025c4d7aef60d5f511c4a6343f63af",
+      "bytes": 5452,
+      "lines": 50,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/PROJECT-ANALYSIS-2026-10-17.md",
+      "sha256": "dce31445e85226124ae13511d2352e0da5c567bc2129f984bb6ac0f6019215ac",
+      "bytes": 22321,
+      "lines": 175,
+      "mode": "targeted_content_read",
+      "note": "Most sections and final 55 lines read; prior analysis treated as dated secondary evidence, not current authority."
+    },
+    {
+      "path": "docs/PROJECT-CREATION.md",
+      "sha256": "28c15d4d327e10f3df85519c0921bb1459cc13eeadb7fa37ef0d786e96ed0cc3",
+      "bytes": 11665,
+      "lines": 77,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/PROJECT-V1.md",
+      "sha256": "d96d595e6c224f7a96b57720beb06effd40bfee150077f6b26dca86a649edc51",
+      "bytes": 27948,
+      "lines": 228,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/PUBLIC-WEBSITE.md",
+      "sha256": "a2eebc80daf1eb5b1bdb161adf429d74759d54db8ab7f46b23f24188e89cba97",
+      "bytes": 16498,
+      "lines": 106,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/ROUTER-EVALUATION.md",
+      "sha256": "e69c9debd98b1b4c126a77db4a19885bdfc2253e45f008bee97262a69a3e9a0f",
+      "bytes": 14132,
+      "lines": 93,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/SCENARIOS.md",
+      "sha256": "1a0e15bed9e63dbae8d180c70a05c1d67574e550ec73d859b4f4aa978ca1022e",
+      "bytes": 14997,
+      "lines": 150,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/SELF-REUSE.md",
+      "sha256": "5568e8be00e2f93901a2ac15779db80c61cc8c76da3694db4ce8ac84174638a5",
+      "bytes": 6535,
+      "lines": 62,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/STOCKDESK-CALIBRATION.md",
+      "sha256": "474f2a21d4ed1e25a480055c9e85eae0de0fe2201b21920808336917cab02d54",
+      "bytes": 8813,
+      "lines": 73,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "docs/TOOL-DIRECTORY.md",
+      "sha256": "64e3edb85f4eeb87008819f26e9462b349d8335edbe5814f6e66e2c42bb43c90",
+      "bytes": 12522,
+      "lines": 114,
+      "mode": "targeted_content_read",
+      "note": "Taxonomy, readiness states, search/filter and acceptance sections."
+    },
+    {
+      "path": "docs/UI-FOUNDATIONS.md",
+      "sha256": "79fdbbce7b499a6fc3dcf8aa18a1e18a5203eff5a36f1c45d63ca336d690ef71",
+      "bytes": 8769,
+      "lines": 57,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/UI-WORKSPACE.md",
+      "sha256": "6167c473caefd770fa85c31cd574d088376cf36f1a8e0e799ad7344773d515bd",
+      "bytes": 8712,
+      "lines": 79,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/USAGE-STATISTICS.md",
+      "sha256": "526814c2e8358994eb591af2a78770182418e88e43fad057c6b37f1e50d5eec4",
+      "bytes": 9305,
+      "lines": 72,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "a91c5514ed567bb3a1e48e5d17235dc9ff555238a5d45f30d791c3fbe4b82a7d",
+      "bytes": 13446,
+      "lines": 95,
+      "mode": "targeted_content_read",
+      "note": "Evaluation, licensing/scope, cost, release and acceptance sections; output had truncation."
+    },
+    {
+      "path": "docs/VIDEO-HUB.md",
+      "sha256": "39b94da6802624f48ad7ae2d33d3a9fe95a93073ca5be9fdf999e4c709d9c5a6",
+      "bytes": 18029,
+      "lines": 113,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/WHY-REPOZERO.md",
+      "sha256": "a5498b9f2abe15bfead122baf3eb782292e75d7c137626b41d79be8d1d642555",
+      "bytes": 9836,
+      "lines": 46,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/ZERO-LAB.md",
+      "sha256": "9421ed2e2b8034d98efc4a72259b38ba8ab9866293b68f86bfdc60106a31f90e",
+      "bytes": 11413,
+      "lines": 85,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/research/CANDIDATE-POOL.md",
+      "sha256": "660c34ca4966bb2e8692268cb5697cc9fac67a70f28f382ddcf9d4627ba648e7",
+      "bytes": 107136,
+      "lines": 1147,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/research/MEDIA-CANDIDATES.md",
+      "sha256": "27935754dd391e2a29d53d207cbc846b0f4d4a27393bec57d470ac787e32f33a",
+      "bytes": 28981,
+      "lines": 231,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/research/README.md",
+      "sha256": "15353a13b4054286895594c1f6af59574728f416e36c2eaa726c6c4b1de27886",
+      "bytes": 15371,
+      "lines": 92,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/research/SPECIAL-CANDIDATES.md",
+      "sha256": "b526dd82d718ca4cecd3085b1294f1e8095e92e67b202687ec341b4bfa41b144",
+      "bytes": 5520,
+      "lines": 36,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/research/TOP100.md",
+      "sha256": "820c6fee95dab7bf5e024baed5377103ca304d5f5bef2c7b135de31d9b4eca62",
+      "bytes": 374775,
+      "lines": 3616,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/architecture-independent.md",
+      "sha256": "abeebb9e32008ce8eb0259d1bc4fe691ea9821cbef087b22ca5b0d795b474a91",
+      "bytes": 111571,
+      "lines": 827,
+      "mode": "targeted_content_read",
+      "note": "Headings and REA section 17, including lines 556-615."
+    },
+    {
+      "path": "docs/reviews/autonomy-updates-review.md",
+      "sha256": "f9f1dc9990fe3c93b53b5de33378038353a2a529721e2e3312d7560a716a7ead",
+      "bytes": 33672,
+      "lines": 213,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/growth-review.md",
+      "sha256": "93824a5833ae5299a6cc5512c8fd8505a05433cb19aadf26dbefe7ebfe29ae76",
+      "bytes": 10907,
+      "lines": 79,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/jev-use-cases-review.md",
+      "sha256": "1bbafb5ac27dd1b98e21fec8d83a8093b670f5635c6ffafc82a79818ecd3c01a",
+      "bytes": 23236,
+      "lines": 132,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/mvp-feasibility-review.md",
+      "sha256": "bd30b9b6fec9cda8bc9bdf56ba750a5bf05d71b1389c13d2d9faa36b528eabe8",
+      "bytes": 14975,
+      "lines": 92,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/provider-auth-review.md",
+      "sha256": "0cb60a12e85b6921e99a4627e938b8c8f57c120d9b02f6aa9af1a3c0e88ff5f8",
+      "bytes": 28127,
+      "lines": 159,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/router-review.md",
+      "sha256": "c308e8214befe93d31f26221518aa29e47c2a4ba7a8eb5eda2f1e255ce95dee5",
+      "bytes": 22423,
+      "lines": 125,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/ui-foundation-review.md",
+      "sha256": "1711574d23be4ad5943acf57f0bc513ce4bdb984985ccbd46a539db1c2e99eac",
+      "bytes": 25098,
+      "lines": 127,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "docs/reviews/video-hub-review.md",
+      "sha256": "5db2af93e26348cc2937d0f093d0fe3ca4b4dd67db05710043b1d4cae164ab91",
+      "bytes": 13248,
+      "lines": 87,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/.agents/skills/composio/SKILL.md",
+      "sha256": "48d1fa49983d2543bacd9ec8bd40566740cf3c98d6dbca14f78cab19c4e583b9",
+      "bytes": 5202,
+      "lines": 78,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/errors.md",
+      "sha256": "6e760fe92170adee0968d24ead200c62d3450fb56607fb05081ccbc12f9f3669",
+      "bytes": 4071,
+      "lines": 71,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/for-you.md",
+      "sha256": "feeae12e4c4ffc22b3896b9758231ae04a63439158c578bfc386a390bd67c0ba",
+      "bytes": 4275,
+      "lines": 81,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/platform.md",
+      "sha256": "baa14dd22535f5944be717335d598ac52b02fa9764d99e76c61db6cf80a7a4b3",
+      "bytes": 9238,
+      "lines": 167,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/.agents/skills/pr-watch/SKILL.md",
+      "sha256": "61c40ba75376c7e4ced89314abeb9e06199f0d4bb0bf91a7c0c504a1faec612d",
+      "bytes": 7321,
+      "lines": 167,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/AGENTS.md",
+      "sha256": "d927bc183e22d9463ed4a19827025358f944bf67bf2b1bbdfa416e889bd62de2",
+      "bytes": 5899,
+      "lines": 20,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "platform/CHANGELOG.md",
+      "sha256": "4aa85448a72b28c253316f4504a6cb4d7cf576f1a6bfabc9a9c6bc3eeae22daa",
+      "bytes": 7464,
+      "lines": 58,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/CLAUDE.md",
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "bytes": 11,
+      "lines": 2,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/CONTRIBUTING.md",
+      "sha256": "6a4335b91d61286027a7fce1d33e4b8772ab16b5d3349c4753ce9be6d28e4434",
+      "bytes": 5156,
+      "lines": 94,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/README.md",
+      "sha256": "e0ad8c77bba070a9a7ef6f1ad0ad0f167f021bed80419dd1658dd46f30f6746c",
+      "bytes": 12938,
+      "lines": 267,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/SECURITY.md",
+      "sha256": "5e74454d155daf0be92101016cce9d58836f999ef7d0f038906c974cb20b6c93",
+      "bytes": 873,
+      "lines": 35,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/SETUP_PROMPT.md",
+      "sha256": "e12f3e924d062dab364f484b3f37ab2481afd624dea6f93f7f5a4193dcd1a37a",
+      "bytes": 13191,
+      "lines": 152,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/UPSTREAM.md",
+      "sha256": "f9a168b3e061942fa8f0c5082fa5faa21d0d439007aac48922968ba7915c49a5",
+      "bytes": 905,
+      "lines": 10,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "platform/VISION.md",
+      "sha256": "6891fffde83c0456327215b9d2ebc17e9563224224b9696e909ec6633a0935f8",
+      "bytes": 6159,
+      "lines": 71,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/apps/desktop/assets/README.md",
+      "sha256": "190fa08eb61d1da632b30fdfbd108e0e51f058c49c0bfbea9726a7760c45ec1e",
+      "bytes": 523,
+      "lines": 12,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/apps/mobile/e2e/README.md",
+      "sha256": "d97ab637757c05d9848ce70897e3a995b30d16ad51983f4145810a6598b78262",
+      "bytes": 1860,
+      "lines": 42,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/apps/mobile/e2e/ios-screenshots/README.md",
+      "sha256": "79f78b700b50950f0fb22e6c05f9fe5bf1bba31ee8ac7757472c83ea6b937439",
+      "bytes": 1238,
+      "lines": 32,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/apps/www/README.md",
+      "sha256": "5c0525491356bbc65910a8ae51d3d005769fe811b93ededf9c3ffa4d2cd383e7",
+      "bytes": 1722,
+      "lines": 20,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/agent-verification.md",
+      "sha256": "0efa5246e1a63e2ffd5b8e77c61b13d53490702cd16b7555021111e10c50263c",
+      "bytes": 21249,
+      "lines": 352,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/ai-data-sharing-review.md",
+      "sha256": "554411136e1aef18c664e58a8999f048c792b21665abe2bdbbf8fabdbdccd393",
+      "bytes": 4777,
+      "lines": 74,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/bot-secrets.md",
+      "sha256": "ad8f97a6d24f9002b2dbbe77c6f52bf79e0b683487a1b704b1c31a4b0d94f78a",
+      "bytes": 9617,
+      "lines": 114,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/computer-runtime.md",
+      "sha256": "56108fc883eed59663eb67ba19a88382646076357a7f42f623937228b7657122",
+      "bytes": 18899,
+      "lines": 147,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "platform/docs/context-and-evals-tasks.md",
+      "sha256": "3b1c9311a0487394c5d48889142ce0023dbc6114091761e8a7a65e1106636703",
+      "bytes": 59874,
+      "lines": 880,
+      "mode": "targeted_content_read",
+      "note": "Headings and first 90 lines; output was truncated."
+    },
+    {
+      "path": "platform/docs/desktop-release.md",
+      "sha256": "e28ae59e59d7b14310b2c612cd37c802e571ff72a65b9f379e870faad5819a9c",
+      "bytes": 2014,
+      "lines": 56,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/evals/history-findings.md",
+      "sha256": "3f58494e44d04a50bb9725f944522bfdad5d80920a77aa670b9e771a46dd6d13",
+      "bytes": 10834,
+      "lines": 173,
+      "mode": "targeted_content_read",
+      "note": "Comparison, preserved failure and qualification sections; targeted search over full file; not every line read."
+    },
+    {
+      "path": "platform/docs/evals/history-retrieval-offline.md",
+      "sha256": "7db0a679dfbe1daea7e3eaa0e219b332eee9f8be7dbc4de325350701e911e260",
+      "bytes": 10579,
+      "lines": 156,
+      "mode": "full_content_read_across_calls"
+    },
+    {
+      "path": "platform/docs/infisical-secrets.md",
+      "sha256": "ea6b66799e1ed5c5c5b6ab7d90868ddfc5f5e811565d9033797f595a4517d9a1",
+      "bytes": 5629,
+      "lines": 103,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/mobile-release.md",
+      "sha256": "0c906cef7354898d8a11ea7f945693debea181ca3bfadec59f48ee4d9c2f81a7",
+      "bytes": 3654,
+      "lines": 83,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/performance.md",
+      "sha256": "4ea46dd7bcb7571545ed305584bf8be3cf932a28b057c0b8a33bf1058cb95094",
+      "bytes": 2650,
+      "lines": 59,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/self-host-restricted-network.md",
+      "sha256": "7dde4fa2ee66fb3e7c9c74fcc4c3897635004aff9fab04798b8bea7317f4e40b",
+      "bytes": 5573,
+      "lines": 128,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/self-host-sandbox-providers.md",
+      "sha256": "7943ca144508f240f744b9a906ae92caddb5c1e63ed1306f752c58fe92d118b8",
+      "bytes": 3097,
+      "lines": 74,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/self-host-secrets.md",
+      "sha256": "a36fdb89fb4bd790cf8a013bf73b390b751844b506798fe2429351618f0fd54b",
+      "bytes": 4929,
+      "lines": 115,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/self-host.md",
+      "sha256": "4969a7029b456a5433970b984962fc910bada0e0de83640018061b8cf4fc9f9b",
+      "bytes": 52455,
+      "lines": 864,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/self-host/cloud-agents.md",
+      "sha256": "ca9b1a524f5f6032306113d0f1f5018deedfaf65f33e97a5246d119f45700fdf",
+      "bytes": 3425,
+      "lines": 38,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/docs/tool-activity.md",
+      "sha256": "432965139b4131890c32b81f28aba2ef3448c3c04817e805b221ee977f05589d",
+      "bytes": 2192,
+      "lines": 43,
+      "mode": "inventory_and_headings_only"
+    },
+    {
+      "path": "platform/packages/ui-tokens/assets/README.md",
+      "sha256": "3ad2c835ce070a174c4f8c71596598fd52644070e78c3c91c8b803d4f9620003",
+      "bytes": 2138,
+      "lines": 38,
+      "mode": "inventory_and_headings_only"
+    }
+  ],
+  "catalogRecordKeys": [
+    "archived",
+    "capability",
+    "category",
+    "license",
+    "licenseApproved",
+    "note",
+    "repository",
+    "runtimeTested",
+    "sourceAvailable",
+    "sourceRevision"
+  ],
+  "uiAddendum": {
+    "manifest": "ui-concepts/manifest.json",
+    "direction": "ui-concepts/UI-UX-DIRECTION.md",
+    "gallery": "ui-concepts/GALLERY.md",
+    "initialGenerations": 7,
+    "refinements": 4,
+    "refinementRounds": 1,
+    "sourceImagesInspected": 5,
+    "allFinalRastersVisuallyInspected": true,
+    "liveInterfaceTested": false,
+    "libraryUserClarification": "Standalone human browsing, popularity/stars/filters, saved collections, comparison and starting projects without an AI task are first-class requirements.",
+    "metricsInMockups": "fictional demo values; library stars explicitly not live",
+    "implementationChanges": 0
+  },
+  "additionalReadSources": [
+    {
+      "path": "package.json",
+      "sha256": "40f10d3e4f3ecf982068b59301f194f845584f3883c020143a1348f7e0020432",
+      "bytes": 4331,
+      "lines": 56,
+      "readMode": "full_content_read",
+      "ranges": []
+    },
+    {
+      "path": "platform/package.json",
+      "sha256": "5678213f71f988e19cfbb8072fc0b83d3ae5787c2a37aef81adad7960394b094",
+      "bytes": 2477,
+      "lines": 58,
+      "readMode": "full_content_read",
+      "ranges": []
+    },
+    {
+      "path": "catalog/project-analysis-2026-10-17.json",
+      "sha256": "2ffd85e98eb4e054b3a934c1ef24278f864615e7656d2d6f43e23e31f99be1c4",
+      "bytes": 37831,
+      "lines": 1101,
+      "readMode": "targeted_fields_read",
+      "ranges": []
+    }
+  ],
+  "missingConditionalSources": [
+    "docs/PLAN.md"
+  ],
+  "recommendations": {
+    "chosenArchitecture": "Extend existing Rakazo runtime with per-run bounded reuse work, not a second scheduler.",
+    "alternativeArchitectures": [
+      "CLI-centered broker retained as lab/adapter only",
+      "New runtime/microservices rewrite deferred"
+    ],
+    "discussionQuestionsAddressed": [
+      "A: discovery versus execution eligibility and singleton fit",
+      "B: request-scoped observer, target identity, fallback/child and idempotent settlement",
+      "C: four implementation alternatives, avoid forced reuse, new negative holdout",
+      "D: first verified result, decentralized recipe contribution and catalog/template/component comparison"
+    ],
+    "proposedExperimentsAreNotExecuted": true,
+    "proposedLiveScreenGenerations": 27
+  },
+  "artifacts": [
+    {
+      "path": "AUDIT.md",
+      "bytes": 23103,
+      "sha256": "557a138e3a75f45fed6e2e01fcaaf5c9987c3b1fffaf9cd0701aa84afa403959"
+    },
+    {
+      "path": "ARCHITECTURE-PLAN.md",
+      "bytes": 37651,
+      "sha256": "c997dfb764c4600b0604500b80eef7907eaddf51e85fc8d91e084be25507ef36"
+    },
+    {
+      "path": "foundation.log",
+      "bytes": 2519,
+      "sha256": "2bbf0d0fb10c56f2557d7c3f8e8c798e88b9d2fc5f994b019b12ce6089f5087d"
+    },
+    {
+      "path": "context.log",
+      "bytes": 1107,
+      "sha256": "a2bb4ffada907997beb520382ce155326e2314610f952b9ec738582f3bd6980d"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 3966,
+      "sha256": "9248fc06e04716af1b2fd3d67ae16ead657448baa72a63b0c831583123638862"
+    },
+    {
+      "path": "probe-results.json",
+      "bytes": 4331,
+      "sha256": "7ccf2222855a3d26a7403574162157ad947e826382b13a21c4b23e0d1e9532e3"
+    },
+    {
+      "path": "document-inventory.json",
+      "bytes": 109170,
+      "sha256": "1e825433ac2d7206d06d699e92dd00e36ec1be89fec7808ec3df6f74e6de71ff"
+    },
+    {
+      "path": "symbol-wiring.log",
+      "bytes": 545,
+      "sha256": "4e549b39542a54605e9e2507d16e4cb9af165ae1c314b4024950a54709b8df09"
+    },
+    {
+      "path": "build-evidence.mjs",
+      "bytes": 20854,
+      "sha256": "7d954485f1a7a1183fe7076431a66891605e28d61897877f78b4b6c175ef0bba"
+    },
+    {
+      "path": "ui-concepts/UI-UX-DIRECTION.md",
+      "bytes": 18913,
+      "sha256": "2b6c4a4a3b955286a11462be3aa1d76f4fb7c21bb8069afd1167e16310bbec36"
+    },
+    {
+      "path": "ui-concepts/GALLERY.md",
+      "bytes": 2827,
+      "sha256": "869ef2ad91c7cd1950abc44227ed161a41cfc4655f11e4ab2b5568a73a823642"
+    },
+    {
+      "path": "ui-concepts/manifest.json",
+      "bytes": 10181,
+      "sha256": "35f958e53d24ab072dff0253b4da758aa60e79ddc3dec7f8461e32866cf70e19"
+    },
+    {
+      "path": "ui-concepts/generation-prompts.json",
+      "bytes": 29242,
+      "sha256": "324b34d4c8758bc795f2fc7b09ae813c2ea8c81873ddf48de5fad5f549527b5b"
+    },
+    {
+      "path": "ui-concepts/refinement-prompts.json",
+      "bytes": 4579,
+      "sha256": "9e6992f53ad50c433386f6cd3483c2acbaaed710f714925be7782a78ca17e879"
+    },
+    {
+      "path": "ui-concepts/library-prompt.json",
+      "bytes": 3721,
+      "sha256": "cf2a787db4d28aecf18cb644397584946a6cd2355f4acd532826cb694355b86d"
+    },
+    {
+      "path": "ui-concepts/source-files.json",
+      "bytes": 2808,
+      "sha256": "a0df2e6c447d2956d63b7e4f171c89b3eb2aa18834301a8352c506378c1eb463"
+    },
+    {
+      "path": "ui-concepts/package-ui.mjs",
+      "bytes": 5152,
+      "sha256": "c4ba184c256e30ec34b860f245d8f413e342f67e1d3b8d98951eb60a2e3ea17f"
+    },
+    {
+      "path": "ui-concepts/01-start.png",
+      "bytes": 1278331,
+      "sha256": "61d77afc903d074c4852665cb32f3771590e5bd69e03d4763d9717cc04536814"
+    },
+    {
+      "path": "ui-concepts/02-workspace.png",
+      "bytes": 1571049,
+      "sha256": "a8ae3e875702b12be971ec899241adec4fa6c6019943de9fda122aa7ee3889bf"
+    },
+    {
+      "path": "ui-concepts/03-components.png",
+      "bytes": 1413531,
+      "sha256": "bdbc5226145b58d61e63346e27b2999853fa03acada7a77a8119c37da2602d73"
+    },
+    {
+      "path": "ui-concepts/04-review.png",
+      "bytes": 1482289,
+      "sha256": "505cffd21f6c03719ccefc62f6cdeed1bb341bff337a2f9c236663ecbf082fc6"
+    },
+    {
+      "path": "ui-concepts/05-connections.png",
+      "bytes": 1546925,
+      "sha256": "bf042dda1e3751d8757d785404574e2888ead5fe20032b73aad4bbd26b69f68d"
+    },
+    {
+      "path": "ui-concepts/06-mobile.png",
+      "bytes": 1425670,
+      "sha256": "b4afd3d2508098aa1b0c91dc6f7c257c9da7f3541070f8c6a1c372eb3d990a88"
+    },
+    {
+      "path": "ui-concepts/07-library.png",
+      "bytes": 1483874,
+      "sha256": "bad33ffbe58799d2e60a3c9bc92e4eab4b3bf75bfb815fb74e89259a3c6726f1"
+    }
+  ]
+}

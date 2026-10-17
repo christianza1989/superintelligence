@@ -1,75 +1,33 @@
-# Kokybės, greičio ir sąnaudų kalibravimas
+# Kalibravimo metodas ir rezultatų indeksas
 
-2026-10-17. **Katalogo pakartojimai baigti (6/6 PASS), atskiras compact etapas turi vieną kokybės nesėkmę (5/6 PASS). Jev ir tikrų Git bibliotekų kohorta baigta: 6/6 PASS, bendra workflow laikų suma −8,35 %, API kainos ekvivalentas −18,47 %. Atskiras lean-low patvirtinimas: 6/6 PASS, visų trial laikų suma −61,61 %, API kainos ekvivalentas −68,69 %. Tai vienos užduoties visos konfigūracijos rezultatas; bendras produkto pranašumas neįrodytas.** Kalibruojama visa RepositoryZero darbo eiga, nuo užklausos supratimo iki patikrinto artefakto. [Daugkartinis Zero Lab modulis](ZERO-LAB.md), [porinio bandymo taisyklės](PAIRED-BENCHMARK.md), [pirma paruošta užduotis](../benchmarks/sprintdesk-v1/README.md).
+2026-10-17. Tikslas — geresnė kokybė, mažesnis visas užduoties laikas ir realios sąnaudos pagal profilį. Fiksuotas 50% pagerėjimas nėra priėmimo kriterijus. Ši metodika palaikoma; istorinės kohortos neperrašomos.
 
-## Tikslas
+## Kaip lyginame
 
-Užduotis laikoma naudinga, kai rezultatas atitinka iš anksto nustatytą acceptance ir naudotojas gali jį paleisti bei tęsti darbą. Optimizuojame bendrą užduoties kainą ir laiką, išlaikydami sutartą kokybę. Vien greičiau sugeneruotas tekstas ar mažiau vieno kvietimo tokenų nėra visos užduoties pagerėjimas.
+| Lane | Konfigūracija |
+|---|---|
+| A | Tas pats pagrindinis modelis/effort, įprasti leidžiami įrankiai ir bibliotekos |
+| B | A + deterministinis Zero retrieval, paruoštas kontekstas/reuse profilis |
+| C | Tas pats B + ribotas Jev pasirinkimas, įskaitant abstain |
 
-Naudotojo „Codex ant steroidų“ tikslą paverčiame tikrinama hipoteze: tinkamų jau sukurtų komponentų paieška, tikslingas kontekstas ir darbo paskirstymas gali pagerinti galutinį rezultatą prieš tą patį coding CLI be papildomo katalogo konteksto. Laimėtojas iš anksto nenustatomas. Nesėkmingi, nutrūkę ir biudžetą išnaudoję bandymai lieka rezultatuose.
+Prieš startą užšaldyti task/prompt, source, modelio/CLI versiją, effort, įrankius, grant/cap, grader ir success taisykles. Vienoje kohortoje jų nekeisti, eiliškumą kaitalioti. Failures, timeout ir model_unavailable paliekami vardiklyje. Profilių ar tikrintuvo pataisai pradėti naują kohortą. Senos v1 spragos nepataisomos retrospektyviu v2 PASS.
 
-## Ką kalibruojame
+Fiksuoti kokybę ir domain kriterijus, kūrimo / tikrinimo / viso workflow laikus, retrieval/preparation/Jev overhead, non-cache input, cache read, cache creation ir output atskirai. API-equivalent CLI estimate nėra faktinis prenumeratos mokestis. Unknown kainos nerodyti kaip 0; cache read tokenų nelaikyti nei unikaliu input, nei tokios pat kainos kaip output.
 
-| Sritis | Keičiami parametrai | Tikrinama pasekmė |
-|---|---|---|
-| Promptai ir planavimas | Užduoties išskaidymas, sistemos instrukcijos, klausimų tikslinimas, sustojimo ir taisymo sąlygos | Prarasti reikalavimai, nereikalingi žingsniai, papildomi naudotojo veiksmai |
-| Katalogo retrieval | Užklausos, kategorijos/capabilities, lexical/semantinio retrieval derinys, shortlist dydis | Tinkamo kandidato suradimas, trūkstami ir klaidingai panašūs rezultatai |
-| Kandidatų atranka | Evidence aktualumas, versija, platforma, licencija, API suderinamumas, vienos bazės ir komponentų parinkimas | Veikiantis reuse ir integracijos kaina; stars nėra kokybės ground truth |
-| Jev | Choice/abstain instrukcijos, kontekstas, kriterijai, aktualumo rubrikos, call grupavimas ir cache | Klaidingi pasirinkimai/atmetimai, routerio kaina ir jo įtaka visai užduočiai |
-| Kontekstas | Dokumentų/failų ištraukos, chunk dydis, privalomų kontraktų išlaikymas, pakartotinis retrieval | Reikalingos informacijos išsaugojimas, pagrindinio modelio input ir taisymų poreikis |
-| Modeliai | Fiksuotas modelis ir reasoning; vėliau Auto pagal tikrai prieinamus capability/context/cost profilius | Galutinis correctness, sąnaudos ir laikas; OAuth modeliai neapsimetami visais tiekėjais |
-| Agentų darbas | Užduočių ribos, specialistai, lygiagretumas, peer review, handoff formatas | Koordinavimo kaina, konfliktai, pasikartojantis skaitymas ir klaidos |
-| Vykdymas ir cache | Source/build/context cache raktai, cold/warm režimai, tinklo ir build trukmė | Tikras end-to-end laikas, stale source, cache klaidos ir atkuriamumas |
-| Testai ir taisymai | Tiksliniai testai, privalomos regresijos, repair limitai, sustojimas | Ištaisytos ir įneštos klaidos, recovery bei galutinio acceptance rezultatas |
+Cold setup, warm reuse ir paruošimo amortizacija pateikiami atskirai. „Provided“, „used“, „verified“ ir „beneficial“ turi atskirus įrodymus. Jev papildoma vertė vertinama B prieš C, o A prieš C keičia visą konfigūraciją. Jev/source-only rekomendacija nėra realaus komponento panaudojimo ar worker ToolSelector įrodymas.
 
-Licencijos, leidimų, secret handling ir privalomo acceptance vartai nesilpninami siekiant geresnio balo. Jev rekomendacija negali pati paskelbti savo teisingumo ar repo verified statuso. Nežinomą kokybę žymime nežinoma.
+## Išsaugoti rezultatai
 
-## Kontroliuojami profiliai
+| Eksperimentas | Faktas ir riba |
+|---|---|
+| [Sonnet / SprintDesk](experiments/CLAUDE-CALIBRATION.md) | Pirma v2 pora abiem PASS; vėliau catalog 6/6, compact 5/6 bendras (compact arm 2/3). Tai CLI konteksto, ne viso produkto testas |
+| [Lean konfigūracija](experiments/LEAN-CALIBRATION.md) | Viename profilyje 6/6, mažesnis workflow ir API-equivalent estimate. Keitėsi visa konfigūracija, todėl Jev priežastinė nauda iš to neišplaukia |
+| [Haiku / StockDesk](experiments/STOCKDESK-CALIBRATION.md) | Pirma A/C pora PASS, bet C negavo bibliotekos: Jev abstain. Vėlesnis B/C v1 turėjo kokybės/tikrintuvo spragą; v2 kontrolės užfiksuotos, v2 live kartojimai dar neatlikti |
 
-1. **A — Claude baseline:** nauja oficialaus Claude CLI sesija, naudotojo prenumerata, `claude-sonnet-5-5`, effort `high`.
-2. **B — Zero retrieval:** tas pats pagrindinis modelis ir reasoning; RepositoryZero katalogas, reuse instrukcija ir konteksto paruošimas.
-3. **C — Zero retrieval + Jev:** tas pats coding modelis, papildoma ribota Jev atranka. Jev ir visų pagalbinių kvietimų laikas bei sąnaudos įtraukiami.
-4. **D — Zero Auto model:** ankstesnis laimėjęs retrieval profilis ir Jev parenkami realiai prijungti modeliai. Tai jau kitas modelių profilis, todėl jo rezultato nepriskiriame vien retrieval ar promptui.
+Pilni laikai, tokenai, cache ir sąnaudos yra šiose ataskaitose ir jų `catalog/*results*.json` šaltiniuose. Neapibendrinti skirtingų prompt/CLI/grader epochų į vieną „Zero greitesnis“ skaičių.
 
-Importuotame Claude bandyme modelio ID ir tikras usage užfiksuoti CLI reportuose; auth status vienas to neįrodo. Codex auth ir mokami OpenRouter pagrindinio coding modelio bandymai atidėti. Jev atrankai naudotojas atskirai leido bendrą 1 USD API biudžetą; [visų paruošimų sąnaudos](../catalog/jev-preparations-2026-10-16.json). Sonnet prenumeratos kalibravimui papildomo bendro sesijų limito nėra; kiekvieno vykdymo ir kohortos baigtinės resursų ribos lieka. Visų keturių profilių paleisti kiekvienam mažam pakeitimui nereikia. Pirmiausia tikrinama konkreti hipotezė su dviem atitinkamais profiliais.
+## Kitas tyrimas
 
-## Vienas ciklas
+Pirma užbaigti vieną tikrą worker reuse vertikalę ir meaningful kandidatų retrieval. Jev pirmas atvejis — pasirinkti leistiną paruoštą tool arba abstain (pvz., PDF tekstas / struktūrinė lentelė / dar neparuoštas OCR). B ir C turi tą patį kandidatų rinkinį, pagrindinį modelį ir tikrintuvą. Įtraukti multi-candidate, aiškų fit ir no-fit.
 
-1. Užfiksuoti užduoties tekstą, acceptance, pradžios failus, source pins, modelį/reasoning, įrankius, teises, cache režimą ir baigtinius laiko/resursų limitus.
-2. Paleisti palyginamus naujus workspace su atskirais duomenimis. A/B eilę kaitalioti arba atsitiktinti; nenaudoti jau gauto kitos pusės sprendimo.
-3. Surinkti faktinį elapsed laiką, modelių usage, realią ar unavailable kainą, žmogaus įsikišimus, artefaktų digest ir nepriklausomą acceptance. Setup, discovery, Jev, coding, tests ir repair laikas įtraukiami, o etapai pateikiami ir atskirai.
-4. Išanalizuoti pagrindinę problemą: discovery miss, netinkama bazė, prarastas kontraktas, klaidingas routing, kodas, aplinka ar vertinimo spraga. Klaidos nepriskirti Jev vien dėl to, kad jis įjungtas.
-5. Pakeisti vieną parametrų grupę, išsaugoti naują profilio versiją ir hipotezę. Susijusių pakeitimų paketą aiškiai pažymėti; iš jo neišvesti kiekvieno parametro atskiros naudos.
-6. Pakartoti bandymą ir patikrinti, ar pagerėjimas išlieka su kitomis užduotimis. Jei kokybė prastėja ar sąnaudos neaiškios, nepristatyti jo kaip bendro laimėjimo.
-
-Vienas laimėtas paleidimas yra vieno atvejo rezultatas. Turint pakankamai kartojimų rodomi sklaidos matavimai, p50/p95 ir neapibrėžtumas; mažo mėginio nevadiname patikima pasauline statistika. Keli vienodai kokybiški variantai gali likti kaip greičio/kainos kompromisai.
-
-## Užduočių rinkiniai ir apsauga nuo prisitaikymo
-
-Kalibravimo užduotys, validavimo užduotys ir galutinis laikomas rinkinys turi atskirus ID ir versijas. Promptai/routeris/kandidatų taisyklės derinami pagal kalibravimo dalį. Galutinio rinkinio atsakymai nenaudojami kitam promptui toje pačioje deklaruotoje eval versijoje; persidengimas pažymimas, rinkinys atnaujinamas.
-
-Apimame naujo produkto kūrimą, pakeitimą esamame projekte, klaidos taisymą, source integraciją, duomenų/dokumentų darbą ir trūkstamą ar netinkamą repo. Pradiniame mažame rinkinyje turi būti bent LT ir EN užduotys. Cold ir warm rezultatų nesuplakame; repo/source pokyčiai ir atsitiktiniai provider sutrikimai išlieka matomi.
-
-Privačios naudotojo užduotys netampa viešu benchmarku ar bendru kalibravimo rinkiniu automatiškai. Tokiam panaudojimui reikia atskiro opt-in, duomenų nuasmeninimo ir aiškaus scope. Katalogo augimas nėra modelio pertreniravimas.
-
-## Kas įgyvendinta ir kas dar laukia
-
-- [x] Kalibravimo principai, parametrų sritys ir kontroliuojami A/B/C/D profiliai aprašyti.
-- [x] Pirmos SprintDesk užduoties promptas ir nepriklausomas API tikrintuvas paruošti prieš generavimą.
-- [x] Bendras SystemOne transportas ir tools/model/repo atrankos ribos turi offline testus.
-- [x] Importuotas Claude prenumeratos CLI conformance ir usage su abiejų sugeneruotų programų revalidation; be naujų modelių kvietimų integruojant.
-- [x] Jev standalone typed decision API ir usage atsakai realiai gauti su bendru biudžeto rezervavimo žurnalu; tai dar ne coding kokybės ar pilno runtime įrodymas.
-- [ ] Auto lane conformance; Codex auth šiuo metu atidėtas.
-- [x] Viena sėkminga Claude prompt-v2 pora: abi realios programos praėjo restart/SQLite ir desktop/mobile acceptance. V1 nesėkmės nepašalintos.
-- [x] Vietinių versijuotų A/B JSON, prompt/source digest, faktinių CLI usage ir konservatyvaus reportų palyginimo kodas; offline testai PASS, importuotas tikras Claude palyginimas perskaičiuotas; [apimtis ir ribos](CLAUDE-CALIBRATION.md).
-- [x] Kontroliuojamo fixture API/SQLite ir izoliuoto desktop/mobile/keyboard grader integracija; regressions aptinkamos, subjektyvus UI vertinimas lieka atskiras.
-- [ ] Kelių užduočių kartojimai, validavimo ir galutinis laikomas rinkinys.
-- [ ] Biudžetu apribotas automatinis profilio vertinimas ir regresijų aptikimas; žmogaus patvirtintas paskelbimas apie realiai išmatuotą rezultatą.
-
-Tai konkretina esamus P0.29 ir P1Q kokybės darbus; pilno MVP30užduočių acceptance ir viešų pažadų nepakeičia. Neribotas kalibravimas ar visų naudotojų mokami kvietimai neįjungiami vien dėl prijungto rakto.
-
-## Artimiausia kohorta
-
-[Istorinė viena pora, pakartojimai ir naujausi rezultatai](CLAUDE-CALIBRATION.md). V2 promptas ir graderis fiksuojami prieš sesijas. Kodavimo laikas analizuojamas atskirai nuo graderio; v1 ir v2 bei skirtingų CLI/grader hash kohortos nesuplakamos. Dabartinis tikslas — pakartojamumas, po to naujas CSV/SQLite užduoties promptas su nepriklausomu tikrintuvu.
-
-`npm run lab:cohort` saugiai paruošia tris poras be modelių; `-- --live` jas vykdo su Claude prenumerata. `--mode compact` yra atskiras seno ir kompaktiško katalogo konteksto palyginimas, o ne automatinis antras etapas. [Komandos, limitai ir ataskaitos](LOCAL-LAB.md#trys-poros-viena-komanda). Naujas kandidatas pakeičia ir kandidatų limitą, ir kodavimą; pirmas eksperimentas vertina jų bendrą poveikį. Payload baitų sumažėjimas nėra tokenų sutaupymo įrodymas. Automatinis numatyto profilio pakeitimas neįjungtas.
+Astra pasiūlytas 3 užduočių × 3 pakartojimų × 3 arms tyrimas yra pasiūlymas, ne jau paleista ar automatiškai finansuota kohorta. Jis nepakeičia MVP 30 užduočių acceptance ar vėlesnio nepriklausomo holdout. [Jev vartai](JEV-APPLICATIONS.md), [pilnas planas](../ROADMAP.md), [vietinės komandos](LOCAL-LAB.md).

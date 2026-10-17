@@ -1,5 +1,7 @@
 # Vietinė ir bendra įrankių naudojimo statistika
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Plano 0.2 reikalavimas, 2026-10-16. **Suprojektuota, NOT_RUN**: counters, collection server ir dashboard dar nesukurti. Tikslas – matyti realų modulių / įrankių naudojimą, padėti atrankai ir viešai parodyti platformos ekosistemos augimą.
 
 Naudojimo faktų pavertimas konkrečių versijų kokybės įrodymais ir upstream/RepositoryZero pataisų ciklas aprašytas [bendruomenės kokybės modelyje](COMMUNITY-QUALITY.md). Populiarumo skaitiklis savaime nesuteikia `verified`; abi projekcijos remiasi tais pačiais vykdymo faktais.

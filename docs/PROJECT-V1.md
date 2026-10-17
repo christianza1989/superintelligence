@@ -1,5 +1,7 @@
 # RepositoryZero — projekto V1 dokumentacija
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 **Dokumentacijos versija 1.0 · 2026-10-16 · Europe/Kiev.** Tai pirmas bendras jau sutartos produkto vizijos ir veikimo paaiškinimas. Dokumentacijos numeris nėra išleistos programos versija. **MVP pradėtas: pirmas read-only katalogo, UI temos ir vietinės svetainės pjūvis įgyvendintas. Pilnas agento vykdymas, integracijų acceptance, public svetainė ir VPS dar nepaleisti.** [Aktuali įgyvendinimo būsena](IMPLEMENTATION.md). Toliau aprašomas numatytas produktas, o ne jau patikrintos runtime funkcijos.
 
 > **One open core. A world of AI tools.**
@@ -10,7 +12,7 @@ GitHub repo dabar vadinasi `superintelligence`. **RepositoryZero** – naudotojo
 
 ## 1. Kas tai yra
 
-RepositoryZero kuriamas kaip bendra darbo aplinka programuotojams, vibe koderiams ir kitiems žmonėms, kurie nori gauti konkretų rezultatą panaudodami tinkamus esamus įrankius. Žmogus aprašo, ką nori padaryti. Sistema padeda rasti jau egzistuojančius sprendimus, palygina jų tinkamumą, sudaro darbą, paleidžia leistinus modulius ir patikrina rezultatą.
+RepositoryZero kuriamas kaip bendra darbo aplinka programuotojams, vibe koderiams ir kitiems žmonėms, kurie nori gauti konkretų rezultatą panaudodami tinkamus esamus įrankius. Žmogus aprašo, ką nori padaryti, arba savarankiškai atveria Library be AI užduoties. Paieška, filtrai, tikri stars su data ir Saved padeda atrasti repo; Start project perduoda konkretų pasirinkimą projekto kūrimui. Šis pilnas Library kelias yra MVP reikalavimas, dar ne įgyvendintas foundation. Sistema padeda rasti jau egzistuojančius sprendimus, palygina jų tinkamumą, sudaro darbą, paleidžia leistinus modulius ir patikrina rezultatą.
 
 Svarbiausia produkto mintis: **AI pirmiausia panaudoja tai, ką žmonės jau sukūrė ir išbandė, tada kuria trūkstamą dalį.** Neaklai išradinėti dviratį, o atrasti tinkamą pagrindą ir komponentus, apie kurių egzistavimą gal net nežinojai.
 
@@ -99,7 +101,7 @@ Sukauptas pradinis baseinas: **806 adresų patikros,757 unikalūs prieinami repo
 
 Panašiems kandidatams reikia parodyti delta. Jei vienas geresnis LT, kitas CPU/offline, abu gali turėti savo vietą. Tą patį repo kitu URL sujungiame į kanoninį įrašą; skirtingų įrankių nesujungiame vien dėl panašaus aprašo. Neįrodytas skirtumas lieka experimental/inconclusive. Galutinis pasirinkimas remiasi licencijų/teisių vartais ir realių darbų palyginimu.
 
-Nėra garantijos, kad viskas GitHub jau rasta. Tai nuolat plečiama ir peržiūrima žinių bei įgyvendinimų bazė. [Kandidatų registras](research/CANDIDATE-POOL.md), [atrankos taisyklės](MODULE-SELECTION.md), [media programa](research/MEDIA-CANDIDATES.md).
+Nėra garantijos, kad viskas GitHub jau rasta. Tai nuolat plečiama ir peržiūrima žinių bei įgyvendinimų bazė. [Kandidatų registras](quarantine/2026-10-17/docs/research/CANDIDATE-POOL.md.snapshot.txt), [atrankos taisyklės](MODULE-SELECTION.md), [media programa](quarantine/2026-10-17/docs/research/MEDIA-CANDIDATES.md.snapshot.txt).
 
 Žmogus galėtų naršyti **sritis → gebėjimas → darbo receptas** arba ieškoti savo žodžiais. Pavyzdžiui, „reikia crypto boto“ parodytų rinkos duomenis, strategijų/backtest ir paper trading įrankius, API jungtis bei stebėseną. Filtrai padėtų pasirinkti įrangai, kainai, licencijai ir leidimams tinkamą profilį. Matytųsi, kas tik kandidatas, o ką AI jau gali vykdyti konkrečioje instaliacijoje. „Geriausias“ reikštų pagrįstą fit šiam darbui; realūs finansiniai veiksmai turi atskirą grant. [Platus kategorijų karkasas ir paieška](TOOL-DIRECTORY.md).
 
@@ -213,7 +215,7 @@ Pirmas pagrindinis sistemos įrodymas: **užduotis → tikras rezultatas → atk
 | Daugiakalbį MVP UI ir vertimų palaikymą | [LANGUAGES.md](LANGUAGES.md) |
 | Codex pažįstamą project/chat/artifact darbo erdvę | [UI-WORKSPACE.md](UI-WORKSPACE.md) |
 | Tikrus siūlomus naudojimo scenarijus | [SCENARIOS.md](SCENARIOS.md) |
-| Source kandidatus ir metodą | [Research](research/README.md), [pool](research/CANDIDATE-POOL.md), [media](research/MEDIA-CANDIDATES.md) |
+| Source kandidatus ir metodą | [Research](quarantine/2026-10-17/docs/research/README.md.snapshot.txt), [pool](quarantine/2026-10-17/docs/research/CANDIDATE-POOL.md.snapshot.txt), [media](quarantine/2026-10-17/docs/research/MEDIA-CANDIDATES.md.snapshot.txt) |
 | Panašius modulius ir pasirinkimą | [MODULE-SELECTION.md](MODULE-SELECTION.md) |
 | Kategorijas, paiešką ir agentų skills/tool atranką | [Katalogas](TOOL-DIRECTORY.md), [agentų registras](AGENT-CAPABILITIES.md) |
 | Vietinį Laya ir mokamą Jev kaip selector kandidatus | [ROUTER-EVALUATION.md](ROUTER-EVALUATION.md) |
@@ -222,6 +224,6 @@ Pirmas pagrindinis sistemos įrodymas: **užduotis → tikras rezultatas → atk
 | Modelių/Treg/auth ribas | [MODELS-AND-TOOLS.md](MODELS-AND-TOOLS.md) |
 | Public svetainę, creator programą ir statistiką | [Website](PUBLIC-WEBSITE.md), [growth](GROWTH-AND-OUTREACH.md), [videos](VIDEO-HUB.md), [usage](USAGE-STATISTICS.md) |
 | Techninius duomenų ir vertinimo kontraktus | [CONTRACTS.md](CONTRACTS.md), [VALIDATION.md](VALIDATION.md) |
-| Kodėl priimti sprendimai ir ką kritikavo abu agentai | [DECISIONS.md](DECISIONS.md), [architecture review](reviews/architecture-independent.md), [autonomy](reviews/autonomy-updates-review.md), [auth](reviews/provider-auth-review.md), [growth](reviews/growth-review.md), [portal/video/intake](reviews/video-hub-review.md) |
+| Kodėl priimti sprendimai ir ką kritikavo abu agentai | [DECISIONS.md](DECISIONS.md), [architecture review](quarantine/2026-10-17/docs/reviews/architecture-independent.md.snapshot.txt), [autonomy](quarantine/2026-10-17/docs/reviews/autonomy-updates-review.md.snapshot.txt), [auth](quarantine/2026-10-17/docs/reviews/provider-auth-review.md.snapshot.txt), [growth](quarantine/2026-10-17/docs/reviews/growth-review.md.snapshot.txt), [portal/video/intake](quarantine/2026-10-17/docs/reviews/video-hub-review.md.snapshot.txt) |
 
 Šis dokumentas sujungia jau sutartą viziją. Naujos produkto funkcijos čia nepridedamos; kitas etapas – pagal roadmapą įrodyti pasirinktą mažą veikiantį pjūvį su turimais resursais.

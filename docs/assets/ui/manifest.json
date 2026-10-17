@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "createdOn": "2026-10-17",
+  "kind": "design-concepts-not-implemented",
+  "images": [
+    {
+      "file": "01-start.png",
+      "sha256": "61d77afc903d074c4852665cb32f3771590e5bd69e03d4763d9717cc04536814",
+      "bytes": 1278331,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1469,
+      "height": 1071
+    },
+    {
+      "file": "02-workspace.png",
+      "sha256": "a8ae3e875702b12be971ec899241adec4fa6c6019943de9fda122aa7ee3889bf",
+      "bytes": 1571049,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1586,
+      "height": 992
+    },
+    {
+      "file": "03-components.png",
+      "sha256": "bdbc5226145b58d61e63346e27b2999853fa03acada7a77a8119c37da2602d73",
+      "bytes": 1413531,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1637,
+      "height": 960
+    },
+    {
+      "file": "04-review.png",
+      "sha256": "505cffd21f6c03719ccefc62f6cdeed1bb341bff337a2f9c236663ecbf082fc6",
+      "bytes": 1482289,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1467,
+      "height": 1072
+    },
+    {
+      "file": "05-connections.png",
+      "sha256": "bf042dda1e3751d8757d785404574e2888ead5fe20032b73aad4bbd26b69f68d",
+      "bytes": 1546925,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1466,
+      "height": 1073
+    },
+    {
+      "file": "06-mobile.png",
+      "sha256": "b4afd3d2508098aa1b0c91dc6f7c257c9da7f3541070f8c6a1c372eb3d990a88",
+      "bytes": 1425670,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 862,
+      "height": 1824
+    },
+    {
+      "file": "07-library.png",
+      "sha256": "bad33ffbe58799d2e60a3c9bc92e4eab4b3bf75bfb815fb74e89259a3c6726f1",
+      "bytes": 1483874,
+      "kind": "generated-design-concept",
+      "notProductEvidence": true,
+      "width": 1586,
+      "height": 992
+    }
+  ],
+  "sourceSnapshot": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+  "notes": [
+    "All UI counts, tests, costs and stars are illustrative.",
+    "Initial versions and prompt history retained in private artifact bundle; no duplicate initial PNGs published."
+  ]
+}

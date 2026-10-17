@@ -1,0 +1,179 @@
+{
+  "snapshot": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+  "originMain": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+  "status": "",
+  "trackedFiles": 2223,
+  "markdownFiles": 102,
+  "catalog": {
+    "records": 796,
+    "capabilityNonempty": 158,
+    "sourceAvailable": 757,
+    "pinned": 756,
+    "runtimeTested": 0,
+    "licenseApproved": 0
+  },
+  "searchProbes": [
+    {
+      "query": "csv",
+      "results": []
+    },
+    {
+      "query": "csv import",
+      "results": []
+    },
+    {
+      "query": "inventory",
+      "results": []
+    },
+    {
+      "query": "warehouse",
+      "results": []
+    },
+    {
+      "query": "sandėlio",
+      "results": []
+    },
+    {
+      "query": "importuoti CSV",
+      "results": []
+    },
+    {
+      "query": "sqlite",
+      "results": [
+        "simonw/sqlite-utils",
+        "sqlite/sqlite",
+        "sqlitebrowser/sqlitebrowser"
+      ]
+    },
+    {
+      "query": "database",
+      "results": []
+    },
+    {
+      "query": "spreadsheet",
+      "results": []
+    },
+    {
+      "query": "tabular data",
+      "results": []
+    },
+    {
+      "query": "agent platform",
+      "results": [
+        "FoundationAgents/OpenManus",
+        "bytedance/UI-TARS-desktop",
+        "eigent-ai/eigent",
+        "elie222/rakazo"
+      ]
+    },
+    {
+      "query": "pdf tables",
+      "results": []
+    },
+    {
+      "query": "docling",
+      "results": [
+        "docling-project/docling"
+      ]
+    },
+    {
+      "query": "honojs/hono",
+      "results": [
+        "honojs/hono"
+      ]
+    },
+    {
+      "query": "image editor",
+      "results": []
+    },
+    {
+      "query": "photo editing",
+      "results": []
+    },
+    {
+      "query": "photoshop",
+      "results": []
+    },
+    {
+      "query": "remove background",
+      "results": []
+    },
+    {
+      "query": "pdf",
+      "results": [
+        "jsvine/pdfplumber",
+        "ocrmypdf/OCRmyPDF",
+        "pdfcpu/pdfcpu",
+        "pdfme/pdfme",
+        "pymupdf/PyMuPDF"
+      ]
+    },
+    {
+      "query": "FFmpeg",
+      "results": [
+        "FFmpeg/FFmpeg",
+        "kkroening/ffmpeg-python"
+      ]
+    },
+    {
+      "query": "reverse engineering",
+      "results": [
+        "morluto/rea"
+      ]
+    }
+  ],
+  "singletonSourceAdvice": {
+    "result": {
+      "status": "recommended",
+      "repository": "example/unrelated",
+      "sourceRevision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "generation": 1,
+      "engine": "single_eligible",
+      "evidence": "source_only"
+    },
+    "networkDispatches": 0,
+    "interpretation": "Source eligibility is not semantic suitability. This helper is advisory, not an execution grant."
+  },
+  "archivedSourceAdvice": {
+    "status": "missing",
+    "reason": "no_current_pinned_source"
+  },
+  "rootWorkflows": [],
+  "nestedWorkflows": [
+    "platform/.github/workflows/ci.yml",
+    "platform/.github/workflows/computer-replay.yml",
+    "platform/.github/workflows/desktop-macos-screenshot.yml",
+    "platform/.github/workflows/mobile-android-screenshots.yml",
+    "platform/.github/workflows/model-catalog-bump.yml",
+    "platform/.github/workflows/nightly-verification.yml",
+    "platform/.github/workflows/playwright.yml",
+    "platform/.github/workflows/publish-playwright-report.yml",
+    "platform/.github/workflows/publish-server-image.yml",
+    "platform/.github/workflows/release-android-apk.yml",
+    "platform/.github/workflows/release-desktop.yml",
+    "platform/.github/workflows/topology-verification.yml"
+  ],
+  "apps": [
+    "platform/apps/api/package.json",
+    "platform/apps/desktop/package.json",
+    "platform/apps/mobile/package.json",
+    "platform/apps/web/package.json",
+    "platform/apps/worker/package.json",
+    "platform/apps/www/package.json"
+  ],
+  "packages": [
+    "platform/packages/adapter-kit/package.json",
+    "platform/packages/adapters/package.json",
+    "platform/packages/auth/package.json",
+    "platform/packages/chat-ui/package.json",
+    "platform/packages/contracts/package.json",
+    "platform/packages/core/package.json",
+    "platform/packages/db/package.json",
+    "platform/packages/logging/package.json",
+    "platform/packages/memory/package.json",
+    "platform/packages/testkit/package.json",
+    "platform/packages/ui-tokens/package.json",
+    "platform/packages/ui-web/package.json"
+  ],
+  "newPaidCalls": 0
+}

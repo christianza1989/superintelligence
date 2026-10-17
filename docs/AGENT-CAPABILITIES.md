@@ -1,5 +1,7 @@
 # Kaip agentai randa ir naudoja įrankius bei skills
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Projekto V1 dokumentacijos papildymas, 2026-10-16. Tai konkretesnis jau sutarto CapabilityRegistry, modulių kontrakto ir darbo receptų veikimas. **Būsena: projektavimas, NOT_RUN.** Resolver API, skill schemas, indeksas ir runtime atrankos testai dar neįgyvendinti; vardai šiame dokumente žymi planuojamus kontraktus.
 
 ## 1. Sąvokos ir vienas autoritetas

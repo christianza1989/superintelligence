@@ -1,5 +1,7 @@
 # Vertinimas, licencijos, kaina ir įrodymų kartelė
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 ## Kas atlikta šiame darbe
 
 Patikrintas viešas GitHub turinys, source failai, licencijos, pasirinkti manifestai/CI įėjimai ir svarbiausių komponentų public API kodas. Parengti dokumentai, JSON/CSV duomenys ir draft schemas. Tai nesuteikia runtime, saugumo ar našumo PASS. Tiksli statistika [research-run.json](../catalog/research-run.json).
@@ -53,7 +55,7 @@ Hostile shell, svetimas PR ir vykdomi binarai reikalauja atskiros išmetamos VM/
 | Rakazo | Root Apache-2.0 patikrinta; SaaS connector ir provider terms atskiri; Treg hosted resale pagal README turi papildomas sąlygas |
 | FFmpeg | Tikra licencija priklauso nuo build flags, codecs ir prijungtų komponentų; skelbti naudojamo binary konfigūraciją |
 
-Upstream šaltinių nuorodos pateiktos [kataloge](research/TOP100.md) ir [atrankos paaiškinime](research/README.md). Nuosavo core Apache-2.0 siūlymas nesuteikia teisės perlicencijuoti upstream. Nežinoma teisė blokuoja platinimą, o ne užpildoma spėjimu.
+Upstream šaltinių nuorodos pateiktos [kataloge](quarantine/2026-10-17/docs/research/TOP100.md.snapshot.txt) ir [atrankos paaiškinime](quarantine/2026-10-17/docs/research/README.md.snapshot.txt). Nuosavo core Apache-2.0 siūlymas nesuteikia teisės perlicencijuoti upstream. Nežinoma teisė blokuoja platinimą, o ne užpildoma spėjimu.
 
 ## Pilna kaina ir dydis
 
@@ -69,7 +71,7 @@ SAI leidimo patikra naudoja trusted base policy/suite SHA ir patikrintą evaluat
 
 ## 0.2 papildyti priėmimo rinkiniai
 
-Pradinių100 balai išsaugoti istorinei dokumentinei imčiai. [Naujame baseine](research/CANDIDATE-POOL.md) nėra dirbtinai priskirtų balų: expanded unscored kandidatai laukia capability/license/overlap ir realių užduočių atrankos. Visi runtime NOT_RUN. Nauji README/license source hash nėra nauji benchmark rezultatai.
+Pradinių100 balai išsaugoti istorinei dokumentinei imčiai. [Naujame baseine](quarantine/2026-10-17/docs/research/CANDIDATE-POOL.md.snapshot.txt) nėra dirbtinai priskirtų balų: expanded unscored kandidatai laukia capability/license/overlap ir realių užduočių atrankos. Visi runtime NOT_RUN. Nauji README/license source hash nėra nauji benchmark rezultatai.
 
 | Sritis | Būtinas teigiamas ir neigiamas įrodymas |
 |---|---|

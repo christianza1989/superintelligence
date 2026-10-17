@@ -1,5 +1,7 @@
 # Pirmas patvaraus biudžeto pjūvis
 
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. **Įgyvendintas ir su tikra vienkartine PostgreSQL išbandytas konservatyvus rezervavimo ledger. Mokamas Jev ar pagrindinio modelio vykdymas neįjungtas.** Tai [viso biudžetų brokerio](INTAKE-AND-BUDGETS.md) dalis, ne viso jo priėmimas.
 
 ## Kas veikia

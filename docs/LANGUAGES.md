@@ -1,5 +1,7 @@
 # Kalbos nuo pirmo MVP
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. Naudotojo kryptis: daugiakalbis UI nuo pirmo MVP, įskaitant EN/RU, ispanų ir kinų. **Dokumentuotas tikslas; i18n UI ir išversta programa dar nesukurti.**
 
 ## Pradinis palaikomas profilis

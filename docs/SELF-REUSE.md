@@ -1,5 +1,7 @@
 # RepositoryZero kaip savo reuse principo pavyzdys
 
+> **Palaikomas runbook / metodika · peržiūrėta 2026-10-17.** Komandų paskirtį ir istorinius rezultatus skirti nuo pilno produkto acceptance. Ši antraštė nepervertina senų kohortų. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. **Tai tikras vietinio paieškos įrankio ir turimo source patikrinimas su žmogaus/agentų sprendimu. Pilnas autonominis naujo produkto sukūrimas dar neparodytas.** Naudotojo reikalavimas: ir pačią platformą kurti iš jau egzistuojančių tinkamų dalių, kaip pasirinkta Rakazo bazė.
 
 ## Pakartojimas

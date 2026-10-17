@@ -1,5 +1,7 @@
 # Gebėjimų, etapų ir dubliavimosi žemėlapis
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 Visi pasirinkimai šiuo metu yra source-reviewed kandidatai. Vienas užduočių autoritetas, vienas galutinis produkto UI ir pagal poreikį diegiami moduliai yra bendras principas. Vartotojo naujai pateiktas Rakazo įtrauktas į privalomą P0 build-vs-adapt palyginimą.
 
 ## Vienas vykdomas produktas
@@ -77,8 +79,8 @@ Norminė [panašių modulių atranka](MODULE-SELECTION.md) skiria alias/fork, fu
 
 ## Išplėstas portfelis be skaičiaus lubų
 
-Ankstesnis maždaug30projektų sąrašas yra pirmų įgyvendinimo prioritetų hipotezė. Jis neriboja [atviro baseino](research/CANDIDATE-POOL.md):757unikalūs prieinami repo, griežta naujų kandidatų atranka dar laukia. Science/research, matematikos, robotikos ir kitų sričių kandidatai lieka alternatyvų tyrime, kol yra konkretus domeno testas ir operatoriaus pajėgumas.
+Ankstesnis maždaug30projektų sąrašas yra pirmų įgyvendinimo prioritetų hipotezė. Jis neriboja [atviro baseino](quarantine/2026-10-17/docs/research/CANDIDATE-POOL.md.snapshot.txt):757unikalūs prieinami repo, griežta naujų kandidatų atranka dar laukia. Science/research, matematikos, robotikos ir kitų sričių kandidatai lieka alternatyvų tyrime, kol yra konkretus domeno testas ir operatoriaus pajėgumas.
 
-[Media programa](research/MEDIA-CANDIDATES.md) išskiria TTS, STT/diarization, realtime voice, image edit, T2V/I2V, camera control, avatar/lip-sync ir montažą. Piper/Whisper nėra iš anksto paskelbti geriausiais visiems darbams: bus lyginami su Kokoro/F5/Chatterbox/Fish/Qwen/CosyVoice ir ASR alternatyvomis. Higgsfield tipo rezultatas yra kelių gebėjimų pipeline, o ne įrodymas, kad rastas vienas lygiavertis open modelis.
+[Media programa](quarantine/2026-10-17/docs/research/MEDIA-CANDIDATES.md.snapshot.txt) išskiria TTS, STT/diarization, realtime voice, image edit, T2V/I2V, camera control, avatar/lip-sync ir montažą. Piper/Whisper nėra iš anksto paskelbti geriausiais visiems darbams: bus lyginami su Kokoro/F5/Chatterbox/Fish/Qwen/CosyVoice ir ASR alternatyvomis. Higgsfield tipo rezultatas yra kelių gebėjimų pipeline, o ne įrodymas, kad rastas vienas lygiavertis open modelis.
 
 **Treg** privalomas planuojamas katalogo/gateway adapteris. Vienas Treg serveris gali suteikti daug endpointų, bet jų pasirenkamos schemos, account grants, read/write/send ir billing tikrinami atskirai. **ProviderHub** jungia oficialius modelių API/OAuth/local metodus ir capability matricą; tai nėra papildomas globalus scheduler. [Detali specifikacija](MODELS-AND-TOOLS.md).

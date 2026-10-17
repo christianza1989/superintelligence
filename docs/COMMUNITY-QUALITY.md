@@ -1,5 +1,7 @@
 # Kaip realus naudojimas pildo katalogo kokybės įrodymus
 
+> **Planuojama produkto specifikacija · peržiūrėta 2026-10-17.** Aprašo siekiamą elgesį; schemų pavyzdžiai ir maketai savaime nėra įgyvendintos funkcijos. Daliniai foundation komponentai nekeičia viso vartų statuso. Datuotos įgyvendinimo pastabos žemiau nėra atnaujinta būsenos suvestinė; senos kainų/auth/source prielaidos tikrinamos prieš realų profilį. Dabarties autoritetas: [būsena](IMPLEMENTATION.md), [priimta architektūra](DECISIONS.md), [roadmapas](../ROADMAP.md).
+
 2026-10-16. **Projektuojama, NOT_IMPLEMENTED / NOT_RUN:** bendras kokybės ledger, evaluator statusų projekcija ir community agregavimas dar nesukurti. Pernaudotame Rakazo yra vykdymo, usage ir testavimo primitives; tai nėra šiame dokumente aprašytos kokybės sistemos priėmimas. Dabartiniai faktai pateikti [įgyvendinimo būsenoje](IMPLEMENTATION.md).
 
 Tikslas: naudojant repo ar modulį tikrai užduočiai, programa automatiškai užfiksuoja leidžiamus vykdymo ir patikros faktus. Laikui bėgant jie padeda atrinkti tinkamus profilius. **Naudojimo faktas nėra bendras „repo kokybė patvirtinta“ sprendimas, ir ne visi kandidatai būtinai taps verified.**

@@ -50,6 +50,8 @@
     "lab:stockdesk": "node scripts/platform.mjs exec tsx scripts/zero-stockdesk-run.mjs",
     "lab:stockdesk-prepare": "node scripts/platform.mjs exec tsx scripts/zero-stockdesk-prepare.mjs",
     "test:stockdesk": "node scripts/platform.mjs exec tsx --test scripts/zero-stockdesk.test.mjs",
-    "test:stockdesk-docker": "ZERO_STOCKDESK_DOCKER_TESTS=1 node scripts/platform.mjs exec tsx --test scripts/zero-stockdesk.test.mjs"
+    "test:stockdesk-docker": "ZERO_STOCKDESK_DOCKER_TESTS=1 node scripts/platform.mjs exec tsx --test scripts/zero-stockdesk.test.mjs",
+    "docs:sync": "node scripts/docs.mjs --write",
+    "check:docs": "node scripts/docs.mjs"
   }
 }

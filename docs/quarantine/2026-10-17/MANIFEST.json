@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "snapshot": "fe14bdd4fb9cd8805938e1169a4bd2d13961bb86",
+  "quarantinedOn": "2026-10-17",
+  "policy": "Exact original bytes; .md.snapshot.txt files are historical plain-text snapshots, not active instructions. Original relative paths resolve at the recorded Git commit.",
+  "files": [
+    {
+      "originalPath": "PLAN.md",
+      "path": "docs/quarantine/2026-10-17/previous/PLAN.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 36790,
+      "sha256": "b7cf90d589b691977e9960c18be002a07d1b3bfe23c796c5ca8bf66caa8caa49"
+    },
+    {
+      "originalPath": "ROADMAP.md",
+      "path": "docs/quarantine/2026-10-17/previous/ROADMAP.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 56702,
+      "sha256": "08c177f98482c7c885c28ccd7374fa2f04b5c970b9992930b6ce226d3710e0a8"
+    },
+    {
+      "originalPath": "MVP-ROADMAP.md",
+      "path": "docs/quarantine/2026-10-17/previous/MVP-ROADMAP.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 11531,
+      "sha256": "a1103a6ecc59b8c1604c252de9532a1078fd478db1662bdb7829362b1fb926c4"
+    },
+    {
+      "originalPath": "docs/IMPLEMENTATION.md",
+      "path": "docs/quarantine/2026-10-17/previous/docs/IMPLEMENTATION.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 12019,
+      "sha256": "d236c66fe4323e5f24012220392fe31568faac466511c58965ed176619fd60f3"
+    },
+    {
+      "originalPath": "docs/DECISIONS.md",
+      "path": "docs/quarantine/2026-10-17/previous/docs/DECISIONS.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 14131,
+      "sha256": "90ddf86e77afa92a7a16ee62a0b80e649e3ecf84c99ed4502d2d8a6729f4ec73"
+    },
+    {
+      "originalPath": "docs/CALIBRATION.md",
+      "path": "docs/quarantine/2026-10-17/previous/docs/CALIBRATION.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 9896,
+      "sha256": "a2467ee3bdbff9d1e613d62d78948ba9f1455bca8e451f9c4670b73aa705d160"
+    },
+    {
+      "originalPath": "docs/JEV-APPLICATIONS.md",
+      "path": "docs/quarantine/2026-10-17/previous/docs/JEV-APPLICATIONS.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 11491,
+      "sha256": "4116c945f38ee9778a39dc054e6778bb347960da20ddb08458be755dcf31fc9d"
+    },
+    {
+      "originalPath": "docs/ROUTER-EVALUATION.md",
+      "path": "docs/quarantine/2026-10-17/previous/docs/ROUTER-EVALUATION.md.snapshot.txt",
+      "reason": "Superseded current guidance; complete dated original retained",
+      "category": "superseded-guidance",
+      "bytes": 14132,
+      "sha256": "e69c9debd98b1b4c126a77db4a19885bdfc2253e45f008bee97262a69a3e9a0f"
+    },
+    {
+      "originalPath": "docs/PROJECT-ANALYSIS-2026-10-17.md",
+      "path": "docs/quarantine/2026-10-17/docs/PROJECT-ANALYSIS-2026-10-17.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 22321,
+      "sha256": "dce31445e85226124ae13511d2352e0da5c567bc2129f984bb6ac0f6019215ac"
+    },
+    {
+      "originalPath": "docs/research/MEDIA-CANDIDATES.md",
+      "path": "docs/quarantine/2026-10-17/docs/research/MEDIA-CANDIDATES.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 28981,
+      "sha256": "27935754dd391e2a29d53d207cbc846b0f4d4a27393bec57d470ac787e32f33a"
+    },
+    {
+      "originalPath": "docs/research/README.md",
+      "path": "docs/quarantine/2026-10-17/docs/research/README.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 15371,
+      "sha256": "15353a13b4054286895594c1f6af59574728f416e36c2eaa726c6c4b1de27886"
+    },
+    {
+      "originalPath": "docs/research/TOP100.md",
+      "path": "docs/quarantine/2026-10-17/docs/research/TOP100.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 374775,
+      "sha256": "820c6fee95dab7bf5e024baed5377103ca304d5f5bef2c7b135de31d9b4eca62"
+    },
+    {
+      "originalPath": "docs/research/CANDIDATE-POOL.md",
+      "path": "docs/quarantine/2026-10-17/docs/research/CANDIDATE-POOL.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 107136,
+      "sha256": "660c34ca4966bb2e8692268cb5697cc9fac67a70f28f382ddcf9d4627ba648e7"
+    },
+    {
+      "originalPath": "docs/research/SPECIAL-CANDIDATES.md",
+      "path": "docs/quarantine/2026-10-17/docs/research/SPECIAL-CANDIDATES.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 5520,
+      "sha256": "b526dd82d718ca4cecd3085b1294f1e8095e92e67b202687ec341b4bfa41b144"
+    },
+    {
+      "originalPath": "docs/reviews/video-hub-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/video-hub-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 13248,
+      "sha256": "5db2af93e26348cc2937d0f093d0fe3ca4b4dd67db05710043b1d4cae164ab91"
+    },
+    {
+      "originalPath": "docs/reviews/provider-auth-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/provider-auth-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 28127,
+      "sha256": "0cb60a12e85b6921e99a4627e938b8c8f57c120d9b02f6aa9af1a3c0e88ff5f8"
+    },
+    {
+      "originalPath": "docs/reviews/mvp-feasibility-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/mvp-feasibility-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 14975,
+      "sha256": "bd30b9b6fec9cda8bc9bdf56ba750a5bf05d71b1389c13d2d9faa36b528eabe8"
+    },
+    {
+      "originalPath": "docs/reviews/ui-foundation-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/ui-foundation-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 25098,
+      "sha256": "1711574d23be4ad5943acf57f0bc513ce4bdb984985ccbd46a539db1c2e99eac"
+    },
+    {
+      "originalPath": "docs/reviews/router-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/router-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 22423,
+      "sha256": "c308e8214befe93d31f26221518aa29e47c2a4ba7a8eb5eda2f1e255ce95dee5"
+    },
+    {
+      "originalPath": "docs/reviews/autonomy-updates-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/autonomy-updates-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 33672,
+      "sha256": "f9f1dc9990fe3c93b53b5de33378038353a2a529721e2e3312d7560a716a7ead"
+    },
+    {
+      "originalPath": "docs/reviews/architecture-independent.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/architecture-independent.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 111571,
+      "sha256": "abeebb9e32008ce8eb0259d1bc4fe691ea9821cbef087b22ca5b0d795b474a91"
+    },
+    {
+      "originalPath": "docs/reviews/growth-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/growth-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 10907,
+      "sha256": "93824a5833ae5299a6cc5512c8fd8505a05433cb19aadf26dbefe7ebfe29ae76"
+    },
+    {
+      "originalPath": "docs/reviews/jev-use-cases-review.md",
+      "path": "docs/quarantine/2026-10-17/docs/reviews/jev-use-cases-review.md.snapshot.txt",
+      "reason": "Dated research/review snapshot; current decisions and status are elsewhere",
+      "category": "historical-research",
+      "bytes": 23236,
+      "sha256": "1bbafb5ac27dd1b98e21fec8d83a8093b670f5635c6ffafc82a79818ecd3c01a"
+    },
+    {
+      "originalPath": "docs/assets/ui/tool-directory-concept.png",
+      "path": "docs/quarantine/2026-10-17/docs/assets/ui/tool-directory-concept.png",
+      "reason": "Superseded design concept, not product evidence",
+      "category": "superseded-design",
+      "bytes": 1533191,
+      "sha256": "ad739dcceac42d08898da5e6c0e784af31a97a199328147e7a8a6734187b854c"
+    },
+    {
+      "originalPath": "docs/assets/ui/workspace-accounting-concept.png",
+      "path": "docs/quarantine/2026-10-17/docs/assets/ui/workspace-accounting-concept.png",
+      "reason": "Superseded design concept, not product evidence",
+      "category": "superseded-design",
+      "bytes": 1476890,
+      "sha256": "61be2ab74336ee2d47d6af8d4443a63f3e6eb00a49d9ba65dc6d2b51eb096e7b"
+    }
+  ]
+}
