@@ -127,6 +127,22 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     if (dataDir) await rm(dataDir, { recursive: true, force: true });
   });
 
+  it("rejects non-finite timestamp offsets before persisting or dispatching a request", async () => {
+    const invalid = "2026-10-17T12:00:00+99:99";
+    expect(Number.isNaN(Date.parse(invalid))).toBe(true);
+    const before = await db.prisma.artifact.count({ where: { spaceId, userId } });
+    await expect(service.submit(input({ deadline: invalid }))).rejects.toMatchObject({
+      name: "ZodError",
+    });
+    expect(() =>
+      createZeroCsvPreparationService(
+        { prisma: db.prisma, artifacts, jobs, authorize },
+        { ...principal, expiresAt: invalid },
+      ),
+    ).toThrow();
+    expect(await db.prisma.artifact.count({ where: { spaceId, userId } })).toBe(before);
+  });
+
   it("executes an immutable request after worker/application reconnection and preserves one versioned receipt", async () => {
     const params = input();
     const submitted = await service.submit(params);

@@ -42,7 +42,10 @@ const inputSchema = z
   .object({
     csv: csvText,
     idempotencyKey: z.string().min(1).max(128),
-    deadline: z.string().datetime({ offset: true }),
+    deadline: z
+      .string()
+      .datetime({ offset: true })
+      .refine((value) => Number.isFinite(Date.parse(value))),
   })
   .strict();
 const principalSchema = z
@@ -51,7 +54,10 @@ const principalSchema = z
     userId: z.string().min(1).max(128),
     scopeId: z.string().min(1).max(128),
     policyRevision: z.string().min(1).max(128),
-    expiresAt: z.string().datetime({ offset: true }),
+    expiresAt: z
+      .string()
+      .datetime({ offset: true })
+      .refine((value) => Number.isFinite(Date.parse(value))),
   })
   .strict();
 const requestSchema = z
@@ -60,7 +66,10 @@ const requestSchema = z
     principal: principalSchema,
     profile: z.literal(ZERO_CSV_PROFILE),
     csv: csvText,
-    deadline: z.string().datetime({ offset: true }),
+    deadline: z
+      .string()
+      .datetime({ offset: true })
+      .refine((value) => Number.isFinite(Date.parse(value))),
     requestDigest: z.string().regex(/^[a-f0-9]{64}$/),
   })
   .strict();
