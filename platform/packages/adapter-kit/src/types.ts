@@ -633,6 +633,8 @@ export interface BackgroundJobPayloads {
   "zero.jev-tool.execute": { requestArtifactId: string };
   "zero.csv.prepare": { requestArtifactId: string };
   "zero.csv.verify": { requestArtifactId: string };
+  "zero.pdf.extract": { requestArtifactId: string };
+  "zero.browser.extract": { requestArtifactId: string };
   "run.continue": { runId: string };
   "routine.wakeup": { routineId: string; scheduledFor: string };
   "computer.sleep": { computerId: string };

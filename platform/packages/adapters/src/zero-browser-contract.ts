@@ -72,6 +72,15 @@ export const zeroBrowserExtractionSchema = z
   .object({
     profile: z.literal(ZERO_BROWSER_STATIC_PROFILE),
     sourceSha256: hash,
+    renderedSha256: hash,
+    rendering: z
+      .object({
+        policy: z.literal("inert-static-v1"),
+        removedElements: z.number().int().min(0).max(8192),
+        removedAttributes: z.number().int().min(0).max(16384),
+        inertLinks: z.number().int().min(0).max(256),
+      })
+      .strict(),
     url: z.literal(ZERO_BROWSER_STATIC_URL),
     title: z.string().max(512),
     headings: z

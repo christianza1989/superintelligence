@@ -137,6 +137,24 @@ export * from "./web-limits.js";
 export * from "./web-provider-factory.js";
 export * from "./web-ssrf.js";
 export * from "./web-tools.js";
+export {
+  ZERO_BROWSER_STATIC_JOB_LIMITS,
+  ZERO_BROWSER_STATIC_PROFILE,
+} from "./zero-browser-contract.js";
+export type { ZeroComponentAuthorize, ZeroComponentPrincipal } from "./zero-component-jobs.js";
+export type {
+  ZeroBrowserBinding,
+  ZeroBrowserResolve,
+  ZeroComponentServiceDependencies,
+  ZeroPdfBinding,
+  ZeroPdfResolve,
+} from "./zero-component-services.js";
+export {
+  createZeroBrowserService,
+  createZeroPdfService,
+  runZeroBrowserExtraction,
+  runZeroPdfExtraction,
+} from "./zero-component-services.js";
 export * from "./zero-csv-application-client.js";
 export type {
   ZeroCsvAuthorize,
@@ -160,6 +178,7 @@ export {
   runZeroJevTool,
   ZERO_JEV_LIMITS,
 } from "./zero-jev-worker.js";
+export { ZERO_PDF_JOB_LIMITS, ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 export {
   createZeroProjectPolicy,
   readZeroOperatorFile as readOperatorFile,

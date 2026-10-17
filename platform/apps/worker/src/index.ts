@@ -247,6 +247,13 @@ async function main() {
     },
     artifacts,
     authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
+    authorizeZeroComponent: zeroCsvScopes
+      ? (principal) => zeroCsvScopes.authorize(principal)
+      : undefined,
+    resolveZeroPdf: zeroCsvScopes ? (principal) => zeroCsvScopes.resolvePdf(principal) : undefined,
+    resolveZeroBrowser: zeroCsvScopes
+      ? (principal) => zeroCsvScopes.resolveBrowser(principal)
+      : undefined,
     resolveZeroCsvVerifier: zeroCsvScopes?.resolveVerifier
       ? (principal) => zeroCsvScopes.resolveVerifier!(principal)
       : undefined,

@@ -10,6 +10,8 @@ const payloadSchemas = {
   "zero.jev-tool.execute": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.csv.prepare": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.csv.verify": z.object({ requestArtifactId: z.string().uuid() }).strict(),
+  "zero.pdf.extract": z.object({ requestArtifactId: z.string().uuid() }).strict(),
+  "zero.browser.extract": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "run.continue": z.object({ runId: z.string().min(1) }),
   "routine.wakeup": z.object({
     routineId: z.string().min(1),

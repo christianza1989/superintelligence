@@ -51,6 +51,58 @@ afterEach(async () => {
 });
 
 describe.skipIf(process.platform !== "linux")("trusted operator project policy", () => {
+  it("keeps bounded file allowlists and runtime paths in current operator policy only", async () => {
+    const principal = grant();
+    const files = [
+      { fileId: "operator-file", path: "documents/source.pdf", sha256: "a".repeat(64) },
+    ];
+    const pdf = {
+      profile: "pdfplumber-0.11.10-born-digital-lines-v1",
+      projectRoot: "/tmp/fixture-project",
+      stagingRoot: "/tmp/fixture-staging",
+      bundleDirectory: "/tmp/fixture-profile",
+      files,
+    };
+    const browser = {
+      profile: "zero-browser-static-v1",
+      projectRoot: "/tmp/fixture-project",
+      stagingRoot: "/tmp/fixture-staging",
+      dockerExecutable: "/usr/bin/docker",
+      dockerConfigDirectory: "/tmp/fixture-docker",
+      imageId: `sha256:${"b".repeat(64)}`,
+      buildInputLockSha256: "c".repeat(64),
+      files: [{ ...files[0]!, path: "page.html" }],
+    };
+    const { policy, file } = await fixture({
+      version: 1,
+      grants: [{ ...principal, pdf, browser }],
+    });
+    expect(await policy.resolve(actor, principal.scopeId)).toEqual(principal);
+    expect(await policy.resolvePdf(principal)).toMatchObject({
+      files,
+      runtime: { bundleDirectory: pdf.bundleDirectory },
+    });
+    expect(await policy.resolveBrowser(principal)).toMatchObject({
+      runtime: { imageId: browser.imageId },
+    });
+    await writeFile(file, JSON.stringify({ version: 1, grants: [principal] }));
+    expect(await policy.resolvePdf(principal)).toBeUndefined();
+    expect(await policy.resolveBrowser(principal)).toBeUndefined();
+    for (const changed of [
+      { ...pdf, files: [...files, ...files] },
+      {
+        ...pdf,
+        files: Array.from({ length: 11 }, (_, index) => ({ ...files[0], fileId: `file-${index}` })),
+      },
+      { ...pdf, files: [{ ...files[0], path: "../private.pdf" }] },
+    ]) {
+      await writeFile(
+        file,
+        JSON.stringify({ version: 1, grants: [{ ...principal, pdf: changed }] }),
+      );
+      await expect(policy.resolvePdf(principal)).rejects.toBeInstanceOf(ZeroProjectPolicyError);
+    }
+  });
   it("keeps optional verifier roots/images outside the principal and reopens their live policy", async () => {
     const principal = grant();
     const verification = {

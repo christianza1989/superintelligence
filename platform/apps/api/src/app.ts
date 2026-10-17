@@ -125,6 +125,8 @@ import {
 } from "./team-chat-startup.js";
 import { mountVoiceHttpRoutes } from "./voice.js";
 import { mountWebhookHttpRoutes } from "./webhook.js";
+import type { ZeroComponentScopePolicy } from "./zero-components.js";
+import { mountZeroComponentRoutes } from "./zero-components.js";
 import type { ZeroCsvScopePolicy } from "./zero-csv.js";
 import { mountZeroCsvRoutes } from "./zero-csv.js";
 import type { ZeroJevScopePolicy } from "./zero-jev.js";
@@ -175,6 +177,7 @@ export async function createApp(
     runtime?: AgentRuntime;
     contextStrategy?: AgentContextStrategy;
     zeroCsvScopes?: ZeroCsvScopePolicy;
+    zeroComponentScopes?: ZeroComponentScopePolicy;
     zeroJevScopes?: ZeroJevScopePolicy;
     zeroJevFetch?: typeof fetch;
   } = {},
@@ -193,6 +196,7 @@ export async function createApp(
     runtime: runtimeOverride,
     contextStrategy,
     zeroCsvScopes: zeroCsvScopesOverride,
+    zeroComponentScopes: zeroComponentScopesOverride,
     zeroJevScopes: zeroJevScopesOverride,
     zeroJevFetch,
     ...envOverrides
@@ -200,6 +204,7 @@ export async function createApp(
   const env = { ...loadEnv(process.env), ...envOverrides };
   const zeroScopes = zeroProjectPolicyFromEnv();
   const zeroCsvScopes = zeroCsvScopesOverride ?? zeroScopes;
+  const zeroComponentScopes = zeroComponentScopesOverride ?? zeroScopes;
   const zeroJevScopes = zeroJevScopesOverride ?? zeroScopes;
   const logger = loggerOverride ?? createServiceLogger({ service: SERVICE_NAMES.api });
   installLogger(logger);
@@ -527,6 +532,15 @@ export async function createApp(
     zeroJev: { pool: jobPool, resolve: zeroJevResolve, fetch: zeroJevFetch },
     artifacts,
     authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
+    authorizeZeroComponent: zeroComponentScopes
+      ? (principal) => zeroComponentScopes.authorize(principal)
+      : undefined,
+    resolveZeroPdf: zeroComponentScopes?.resolvePdf
+      ? (principal) => zeroComponentScopes.resolvePdf!(principal)
+      : undefined,
+    resolveZeroBrowser: zeroComponentScopes?.resolveBrowser
+      ? (principal) => zeroComponentScopes.resolveBrowser!(principal)
+      : undefined,
     resolveZeroCsvVerifier: zeroCsvScopes?.resolveVerifier
       ? (principal) => zeroCsvScopes.resolveVerifier!(principal)
       : undefined,
@@ -671,6 +685,14 @@ export async function createApp(
     return actor && { actor, sessionId: session.session.id };
   };
   const sessionActor = async (request: Request) => (await requestSession(request))?.actor ?? null;
+  mountZeroComponentRoutes(app, {
+    prisma,
+    artifacts,
+    jobs,
+    policy: zeroComponentScopes,
+    authenticate: sessionActor,
+    trustedOrigin: (origin) => isTrustedOrigin(origin, env),
+  });
   mountZeroCsvRoutes(app, {
     prisma,
     artifacts,

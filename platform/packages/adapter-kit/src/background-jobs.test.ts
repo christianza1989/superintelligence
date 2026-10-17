@@ -14,6 +14,8 @@ function handlers(): BackgroundJobHandlers {
     "zero.jev-tool.execute": vi.fn(async () => undefined),
     "zero.csv.prepare": vi.fn(async () => undefined),
     "zero.csv.verify": vi.fn(async () => undefined),
+    "zero.pdf.extract": vi.fn(async () => undefined),
+    "zero.browser.extract": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),
     "computer.update": vi.fn(async () => undefined),
@@ -27,17 +29,20 @@ function handlers(): BackgroundJobHandlers {
 }
 
 describe("background job contracts", () => {
-  it.each(["zero.csv.prepare", "zero.csv.verify", "zero.jev-tool.execute"] as const)(
-    "accepts only the immutable request artifact reference for %s",
-    async (job) => {
-      const requestArtifactId = "e920b9e2-17ce-445e-9e91-a1a1cc365745";
-      const target = handlers();
-      await dispatchBackgroundJob(target, job, { requestArtifactId });
-      expect(target[job]).toHaveBeenCalledWith({ requestArtifactId });
-      expect(() => parseBackgroundJob(job, { requestArtifactId, userId: "untrusted" })).toThrow();
-      expect(() => parseBackgroundJob(job, { requestArtifactId: "../input" })).toThrow();
-    },
-  );
+  it.each([
+    "zero.csv.prepare",
+    "zero.csv.verify",
+    "zero.pdf.extract",
+    "zero.browser.extract",
+    "zero.jev-tool.execute",
+  ] as const)("accepts only the immutable request artifact reference for %s", async (job) => {
+    const requestArtifactId = "e920b9e2-17ce-445e-9e91-a1a1cc365745";
+    const target = handlers();
+    await dispatchBackgroundJob(target, job, { requestArtifactId });
+    expect(target[job]).toHaveBeenCalledWith({ requestArtifactId });
+    expect(() => parseBackgroundJob(job, { requestArtifactId, userId: "untrusted" })).toThrow();
+    expect(() => parseBackgroundJob(job, { requestArtifactId: "../input" })).toThrow();
+  });
 
   it("validates and dispatches messaging.deliver", async () => {
     const target = handlers();

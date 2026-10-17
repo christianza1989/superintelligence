@@ -21,6 +21,8 @@ import { compactHistory } from "./history-compaction.js";
 import type { MemoryProviderResolver } from "./memory-provider-factory.js";
 import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-delivery.js";
 import { expireTaughtSkillTeaching } from "./teaching-session.js";
+import type { ZeroBrowserResolve, ZeroPdfResolve } from "./zero-component-services.js";
+import { runZeroBrowserExtraction, runZeroPdfExtraction } from "./zero-component-services.js";
 import type { ZeroCsvAuthorize, ZeroCsvResolveVerifier } from "./zero-csv-preparation.js";
 import { runZeroCsvPreparation, runZeroCsvVerification } from "./zero-csv-preparation.js";
 import type { ZeroJevWorkerDependencies } from "./zero-jev-worker.js";
@@ -31,6 +33,9 @@ export function createBackgroundJobHandlers(deps: {
   zeroJev?: Pick<ZeroJevWorkerDependencies, "pool" | "resolve" | "fetch">;
   authorizeZeroCsv?: ZeroCsvAuthorize;
   resolveZeroCsvVerifier?: ZeroCsvResolveVerifier;
+  authorizeZeroComponent?: ZeroCsvAuthorize;
+  resolveZeroPdf?: ZeroPdfResolve;
+  resolveZeroBrowser?: ZeroBrowserResolve;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
   sandbox: SandboxProvider;
@@ -62,6 +67,30 @@ export function createBackgroundJobHandlers(deps: {
   };
 
   return {
+    "zero.pdf.extract": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("Component artifact store unavailable");
+      await runZeroPdfExtraction(
+        {
+          prisma: deps.prisma,
+          artifacts: deps.artifacts,
+          authorize: deps.authorizeZeroComponent,
+          resolvePdf: deps.resolveZeroPdf,
+        },
+        requestArtifactId,
+      );
+    },
+    "zero.browser.extract": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("Component artifact store unavailable");
+      await runZeroBrowserExtraction(
+        {
+          prisma: deps.prisma,
+          artifacts: deps.artifacts,
+          authorize: deps.authorizeZeroComponent,
+          resolveBrowser: deps.resolveZeroBrowser,
+        },
+        requestArtifactId,
+      );
+    },
     "zero.jev-tool.execute": async ({ requestArtifactId }) => {
       if (!deps.artifacts) throw new Error("Routing artifact store unavailable");
       await runZeroJevTool(

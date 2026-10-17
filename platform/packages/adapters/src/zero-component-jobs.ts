@@ -88,6 +88,7 @@ export interface ZeroComponentHeader {
   requestDigest: string;
   deadline?: string;
   inputSha256?: string | null;
+  fileId?: string;
 }
 export type ZeroComponentState = "succeeded" | "failed" | "blocked" | "cancelled";
 type StorageDependencies = Pick<ZeroComponentDependencies, "prisma" | "artifacts"> & {
@@ -210,6 +211,16 @@ export async function loadZeroComponentHeader(
         }
       : {}),
     inputSha256: metadata.inputSha256 ? hashSchema.parse(metadata.inputSha256) : null,
+    ...(metadata.fileId !== undefined
+      ? {
+          fileId: z
+            .string()
+            .min(1)
+            .max(128)
+            .regex(/^[A-Za-z0-9_-]+$/u)
+            .parse(metadata.fileId),
+        }
+      : {}),
   };
   return { row, header };
 }
@@ -478,6 +489,7 @@ export async function submitZeroComponent(
               kind: request.kind,
               deadline: request.deadline,
               inputSha256: options.inputSha256 ?? null,
+              ...("fileId" in request ? { fileId: request.fileId } : {}),
               requestDigest: request.requestDigest,
             }),
             mimeType: "application/json",
@@ -500,7 +512,7 @@ export async function submitZeroComponent(
   }
   if (!(await findZeroComponentReceipt(deps.prisma, family, request, row.id)))
     await deps.jobs.enqueue({
-      name: execution(family, request).jobName as "zero.csv.prepare",
+      name: execution(family, request).jobName,
       payload: { requestArtifactId: row.id },
       replaceKey: zeroComponentJobKey(family, row.id, request),
       keepExisting: true,

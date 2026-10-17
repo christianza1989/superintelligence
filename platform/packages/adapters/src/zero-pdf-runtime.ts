@@ -24,6 +24,8 @@ export type ZeroPdfRuntimeResult =
 /** Private operator-created 0600 bundle files outside every Git checkout. Never tool arguments. */
 export interface ZeroPdfRuntimeConfig {
   bundleDirectory: string;
+  /** Trusted worker gate, rechecked after all staging and image inspection. */
+  beforeDispatch?: () => Promise<void>;
 }
 const metrics = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
 const completed = z
@@ -220,6 +222,8 @@ export async function executeZeroPdf(
     );
     if (image.code !== 0 || image.reason || image.stdout.trim() !== ZERO_PDF_IMAGE)
       throw new Error("image");
+    if (active.aborted) throw new Error("aborted");
+    await config.beforeDispatch?.();
     if (active.aborted) throw new Error("aborted");
     attempted = true;
     const execution = await capture([
