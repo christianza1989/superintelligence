@@ -2,6 +2,10 @@
 
 2026-10-17. Tikslas — geresnė kokybė, mažesnis visas užduoties laikas ir realios sąnaudos pagal profilį. Fiksuotas 50% pagerėjimas nėra priėmimo kriterijus. Ši metodika palaikoma; istorinės kohortos neperrašomos.
 
+## Naujas native Codex profilis
+
+[Native Codex A/B](NATIVE-CODEX-BENCHMARK.md) naudos du naujus desktop projektus/pokalbius ir identiškus task prompto baitus. A iš tiesų neturi Zero įrankių ar papildinio instrukcijų; B turi užfiksuotą Zero pagalbos paketą. Tai atskira dar NOT_RUN kohorta, ne esamų Claude CLI rezultatų tęsinys. Prieš pilotą būtina pilna viena MCP reuse vertikalė, tikri limitai ir nepriklausomas grader. Modelį/effort fiksuoti pagal faktinę host prieigą, o trūkstamas usage/cache metrikas palikti unknown.
+
 ## Kaip lyginame
 
 | Lane | Konfigūracija |

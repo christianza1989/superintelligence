@@ -10,7 +10,7 @@ Prieš startą užfiksuojamas tikslus promptas, tie patys pradiniai failai/sourc
 
 Abi sesijos pradeda be ankstesnio šios konkrečios užduoties pokalbio. Cold setup ir jau paruoštos aplinkos darbo laikas žymimi atskirai. Modeliai, Auto režimas, modelio parametrai, turimi įrankiai, concurrency ir infrastruktūra užrašomi, o žinomi skirtumai nepaslepiami.
 
-Dabartinis naudotojo pasirinkimas — Claude prenumerata, `claude-sonnet-5-5` ir effort `high` abiem pusėms. Codex auth ir OpenRouter lenktynes praleidžiame. Tikrinamas katalogo konteksto priedas; retrieval+Jev ir Auto vėliau turi atskirus [kalibravimo profilius](CALIBRATION.md).
+Istorinis SprintDesk profilis naudojo Claude prenumeratą, Sonnet 5.5/high; naujausias atskiras StockDesk profilis — Haiku 5.5/high. Tikslius profilius ir epochas žr. [kalibravimo indekse](CALIBRATION.md). Codex CLI auth ir OpenRouter coding lenktynės tebėra atidėtos. Naujas [native Codex MCP palyginimas](NATIVE-CODEX-BENCHMARK.md) naudos dabartinę host paskyrą ir atskiras kohortas; dar NOT_RUN. Jis nėra šių CLI konteksto rezultatų pervadinimas.
 
 Daugkartinis modulis [Zero Lab](ZERO-LAB.md) turi veikiantį offline plano sudarymą. Pirma [SprintDesk užduotis ir API acceptance](../benchmarks/sprintdesk-v1/README.md) paruošti prieš generavimą. Prompt-v2 poroje jie taikyti abiem tikroms sugeneruotoms programoms, o šioje integracijoje pakartoti pagal tą patį candidate source digest be naujų modelių kvietimų.
 

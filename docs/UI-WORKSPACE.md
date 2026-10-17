@@ -4,6 +4,10 @@
 
 2026-10-16. Naudotojo pateikta Codex ekrano nuotrauka yra darbo struktūros atskaitos taškas. **Tai dizaino planas, ne jau sukurta sąsaja.** Naudojame pažįstamą projektų/pokalbio/rezultato struktūrą ir savą RepositoryZero identitetą.
 
+## Naudojimas iš native kliento
+
+2026-10-17: MCP yra trečias įėjimas greta šios darbo erdvės ir Library. Naudojant Codex/Claude Code pokalbis bei kodo redagavimas lieka native kliente; Zero UI rodo tų pačių preparation/verification jobs ir artefaktų faktus. Antras coding pokalbis nekuriamas. Integracijų setup turi parodyti konkretaus host/profilio patikrą, leistiną projektą, execution vietą ir disconnect/update/revoke; specifikacija [MCP plane](MCP-INTEGRATION.md), P1X.11/P1X.12. Maketai nėra šio prijungimo įrodymas.
+
 ## Pagrindinis vaizdas
 
 ```text

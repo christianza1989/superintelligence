@@ -3,6 +3,7 @@
 Read [docs/README.md](docs/README.md), [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md), [docs/DECISIONS.md](docs/DECISIONS.md), then the relevant [ROADMAP.md](ROADMAP.md) tasks. Read [platform/AGENTS.md](platform/AGENTS.md) before changing platform code; its public-data, provider, runtime and UI rules apply there.
 
 - Work in a real Git checkout of this repository. A source export has no Git history: preserve its local artifacts and connections, and use a separate checkout for Git work. Never overwrite another working copy to synchronize it.
+- Read [docs/MCP-INTEGRATION.md](docs/MCP-INTEGRATION.md) before native integrations. Host owns its conversation, primary model/auth and source edits; Zero owns only requested scoped jobs. Never claim Zero controls all native host model/shell costs or export subscription auth. Discovery preview, plugin installation, host connection, actual component use, verified outcome and repeated benefit are separate gates.
 - One Rakazo-based product, existing Graphile/PostgreSQL worker and shared UI. Add thin reuse functions in existing paths; no parallel scheduler, universal integration framework or replacement CLI product.
 - Library is an independent human entry point. Browsing/saving does not require an AI task or install source. Source availability, popularity, preparation, actual use and verified benefit are different facts.
 - ROADMAP is the checkbox authority. MVP-ROADMAP is a generated subset: edit ROADMAP and run `npm run docs:sync`. Do not close runtime gates because a design, schema, mockup or offline test exists.

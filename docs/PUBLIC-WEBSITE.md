@@ -4,6 +4,10 @@
 
 Plano 0.2 papildymas, 2026-10-16. Naudotojo reikalavimas: svetainė pradeda veikti ankstyvame projekto etape ir autonomiškai parodo, kas keičiasi. **Šiuo metu parengtas jos planas; domenas, hostingas, mokėjimų paskyra ir viešas deploy neaktyvuoti.** `repositionzero.com` buvo pasiūlytas, bet nėra pasirinktas ar nuosavybės patikrintas.
 
+## Prijungti prie Codex / Claude Code
+
+2026-10-17 priimtas papildymas: svetainė turi native kliento, OS ir execution profilio pasirinkimą; trumpiausią patikrintą install kelią arba Copy command vedlį, tikrą host probe, klaidų bei disconnect/update/revoke būsenas. P1X.11/P1X.12 yra MVP darbai. Oficiali install nuoroda turi realų plugin/marketplace; nežinomo marketplace įregistravimas ir app trust lieka atskiri. Viešas puslapis negali paskelbti vietinio STDIO connected vien po paspaudimo. Visa norminė eiga ir upstream šaltiniai — [MCP specifikacijoje](MCP-INTEGRATION.md#svetainės-prijungti-prie-codex--prijungti-prie-claude-code-eiga). Šie mygtukai dar neįgyvendinti.
+
 ## 1. Pirmas viešas paviršius
 
 Svetainė neprivalo laukti pilno produkto beta: jos pradinis variantas skelbia viziją, realų research/planning statusą, roadmapą, source katalogą ir prisidėjimo kelią. Vėliau tie patys puslapiai gauna pamatuotas demonstracijas, supported OS ir release download. Nedeklaruojame būsimos funkcijos kaip jau veikiančios. Svetainės publikavimo darbas atskiras nuo app runtime, todėl jos neveikimas nesustabdo vietinių užduočių.

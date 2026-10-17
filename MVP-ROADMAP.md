@@ -2,7 +2,24 @@
 
 **Atnaujinta 2026-10-17.** Generuojama iš [ROADMAP](ROADMAP.md) tų pačių ID ir checkbox būsenų. Keisti pilną roadmapą ir paleisti `npm run docs:sync`; `npm run check:docs` aptinka neatitikimą. [Dabartinė būsena](docs/IMPLEMENTATION.md), [priimta architektūra](docs/DECISIONS.md).
 
-Techninis preview = vienas tikras mažas worker pjūvis, leidžiant pažymėtą modelio emuliaciją. **Techninis MVP = vienas kvalifikuotas vietinis profilis su tikru modeliu ir pasirinktu Jev ToolSelector, savarankiška Library bei browser/research, PDF ir coding.** CSV demonstracija nepakeičia šių trijų gebėjimų.
+MCP discovery preview = P1X.2/P1X.3; pilna viena deterministic MCP vertikalė leidžia native pilotą, bet neuždaro MVP. Techninis preview = vienas tikras mažas worker pjūvis, leidžiant pažymėtą modelio emuliaciją. **Techninis MVP = kvalifikuotas vietinis profilis su tikru modeliu, pasirinktu Jev ToolSelector, Library, browser/research, PDF ir coding bei MCP E2E/plugin/setup.** Native host model/auth yra host-managed pagal A15/P1X.8; tai neuždaro atskirų Zero own-app P1.14/OBS vartų. [Profilių mapping](docs/MCP-INTEGRATION.md#7-profilių-vartai-ir-įgyvendinimo-seka). CSV demonstracija nepakeičia šių trijų gebėjimų.
+
+## MCP įėjimas, plugin ir setup
+
+Pirmas read-only discovery ir tikras Codex desktop ryšys. Prieš prepare/verify būtini scope ir resursų limitai; host primary model/auth lieka host, Zero turi tik savo jobs. Platinamam MVP reikia plugin ir svetainės verification. Claude ir kiekviena OS kvalifikuojami atskirai.
+
+- [x] P1X.1 Priimti A13–A16: trečias MCP įėjimas, native host / Zero job autoritetas, vienas service/worker, profilių vartai ir native allowance matomumas. Kritiškai peržiūrėtas Astra pasiūlymas; serveris dar neįgyvendintas.
+- [ ] P1X.2 Plonas STDIO discovery serveris: zero_search/zero_inspect/zero_status, strict bounded schemas, pinned SDK, tik protokolas stdout. Offline initialize/list/call/invalid-input/output-limit/shutdown patikros ir TP0 merge kontrolė; be DB/modelio kvietimo.
+- [ ] P1X.3 Pirmas tikras Codex desktop ryšys naujame pokalbyje: atranda ir kviečia preview tools. Exact host/build/OS/transport/server/protocol ir setup/restart įrodymai; Windows–WSL bridge/roots patikrinti. SDK klientas ar CLI help to neuždaro; nuo P1X.2. Claude turi atskirą P1X.10 eilutę.
+- [ ] P1X.4 Operator-approved project scope ir immutable snapshot; roots sankirta arba aiškus root, private-file exclusion, traversal/symlink/Windows–WSL mapping ir cross-project/job ACL. Grant recheck prieš vykdymą; nuo P1X.1, prieš prepare/verify.
+- [ ] P1X.5 Prepare/job/artifact/cancel per esamą patvarų worker: idempotency ir key conflict/expiry, lease/fence, timeout/unknown, reconnect bei wrapper/backend restart. Jokio antro scheduler; nuo P1X.4, P1X.8 limitų ir TP1/TP2 būsenos darbų.
+- [ ] P1X.6 Vienas PREP1/NEED1 komponento profilis su pin/lock/license/runtime, staging artefaktu ir host handoff; host tikrai perskaito/integruoja, TRACE1 actual use evidence. Ne universalus installer; nuo P1X.5.
+- [ ] P1X.7 zero_verify ant izoliuoto immutable snapshot: trusted policy, CSV/SQLite/browser rezultatas, actual-use ir neigiama kontrolė, stale receipt po host edit. Produkto feedback atskiras nuo A/B holdout; nuo P1X.6/TRACE1; vienas atvejis neuždaro G2.
+- [ ] P1X.8 Įgyvendinti native profilio allowance/apskaitos ribas ir Zero job file/byte/time/concurrency limitus prieš execution. Deterministic Zero mokamų modelio dispatch 0; Jev profiliui J1/J2 ir jam taikoma OBS2, OBS3 jei įjungti Zero child/fallback. Host usage/cache unknown matomi; native calls nėra Zero broker-enforced, standalone P1.14/OBS lieka atviri.
+- [ ] P1X.9 Plonas local plugin paketas: viena trumpa provider-neutral skill, atskiri host manifestai, pinned launcher, setup/uninstall ir naujos sesijos patikra. Be hooks priklausomybės/auth export. Direct MCP pilotas gali vykti anksčiau; platinamam MVP papildiniui šis vartas privalomas.
+- [ ] P1X.10 MCP support matrica: atskirai protocol/connection/tool-use/useful-result kiekvienam host/build/OS/profiliui. Codex E2E tik po taikomų P1X.2–P1X.8; Claude tik po savo bandymo. Library/own-app išlaikyti. Upstream dokumentuota nėra mūsų patikrinta.
+- [ ] P1X.11 Svetainės Prijungti prie Codex / Claude Code įėjimai su client/OS/execution pasirinkimu, tikrais package/plugin ID, official links ir trumpu fallback vedliu/Copy command. Known-marketplace sąlyga, host trust/consent, jokių spėtų URI/config rašymo. Nuo P1X.2/P1X.3; plugin šakai ir P1X.9.
+- [ ] P1X.12 Tikra host probe/receipt verification ir lifecycle: connected nėra clicked, local-site unknown, restart/version/backend/auth klaidos, disconnect/update/revoke. Viešą support maitina P1X.10, new-user setup tikrina MVP1; nuo P1X.11.
 
 ## Techninis preview
 
@@ -11,6 +28,14 @@ TP0 yra pristatymo kontrolė; offline vertikalė gali būti kuriama lygiagrečia
 - [ ] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Dokumentų CI vienas to neuždaro.
 - [ ] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Emuliuotas modelis aiškiai pažymėtas; galima vykdyti lygiagrečiai OBS darbams.
 - [ ] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti; nuo TP1. Tai siaura aprėptis, ne visas G1.
+
+## Native Codex pilotas ir atskiras naudos tyrimas
+
+Po pilnos vienos deterministic MCP vertikalės ir profilio priėmimo galima pirma tikra A/B pora prieš viso MVP užbaigimą. Vienodi task prompto baitai, nauji projektai/pokalbiai, A tikrai be Zero. P1E.12 matavimas atskiras nuo integracijos priėmimo; neigiamas tyrimo rezultatas nėra pranašumo įrodymas.
+
+- [ ] P1E.10 Užšaldytas native Codex A/B protokolas ir izoliacijos preflight: vienodi prompt/starter/grader/model/effort, A be Zero metadata/skills/AGENTS, atskiros darbo vietos, limits/failure/cache/order/measurement. Nuo vienos P1X.7 vertikalės/P1X.8 ir Codex P1X.10, prieš kuriant benchmark pokalbius; [metodas](docs/NATIVE-CODEX-BENCHMARK.md).
+- [ ] P1E.11 Pirma gyva native pora: du nauji Codex desktop projektai/pokalbiai, identiški task prompto baitai, originali eiga ir nepriklausomi rezultatai pagal P1E.10. Tool smoke atskirai; viena pora nėra naudos įrodymas.
+- [ ] P1E.12 Pakartotinis native naudos tyrimas su subalansuota tvarka, naujais task/input, kokybės/laiko/kainos ir neapibrėžtumo ataskaita; skill-only kontrolė pagal poreikį, Jev J3 atskirai B/C. Neigiamas rezultatas užbaigia tyrimą, bet neįrodo pranašumo.
 
 ## Profilis, kontraktai ir G0
 
@@ -56,7 +81,7 @@ Esami primityvai turi veikti vienoje worker grandinėje. G1 išlaiko 50 fault vy
 - [ ] P1.11 Backup/restore bandymas su DB ir artefaktų nuorodomis; neteisingo projekto prieigos testas.
 - [ ] P1.12 Bazinio cold-install ir idle atminties ataskaita švariame host.
 - [ ] P1.13 Localhost launcher, loopback session auth, Origin/Host/CSRF, port/single-instance ir aiškus foreground/background/autostart; duomenų ir app katalogų atskyrimas.
-- [ ] P1.14 Vienas veikiantis ModelAdapter ir credential brokeris; renderer/agent gauna tik binding metadata; budget/expiry/refresh/account switch ir leakage canary testai.
+- [ ] P1.14 Vienas veikiantis Zero own-app ModelAdapter ir credential brokeris; renderer/agent gauna tik binding metadata; budget/expiry/refresh/account switch ir leakage canary testai. Native MCP host primary model/auth lieka host pagal A15/P1X.8; jo ryšys šio own-app vartų neuždaro.
 - [ ] P1.15 Provider/model capability matrica ir projektui leistini failover keliai; nėra išorinio veiksmo pakartojimo dėl modelio pakeitimo.
 - [ ] P1.16 Pernaudotas realus pasirinkto UI workspace/composer ir task/tool/artifact projection; vienas autoritetingas runtime, be dubliuoto auth/agent scheduler.
 - [ ] P1.17 Preview/Changes/Checks, Stop/blocked/unknown/reconnect ir accessibility; juoda/salotinė default su semantiniais tokens, theme registry/persist/fallback ir testine alternatyva, daugiau išbaigtų temų vėliau.

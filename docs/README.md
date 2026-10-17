@@ -13,6 +13,10 @@
 
 Prieštaravimo tvarka: naujesnis aiškus priimtas DECISIONS sprendimas → ROADMAP vartai → IMPLEMENTATION faktai → teminė specifikacija. Faktinis testas negali būti paneigtas planu, o vien testas nepakeičia vartų apimties. Neaiškumą fiksuoti kaip konkretų ADR, ne spėti, kad senas checkbox jau PASS.
 
+## MCP ir papildiniai nuo MVP
+
+[Priimtas MCP planas](MCP-INTEGRATION.md) apibrėžia bendrą backend, native host ribas, svetainės diegimo eigą ir profilių vartus. [Native Codex palyginimas](NATIVE-CODEX-BENCHMARK.md) — būsimo gyvo piloto metodas, dar NOT_RUN. Darbai P1X/P1E yra bendrame roadmape; serveris ir papildiniai dar neįgyvendinti.
+
 ## MCP ir papildinių tyrimas
 
 [Codex ir Claude Code prijungimas](research/MCP-AND-PLUGINS-2026-10-17.md) — 2026-10-17 oficialių sąsajų, svetainės diegimo ir gyvo native Codex palyginimo tyrimas. Įgyvendinimo apimtį nustato priimti sprendimai ir bendras roadmapas.

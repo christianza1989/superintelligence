@@ -34,6 +34,8 @@ Claude Code papildiniai taip pat apjungia skills ir MCP. Jie turi savo manifest�
 
 Codex turi dokumentuotą `codex://plugins/install/<plugin-name>?marketplace=<marketplace-name>` install flow nuorodą. Ji skirta klientui jau žinomam marketplace; vien URL negalima laikyti naujo marketplace registravimu. Nežinomas įrašas gali atverti bendrą Plugins puslapį. [Codex commands](https://learn.chatgpt.com/docs/reference/commands).
 
+Codex taip pat dokumentuoja codex://new su URI-encoded promptu ir tikru plugin mention: tai paruošia composer, prompto automatiškai nesiunčia. Šis Try with Zero kelias atskiras nuo formalios identiško prompto A/B poros. [Commands](https://learn.chatgpt.com/docs/reference/commands).
+
 Todėl svetainės „Prijungti prie Codex“ turi pasirinkti tikrą palaikomą kelią: esamo listing install nuorodą arba trumpą patikrinto marketplace/direct MCP paruošimo vedlį. Vietinio marketplace ir universalios viešos direktorijos publikavimas yra skirtingi keliai. [Package your plugin](https://developers.openai.com/plugins/build/plugins).
 
 Claude Code dokumentuoja vietinio papildinio ir jo ZIP/URL bandymą bei marketplace diegimą. Šiame tyrime nepatvirtinta universali svetainės URL schema, kuri savavališkai sukonfigūruotų Claude Code. Pirmam palaikomam keliui tinka patikrinta kopijuojama komanda arba oficialaus listing eiga, kai toks listing iš tikrųjų yra. [Create a Claude Code plugin](https://code.claude.com/docs/en/plugins/create).
@@ -70,6 +72,10 @@ Užduoties prompto tekstas ir nepriklausomas grader turi būti identiški; integ
 Pirmas tinkamas scenarijus: CSV peržiūra ir importas į SQLite, su quoted/newline laukais, klaidingais duomenimis ir atominiu rollback. B turi faktiškai panaudoti paruoštą CSV komponentą. Vien source rekomendacijos ar tuščias Jev pasirinkimas nepatvirtina visos grandinės. Pirmą porą vadinti exploratory; kartojimuose kaitalioti AB/BA eilę ir įtraukti kitas užduotis.
 
 Vertinti galutinę kokybę, žmogaus taisymus, kūrimo/tikrinimo/viso workflow laikus, MCP startup, retrieval ir preparation, tikrus modelio usage/cache įrašus ir atskiras API sąnaudas. Cache ir prenumeratos mokestis neapibendrinami vien total tokens. Neišgaunama metrika yra unknown. Failures ir tool nepanaudojimas neišmetami; warm/cold ir vieno host bendrų resursų poveikis nurodomi. Naudotojui matomi abu native darbo procesai, o ne jų imitacija Zero lange.
+
+## Priimta tolesnė kryptis
+
+Po Astra peržiūros priimtas [MCP įgyvendinimo planas](../MCP-INTEGRATION.md) ir atskiras [native Codex piloto metodas](../NATIVE-CODEX-BENCHMARK.md). Šio datuoto tyrimo faktai nepakeičia runtime būsenos; serveris ir papildiniai dar neįgyvendinti.
 
 ## Dabartinė išvada
 

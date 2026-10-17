@@ -12,6 +12,10 @@
 | Usage / budget | Atominiai baigtiniai budget primityvai, observer hook/call IDs ir usage dedup yra | Request scope + trusted account + reserve/receipt sujungimas, visi palaikomi fallback/child keliai |
 | Zero Lab | Oficialus Claude CLI, cohort/compact runner, API/SQLite/browser tikrintuvai, report comparison ir tikri pakartojimai | Lab UI, kelių užduočių produkto acceptance ir nepriklausomas holdout |
 | REA / Treg | Šaltiniai ir profiliai ištirti; būtini vėlesniame produkto plane | Zero produkto tikri conformance/permissions/resource scenarijai. REA native Windows proceso capture šiame snapshot nepalaikomas; REA nėra sandbox |
+| MCP serverio protokolas | Plonas export serveris suplanuotas; esamas mcp-transport yra klientas | P1X.2 offline serveris dar NOT_RUN |
+| Native host ryšys | Codex desktop ir Claude Code turi atskirus profilius | Abu Zero connection NOT_RUN; CLI help nėra tool call įrodymas |
+| Native komponentas / rezultatas / nauda | Priimtas vienos vertikalės ir naujų Codex pokalbių protokolas | Prepare/actual-use/verified-outcome/repeated-benefit dar NOT_RUN; jokio procentinio pažado |
+| Papildiniai / svetainės prijungimas | Patikrinti oficialūs galimi keliai; priimta setup/probe/lifecycle specifikacija | Manifestai, install mygtukai ir connected verification dar neįgyvendinti |
 | Platinimas / beta | Vietinio source paketo ir setup įrankiai yra | Naujo žmogaus MVP/beta, signed update/recovery ir native OS matrica |
 
 ## Patikros ir jų ribos
@@ -25,7 +29,7 @@ Astra šiame source snapshot pakartojo:
 
 ## Eksperimentų būklė
 
-Claude prenumerata pasirinkta vietiniam coding Lab. Naujausi StockDesk bandymai naudojo oficialų CLI **2.1.301, Haiku 5.5/high** abiem pusėms; senesni Sonnet ir CLI 2.1.292 rezultatai turi atskirus profilius. Šiuo dokumentų tvarkymo metu gyvų lenktynių nevykdome. Codex auth ir pagrindinio coding modelio OpenRouter lenktynės atidėtos. Jev API turi atskirą anksčiau suteiktą bendrą 1 USD cap; ledger nėra atstatomas.
+Claude prenumerata pasirinkta vietiniam coding Lab. Naujausi StockDesk bandymai naudojo oficialų CLI **2.1.301, Haiku 5.5/high** abiem pusėms; senesni Sonnet ir CLI 2.1.292 rezultatai turi atskirus profilius. Šiuo dokumentų tvarkymo metu gyvų lenktynių nevykdome. Codex CLI auth ir pagrindinio coding modelio OpenRouter lenktynės atidėtos. Naujas native Codex desktop MCP profilis naudos host paskyrą; tai atskiras dar NOT_RUN bandymas, neprašantis CLI auth perkėlimo. Jev API turi atskirą anksčiau suteiktą bendrą 1 USD cap; ledger nėra atstatomas.
 
 [Sonnet / SprintDesk](experiments/CLAUDE-CALIBRATION.md), [lean profilis](experiments/LEAN-CALIBRATION.md), [Haiku / StockDesk](experiments/STOCKDESK-CALIBRATION.md), [dabartinis metodas](CALIBRATION.md). Senas NOT_RUN dėl CLI neprieinamumo yra istorinė aplinkos būsena. V2 StockDesk grader kontrolės nepaverčia v1 programų retrospektyviai praėjusiomis.
 
@@ -56,4 +60,4 @@ npm run dev:worker
 
 ## Kas toliau
 
-Pirma TP0/OBS1 ir maža TP1/TP2 worker vertikalė, lygiagrečiai Library L1–L5; tada gyvo profilio apskaita ir J1/J2. Detalūs reikalavimai ir priklausomybės [ROADMAP](../ROADMAP.md), ribotas kelias [MVP-ROADMAP](../MVP-ROADMAP.md). Atviri vartai nežymimi PASS dėl maketo ar dokumentų sutvarkymo.
+Pirma P1X.2/P1X.3 read-only MCP ir tikras Codex ryšys; prieš vykdymą P1X.4/P1X.8 scope/limitai, tada TP1/TP2 ir P1X.5–P1X.7 maža worker vertikalė. Vienos vertikalės native pilotas P1E.10–P1E.11 gali vykti prieš visą MVP. Lygiagrečiai Library L1–L5 ir OBS1; Zero mokamiems profiliams tikra apskaita ir J1/J2. [Profilių ribos](MCP-INTEGRATION.md#7-profilių-vartai-ir-įgyvendinimo-seka). Detalūs reikalavimai ir priklausomybės [ROADMAP](../ROADMAP.md), ribotas kelias [MVP-ROADMAP](../MVP-ROADMAP.md). Atviri vartai nežymimi PASS dėl maketo ar dokumentų sutvarkymo.

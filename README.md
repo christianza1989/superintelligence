@@ -1,6 +1,6 @@
 # RepositoryZero
 
-RepositoryZero kuriamas kaip atviro kodo AI darbo platforma, kuri prieš rašydama naują kodą randa ir panaudoja tinkamus esamus projektus, komponentus bei įrankius. Žmogus gali pradėti nuo užduoties arba savarankiškai naršyti repo biblioteką ir iš pasirinkto repo kurti projektą.
+RepositoryZero kuriamas kaip atviro kodo AI darbo platforma, kuri prieš rašydama naują kodą randa ir panaudoja tinkamus esamus projektus, komponentus bei įrankius. Žmogus galės pradėti nuo užduoties, savarankiškos repo bibliotekos arba naudoti Zero iš savo Codex / Claude Code per MCP ir papildinį. Native klientas išlaiko jo modelį ir prisijungimą.
 
 **Stadija: įgyvendintas foundation ir vietinis Zero Lab; visas produkto MVP dar nepriimtas.** Yra Rakazo adaptacija, katalogo paieška, offline atrankos/budget primityvai ir tikri CLI eksperimentai. Automatinė grandinė „repo atranka → paruošimas → naudojimas worker → nepriklausoma patikra“ dar neužbaigta. Bendras greičio, kainos ar kokybės pranašumas neįrodytas.
 
@@ -11,6 +11,8 @@ RepositoryZero kuriamas kaip atviro kodo AI darbo platforma, kuri prieš rašyda
 | Visas planas su checkboxais | [ROADMAP](ROADMAP.md) |
 | Atskiras techninio preview ir MVP kelias | [MVP-ROADMAP](MVP-ROADMAP.md) |
 | Visi dokumentai pagal paskirtį | [Dokumentų indeksas](docs/README.md) |
+| MCP / plugin architektūra ir svetainės prijungimas | [Priimtas planas; dar neįgyvendinta](docs/MCP-INTEGRATION.md) |
+| Gyvas Codex su Zero / be Zero | [Būsimo native piloto protokolas](docs/NATIVE-CODEX-BENCHMARK.md) |
 | Naujausi UI maketai | [Septyni konceptai](docs/assets/ui/README.md) |
 | Kalibravimo metodas ir tikri ankstesni rezultatai | [CALIBRATION](docs/CALIBRATION.md) |
 

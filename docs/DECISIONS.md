@@ -16,6 +16,12 @@
 | A10 | Preview, techninis MVP, vieša beta ir native platinimas atskiri | CSV proof neuždaro 3 modulių; lieka G0/G1, 30 užduočių (24/30 ir ≥7/10 kiekvienoje srityje), 8 locale apimtis. REA/Treg ir G3A–G3D reikalingi beta; P4D atskiras |
 | A11 | Kalibravimas vertina visos konfigūracijos kokybę, laiką, kainą ir nesėkmes | Nebelieka fiksuoto 50% pažado. CLI cache tokenai nėra unikalus input ar vienodai apmokestinami tokenai. Jev naudai reikia B prieš tą patį B+Jev C |
 | A12 | Naujausia UI kryptis — santūri užduoties ir rezultato darbo erdvė + Library | Septyni maketai yra design concept. Pirmų šešių Tools nav įgyvendinant suvienodinti į Library. Esamus semantic tokens keisti tik per bendrą šaltinį, maketų spalvos dar neimplementuotos |
+| A13 | MCP nuo MVP: host valdo pokalbį, coding modelį/auth ir projekto redagavimą; Zero tik užsakytus bounded reuse jobs | Pirmas Codex desktop, Claude Code atskirai. Host prenumeratos auth neeksportuojamas; Zero nėra antro coding pokalbio scheduler |
+| A14 | Library, own-app ir MCP dalijasi tomis pačiomis core funkcijomis ir esamu application/worker | Read-only discovery be DB; prepare/verify per esamą Graphile/PostgreSQL. Host integruoja staging komponentą, Zero nekonkuruoja rašydamas originalų medį |
+| A15 | Priėmimas ir sąnaudos priklauso nuo execution profilio | Native primary model/account lieka host-managed, jo usage unknown matomi. P1.14/OBS own-app darbai neuždaromi. Zero mokamam Jev būtini trusted account/cap ir J1/J2; Zero grant/resource ribos prieš prepare/verify |
+| A16 | Protokolas, plugin paketas, svetainės setup, tikras ryšys ir rezultato nauda — atskiri priėmimai | Direct STDIO pirmas, native plugin MVP platinimui, HTTP/OAuth vėliau. Tikri official link/marketplace ID; connected tik po patikros. Nepriklausomas native A/B atskiras nuo istorinio CLI Lab |
+
+[MCP kontraktas, support matrica ir profilių vartai](MCP-INTEGRATION.md), [native Codex bandymas](NATIVE-CODEX-BENCHMARK.md). Viena deterministic vertikalė leidžia pilotą prieš pilną trijų modulių MVP; ji neatšaukia Jev, Library ar G0/G1/G2 reikalavimų.
 
 Ankstesni ADR01–ADR42 su visa argumentų istorija išsaugoti [karantine](quarantine/README.md). ADR39 Codex pasirinkimą pakeitė Claude prenumerata; ADR41 Sonnet ir ADR42 „cloud neturi CLI“ apibūdina senus bandymus, o ne dabartinę aplinką. Naujausi StockDesk eksperimentai naudojo Haiku 5.5/high, bet nėra šiuo metu vykdomo bandymo.
 

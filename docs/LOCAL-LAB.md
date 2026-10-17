@@ -4,6 +4,10 @@
 
 2026-10-17. Naujausias pasirinktas eksperimentų profilis — **oficialus Claude CLI 2.1.301, Haiku 5.5/high ir Claude prenumerata**, vienodai abiem pusėms. [StockDesk eiga ir rezultatai](experiments/STOCKDESK-CALIBRATION.md). Ankstesni [Sonnet bandymai](experiments/CLAUDE-CALIBRATION.md) išsaugoti atskirai. Codex auth ir OpenRouter coding lenktynes praleidžiame; Jev atranka turi atskirą bendrą 1 USD biudžetą.
 
+## Native Codex MCP — atskiras kelias
+
+Šios komandos yra Claude CLI Lab, ne Codex desktop prijungimas. Naujas [MCP planas](MCP-INTEGRATION.md) naudoja modelį/auth host programoje; jo būsimas [native A/B](NATIVE-CODEX-BENCHMARK.md) neturi reikalauti atidėto Codex CLI OAuth. Abiejų profilių kohortos, usage šaltiniai ir acceptance įrodymai atskiri. MCP serverio/host ryšys dar NOT_RUN.
+
 ## Pradinės sąlygos
 
 - Debian Linux x64 per WSL2, Node.js24/npm ir projektas Linux failų sistemoje, pavyzdžiui `~/projects/repositoryzero`.

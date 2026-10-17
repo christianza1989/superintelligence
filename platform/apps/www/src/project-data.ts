@@ -58,13 +58,31 @@ export const documentation = [
     "id": "mvp-roadmap",
     "title": "MVP roadmap",
     "source": "MVP-ROADMAP.md",
-    "copy": "A technical preview, a real three-workflow MVP and a standalone Library."
+    "copy": "MCP setup, one native pilot, three-workflow acceptance and an independent Library."
   },
   {
     "id": "full-roadmap",
     "title": "Full roadmap",
     "source": "ROADMAP.md",
     "copy": "One checkbox authority, preserved acceptance gates and later product stages."
+  },
+  {
+    "id": "mcp-integration",
+    "title": "MCP and native plugins — planned",
+    "source": "docs/MCP-INTEGRATION.md",
+    "copy": "Accepted host boundaries, one shared worker and a verified setup flow. Server implementation remains open."
+  },
+  {
+    "id": "native-codex-benchmark",
+    "title": "Native Codex comparison — not run",
+    "source": "docs/NATIVE-CODEX-BENCHMARK.md",
+    "copy": "Fresh projects, identical task prompts and independent results, with and without Zero."
+  },
+  {
+    "id": "integration-research",
+    "title": "MCP and plugin research — dated",
+    "source": "docs/research/MCP-AND-PLUGINS-2026-10-17.md",
+    "copy": "Official integration and installation paths checked on 2026-10-17."
   },
   {
     "id": "local-lab",
