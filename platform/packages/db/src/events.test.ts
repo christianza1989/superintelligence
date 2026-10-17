@@ -61,6 +61,12 @@ function event(seq: number) {
   };
 }
 
+function finalizerQueries(runId: string) {
+  return vi.fn(async (query: TemplateStringsArray) =>
+    query.join("").includes("clock_timestamp") ? [{ now: new Date() }] : [{ id: runId }],
+  );
+}
+
 describe("finalizeRun", () => {
   it("stamps the final steps block with wall-clock run duration", () => {
     const blocks = [
@@ -83,7 +89,7 @@ describe("finalizeRun", () => {
     const conflict = Object.assign(new Error("serialization conflict"), { code: "P2034" });
     const createEvent = vi.fn(async () => ({ threadId: "thread-1", seq: 0 }));
     const tx = {
-      $queryRaw: vi.fn(async () => []),
+      $queryRaw: finalizerQueries("run-1"),
       run: {
         findUnique: vi.fn(async () => ({ status: "running" })),
         findUniqueOrThrow: vi.fn(async () => ({ sourceMessage: null })),
@@ -132,7 +138,7 @@ describe("finalizeRun", () => {
 
   it("resumes a held messaging inbound as a messaging run", async () => {
     const tx = {
-      $queryRaw: vi.fn(async () => []),
+      $queryRaw: finalizerQueries("intro-run"),
       run: {
         findUnique: vi.fn(async () => ({ status: "running", startedAt: null })),
         findUniqueOrThrow: vi.fn(async () => ({ sourceMessage: null })),
@@ -198,7 +204,7 @@ describe("finalizeRun", () => {
 
   it("pins the continuation when every waited message chose the same model", async () => {
     const tx = {
-      $queryRaw: vi.fn(async () => []),
+      $queryRaw: finalizerQueries("routine-run"),
       run: {
         findUnique: vi.fn(async () => ({ status: "running", startedAt: null })),
         findUniqueOrThrow: vi.fn(async () => ({ sourceMessage: null })),
@@ -276,7 +282,7 @@ describe("finalizeRun", () => {
       text: "What is the status?",
     };
     const tx = {
-      $queryRaw: vi.fn(async () => []),
+      $queryRaw: finalizerQueries("routine-run"),
       run: {
         findUnique: vi.fn(async () => ({ status: "running", startedAt: null })),
         findUniqueOrThrow: vi.fn(async () => ({ sourceMessage: null })),
@@ -360,6 +366,41 @@ describe("finalizeRun", () => {
       data: { runId: "run-reply", claimedAt: null },
     });
   });
+  it.each(["absent run", "foreign row", "missing clock", "invalid clock"])(
+    "does not write terminal output with %s authority data",
+    async (cut) => {
+      const update = vi.fn();
+      const query = vi
+        .fn()
+        .mockResolvedValueOnce([{ id: "thread-1" }])
+        .mockResolvedValueOnce(
+          cut === "absent run" ? [] : [{ id: cut === "foreign row" ? "other" : "run-1" }],
+        )
+        .mockResolvedValueOnce(cut === "missing clock" ? [] : [{ now: new Date(Number.NaN) }]);
+      const tx = {
+        $queryRaw: query,
+        run: { findUnique: vi.fn(async () => ({ status: "running" })), updateMany: update },
+      };
+      const prisma = {
+        $transaction: vi.fn(async (operation: (value: typeof tx) => unknown) => operation(tx)),
+      } as unknown as PrismaClient;
+      await expect(
+        finalizeRun(prisma, {
+          spaceId: "space-1",
+          threadId: "thread-1",
+          botId: "bot-1",
+          runId: "run-1",
+          taskId: "task-1",
+          attemptId: "attempt-1",
+          leaseOwner: "worker-1",
+          leaseFence: 1,
+          outcome: "completed",
+          blocks: [],
+        }),
+      ).resolves.toBe(false);
+      expect(update).not.toHaveBeenCalled();
+    },
+  );
 });
 
 describe("followThreadEvents", () => {

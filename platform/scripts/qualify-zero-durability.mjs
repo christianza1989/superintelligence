@@ -11,7 +11,7 @@ const container = `zero-g1-proof-${suffix}`;
 const reportDirectory = path.join(platform, ".local", "durability-qualification", suffix);
 const fixturePassword = randomBytes(24).toString("hex");
 const reports = [];
-const matrix = [
+const baseMatrix = [
   {
     file: "packages/testkit/src/executor-lifecycle.test.ts",
     mechanism: "real PostgreSQL; scripted runtime/fake connector; injected durable boundary states",
@@ -79,8 +79,22 @@ const matrix = [
     ],
   },
 ];
-if (matrix.reduce((sum, group) => sum + group.titles.length, 0) !== 50)
+if (baseMatrix.reduce((sum, group) => sum + group.titles.length, 0) !== 50)
   throw new Error("Qualification matrix must name exactly 50 scenarios");
+const expiryLockMode = process.argv.length === 3 && process.argv[2] === "--expiry-lock";
+const matrix = expiryLockMode
+  ? [
+      {
+        file: "packages/testkit/src/zero-durability-expiry-lock.postgres.test.ts",
+        mechanism:
+          "real PostgreSQL run-row lock wait acknowledged before expiry; release only after DB clock expires lease",
+        titles: [
+          "rejects a terminal commit whose lease expires while waiting for the run row lock",
+        ],
+      },
+    ]
+  : baseMatrix;
+const denominator = expiryLockMode ? 1 : 50;
 
 let created = false;
 let postgresImageId;
@@ -148,8 +162,8 @@ async function run(
 }
 
 async function main() {
-  if (process.argv.length !== 2)
-    throw new Error("Usage: node platform/scripts/qualify-zero-durability.mjs");
+  if (process.argv.length !== 2 && !expiryLockMode)
+    throw new Error("Usage: node platform/scripts/qualify-zero-durability.mjs [--expiry-lock]");
   await mkdir(reportDirectory, { recursive: true, mode: 0o700 });
   // Fixed installed image, no pull, host network, model credentials, .env, or production DB.
   await run("docker", [
@@ -358,7 +372,7 @@ try {
     !fatal &&
     reports.length === matrix.length &&
     reports.every((group) => group.pass) &&
-    passed === 50;
+    passed === denominator;
   const sourceFiles = await Promise.all(
     [
       ...matrix.map((group) => group.file),
@@ -373,9 +387,9 @@ try {
     })),
   );
   const report = {
-    kind: "zero.g1.fault-qualification.v1",
+    kind: expiryLockMode ? "zero.g1.expiry-lock-control.v1" : "zero.g1.fault-qualification.v1",
     passed,
-    denominator: 50,
+    denominator,
     qualified,
     paidModelCalls: 0,
     runtime: {
@@ -387,14 +401,20 @@ try {
     sourceFiles,
     fatal: fatal ?? null,
     groups: reports,
-    limitations: [
-      "Selected deterministic development matrix, not a universal crash guarantee",
-      "Only two terminal-transaction cuts kill a real child; stored lease/effect states simulate other interruption cuts",
-      "Graphile shutdown is graceful; no scheduler-process or PostgreSQL power-loss kill in this matrix",
-      "Backup is quiesced synthetic pg_dump plus artifact copy into a fresh database; no live backup consistency or off-host restore claim",
-      "No disk-full, RAM/CPU exhaustion, clean-host footprint, native reconnect, or paid provider qualification in this report",
-      "Full G1/P0.12 remains open for the omitted scheduler crash/disk-full/resource matrix and separate base-byte/peak-temporary-disk criteria",
-    ],
+    limitations: expiryLockMode
+      ? [
+          "One additional lock-wait control; original 50-case qualification remains a separate evidence epoch",
+          "Terminal authority is checked after the row lock is acquired, not a guarantee that wall time cannot advance before commit",
+          "Full G1/P0.12 remains open for scheduler/DB death, disk-full/resource exhaustion, live backup consistency and footprint criteria",
+        ]
+      : [
+          "Selected deterministic development matrix, not a universal crash guarantee",
+          "Only two terminal-transaction cuts kill a real child; stored lease/effect states simulate other interruption cuts",
+          "Graphile shutdown is graceful; no scheduler-process or PostgreSQL power-loss kill in this matrix",
+          "Backup is quiesced synthetic pg_dump plus artifact copy into a fresh database; no live backup consistency or off-host restore claim",
+          "No disk-full, RAM/CPU exhaustion, clean-host footprint, native reconnect, or paid provider qualification in this report",
+          "Full G1/P0.12 remains open for the omitted scheduler crash/disk-full/resource matrix and separate base-byte/peak-temporary-disk criteria",
+        ],
   };
   await mkdir(reportDirectory, { recursive: true, mode: 0o700 });
   await writeFile(
@@ -403,7 +423,7 @@ try {
     { mode: 0o600 },
   );
   console.log(
-    `[G1] ${qualified ? "PASS" : "FAIL"}: ${passed}/50; report retained in .local/durability-qualification/${suffix}/qualification.json`,
+    `[G1] ${qualified ? "PASS" : "FAIL"}: ${passed}/${denominator}; report retained in .local/durability-qualification/${suffix}/qualification.json`,
   );
   if (fatal) console.error(fatal);
   if (!qualified) process.exitCode = 1;

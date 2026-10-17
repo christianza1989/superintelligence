@@ -1188,6 +1188,11 @@ async function finalizeRunOnce(
 ): Promise<{ threadId: string; seq: number; continuationRunId: string | null } | null> {
   return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     await tx.$queryRaw`SELECT id FROM threads WHERE id = ${input.threadId} FOR UPDATE`;
+    // Terminal authority linearizes after thread -> run locks are held. Sampling
+    // time before a blocked UPDATE would let an expired lease commit later.
+    const lockedRuns = await tx.$queryRaw<Array<{ id: string }>>`
+      SELECT id FROM runs WHERE id = ${input.runId} FOR UPDATE`;
+    if (lockedRuns.length !== 1 || lockedRuns[0]?.id !== input.runId) return null;
     let writableRun: { startedAt: Date | null } | undefined;
     try {
       writableRun = await assertRunCanWriteHistory(tx, input.runId);
@@ -1195,7 +1200,9 @@ async function finalizeRunOnce(
       if (error instanceof RunHistoryWriteError) return null;
       throw error;
     }
-    const now = new Date();
+    const clocks = await tx.$queryRaw<Array<{ now: Date }>>`SELECT clock_timestamp() AS now`;
+    const now = clocks.length === 1 ? clocks[0]?.now : undefined;
+    if (!(now instanceof Date) || !Number.isFinite(now.getTime())) return null;
     const terminal = await tx.run.updateMany({
       where: {
         id: input.runId,
