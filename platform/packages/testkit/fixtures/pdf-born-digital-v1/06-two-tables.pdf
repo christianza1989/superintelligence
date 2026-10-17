@@ -1,0 +1,69 @@
+%PDF-1.4
+% Synthetic corpus
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [4 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 1490 >>
+stream
+BT /F1 18 Tf 48 744 Td (Two reporting periods) Tj ET
+BT /F1 10 Tf 48 716 Td (Synthetic fixture 06-two-tables - page 1) Tj ET
+48 650 m 548 650 l S
+48 622 m 548 622 l S
+48 594 m 548 594 l S
+48 566 m 548 566 l S
+48.000 650 m 48.000 566 l S
+214.667 650 m 214.667 566 l S
+381.333 650 m 381.333 566 l S
+548.000 650 m 548.000 566 l S
+BT /F1 11 Tf 56 632 Td (Item) Tj ET
+BT /F1 11 Tf 222.66666666666666 632 Td (Quantity) Tj ET
+BT /F1 11 Tf 389.3333333333333 632 Td (Amount USD) Tj ET
+BT /F1 11 Tf 56 604 Td (January) Tj ET
+BT /F1 11 Tf 222.66666666666666 604 Td (10) Tj ET
+BT /F1 11 Tf 389.3333333333333 604 Td (100.00) Tj ET
+BT /F1 11 Tf 56 576 Td (February) Tj ET
+BT /F1 11 Tf 222.66666666666666 576 Td (20) Tj ET
+BT /F1 11 Tf 389.3333333333333 576 Td (200.00) Tj ET
+48 400 m 548 400 l S
+48 372 m 548 372 l S
+48 344 m 548 344 l S
+48 316 m 548 316 l S
+48.000 400 m 48.000 316 l S
+214.667 400 m 214.667 316 l S
+381.333 400 m 381.333 316 l S
+548.000 400 m 548.000 316 l S
+BT /F1 11 Tf 56 382 Td (Item) Tj ET
+BT /F1 11 Tf 222.66666666666666 382 Td (Quantity) Tj ET
+BT /F1 11 Tf 389.3333333333333 382 Td (Amount USD) Tj ET
+BT /F1 11 Tf 56 354 Td (March) Tj ET
+BT /F1 11 Tf 222.66666666666666 354 Td (30) Tj ET
+BT /F1 11 Tf 389.3333333333333 354 Td (300.00) Tj ET
+BT /F1 11 Tf 56 326 Td (April) Tj ET
+BT /F1 11 Tf 222.66666666666666 326 Td (40) Tj ET
+BT /F1 11 Tf 389.3333333333333 326 Td (400.00) Tj ET
+BT /F1 9 Tf 48 48 Td (RepositoryZero synthetic document - no real account or personal data) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000028 00000 n 
+0000000077 00000 n 
+0000000134 00000 n 
+0000000204 00000 n 
+0000000330 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1871
+%%EOF
