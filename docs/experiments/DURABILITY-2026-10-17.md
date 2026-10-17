@@ -20,6 +20,10 @@ Runner saugo tikslų source SHA, vietinio PG image ID, visus vardinius rezultatu
 
 Paleisti iš paruošto Linux checkout: `npm run qualify:durability`. Šis opt-in testas naudoja Docker ir sugeneruotą fake konfigūraciją, neskaito development .env. Source runner: `platform/scripts/qualify-zero-durability.mjs`.
 
+## Papildoma expiry / lock kontrolė
+
+Atskiras 51-as tikras PostgreSQL bandymas parodė dar vieną klaidą: galiojimo laiką paėmus prieš blokuojantį UPDATE, laukiantis vykdytojas galėjo finalizuoti jau pasibaigus lease. Testas per `pg_stat_activity` patvirtina tikrą Lock laukimą dar galiojant lease, o užraktą paleidžia tik DB laikrodžiui peržengus expiry. Pradinis RED išsaugotas. Pataisa pirmiausia užrakina thread ir run eilutes esama tvarka, tada ima `clock_timestamp()` ir tikrina galiojimą laikydama run užraktą iki commit. Nauja atskira kontrolė **1/1 PASS**, terminal writes 0; pirminė 50 atvejų epocha nepakeista. Papildomai **67/67** DB event unit testai ir db/testkit types PASS. Paleidimas: `node platform/scripts/qualify-zero-durability.mjs --expiry-lock`.
+
 ## Likusi G1 apimtis
 
 Dar atviri actual scheduler / DB crash ir fizinio disk-full / resource exhaustion pjūviai, nuoseklus live backup/restore bei ≤2 000 000 000 B bazės ir pikinio laikino disko matavimas. Vien 50 žalių testų šių vartų neuždaro. Tai viešai matomas kūrimo rinkinys, ne independent holdout ar visų gedimų garantija.

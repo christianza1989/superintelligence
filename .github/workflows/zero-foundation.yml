@@ -29,6 +29,8 @@ jobs:
           npm run db:generate
       - name: Qualify the named durability matrix in an owned disposable database
         run: npm run qualify:durability
+      - name: Reject a terminal commit blocked beyond its lease expiry
+        run: node platform/scripts/qualify-zero-durability.mjs --expiry-lock
       - name: Check database and testkit types
         run: node scripts/platform.mjs --filter @rakazo/db --filter @rakazo/testkit check
 
@@ -108,6 +110,15 @@ jobs:
           npm run test:csv:postgres -- --maxWorkers=1
           npm run test:csv:api -- --maxWorkers=1
           npm run test:csv:mcp
+      - name: Exercise the Library handoff without starting a model worker
+        env:
+          DATABASE_URL: postgresql://zero_fixture:fixture_only_password@127.0.0.1:5432/zero_library_test_ci
+          LIBRARY_HANDOFF_TEST_DATABASE_URL: postgresql://zero_fixture:fixture_only_password@127.0.0.1:5432/zero_library_test_ci
+          VERIFY_LIBRARY_HANDOFF_DATABASE: "1"
+          NODE_ENV: test
+        run: |
+          npm run db:migrate
+          npm run test:library:postgres -- --maxWorkers=1
       - name: Exercise the Jev worker with an offline provider and a separate fixture ledger
         env:
           DATABASE_URL: postgresql://zero_fixture:fixture_only_password@127.0.0.1:5432/zero_jev_test_ci
