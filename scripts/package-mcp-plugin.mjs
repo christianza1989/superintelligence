@@ -68,13 +68,13 @@ for (const [name, entry] of [
   const inputs = Object.keys(result.metafile.inputs);
   // These are transport clients, not a bundled application/worker/installer.
   const denied =
-    /(?:platform\/packages\/db\/|node_modules\/(?:koffi|pg|graphile-worker|@prisma\/client)\/|\/(?:file-handle-path|desktop-sandbox-win32-path|zero-project-policy|zero-csv-(?:worker|preparation|project-verifier)|zero-jev-worker)\.[tj]s$)/;
+    /(?:platform\/packages\/db\/|node_modules\/(?:koffi|pg|graphile-worker|@prisma\/client)\/|\/(?:file-handle-path|desktop-sandbox-win32-path|zero-project-policy|zero-component-jobs|zero-(?:pdf|browser)-(?:runtime|docker|service)|zero-csv-(?:worker|preparation|project-verifier)|zero-jev-worker)\.[tj]s$)/;
   if (inputs.some((input) => denied.test(input)))
     throw new Error("Forbidden application or native runtime in plugin bundle");
   if (
     name === "discovery" &&
     inputs.some((input) =>
-      /zero-(?:operator-file|application-transport|csv-application-client)/.test(
+      /zero-(?:operator-file|application-transport|(?:csv|component)-application-client)/.test(
         input,
       ),
     )

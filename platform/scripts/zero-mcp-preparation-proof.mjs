@@ -112,10 +112,11 @@ try {
   await connect();
   const status = await call("zero_status", { nonce: "process-before-restart" });
   assert.equal(status.backend, "available");
-  assert.equal(status.profile, verifyEnabled ? "csv-preparation-and-verification" : "csv-preparation-only");
+  assert.equal(status.profile, "scoped-component-jobs");
+  assert.deepEqual(status.components, { csv: "available", pdf: "unavailable", browser: "unavailable" });
   stage = "tool-inventory";
   const operationNames = (await client.listTools()).tools.map((tool) => tool.name).sort();
-  assert.deepEqual(operationNames, ["zero_artifact", "zero_cancel", "zero_freshness", "zero_inspect", "zero_job", "zero_prepare", "zero_search", "zero_status", "zero_verify"]);
+  assert.deepEqual(operationNames, ["zero_artifact", "zero_browser_artifact", "zero_browser_cancel", "zero_browser_extract", "zero_browser_job", "zero_cancel", "zero_freshness", "zero_inspect", "zero_job", "zero_pdf_artifact", "zero_pdf_cancel", "zero_pdf_extract", "zero_pdf_job", "zero_prepare", "zero_search", "zero_status", "zero_verify"]);
   assert.deepEqual([...status.operations].sort(), operationNames);
   stage = "submit";
   const input = { profile: "d3-dsv-3.0.1/strict-table-v1", csv: 'name,value\n"one,two",3\n', idempotencyKey: randomUUID(), deadline: new Date(Date.now() + 60_000).toISOString() };

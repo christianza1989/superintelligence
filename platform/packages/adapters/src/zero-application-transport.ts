@@ -1,4 +1,4 @@
-/** Shared bounded loopback transport for the CSV and Jev application clients. */
+/** Shared bounded loopback transport for the fixed application clients. */
 import { z } from "zod";
 
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
@@ -41,6 +41,9 @@ const errorCodes = [
   "routing_profile_unavailable",
   "routing_budget_unavailable",
   "routing_backend_unavailable",
+  "component_profile_unavailable",
+  "component_backend_unavailable",
+  "component_input_rejected",
   "invalid_job_bounds",
   "request_limit_exceeded",
   "authentication_required",
@@ -134,10 +137,10 @@ async function readJson(response: Response, signal: AbortSignal): Promise<unknow
 
 export function createZeroApplicationTransport(
   trustedBinding: ZeroApplicationBinding,
-  family: "csv" | "jev",
+  family: "csv" | "jev" | "pdf" | "browser",
   options: ZeroApplicationTransportOptions = {},
 ) {
-  if (family !== "csv" && family !== "jev") fail("invalid_binding");
+  if (!["csv", "jev", "pdf", "browser"].includes(family)) fail("invalid_binding");
   const parsed = bindingSchema.safeParse(trustedBinding);
   if (!parsed.success) fail("invalid_binding");
   const binding = parsed.data;

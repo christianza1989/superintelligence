@@ -1,6 +1,6 @@
 # Vietinis MCP papildinio paketas
 
-2026-10-17. Numatytasis profilis — trys discovery įrankiai ir vienas reuse skill. Tas pats paketas turi pasirenkamą Linux operator-bound CSV paruošimo ir patikros transportą per esamą Zero API/Graphile. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas.
+2026-10-17. Numatytasis profilis — trys discovery įrankiai ir vienas reuse skill. Source 0.5 paketas turi pasirenkamą Linux operator-bound CSV paruošimo / patikros bei PDF / statinio HTML extraction transportą per esamą Zero API/Graphile. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas. Tikro native 0.4 bandymo ribos išlaikomos atskirai nuo vėlesnės versijos source ir fixture kontrolės.
 
 ## Sukurti ir patikrinti
 
@@ -14,7 +14,7 @@ node scripts/test-mcp-plugin-portable.mjs /absolute/path/printed/by/build
 
 Build sukuria naują katalogą `.artifacts/plugins`, išsaugodamas ankstesnius ir nesėkmingus bandymus. Pakete yra mažas `server/index.mjs` bootstrap, atskiri `discovery.mjs` bei `execution.mjs`, katalogo snapshot, manifestai, skill, LICENSE/NOTICE ir bundled dependency licencijų inventorius. Node 24 ar naujesnis vis dar reikalingas; runtime install ar projekto node_modules nereikia. BUILD.json pateikia visų trijų serverio failų baitų SHA-256 ir profilių ribas; testas juos patikrina prieš vykdymą. Build atmeta DB, worker, verifier ir native koffi priklausomybes bei external runtime paketus.
 
-Testas paleidžia tikrą proceso transportą iš atskiro tuščio katalogo pagal portable ir compatibility MCP konfigūraciją. Tikrina initialize, tool sąrašą, nonce, versijas, search/inspect faktus ir švarų stderr. Linux teste papildomai naudojamas nukopijuotas paketas be .git ir tikras STDIO klientas su vietiniu HTTP fixture: opt-in, devyni tools, private binding reread/restart/revocation, neteisingo binding bei package/export katalogo atmetimas ir redacted klaidos. Tai transporto conformance; fixture nevykdo Graphile worker ir nėra native host plugin įdiegimo PASS.
+Testas paleidžia tikrą proceso transportą iš atskiro tuščio katalogo pagal portable ir compatibility MCP konfigūraciją. Tikrina initialize, tool sąrašą, nonce, versijas, search/inspect faktus ir švarų stderr. Linux teste papildomai naudojamas nukopijuotas paketas be .git ir tikras STDIO klientas su vietiniu HTTP fixture: opt-in, 17 tools, atskirų profilių statusai, private binding reread/restart/revocation, neteisingo binding bei package/export katalogo atmetimas ir redacted klaidos. Tai transporto conformance; fixture nevykdo Graphile worker ir nėra native host plugin įdiegimo PASS.
 
 ## Codex vietinis marketplace
 
@@ -44,7 +44,7 @@ ZERO_MCP_BINDING_FILE=/absolute/private/operator.json node /absolute/generated/p
 
 Tai vietinės operatoriaus reikšmės: paketas jų nesukuria, nenuspėja distro/Node/projekto root ir nerašo host global config. Privatus failas turi likti už bet kurio Git checkout ir paties paketo/export katalogo, absoliučiame canonical Linux kelyje, current UID, exact0600, vieno link ir be symlink. Paketo ribą įtvirtina compile-time flag; environment negali jos išjungti. Binding schema ir trusted backend/grant setup — [MCP-SETUP](MCP-SETUP.md). Host prenumeratos credentials neperduodami.
 
-Opt-in prijungia zero_prepare, zero_job, zero_artifact, zero_cancel, zero_verify ir zero_freshness prie esamo application client. Tikras zero_status nonce/profile/backend atsakymas tikrina dabartinį API ir leidimą; tools sąrašas nėra authorization ar patikros PASS. Neteisingas, expired ar pašalintas binding užblokuoja operaciją be privataus turinio klaidoje. Endpoint ir sesija perskaitomi kiekvienai operacijai; discovery nepakeičiamas į tariamai veikiančią execution būseną.
+Opt-in prijungia zero_prepare, zero_job, zero_artifact, zero_cancel, zero_verify ir zero_freshness bei keturias zero_pdf_* ir keturias zero_browser_* operacijas prie tų pačių application clients. Tikras zero_status nonce/profile/backend ir atskirų components atsakymas tikrina dabartinį API bei leidimą; tools sąrašas nėra authorization ar patikros PASS. Neteisingas, expired ar pašalintas binding užblokuoja operaciją be privataus turinio klaidoje. Endpoint ir sesija perskaitomi kiekvienai operacijai. [Konkrečių profilių ir failų ribos](MCP-SETUP.md).
 
 Nauja proceso sesija be binding grįžta prie discovery. Atnaujinant paketą tikrinti naują BUILD.json, host pasirinkto paketo/cache versiją ir naujos sesijos zero_status; package pakeitimas nėra įrodytas host update. Uninstall nėra backend sesijos ar grant revocation: juos atšaukti atskirai pagal operatoriaus politiką. Vietinis paketo failo ištrynimas nėra host cache uninstall. Native install/update/uninstall priėmimas dokumentuojamas tik po tikro host bandymo; šis source/bundle testas jo neuždaro.
 

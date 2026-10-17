@@ -34,7 +34,9 @@ export async function testExecutionPackage(
     calls++;
     assert.equal(request.headers.authorization, `Bearer ${expectedToken}`);
     assert.equal(request.headers["x-rakazo-space-id"], "fixture-space");
-    assert.ok(request.url.startsWith("/api/zero/csv/scopes/fixture-scope/"));
+    const route = /^\/api\/zero\/(csv|pdf|browser)\/scopes\/fixture-scope\//.exec(request.url);
+    assert.ok(route);
+    const family = route[1];
     response.setHeader("content-type", "application/json");
     if (!authorized) {
       response
@@ -43,6 +45,17 @@ export async function testExecutionPackage(
       return;
     }
     if (request.url.endsWith("/status")) {
+      if (family !== "csv") {
+        const pdf = family === "pdf";
+        response.end(JSON.stringify({
+          profile: pdf ? "pdfplumber-0.11.10-born-digital-lines-v1" : "zero-browser-static-v1",
+          backend: "available", paidModelCalls: 0,
+          execution: pdf ? "pdf-extraction" : "browser-static-extraction",
+          limits: { inputBytes: pdf ? 1048576 : 16384, runtimeMs: pdf ? 30000 : 20000,
+            artifactBytes: pdf ? 1064960 : 2097152, outstandingJobsPerScope: 4 },
+        }));
+        return;
+      }
       response.end(
         JSON.stringify({
           profile: "d3-dsv-3.0.1/strict-table-v1",
@@ -61,11 +74,12 @@ export async function testExecutionPackage(
           },
         }),
       );
-    } else if (request.url.endsWith("/prepare")) {
+    } else if (request.url.endsWith("/prepare") || (family !== "csv" && request.url.endsWith("/extract"))) {
       let body = "";
       for await (const chunk of request) body += chunk;
       const input = JSON.parse(body);
-      assert.equal(input.csv, "a\n1");
+      if (family === "csv") assert.equal(input.csv, "a\n1");
+      else assert.equal(input.fileId, "approved-fixture");
       response
         .writeHead(202)
         .end(JSON.stringify({ jobId, requestDigest: "a".repeat(64) }));
@@ -175,10 +189,18 @@ export async function testExecutionPackage(
         tools,
         [
           "zero_artifact",
+          "zero_browser_artifact",
+          "zero_browser_cancel",
+          "zero_browser_extract",
+          "zero_browser_job",
           "zero_cancel",
           "zero_freshness",
           "zero_inspect",
           "zero_job",
+          "zero_pdf_artifact",
+          "zero_pdf_cancel",
+          "zero_pdf_extract",
+          "zero_pdf_job",
           "zero_prepare",
           "zero_search",
           "zero_status",
@@ -186,7 +208,16 @@ export async function testExecutionPackage(
         ].sort(),
       );
       const available = await status(run.client, "available");
-      assert.equal(available.profile, "csv-preparation-and-verification");
+      assert.equal(available.profile, "scoped-component-jobs");
+      assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available" });
+      for (const family of ["pdf", "browser"]) {
+        const extracted = await run.client.callTool({ name: `zero_${family}_extract`, arguments: {
+          fileId: "approved-fixture", idempotencyKey: `fixture-${family}`,
+          deadline: new Date(Date.now() + 30000).toISOString(),
+        } });
+        assert.deepEqual(extracted.structuredContent, { jobId, requestDigest: "a".repeat(64) });
+        cleanResult(extracted);
+      }
       const receipt = await run.client.callTool({
         name: "zero_prepare",
         arguments: {
