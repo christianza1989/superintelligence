@@ -5,11 +5,7 @@
   "package": {
     "name": "docling-slim",
     "version": "2.140.0",
-    "extras": [
-      "convert-core",
-      "format-pdf",
-      "models-local"
-    ],
+    "extras": ["convert-core", "format-pdf", "models-local"],
     "sha256": "91ab66bc79c471aa4c23d956a6c4887344d84673a496dcc867ec6a3ada8e41d5",
     "license": "MIT",
     "source": "https://github.com/docling-project/docling/tree/0e54294231b69bc2cf7a39873235495788f76b57",
