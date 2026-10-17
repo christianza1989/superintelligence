@@ -1,6 +1,7 @@
 import { Trans } from "@lingui/react/macro";
 import { Link, useNavigate } from "react-router-dom";
 import { WindowChrome } from "./WindowChrome";
+import { libraryReturnPath } from "../lib/repository-library-navigation";
 
 export function WelcomePage() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export function WelcomePage() {
           </Trans>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <Link to="/discover" className="rounded-full bg-primary px-8 py-4 text-primary-foreground"><Trans>Explore existing tools</Trans></Link>
+          <Link to={libraryReturnPath()} className="rounded-full bg-primary px-8 py-4 text-primary-foreground"><Trans>Library</Trans></Link>
           <button
             type="button"
             onClick={() => navigate("/sign-up")}

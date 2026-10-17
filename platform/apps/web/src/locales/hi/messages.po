@@ -265,7 +265,7 @@ msgstr ""
 #: src/pages/BillingSettingsPanel.tsx
 #: src/pages/RoutineEditor.tsx
 msgid "Active"
-msgstr ""
+msgstr "सक्रिय"
 
 #: src/pages/ModelSettingsOverlay.tsx
 msgid "Active model"
@@ -2579,7 +2579,7 @@ msgstr "पुराने संदेश लोड करें"
 
 #: src/pages/Artifacts.tsx
 msgid "Load more"
-msgstr ""
+msgstr "और लोड करें"
 
 #: src/pages/RoutineRunHistory.tsx
 msgid "Load older runs"
@@ -4547,7 +4547,7 @@ msgstr "असाइन नहीं किया गया"
 
 #: src/components/SoftwareUpdateSection.tsx
 msgid "Unavailable"
-msgstr ""
+msgstr "अनुपलब्ध"
 
 #: src/pages/PluginsOverlay.tsx
 msgid "Uninstall"
@@ -4844,3 +4844,215 @@ msgstr "आपका नाम"
 #: src/pages/Welcome.tsx
 msgid "Your team of always-on agents<0/>that you can give real work to."
 msgstr "हमेशा चालू रहने वाले एजेंटों की आपकी टीम<0/>जिन्हें आप असली काम सौंप सकते हैं।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "A tested module profile is required before installation or execution."
+msgstr "इंस्टॉल या चलाने से पहले परीक्षण किया गया मॉड्यूल प्रोफ़ाइल आवश्यक है।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All"
+msgstr "सभी"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All categories"
+msgstr "सभी श्रेणियाँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Approved"
+msgstr "स्वीकृत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Archived only"
+msgstr "केवल संग्रहीत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Available"
+msgstr "उपलब्ध"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Back to results"
+msgstr "परिणामों पर वापस जाएँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Browser storage is unavailable. Saved changes last until this page closes."
+msgstr "ब्राउज़र संग्रहण उपलब्ध नहीं है। सहेजे गए बदलाव इस पृष्ठ के बंद होने तक रहेंगे।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Capability not recorded"
+msgstr "क्षमता दर्ज नहीं है"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Category"
+msgstr "श्रेणी"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Clear filters"
+msgstr "फ़िल्टर हटाएँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Dated stars; missing counts are unknown."
+msgstr "सितारों की संख्या दिनांकित है; अनुपलब्ध संख्याएँ अज्ञात हैं।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Explore source candidates."
+msgstr "स्रोत उम्मीदवारों को देखें।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Inspect source, license and evaluation facts."
+msgstr "स्रोत, लाइसेंस और मूल्यांकन के तथ्य देखें।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Language metadata is not recorded."
+msgstr "भाषा का मेटाडेटा दर्ज नहीं है।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library"
+msgstr "लाइब्रेरी"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library navigation"
+msgstr "लाइब्रेरी नेविगेशन"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library settings"
+msgstr "लाइब्रेरी सेटिंग"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License review"
+msgstr "लाइसेंस समीक्षा"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License source"
+msgstr "लाइसेंस स्रोत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Metadata date"
+msgstr "मेटाडेटा दिनांक"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "More filters"
+msgstr "अधिक फ़िल्टर"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Most stars"
+msgstr "सबसे अधिक सितारे"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No"
+msgstr "नहीं"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No matching candidate. Try another capability or category."
+msgstr "कोई मेल खाता उम्मीदवार नहीं है। दूसरी क्षमता या श्रेणी आज़माएँ।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No saved repositories yet."
+msgstr "अभी कोई रिपॉज़िटरी सहेजी नहीं गई है।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not evaluated in runtime"
+msgstr "रनटाइम में मूल्यांकित नहीं"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Observed"
+msgstr "अवलोकन दिनांक"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open source"
+msgstr "स्रोत खोलें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open workspace"
+msgstr "कार्यक्षेत्र खोलें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pending evaluation"
+msgstr "मूल्यांकन लंबित"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Popularity source"
+msgstr "लोकप्रियता का स्रोत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recorded"
+msgstr "दर्ज"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Relevance"
+msgstr "प्रासंगिकता"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Remove from Saved"
+msgstr "सहेजे गए से हटाएँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository details"
+msgstr "रिपॉज़िटरी विवरण"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime"
+msgstr "रनटाइम"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime ready"
+msgstr "रनटाइम के लिए तैयार"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime tested"
+msgstr "रनटाइम में परीक्षण किया गया"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Save repositories to return to them here."
+msgstr "रिपॉज़िटरी सहेजें ताकि यहाँ उन पर वापस आ सकें।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories"
+msgstr "रिपॉज़िटरी खोजें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories or capabilities"
+msgstr "रिपॉज़िटरी या क्षमताएँ खोजें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Select a repository"
+msgstr "रिपॉज़िटरी चुनें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Sort"
+msgstr "क्रमबद्ध करें"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source"
+msgstr "स्रोत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source only"
+msgstr "केवल स्रोत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source research"
+msgstr "स्रोत शोध"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source revision"
+msgstr "स्रोत संशोधन"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source unavailable"
+msgstr "स्रोत अनुपलब्ध"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Stars"
+msgstr "सितारे"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Unknown"
+msgstr "अज्ञात"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Yes"
+msgstr "हाँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "repositories"
+msgstr "रिपॉज़िटरी"

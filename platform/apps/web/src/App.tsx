@@ -12,7 +12,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { Navigate, Outlet, Route, Routes, useSearchParams } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
 import { LoadingState } from "./components/ai/primitives";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { SubscriptionGate } from "./components/SubscriptionGate";
@@ -71,6 +71,7 @@ const linkFavicons: LinkFavicons = {
 };
 
 export function App() {
+  const location = useLocation();
   const loadRemoteImages = useSyncExternalStore(
     subscribeRemoteImages,
     getRemoteImagesEnabled,
@@ -80,11 +81,11 @@ export function App() {
     <RemoteImagesContext.Provider value={loadRemoteImages}>
       <LinkFaviconsContext.Provider value={linkFavicons}>
         <ErrorBoundary fallback={<AppFailed />}>
-          {window.location.pathname === SSO_CALLBACK_PATH ? (
+          {location.pathname === SSO_CALLBACK_PATH ? (
             <SsoCallbackPage />
-          ) : window.location.pathname === LOCAL_SETTINGS_PAGE ? (
+          ) : location.pathname === LOCAL_SETTINGS_PAGE ? (
             <LocalSettingsPage />
-          ) : window.location.pathname === "/discover" ? (
+          ) : location.pathname === "/discover" ? (
             <Suspense fallback={<LoadingState />}>
               <RepositoryDirectoryPage />
             </Suspense>

@@ -2579,7 +2579,7 @@ msgstr "이전 메시지 불러오기"
 
 #: src/pages/Artifacts.tsx
 msgid "Load more"
-msgstr ""
+msgstr "더 보기"
 
 #: src/pages/RoutineRunHistory.tsx
 msgid "Load older runs"
@@ -4844,3 +4844,215 @@ msgstr "이름"
 #: src/pages/Welcome.tsx
 msgid "Your team of always-on agents<0/>that you can give real work to."
 msgstr "언제든 실제 작업을 맡길 수 있는<0/>나만의 Agent 팀"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "A tested module profile is required before installation or execution."
+msgstr "설치하거나 실행하기 전에 테스트된 모듈 프로필이 필요합니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All"
+msgstr "전체"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All categories"
+msgstr "모든 카테고리"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Approved"
+msgstr "승인됨"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Archived only"
+msgstr "보관된 항목만"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Available"
+msgstr "사용 가능"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Back to results"
+msgstr "결과로 돌아가기"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Browser storage is unavailable. Saved changes last until this page closes."
+msgstr "브라우저 저장소를 사용할 수 없습니다. 저장한 변경 사항은 이 페이지를 닫을 때까지만 유지됩니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Capability not recorded"
+msgstr "기능 정보 없음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Category"
+msgstr "카테고리"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Clear filters"
+msgstr "필터 지우기"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Dated stars; missing counts are unknown."
+msgstr "별 개수는 기록된 날짜 기준이며, 누락된 개수는 알 수 없습니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Explore source candidates."
+msgstr "소스 후보를 살펴보세요."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Inspect source, license and evaluation facts."
+msgstr "소스, 라이선스 및 평가 정보를 확인하세요."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Language metadata is not recorded."
+msgstr "언어 메타데이터가 기록되지 않았습니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library"
+msgstr "라이브러리"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library navigation"
+msgstr "라이브러리 탐색"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library settings"
+msgstr "라이브러리 설정"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License review"
+msgstr "라이선스 검토"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License source"
+msgstr "라이선스 출처"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Metadata date"
+msgstr "메타데이터 날짜"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "More filters"
+msgstr "추가 필터"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Most stars"
+msgstr "별 많은 순"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No"
+msgstr "아니요"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No matching candidate. Try another capability or category."
+msgstr "일치하는 후보가 없습니다. 다른 기능이나 카테고리를 시도하세요."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No saved repositories yet."
+msgstr "아직 저장된 저장소가 없습니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not evaluated in runtime"
+msgstr "런타임에서 평가되지 않음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Observed"
+msgstr "기록 날짜"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open source"
+msgstr "소스 열기"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open workspace"
+msgstr "작업 공간 열기"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pending evaluation"
+msgstr "평가 대기 중"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Popularity source"
+msgstr "인기도 출처"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recorded"
+msgstr "기록됨"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Relevance"
+msgstr "관련도"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Remove from Saved"
+msgstr "저장 목록에서 제거"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository details"
+msgstr "저장소 상세 정보"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime"
+msgstr "런타임"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime ready"
+msgstr "런타임 준비 상태"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime tested"
+msgstr "런타임 테스트 완료"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Save repositories to return to them here."
+msgstr "저장소를 저장하면 여기에서 다시 찾을 수 있습니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories"
+msgstr "저장소 검색"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories or capabilities"
+msgstr "저장소 또는 기능 검색"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Select a repository"
+msgstr "저장소 선택"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Sort"
+msgstr "정렬"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source"
+msgstr "소스"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source only"
+msgstr "소스만 제공"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source research"
+msgstr "소스 조사"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source revision"
+msgstr "소스 리비전"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source unavailable"
+msgstr "소스 사용 불가"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Stars"
+msgstr "별"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Yes"
+msgstr "예"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "repositories"
+msgstr "저장소"

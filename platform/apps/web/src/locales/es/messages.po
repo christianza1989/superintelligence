@@ -2579,7 +2579,7 @@ msgstr "Cargar mensajes anteriores"
 
 #: src/pages/Artifacts.tsx
 msgid "Load more"
-msgstr ""
+msgstr "Cargar más"
 
 #: src/pages/RoutineRunHistory.tsx
 msgid "Load older runs"
@@ -4844,3 +4844,215 @@ msgstr "Tu nombre"
 #: src/pages/Welcome.tsx
 msgid "Your team of always-on agents<0/>that you can give real work to."
 msgstr "Tu equipo de agentes siempre activos<0/>a los que puedes dar trabajo real."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "A tested module profile is required before installation or execution."
+msgstr "Se requiere un perfil de módulo probado antes de instalar o ejecutar."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All"
+msgstr "Todos"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All categories"
+msgstr "Todas las categorías"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Approved"
+msgstr "Aprobado"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Archived only"
+msgstr "Solo archivados"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Available"
+msgstr "Disponible"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Back to results"
+msgstr "Volver a resultados"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Browser storage is unavailable. Saved changes last until this page closes."
+msgstr "El almacenamiento del navegador no está disponible. Los cambios guardados duran hasta que se cierre esta página."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Capability not recorded"
+msgstr "Capacidad no registrada"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Category"
+msgstr "Categoría"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Clear filters"
+msgstr "Borrar filtros"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Dated stars; missing counts are unknown."
+msgstr "Estrellas con fecha; los recuentos ausentes son desconocidos."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Explore source candidates."
+msgstr "Explora proyectos candidatos."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Inspect source, license and evaluation facts."
+msgstr "Consulta los datos de fuente, licencia y evaluación."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Language metadata is not recorded."
+msgstr "No se han registrado metadatos de lenguaje."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library"
+msgstr "Biblioteca"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library navigation"
+msgstr "Navegación de la biblioteca"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library settings"
+msgstr "Ajustes de biblioteca"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License review"
+msgstr "Revisión de licencia"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License source"
+msgstr "Fuente de licencia"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Metadata date"
+msgstr "Fecha de metadatos"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "More filters"
+msgstr "Más filtros"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Most stars"
+msgstr "Más estrellas"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No"
+msgstr "No"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No matching candidate. Try another capability or category."
+msgstr "No hay candidatos coincidentes. Prueba otra capacidad o categoría."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No saved repositories yet."
+msgstr "Aún no hay repositorios guardados."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not evaluated in runtime"
+msgstr "No evaluado en ejecución"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Observed"
+msgstr "Observado"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open source"
+msgstr "Abrir fuente"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open workspace"
+msgstr "Abrir espacio de trabajo"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pending evaluation"
+msgstr "Evaluación pendiente"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Popularity source"
+msgstr "Fuente de popularidad"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recorded"
+msgstr "Registrado"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Relevance"
+msgstr "Relevancia"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Remove from Saved"
+msgstr "Quitar de guardados"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository details"
+msgstr "Detalles del repositorio"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime"
+msgstr "Ejecución"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime ready"
+msgstr "Listo para ejecución"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime tested"
+msgstr "Probado en ejecución"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Save repositories to return to them here."
+msgstr "Guarda repositorios para volver a ellos aquí."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories"
+msgstr "Buscar repositorios"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories or capabilities"
+msgstr "Buscar repositorios o capacidades"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Select a repository"
+msgstr "Selecciona un repositorio"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Sort"
+msgstr "Ordenar"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source"
+msgstr "Fuente"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source only"
+msgstr "Solo fuente"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source research"
+msgstr "Investigación de fuentes"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source revision"
+msgstr "Revisión de fuente"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source unavailable"
+msgstr "Fuente no disponible"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Stars"
+msgstr "Estrellas"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Yes"
+msgstr "Sí"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "repositories"
+msgstr "repositorios"

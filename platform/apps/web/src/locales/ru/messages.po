@@ -2579,7 +2579,7 @@ msgstr "Загрузить более ранние сообщения"
 
 #: src/pages/Artifacts.tsx
 msgid "Load more"
-msgstr ""
+msgstr "Загрузить ещё"
 
 #: src/pages/RoutineRunHistory.tsx
 msgid "Load older runs"
@@ -4844,3 +4844,215 @@ msgstr "Ваше имя"
 #: src/pages/Welcome.tsx
 msgid "Your team of always-on agents<0/>that you can give real work to."
 msgstr "Ваша команда постоянно работающих агентов<0/>, которым вы можете дать настоящую работу."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "A tested module profile is required before installation or execution."
+msgstr "Перед установкой или выполнением требуется проверенный профиль модуля."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All"
+msgstr "Все"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All categories"
+msgstr "Все категории"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Approved"
+msgstr "Одобрено"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Archived only"
+msgstr "Только архивные"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Available"
+msgstr "Доступен"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Back to results"
+msgstr "К результатам"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Browser storage is unavailable. Saved changes last until this page closes."
+msgstr "Хранилище браузера недоступно. Сохранённые изменения сохранятся до закрытия страницы."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Capability not recorded"
+msgstr "Возможности не указаны"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Category"
+msgstr "Категория"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Clear filters"
+msgstr "Сбросить фильтры"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Dated stars; missing counts are unknown."
+msgstr "Звёзды на указанную дату; отсутствующие значения неизвестны."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Explore source candidates."
+msgstr "Просматривайте исходные проекты-кандидаты."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Inspect source, license and evaluation facts."
+msgstr "Изучите данные об исходном коде, лицензии и оценке."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Language metadata is not recorded."
+msgstr "Метаданные о языке не указаны."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library"
+msgstr "Библиотека"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library navigation"
+msgstr "Навигация по библиотеке"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library settings"
+msgstr "Настройки библиотеки"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License review"
+msgstr "Проверка лицензии"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License source"
+msgstr "Источник лицензии"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Metadata date"
+msgstr "Дата метаданных"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "More filters"
+msgstr "Другие фильтры"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Most stars"
+msgstr "Больше всего звёзд"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No"
+msgstr "Нет"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No matching candidate. Try another capability or category."
+msgstr "Подходящих кандидатов нет. Попробуйте другую возможность или категорию."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No saved repositories yet."
+msgstr "Сохранённых репозиториев пока нет."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not evaluated in runtime"
+msgstr "Не проверено при выполнении"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Observed"
+msgstr "Зафиксировано"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open source"
+msgstr "Открыть исходный код"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open workspace"
+msgstr "Открыть рабочую область"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pending evaluation"
+msgstr "Ожидает оценки"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Popularity source"
+msgstr "Источник популярности"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recorded"
+msgstr "Указан"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Relevance"
+msgstr "Релевантность"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Remove from Saved"
+msgstr "Удалить из сохранённого"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository details"
+msgstr "Сведения о репозитории"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime"
+msgstr "Выполнение"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime ready"
+msgstr "Готовность к выполнению"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime tested"
+msgstr "Проверено при выполнении"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Save repositories to return to them here."
+msgstr "Сохраните репозитории, чтобы вернуться к ним здесь."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories"
+msgstr "Поиск репозиториев"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories or capabilities"
+msgstr "Поиск репозиториев или возможностей"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Select a repository"
+msgstr "Выберите репозиторий"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Sort"
+msgstr "Сортировка"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source"
+msgstr "Исходный код"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source only"
+msgstr "Только исходный код"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source research"
+msgstr "Исследование исходных проектов"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source revision"
+msgstr "Ревизия исходного кода"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source unavailable"
+msgstr "Исходный код недоступен"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Stars"
+msgstr "Звёзды"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Yes"
+msgstr "Да"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "repositories"
+msgstr "репозиториев"

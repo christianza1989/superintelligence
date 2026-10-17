@@ -88,6 +88,7 @@ import {
   ArrowDown,
   ArrowUp,
   Bell,
+  BookOpen,
   Box,
   ChevronDown,
   CircleAlert,
@@ -134,7 +135,8 @@ import {
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { libraryReturnPath } from "../lib/repository-library-navigation";
 import { ArtifactFileCard } from "../components/ArtifactFileCard";
 import { AskCard } from "../components/AskCard";
 import { ActiveBotGlyph, CollaborationMarker } from "../components/ai/CollaborationMarker";
@@ -2931,6 +2933,15 @@ export function ShellPage() {
             </Popover>
           </div>
         </div>
+        <Button
+          variant="ghost"
+          className="mx-2.5 mb-2 justify-start"
+          render={<Link to={libraryReturnPath()} />}
+          onClick={() => setMobileSidebarOpen(false)}
+        >
+          <BookOpen size={17} strokeWidth={1.8} aria-hidden="true" />
+          <Trans>Library</Trans>
+        </Button>
         <InputGroup
           data-testid="sidebar-search"
           className="mx-2.5 mb-3 w-auto rounded-xl bg-card dark:bg-input border border-border text-muted-foreground focus-within:border-ring"

@@ -108,6 +108,16 @@ function concepts(text: string): Set<string> {
 export function searchRepositories(
   options: SearchOptions = {},
 ): RepositoryCandidate[] {
+  const limit = Number.isFinite(options.limit)
+    ? Math.max(1, Math.min(100, Math.trunc(options.limit!)))
+    : 30;
+  return listRepositories(options).slice(0, limit);
+}
+
+/** Full bundled matching set for human Library counts and pagination. */
+export function listRepositories(
+  options: Omit<SearchOptions, "limit"> = {},
+): RepositoryCandidate[] {
   const query = (options.query ?? "").trim().slice(0, 256);
   const identity = normalizeText(query).replace(/\s*\/\s*/gu, "/");
   const isIdentity = /^[a-z0-9_.-]+\/[a-z0-9_.-]+$/u.test(identity);
@@ -117,9 +127,6 @@ export function searchRepositories(
   ];
   // Empty input retains catalog browsing; a nonempty but content-free request is no-fit.
   if (query && terms.length === 0) return [];
-  const limit = Number.isFinite(options.limit)
-    ? Math.max(1, Math.min(100, Math.trunc(options.limit!)))
-    : 30;
   return snapshot.records
     .filter((entry) => !options.category || entry.category === options.category)
     .filter((entry) => !options.sourceOnly || entry.sourceAvailable)
@@ -161,7 +168,6 @@ export function searchRepositories(
         b.relevance - a.relevance ||
         a.entry.repository.localeCompare(b.entry.repository),
     )
-    .slice(0, limit)
     .map(({ entry }) => entry);
 }
 

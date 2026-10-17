@@ -2579,7 +2579,7 @@ msgstr "加载更早的消息"
 
 #: src/pages/Artifacts.tsx
 msgid "Load more"
-msgstr ""
+msgstr "加载更多"
 
 #: src/pages/RoutineRunHistory.tsx
 msgid "Load older runs"
@@ -4844,3 +4844,215 @@ msgstr "你的名字"
 #: src/pages/Welcome.tsx
 msgid "Your team of always-on agents<0/>that you can give real work to."
 msgstr "你的一支随时在线的 Agent 团队<0/>可以交给它们真正的工作。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "A tested module profile is required before installation or execution."
+msgstr "安装或运行前需要经过测试的模块配置。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All"
+msgstr "全部"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All categories"
+msgstr "所有类别"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Approved"
+msgstr "已批准"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Archived only"
+msgstr "仅已归档"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Available"
+msgstr "可用"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Back to results"
+msgstr "返回结果"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Browser storage is unavailable. Saved changes last until this page closes."
+msgstr "浏览器存储不可用。已保存的更改仅保留到此页面关闭。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Capability not recorded"
+msgstr "未记录功能"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Category"
+msgstr "类别"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Clear filters"
+msgstr "清除筛选"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Dated stars; missing counts are unknown."
+msgstr "星标数附有记录日期；缺失的数量为未知。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Explore source candidates."
+msgstr "浏览源代码候选项目。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Inspect source, license and evaluation facts."
+msgstr "查看源代码、许可证和评估事实。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Language metadata is not recorded."
+msgstr "未记录编程语言元数据。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library"
+msgstr "资源库"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library navigation"
+msgstr "资源库导航"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Library settings"
+msgstr "资源库设置"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License review"
+msgstr "许可证审核"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "License source"
+msgstr "许可证来源"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Metadata date"
+msgstr "元数据日期"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "More filters"
+msgstr "更多筛选"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Most stars"
+msgstr "星标最多"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No"
+msgstr "否"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No matching candidate. Try another capability or category."
+msgstr "没有匹配的候选项目。请尝试其他功能或类别。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "No saved repositories yet."
+msgstr "尚未保存任何仓库。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not evaluated in runtime"
+msgstr "尚未进行运行时评估"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Observed"
+msgstr "记录于"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open source"
+msgstr "打开源代码"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Open workspace"
+msgstr "打开工作区"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pending evaluation"
+msgstr "待评估"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Popularity source"
+msgstr "人气数据来源"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recorded"
+msgstr "已记录"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Relevance"
+msgstr "相关度"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Remove from Saved"
+msgstr "从已保存中移除"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository details"
+msgstr "仓库详情"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime"
+msgstr "运行时"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime ready"
+msgstr "运行就绪"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Runtime tested"
+msgstr "已进行运行时测试"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Save repositories to return to them here."
+msgstr "保存仓库，以便在此再次查看。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories"
+msgstr "搜索仓库"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Search repositories or capabilities"
+msgstr "搜索仓库或功能"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Select a repository"
+msgstr "选择一个仓库"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Sort"
+msgstr "排序"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source"
+msgstr "源代码"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source only"
+msgstr "仅源代码"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source research"
+msgstr "源代码调研"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source revision"
+msgstr "源代码版本"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Source unavailable"
+msgstr "源代码不可用"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Stars"
+msgstr "星标"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Unknown"
+msgstr "未知"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Yes"
+msgstr "是"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "repositories"
+msgstr "个仓库"
