@@ -7,6 +7,7 @@ import {
   repositoryWords,
 } from "./zero-need-normalization.js";
 import type { RepositoryRequirements } from "./zero-need-normalization.js";
+import { searchPreparedProfiles } from "./zero-prepared-profiles.js";
 export type { RepositoryRequirements } from "./zero-need-normalization.js";
 
 export type RepositoryCandidate = (typeof snapshot.records)[number];
@@ -28,6 +29,15 @@ export function searchRepositories(
     ? Math.max(1, Math.min(100, Math.trunc(options.limit!)))
     : 30;
   return listRepositories(options).slice(0, limit);
+}
+
+/** A05 prepared-profile discovery precedes independent frozen source facts.
+ * Neither result collection authorizes installation, execution or a project. */
+export function retrieveRepositoryNeed(options: SearchOptions = {}) {
+  return {
+    preparedProfiles: searchPreparedProfiles(options),
+    sourceCandidates: searchRepositories(options),
+  };
 }
 
 /** Full bundled matching set for human Library counts and pagination. */
@@ -127,3 +137,15 @@ export {
   createRepositoryReusePlan,
   InvalidRepositoryReusePlan,
 } from "./zero-reuse-plan.js";
+
+export {
+  preparedProfiles,
+  searchPreparedProfiles,
+  ZERO_CSV_PROFILE,
+  ZERO_CSV_LIMITS,
+  ZERO_CSV_SOURCE_PINS,
+} from "./zero-prepared-profiles.js";
+export type {
+  PreparedProfile,
+  PreparedProfileSearchOptions,
+} from "./zero-prepared-profiles.js";

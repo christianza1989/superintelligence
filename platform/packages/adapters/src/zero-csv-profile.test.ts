@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { preparedProfiles, ZERO_CSV_SOURCE_PINS } from "@rakazo/core/zero-prepared-profiles";
 import {
   executeZeroCsv,
   prepareZeroCsvComponent,
@@ -74,5 +75,13 @@ describe("bounded CSV preparation profile", () => {
       "LICENSE",
       "package.json",
     ]);
+    const profile = preparedProfiles[0]!;
+    expect(component.profile).toBe(profile.profileId);
+    expect(component.version).toBe(profile.packageVersion);
+    expect(component.license).toBe(profile.licenseSource);
+    expect(component.entrypoint).toBe(profile.entrypoint);
+    expect(component.files.slice(0, 3).map(({ path, sha256 }) => [path, sha256])).toEqual(
+      Object.entries(ZERO_CSV_SOURCE_PINS),
+    );
   });
 });

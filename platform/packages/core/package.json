@@ -44,6 +44,11 @@
       "development": "./src/node/screen-capability.ts",
       "default": "./src/node/screen-capability.ts"
     },
+    "./zero-prepared-profiles": {
+      "types": "./src/zero-prepared-profiles.ts",
+      "development": "./src/zero-prepared-profiles.ts",
+      "default": "./src/zero-prepared-profiles.ts"
+    },
     "./repositoryzero": {
       "types": "./src/zero-catalog.ts",
       "default": "./src/zero-catalog.ts"

@@ -3,20 +3,16 @@ import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { csvParseRows } from "d3-dsv";
+import {
+  ZERO_CSV_PROFILE,
+  ZERO_CSV_LIMITS,
+  ZERO_CSV_SOURCE_PINS,
+} from "@rakazo/core/zero-prepared-profiles";
+export { ZERO_CSV_PROFILE, ZERO_CSV_LIMITS } from "@rakazo/core/zero-prepared-profiles";
 
 // Application runtime layout is fixed by its own packager, separate from plugins.
 declare const ZERO_RUNTIME_BUNDLED: boolean;
 
-export const ZERO_CSV_PROFILE = "d3-dsv-3.0.1/strict-table-v1";
-export const ZERO_CSV_LIMITS = Object.freeze({
-  inputBytes: 16_384,
-  rows: 512,
-  columns: 64,
-  cellChars: 4096,
-  artifactBytes: 98_304,
-  runtimeMs: 5000,
-  outstandingJobsPerScope: 4,
-});
 export const zeroCsvHash = (value: string | Uint8Array) =>
   createHash("sha256").update(value).digest("hex");
 
@@ -98,11 +94,7 @@ export function verifyZeroCsvRows(reference: string[][], actual: unknown) {
 export async function prepareZeroCsvComponent() {
   const entry = createRequire(import.meta.url).resolve("d3-dsv");
   const root = path.dirname(path.dirname(entry));
-  const pins = {
-    "src/csv.js": "b5dcb2a30eb68c069b7e058771a445add9bd9ab006ab74fa7fa939c1ed7c3fc2",
-    "src/dsv.js": "955def3fd0dfcb744c7ad3d4f7f071f368aa2021e68ac44eeb73952e25625947",
-    LICENSE: "7842a82012622e5a37bfe4f6c1b67cd3bae6350716b5bf87f36cea0bdc1319dc",
-  };
+  const pins = ZERO_CSV_SOURCE_PINS;
   const info = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
   if (info.name !== "d3-dsv" || info.version !== "3.0.1" || info.license !== "ISC")
     throw new Error("component_pin_mismatch");
