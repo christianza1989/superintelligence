@@ -1,5 +1,5 @@
 import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
-import type { ZeroCsvAuthorize, ZeroCsvPrincipal } from "@rakazo/adapters";
+import type { ZeroCsvAuthorize, ZeroCsvPrincipal, ZeroCsvResolveVerifier } from "@rakazo/adapters";
 import {
   createZeroCsvPreparationService,
   ZERO_CSV_LIMITS,
@@ -15,6 +15,7 @@ import { readBoundedBody } from "./http-body.js";
 export interface ZeroCsvScopePolicy {
   resolve(actor: Actor, scopeId: string): Promise<ZeroCsvPrincipal>;
   authorize: ZeroCsvAuthorize;
+  resolveVerifier?: ZeroCsvResolveVerifier;
 }
 export const ZERO_CSV_API_PREFIX = "/api/zero/csv/scopes";
 const MAX_REQUEST_BYTES = 36 * 1024;
@@ -65,6 +66,9 @@ export function mountZeroCsvRoutes(
           artifacts: deps.artifacts,
           jobs: deps.jobs,
           authorize: (owner) => deps.policy!.authorize(owner),
+          resolveVerifier: deps.policy.resolveVerifier
+            ? (owner) => deps.policy!.resolveVerifier!(owner)
+            : undefined,
         },
         principal,
       );
@@ -82,9 +86,15 @@ export function mountZeroCsvRoutes(
         return c.json({ error: error.message }, 429);
       if (
         error instanceof Error &&
-        ["csv_limit_exceeded", "invalid_job_deadline"].includes(error.message)
+        [
+          "csv_limit_exceeded",
+          "invalid_job_deadline",
+          "verification_preparation_required",
+        ].includes(error.message)
       )
         return c.json({ error: error.message }, 400);
+      if (error instanceof Error && error.message === "verification_unavailable")
+        return c.json({ error: error.message }, 503);
       // Never expose SQL, input contents, filesystem paths or credential details.
       return c.json({ error: "preparation_backend_unavailable" }, 503);
     }
@@ -101,15 +111,24 @@ export function mountZeroCsvRoutes(
     }
   };
   app.get(`${ZERO_CSV_API_PREFIX}/:scopeId/status`, (c) =>
-    scoped(c, async () =>
-      c.json({
+    scoped(c, async (service) => {
+      const enabled = await service.verificationAvailable();
+      return c.json({
         profile: ZERO_CSV_PROFILE,
         backend: "available",
         paidModelCalls: 0,
-        execution: "csv-preparation-only",
+        execution: enabled ? "csv-preparation-and-verification" : "csv-preparation-only",
+        ...(enabled ? { verification: "zero-csv-project-v1" } : {}),
         limits: ZERO_CSV_LIMITS,
-      }),
-    ),
+      });
+    }),
+  );
+  app.post(`${ZERO_CSV_API_PREFIX}/:scopeId/verify`, (c) =>
+    scoped(c, async (service) => {
+      const body = await jsonBody(c);
+      if (body.error) return body.error;
+      return c.json(await service.submitVerify(body.value), 202);
+    }),
   );
   app.post(`${ZERO_CSV_API_PREFIX}/:scopeId/prepare`, (c) =>
     scoped(c, async (service) => {

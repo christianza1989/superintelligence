@@ -59,6 +59,39 @@ async function errorCode(operation: Promise<unknown>, code: string) {
 }
 
 describe("bounded authenticated CSV application client", () => {
+  it("submits verification IDs only and reads either trusted stored job profile", async () => {
+    const calls: { url: string; body: unknown }[] = [];
+    const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(async (url, options) => {
+      calls.push({
+        url: String(url),
+        body: options?.body ? JSON.parse(String(options.body)) : null,
+      });
+      if (String(url).endsWith("/verify")) return response({ jobId, requestDigest: sha256 }, 202);
+      return response({
+        ...terminal("succeeded"),
+        profile: "zero-csv-project-v1",
+        revision: 2,
+        sha256,
+      });
+    });
+    const client = createZeroCsvApplicationClient(binding(), { fetch });
+    const verify = {
+      preparationJobId: jobId,
+      idempotencyKey: "verify-fixture",
+      deadline: input().deadline,
+    };
+    expect(await client.verify(verify)).toEqual({ jobId, requestDigest: sha256 });
+    expect(calls[0]).toMatchObject({ url: expect.stringMatching(/\/verify$/u), body: verify });
+    expect(await client.get(jobId)).toMatchObject({
+      profile: "zero-csv-project-v1",
+      state: "succeeded",
+    });
+    await errorCode(
+      client.verify({ ...verify, projectRoot: "/" } as typeof verify),
+      "invalid_request",
+    );
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
   it("uses the actual local HTTP path, selected space and existing Zero session authentication", async () => {
     const seen: Array<{
       path: string;

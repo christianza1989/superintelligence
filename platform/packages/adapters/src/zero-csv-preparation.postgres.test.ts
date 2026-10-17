@@ -1,15 +1,18 @@
 import { randomUUID } from "node:crypto";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import type { ArtifactStore } from "@rakazo/adapter-kit";
 import { createDb, IsolationError } from "@rakazo/db";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { LocalArtifactStore } from "./artifacts.js";
 import { createBackgroundJobHandlers } from "./background-job-handlers.js";
 import { GraphileJobPublisher, GraphileJobWorkerHost } from "./wakeup.js";
 import type { ZeroCsvAuthorize, ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import { createZeroCsvPreparationService } from "./zero-csv-preparation.js";
+import { prepareZeroCsvComponent, zeroCsvHash } from "./zero-csv-profile.js";
+import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
+import * as projectVerifier from "./zero-csv-project-verifier.js";
 
 const databaseUrl = process.env.ZERO_CSV_TEST_DATABASE_URL;
 const postgres =
@@ -26,6 +29,8 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
   let host: GraphileJobWorkerHost | undefined;
   let service: ReturnType<typeof createZeroCsvPreparationService>;
   let principal: ZeroCsvPrincipal;
+  let verifierConfig: ZeroCsvProjectVerifierConfig | undefined;
+  const resolveVerifier = async () => verifierConfig;
   const modelRun = vi.fn(() => {
     throw new Error("Model dispatch forbidden");
   });
@@ -54,6 +59,7 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
       prisma: db.prisma,
       artifacts: store,
       authorizeZeroCsv: guard,
+      resolveZeroCsvVerifier: resolveVerifier,
       jobs,
       workerId: "csv-fixture-worker",
       executor: { continueRun: modelRun },
@@ -86,7 +92,7 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
       expiresAt: new Date(Date.now() + 5 * 60_000).toISOString(),
     };
     service = createZeroCsvPreparationService(
-      { prisma: db.prisma, artifacts, jobs, authorize },
+      { prisma: db.prisma, artifacts, jobs, authorize, resolveVerifier },
       principal,
     );
     await db.prisma.user.create({
@@ -148,7 +154,7 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     const submitted = await service.submit(params);
     expect(await service.get(submitted.jobId)).toMatchObject({ state: "queued" });
     service = createZeroCsvPreparationService(
-      { prisma: db.prisma, artifacts, jobs, authorize },
+      { prisma: db.prisma, artifacts, jobs, authorize, resolveVerifier },
       principal,
     );
     expect(await service.submit(params)).toEqual(submitted);
@@ -477,5 +483,240 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     expect(blocked.result).toBeUndefined();
     await stop();
     await start();
+  });
+
+  const docker =
+    process.env.VERIFY_ZERO_CSV_PROJECT_DOCKER === "1" && process.env.ZERO_CSV_PROJECT_IMAGE_ID
+      ? describe.sequential
+      : describe.skip;
+  docker("operator-enabled host verification through the same worker", () => {
+    let project: string;
+    let staging: string;
+    const app = `import {csvParseRows} from './vendor/d3-dsv/src/csv.js'; export function parseCsv(input){return csvParseRows(input);}`;
+    beforeEach(async () => {
+      project = await mkdtemp(path.join(dataDir, "verify-project-"));
+      staging = await mkdtemp(path.join(dataDir, "verify-staging-"));
+      await writeFile(path.join(project, "app.mjs"), app);
+      for (const file of (await prepareZeroCsvComponent()).files) {
+        const target = path.join(project, "vendor/d3-dsv", file.path);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, file.content);
+      }
+      verifierConfig = {
+        dockerExecutable: "/usr/bin/docker",
+        imageId: process.env.ZERO_CSV_PROJECT_IMAGE_ID!,
+        snapshot: {
+          scopeId: principal.scopeId,
+          projectRoot: project,
+          stagingRoot: staging,
+          allowedFiles: [...projectVerifier.ZERO_CSV_PROJECT_FILES],
+          limits: { maxFiles: 5, maxFileBytes: 131_072, maxTotalBytes: 262_144 },
+        },
+      };
+      if (!host) await start();
+    });
+    afterEach(async () => {
+      await stop();
+      vi.restoreAllMocks();
+      verifierConfig = undefined;
+      await start();
+    });
+    const preparation = async () => {
+      const accepted = await service.submit(input());
+      await terminal(accepted.jobId, "succeeded");
+      return accepted.jobId;
+    };
+    const verifying = (preparationJobId: string, extra = {}) => ({
+      preparationJobId,
+      idempotencyKey: randomUUID(),
+      deadline: new Date(Date.now() + 30_000).toISOString(),
+      ...extra,
+    });
+    const scopeDirectory = () =>
+      path.join(
+        staging,
+        `zero-csv-scope-${zeroCsvHash(JSON.stringify([spaceId, userId, principal.scopeId]))}`,
+      );
+
+    it("binds a real prepared component, host snapshot and invocation receipt idempotently without private paths", async () => {
+      const prepared = await preparation();
+      const params = verifying(prepared);
+      const accepted = await service.submitVerify(params);
+      expect(await service.submitVerify(params)).toEqual(accepted);
+      const receipt = await terminal(accepted.jobId, "succeeded");
+      expect(receipt).toMatchObject({
+        profile: "zero-csv-project-v1",
+        preparationJobId: prepared,
+        verification: {
+          outcome: "pass",
+          cases: [
+            { actualUse: { calls: 1 } },
+            { actualUse: { calls: 1 } },
+            { actualUse: { calls: 1 } },
+          ],
+        },
+        freshness: { state: "unchanged" },
+        paidModelCalls: 0,
+      });
+      expect(JSON.stringify(receipt)).not.toContain(dataDir);
+      expect(await db.prisma.artifact.count({ where: { rootArtifactId: accepted.jobId } })).toBe(1);
+      await stop();
+      expect(await readdir(scopeDirectory())).toEqual([]);
+      await start();
+      await expect(service.submitVerify(verifying(prepared, { root: "/" }))).rejects.toThrow();
+      await expect(
+        service.submitVerify({ ...params, preparationJobId: randomUUID() }),
+      ).rejects.toThrow();
+      await expect(service.submitVerify(verifying(accepted.jobId))).rejects.toThrow(
+        "verification_preparation_required",
+      );
+      expect(modelRun).not.toHaveBeenCalled();
+    });
+
+    it.each(["unused", "tampered"])(
+      "does not upgrade %s host code into a verified result",
+      async (mode) => {
+        const prepared = await preparation();
+        if (mode === "unused")
+          await writeFile(path.join(project, "app.mjs"), `export function parseCsv(){return [];}`);
+        else await writeFile(path.join(project, "vendor/d3-dsv/LICENSE"), "tampered");
+        const accepted = await service.submitVerify(verifying(prepared));
+        expect(await terminal(accepted.jobId, "succeeded")).toMatchObject({
+          verification: {
+            outcome: "fail",
+            reason: mode === "unused" ? "component_not_used" : "component_source_mismatch",
+          },
+        });
+      },
+    );
+
+    it("marks a host edit after execution stale instead of publishing a current-project PASS", async () => {
+      const prepared = await preparation();
+      const original = projectVerifier.verifyZeroCsvProject;
+      vi.spyOn(projectVerifier, "verifyZeroCsvProject").mockImplementation(async (...args) => {
+        const result = await original(...args);
+        await writeFile(path.join(project, "app.mjs"), `${app}\n// host changed after snapshot`);
+        return result;
+      });
+      const accepted = await service.submitVerify(verifying(prepared));
+      expect(await terminal(accepted.jobId, "succeeded")).toMatchObject({
+        verification: { outcome: "unknown", reason: "host_project_changed_after_snapshot" },
+        freshness: { state: "changed" },
+      });
+    });
+
+    it("blocks revoked original grants before reading their private verify request bytes", async () => {
+      const prepared = await preparation();
+      await stop();
+      const accepted = await service.submitVerify(verifying(prepared));
+      const get = vi.fn(artifacts.get.bind(artifacts));
+      const guarded: ArtifactStore = {
+        describe: () => artifacts.describe(),
+        get,
+        put: (...args) => artifacts.put(...args),
+        remove: (...args) => artifacts.remove(...args),
+      };
+      await start(guarded, async () => {
+        throw new IsolationError();
+      });
+      expect(await terminal(accepted.jobId, "blocked")).toMatchObject({
+        reason: "project_scope_rejected",
+      });
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("rechecks a grant revoked after snapshot capture before Docker dispatch", async () => {
+      const prepared = await preparation();
+      await stop();
+      let allowed = true;
+      await start(artifacts, async (owner) => {
+        await authorize(owner);
+        if (!allowed) throw new IsolationError();
+      });
+      const original = projectVerifier.verifyZeroCsvProject;
+      vi.spyOn(projectVerifier, "verifyZeroCsvProject").mockImplementation((config, signal) =>
+        original(
+          {
+            ...config,
+            beforeDispatch: async () => {
+              allowed = false;
+              await config.beforeDispatch?.();
+            },
+          },
+          signal,
+        ),
+      );
+      const accepted = await service.submitVerify(verifying(prepared));
+      const receipt = await terminal(accepted.jobId, "blocked");
+      expect(receipt.reason).toBe("project_scope_rejected");
+      expect(receipt.verification).toBeUndefined();
+      await stop();
+      expect(await readdir(scopeDirectory())).toEqual([]);
+    });
+
+    it("preserves a cancellation winner and stops the bounded in-flight container", async () => {
+      const prepared = await preparation();
+      await writeFile(path.join(project, "app.mjs"), `${app}\nwhile(true){}`);
+      let entered!: () => void;
+      const dispatched = new Promise<void>((resolve) => {
+        entered = resolve;
+      });
+      const original = projectVerifier.verifyZeroCsvProject;
+      vi.spyOn(projectVerifier, "verifyZeroCsvProject").mockImplementation((config, signal) =>
+        original(
+          {
+            ...config,
+            beforeDispatch: async () => {
+              await config.beforeDispatch?.();
+              entered();
+            },
+          },
+          signal,
+        ),
+      );
+      const accepted = await service.submitVerify(verifying(prepared));
+      await dispatched;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      expect(await service.cancel(accepted.jobId)).toMatchObject({ state: "cancelled" });
+      await stop();
+      expect(
+        JSON.parse((await service.artifact(accepted.jobId)).content).verification,
+      ).toBeUndefined();
+      expect(await readdir(scopeDirectory())).toEqual([]);
+      expect(await db.prisma.artifact.count({ where: { rootArtifactId: accepted.jobId } })).toBe(1);
+    });
+
+    it("refuses bounded crash-orphan capacity without deleting old reservations or executing", async () => {
+      const prepared = await preparation();
+      await mkdir(scopeDirectory(), { mode: 0o700 });
+      for (let i = 0; i < 4; i++)
+        await mkdir(path.join(scopeDirectory(), `slot-${i}`), { mode: 0o700 });
+      const execute = vi.spyOn(projectVerifier, "verifyZeroCsvProject");
+      const accepted = await service.submitVerify(verifying(prepared));
+      expect(await terminal(accepted.jobId, "blocked")).toMatchObject({
+        reason: "verification_staging_operator_cleanup_required",
+      });
+      expect(execute).not.toHaveBeenCalled();
+      expect(await readdir(scopeDirectory())).toHaveLength(4);
+    });
+    it.each(["oversized", "symlink"])(
+      "refuses %s orphan contents before capture without deleting them",
+      async (kind) => {
+        const prepared = await preparation();
+        const slot = path.join(scopeDirectory(), "slot-0");
+        await mkdir(scopeDirectory(), { mode: 0o700 });
+        await mkdir(slot, { mode: 0o700 });
+        const retained = path.join(slot, "retained");
+        if (kind === "oversized") await writeFile(retained, Buffer.alloc(1_048_577));
+        else await symlink(project, retained);
+        const execute = vi.spyOn(projectVerifier, "verifyZeroCsvProject");
+        const accepted = await service.submitVerify(verifying(prepared));
+        expect(await terminal(accepted.jobId, "blocked")).toMatchObject({
+          reason: "verification_staging_operator_cleanup_required",
+        });
+        expect(execute).not.toHaveBeenCalled();
+        expect(await readdir(slot)).toEqual(["retained"]);
+      },
+    );
   });
 });

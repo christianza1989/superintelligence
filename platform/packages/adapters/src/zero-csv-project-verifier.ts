@@ -35,6 +35,8 @@ export interface ZeroCsvProjectVerifierConfig {
   dockerExecutable: string;
   /** Exact local Docker image ID, never a mutable tag; image must contain Node >=22.15. */
   imageId: string;
+  /** Trusted worker boundary recheck immediately before Docker dispatch. */
+  beforeDispatch?: () => Promise<void>;
 }
 
 export interface ZeroCsvProjectReceipt {
@@ -312,6 +314,8 @@ async function verifyCapturedProject(config: ZeroCsvProjectVerifierConfig, signa
     )
       throw new Error("snapshot_content_mismatch");
   }
+  await trusted.beforeDispatch?.();
+  signal.throwIfAborted();
   const control = await mkdtemp(path.join(trusted.snapshot.stagingRoot, "zero-csv-control-"));
   const name = `zero-csv-${randomUUID()}`;
   try {

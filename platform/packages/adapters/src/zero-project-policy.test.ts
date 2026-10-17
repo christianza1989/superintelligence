@@ -51,6 +51,43 @@ afterEach(async () => {
 });
 
 describe.skipIf(process.platform !== "linux")("trusted operator project policy", () => {
+  it("keeps optional verifier roots/images outside the principal and reopens their live policy", async () => {
+    const principal = grant();
+    const verification = {
+      profile: "zero-csv-project-v1",
+      projectRoot: "/tmp/fixture-project",
+      stagingRoot: "/tmp/fixture-staging",
+      dockerExecutable: "/usr/bin/docker",
+      imageId: `sha256:${"a".repeat(64)}`,
+      limits: { maxFiles: 5, maxFileBytes: 131_072, maxTotalBytes: 262_144 },
+    };
+    const { file, policy } = await fixture({
+      version: 1,
+      grants: [{ ...principal, verification }],
+    });
+    expect(await policy.resolve(actor, principal.scopeId)).toEqual(principal);
+    await policy.authorize(principal);
+    expect(await policy.resolveVerifier(principal)).toMatchObject({
+      imageId: verification.imageId,
+      dockerExecutable: verification.dockerExecutable,
+      snapshot: {
+        scopeId: principal.scopeId,
+        projectRoot: verification.projectRoot,
+        stagingRoot: verification.stagingRoot,
+        limits: verification.limits,
+      },
+    });
+    await writeFile(file, JSON.stringify({ version: 1, grants: [principal] }));
+    expect(await policy.resolveVerifier(principal)).toBeUndefined();
+    await writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        grants: [{ ...principal, verification: { ...verification, imageId: "node:latest" } }],
+      }),
+    );
+    await expect(policy.resolveVerifier(principal)).rejects.toBeInstanceOf(ZeroProjectPolicyError);
+  });
   it("shares the descriptor reader with smaller bounded operator bindings", async () => {
     const { file } = await fixture();
     const expected = await readFile(file);

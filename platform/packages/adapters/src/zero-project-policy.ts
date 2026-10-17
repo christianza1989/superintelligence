@@ -7,10 +7,12 @@ import { IsolationError } from "@rakazo/db";
 import { z } from "zod";
 import { fileHandlePath } from "./file-handle-path.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
+import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
+import { ZERO_CSV_PROJECT_FILES, ZERO_CSV_PROJECT_LIMITS } from "./zero-csv-project-verifier.js";
 
 export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({ bytes: 65_536, grants: 64 });
 const checkout = fileURLToPath(new URL("../../../../", import.meta.url));
-const grantSchema = z
+const principalSchema = z
   .object({
     spaceId: z.string().min(1).max(128),
     userId: z.string().min(1).max(128),
@@ -21,6 +23,39 @@ const grantSchema = z
       .datetime({ offset: true })
       .refine((value) => Number.isFinite(Date.parse(value))),
   })
+  .strict();
+const operatorPath = z
+  .string()
+  .min(1)
+  .max(4096)
+  .refine(
+    (value) =>
+      path.posix.isAbsolute(value) &&
+      path.posix.normalize(value) === value &&
+      value !== "/" &&
+      value !== "/mnt" &&
+      !value.startsWith("/mnt/") &&
+      ![...value].some((character) => character.charCodeAt(0) < 32) &&
+      !value.includes(","),
+  );
+const verificationSchema = z
+  .object({
+    profile: z.literal("zero-csv-project-v1"),
+    projectRoot: operatorPath,
+    stagingRoot: operatorPath,
+    dockerExecutable: operatorPath,
+    imageId: z.string().regex(/^sha256:[a-f0-9]{64}$/u),
+    limits: z
+      .object({
+        maxFiles: z.literal(5),
+        maxFileBytes: z.number().int().min(1).max(131_072),
+        maxTotalBytes: z.number().int().min(1).max(ZERO_CSV_PROJECT_LIMITS.sourceBytes),
+      })
+      .strict(),
+  })
+  .strict();
+const grantSchema = principalSchema
+  .extend({ verification: verificationSchema.optional() })
   .strict();
 const policySchema = z
   .object({
@@ -169,20 +204,45 @@ export function createZeroProjectPolicy(file: string) {
     if (!grant || Date.parse(grant.expiresAt) <= Date.now()) throw new ZeroProjectPolicyError();
     return grant;
   };
+  const checkedGrant = async (principal: ZeroCsvPrincipal) => {
+    const parsed = principalSchema.safeParse(principal);
+    if (!parsed.success) throw new ZeroProjectPolicyError();
+    const checked = parsed.data;
+    const current = await find(checked);
+    if (fields.some((field) => checked[field] !== current[field]))
+      throw new ZeroProjectPolicyError();
+    return current;
+  };
   return {
     async resolve(
       actor: Pick<Actor, "spaceId" | "userId">,
       scopeId: string,
     ): Promise<ZeroCsvPrincipal> {
-      return { ...(await find({ spaceId: actor.spaceId, userId: actor.userId, scopeId })) };
+      const current = await find({ spaceId: actor.spaceId, userId: actor.userId, scopeId });
+      return principalSchema.parse(
+        Object.fromEntries(fields.map((field) => [field, current[field]])),
+      );
     },
     async authorize(principal: ZeroCsvPrincipal): Promise<void> {
-      const parsed = grantSchema.safeParse(principal);
-      if (!parsed.success) throw new ZeroProjectPolicyError();
-      const checked = parsed.data;
-      const current = await find(checked);
-      if (fields.some((field) => checked[field] !== current[field]))
-        throw new ZeroProjectPolicyError();
+      await checkedGrant(principal);
+    },
+    async resolveVerifier(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroCsvProjectVerifierConfig | undefined> {
+      const grant = await checkedGrant(principal);
+      if (!grant.verification) return undefined;
+      const verification = grant.verification;
+      return {
+        dockerExecutable: verification.dockerExecutable,
+        imageId: verification.imageId,
+        snapshot: {
+          scopeId: grant.scopeId,
+          projectRoot: verification.projectRoot,
+          stagingRoot: verification.stagingRoot,
+          allowedFiles: [...ZERO_CSV_PROJECT_FILES],
+          limits: { ...verification.limits },
+        },
+      };
     },
   };
 }

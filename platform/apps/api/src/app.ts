@@ -507,6 +507,9 @@ export async function createApp(
   const jobHandlers = createBackgroundJobHandlers({
     artifacts,
     authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
+    resolveZeroCsvVerifier: zeroCsvScopes?.resolveVerifier
+      ? (principal) => zeroCsvScopes.resolveVerifier!(principal)
+      : undefined,
     executor,
     prisma,
     sandbox,

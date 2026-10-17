@@ -154,6 +154,29 @@ postgres("authenticated CSV preparation application API (PostgreSQL)", () => {
   });
 
   it("takes principal solely from session membership and explicit operator policy", async () => {
+    const noVerifier = await request(`${prefix}/verify`, {
+      method: "POST",
+      body: {
+        preparationJobId: randomUUID(),
+        idempotencyKey: "verification-not-configured",
+        deadline: new Date(Date.now() + 30_000).toISOString(),
+      },
+    });
+    expect(noVerifier.status).toBe(503);
+    expect(await noVerifier.json()).toEqual({ error: "verification_unavailable" });
+    expect(
+      (
+        await request(`${prefix}/verify`, {
+          method: "POST",
+          body: {
+            preparationJobId: randomUUID(),
+            idempotencyKey: "no-root-input",
+            deadline: new Date(Date.now() + 30_000).toISOString(),
+            projectRoot: "/",
+          },
+        })
+      ).status,
+    ).toBe(400);
     for (const extra of [
       { userId: principal.userId },
       { spaceId: principal.spaceId },

@@ -13,6 +13,7 @@ function handlers(): BackgroundJobHandlers {
   return {
     "zero.jev-tool.execute": vi.fn(async () => undefined),
     "zero.csv.prepare": vi.fn(async () => undefined),
+    "zero.csv.verify": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),
     "computer.update": vi.fn(async () => undefined),
@@ -26,17 +27,15 @@ function handlers(): BackgroundJobHandlers {
 }
 
 describe("background job contracts", () => {
-  it.each(["zero.csv.prepare", "zero.jev-tool.execute"])(
-    "accepts only the immutable artifact reference for %s",
-    async (name) => {
+  it.each(["zero.csv.prepare", "zero.csv.verify", "zero.jev-tool.execute"] as const)(
+    "accepts only the immutable request artifact reference for %s",
+    async (job) => {
       const requestArtifactId = "e920b9e2-17ce-445e-9e91-a1a1cc365745";
       const target = handlers();
-      await dispatchBackgroundJob(target, name, { requestArtifactId });
-      expect(target[name as "zero.csv.prepare" | "zero.jev-tool.execute"]).toHaveBeenCalledWith({
-        requestArtifactId,
-      });
-      expect(() => parseBackgroundJob(name, { requestArtifactId, userId: "untrusted" })).toThrow();
-      expect(() => parseBackgroundJob(name, { requestArtifactId: "../input" })).toThrow();
+      await dispatchBackgroundJob(target, job, { requestArtifactId });
+      expect(target[job]).toHaveBeenCalledWith({ requestArtifactId });
+      expect(() => parseBackgroundJob(job, { requestArtifactId, userId: "untrusted" })).toThrow();
+      expect(() => parseBackgroundJob(job, { requestArtifactId: "../input" })).toThrow();
     },
   );
 

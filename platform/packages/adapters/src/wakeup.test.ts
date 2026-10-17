@@ -6,6 +6,7 @@ function handlers(): BackgroundJobHandlers {
   return {
     "zero.jev-tool.execute": vi.fn(async () => undefined),
     "zero.csv.prepare": vi.fn(async () => undefined),
+    "zero.csv.verify": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),
     "computer.update": vi.fn(async () => undefined),

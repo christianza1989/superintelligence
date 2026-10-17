@@ -21,7 +21,8 @@ export const zeroCsvStatusSchema = z
     profile: z.literal(ZERO_CSV_PROFILE),
     backend: z.literal("available"),
     paidModelCalls: z.literal(0),
-    execution: z.literal("csv-preparation-only"),
+    execution: z.enum(["csv-preparation-only", "csv-preparation-and-verification"]),
+    verification: z.literal("zero-csv-project-v1").optional(),
     limits: limitsSchema,
   })
   .strict();
@@ -29,7 +30,7 @@ export const zeroCsvPreparedSchema = z.object({ jobId: jobIdSchema, requestDiges
 const terminal = {
   jobId: jobIdSchema,
   state: z.enum(["succeeded", "failed", "blocked", "cancelled"]),
-  profile: z.literal(ZERO_CSV_PROFILE),
+  profile: z.enum([ZERO_CSV_PROFILE, "zero-csv-project-v1"]),
   requestDigest: hash,
   artifactId: id,
 };
@@ -77,6 +78,17 @@ export type ZeroCsvJob = z.infer<typeof zeroCsvJobSchema>;
 export type ZeroCsvCancelled = z.infer<typeof zeroCsvCancelledSchema>;
 export type ZeroCsvArtifactPage = z.infer<typeof zeroCsvArtifactPageSchema>;
 export type ZeroCsvPrepareInput = z.infer<typeof zeroCsvPrepareInputSchema>;
+export const zeroCsvVerifyInputSchema = z
+  .object({
+    preparationJobId: jobIdSchema,
+    idempotencyKey: z.string().min(1).max(128),
+    deadline: z
+      .string()
+      .datetime({ offset: true })
+      .refine((value) => Number.isFinite(Date.parse(value))),
+  })
+  .strict();
+export type ZeroCsvVerifyInput = z.infer<typeof zeroCsvVerifyInputSchema>;
 /** Trusted local Zero BetterAuth session binding. Never host subscription authentication. */
 export interface ZeroCsvApplicationBinding {
   apiUrl: string;
@@ -88,6 +100,7 @@ export interface ZeroCsvApplicationBinding {
 export interface ZeroCsvApplicationClient {
   status(): Promise<ZeroCsvStatus>;
   prepare(input: ZeroCsvPrepareInput): Promise<ZeroCsvPrepared>;
+  verify(input: ZeroCsvVerifyInput): Promise<ZeroCsvPrepared>;
   get(jobId: string): Promise<ZeroCsvJob>;
   cancel(jobId: string): Promise<ZeroCsvCancelled>;
   artifactPage(
@@ -129,6 +142,8 @@ const errorCodes = [
   "scope_job_limit_exceeded",
   "csv_limit_exceeded",
   "invalid_job_deadline",
+  "verification_unavailable",
+  "verification_preparation_required",
   "preparation_backend_unavailable",
   "json_required",
   "request_too_large",
@@ -255,7 +270,7 @@ export function createZeroCsvApplicationClient(
           }
           const json = await readJson(response, controller.signal);
           active();
-          if (response.status !== (suffix === "/prepare" ? 202 : 200)) {
+          if (response.status !== (suffix === "/prepare" || suffix === "/verify" ? 202 : 200)) {
             const error = z
               .object({ error: z.enum(errorCodes) })
               .strict()
@@ -288,6 +303,13 @@ export function createZeroCsvApplicationClient(
       const remaining = Date.parse(checked.data.deadline) - Date.now();
       if (remaining <= 0 || remaining > 10 * 60_000) fail("invalid_request");
       return request("/prepare", zeroCsvPreparedSchema, checked.data);
+    },
+    async verify(input) {
+      const checked = zeroCsvVerifyInputSchema.safeParse(input);
+      if (!checked.success) fail("invalid_request");
+      const remaining = Date.parse(checked.data.deadline) - Date.now();
+      if (remaining <= 0 || remaining > 10 * 60_000) fail("invalid_request");
+      return request("/verify", zeroCsvPreparedSchema, checked.data);
     },
     async get(value) {
       const jobId = checkedJob(value);
@@ -351,6 +373,7 @@ export function createZeroCsvApplicationClientFromFile(
   return {
     status: async () => (await client()).status(),
     prepare: async (input) => (await client()).prepare(input),
+    verify: async (input) => (await client()).verify(input),
     get: async (jobId) => (await client()).get(jobId),
     cancel: async (jobId) => (await client()).cancel(jobId),
     artifactPage: async (jobId, page) => (await client()).artifactPage(jobId, page),

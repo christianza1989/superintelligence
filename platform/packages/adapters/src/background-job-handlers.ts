@@ -21,8 +21,8 @@ import { compactHistory } from "./history-compaction.js";
 import type { MemoryProviderResolver } from "./memory-provider-factory.js";
 import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-delivery.js";
 import { expireTaughtSkillTeaching } from "./teaching-session.js";
-import type { ZeroCsvAuthorize } from "./zero-csv-preparation.js";
-import { runZeroCsvPreparation } from "./zero-csv-preparation.js";
+import type { ZeroCsvAuthorize, ZeroCsvResolveVerifier } from "./zero-csv-preparation.js";
+import { runZeroCsvPreparation, runZeroCsvVerification } from "./zero-csv-preparation.js";
 import type { ZeroJevWorkerDependencies } from "./zero-jev-worker.js";
 import { runZeroJevTool } from "./zero-jev-worker.js";
 
@@ -30,6 +30,7 @@ export function createBackgroundJobHandlers(deps: {
   artifacts?: ArtifactStore;
   zeroJev?: Pick<ZeroJevWorkerDependencies, "pool" | "resolve" | "fetch">;
   authorizeZeroCsv?: ZeroCsvAuthorize;
+  resolveZeroCsvVerifier?: ZeroCsvResolveVerifier;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
   sandbox: SandboxProvider;
@@ -65,6 +66,18 @@ export function createBackgroundJobHandlers(deps: {
       if (!deps.artifacts) throw new Error("Routing artifact store unavailable");
       await runZeroJevTool(
         { ...deps.zeroJev, prisma: deps.prisma, artifacts: deps.artifacts },
+        requestArtifactId,
+      );
+    },
+    "zero.csv.verify": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("CSV artifact store unavailable");
+      await runZeroCsvVerification(
+        {
+          prisma: deps.prisma,
+          artifacts: deps.artifacts,
+          authorize: deps.authorizeZeroCsv,
+          resolveVerifier: deps.resolveZeroCsvVerifier,
+        },
         requestArtifactId,
       );
     },
