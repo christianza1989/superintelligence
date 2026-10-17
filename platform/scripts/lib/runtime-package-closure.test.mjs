@@ -12,7 +12,10 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, test } from "node:test";
-import { copyRuntimePackageClosure } from "./runtime-package-closure.mjs";
+import {
+  copyRuntimePackageClosure,
+  inspectRuntimePackageClosure,
+} from "./runtime-package-closure.mjs";
 const roots = [];
 afterEach(async () => {
   for (const root of roots.splice(0))
@@ -173,4 +176,25 @@ test("rejects package asset symlink escapes and bounded-copy overflow while reta
     /exceeds/,
   );
   assert.equal((await lstat(f.options.outputDirectory)).isDirectory(), true);
+});
+
+test("read-only inventory matches copied payload hashes without creating an output", async () => {
+  const f = await fixture();
+  await assert.rejects(
+    inspectRuntimePackageClosure({ ...f.options, maxBytes: 1 }),
+    /exceeds/,
+  );
+  const inventory = await inspectRuntimePackageClosure(f.options);
+  await assert.rejects(lstat(f.options.outputDirectory), { code: "ENOENT" });
+  assert.equal(inventory.measurement, "source-inventory");
+  assert.equal(inventory.apparentBytes, null);
+  assert.equal(inventory.allocatedBytes, null);
+  assert.equal(inventory.uniqueInodes, null);
+  assert.equal(inventory.physicalSharedExtentDedup, null);
+  const copied = await copyRuntimePackageClosure(f.options);
+  assert.equal(copied.measurement, "copied-runtime");
+  assert.deepEqual(inventory.packages, copied.packages);
+  assert.deepEqual(inventory.rootBindings, copied.rootBindings);
+  assert.equal(inventory.fileBytes, copied.fileBytes);
+  assert.equal(inventory.fileCount, copied.fileCount);
 });

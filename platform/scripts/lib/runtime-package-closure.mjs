@@ -46,15 +46,24 @@ async function hashFile(file) {
 }
 
 /** Copy a bounded, already-installed third-party closure; never install or resolve versions. */
-export async function copyRuntimePackageClosure({
-  workspaceRoot,
-  importers,
-  outputDirectory,
-  maxBytes = 1_000_000_000,
-}) {
+export async function copyRuntimePackageClosure(options) {
+  return runtimePackageClosure(options, false);
+}
+
+/** Read installed source payloads only; this is not an installed production disk measurement. */
+export async function inspectRuntimePackageClosure(options) {
+  return runtimePackageClosure(options, true);
+}
+
+async function runtimePackageClosure(
+  { workspaceRoot, importers, outputDirectory, maxBytes = 1_000_000_000 },
+  inspectOnly,
+) {
   const workspace = await realpath(workspaceRoot),
     store = await realpath(path.join(workspace, "node_modules/.pnpm"));
-  const output = path.resolve(outputDirectory);
+  const output = inspectOnly
+    ? path.join(workspace, ".runtime-inventory-unused")
+    : path.resolve(outputDirectory);
   if (
     !Number.isSafeInteger(maxBytes) ||
     maxBytes < 1 ||
@@ -134,7 +143,7 @@ export async function copyRuntimePackageClosure({
     }
   }
   // Caller supplies an existing staging parent. Existing outputs are never overwritten.
-  await mkdir(output);
+  if (!inspectOnly) await mkdir(output);
   const copiedInodes = new Map(),
     manifests = [];
   const copyPackage = async (node) => {
@@ -142,7 +151,7 @@ export async function copyRuntimePackageClosure({
       packageFiles = 0;
     const treeHash = createHash("sha256");
     const walk = async (source, target, relative = "") => {
-      await mkdir(target, { recursive: true });
+      if (!inspectOnly) await mkdir(target, { recursive: true });
       for (const entry of (await readdir(source, { withFileTypes: true })).sort(
         (a, b) => a.name.localeCompare(b.name),
       )) {
@@ -166,7 +175,8 @@ export async function copyRuntimePackageClosure({
             node.target,
             path.relative(node.source, resolved),
           );
-          await symlink(path.relative(path.dirname(out), dest), out);
+          if (!inspectOnly)
+            await symlink(path.relative(path.dirname(out), dest), out);
           treeHash.update(
             JSON.stringify([
               rel,
@@ -186,8 +196,8 @@ export async function copyRuntimePackageClosure({
           throw new Error("Runtime closure exceeds byte or file bound");
         const identity = info.dev + ":" + info.ino,
           prior = copiedInodes.get(identity);
-        if (prior) await link(prior, out);
-        else {
+        if (!inspectOnly && prior) await link(prior, out);
+        else if (!inspectOnly) {
           await copyFile(input, out, constants.COPYFILE_FICLONE);
           copiedInodes.set(identity, out);
           await chmod(out, Number(info.mode & 0o777n));
@@ -197,7 +207,7 @@ export async function copyRuntimePackageClosure({
             rel,
             Number(info.mode & 0o777n),
             bytes,
-            await hashFile(out),
+            await hashFile(inspectOnly ? input : out),
           ]),
         );
       }
@@ -224,7 +234,7 @@ export async function copyRuntimePackageClosure({
   };
   for (const node of nodes.values()) await copyPackage(node);
   const alias = async (file, target) => {
-    if (file === target) return;
+    if (inspectOnly || file === target) return;
     await mkdir(path.dirname(file), { recursive: true });
     try {
       await symlink(path.relative(path.dirname(file), target), file);
@@ -262,15 +272,18 @@ export async function copyRuntimePackageClosure({
       if (info.isDirectory()) await measure(file);
     }
   };
-  const rootInfo = await lstat(output);
-  apparentBytes += rootInfo.size;
-  allocatedBytes += rootInfo.blocks * 512;
-  uniqueInodes++;
-  await measure(output);
+  if (!inspectOnly) {
+    const rootInfo = await lstat(output);
+    apparentBytes += rootInfo.size;
+    allocatedBytes += rootInfo.blocks * 512;
+    uniqueInodes++;
+    await measure(output);
+  }
   if (apparentBytes > maxBytes)
     throw new Error("Runtime closure exceeds its total disk bound");
   return {
     schemaVersion: 1,
+    measurement: inspectOnly ? "source-inventory" : "copied-runtime",
     packages: manifests.sort((a, b) => a.instance.localeCompare(b.instance)),
     roots: [...roots.keys()].sort(),
     rootBindings: Object.fromEntries(
@@ -281,9 +294,9 @@ export async function copyRuntimePackageClosure({
     missingOptional: [...missingOptional].sort(),
     fileCount,
     fileBytes: copiedBytes,
-    apparentBytes,
-    allocatedBytes,
-    uniqueInodes,
+    apparentBytes: inspectOnly ? null : apparentBytes,
+    allocatedBytes: inspectOnly ? null : allocatedBytes,
+    uniqueInodes: inspectOnly ? null : uniqueInodes,
     physicalSharedExtentDedup: null,
   };
 }
