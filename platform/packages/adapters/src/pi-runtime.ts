@@ -138,6 +138,7 @@ export function maxToolCallsPerTurn(env: NodeJS.ProcessEnv = process.env): numbe
 export interface PiAgentRuntimeOptions {
   /** Directory where Pi JSONL sessions are written. Omit to disable recording. */
   sessionRoot?: string;
+  /** Default for callers without a request-scoped observer. */
   modelCallObserver?: ModelCallObserver;
   /** Sanitized per-call selection telemetry; never includes prompt or credentials. */
   onContextDecision?: (
@@ -245,7 +246,7 @@ export class PiAgentRuntime implements AgentRuntime {
           queue,
           context,
           onContextDecision: this.onContextDecision,
-          modelCallObserver: this.modelCallObserver,
+          modelCallObserver: request.modelCallObserver ?? this.modelCallObserver,
           request,
           activeModel: initialModelTarget,
           models,
@@ -353,7 +354,7 @@ export class PiAgentRuntime implements AgentRuntime {
                   ctx,
                   preparedOptions,
                   (event) => queue.push(event),
-                  this.modelCallObserver,
+                  host.modelCallObserver,
                   { operationKind: request.usageOperationKind ?? "answer" },
                   {
                     ...usageHooks,

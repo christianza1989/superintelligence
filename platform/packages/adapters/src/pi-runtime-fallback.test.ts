@@ -541,6 +541,112 @@ describe("Pi runtime ordered model fallback", () => {
     }
   });
 
+  it("isolates request observers across overlapping runs on one runtime", async () => {
+    const defaultObserver = {
+      beforeCall: vi.fn<ModelCallObserver["beforeCall"]>(() => "default-reservation"),
+      afterCall: vi.fn<ModelCallObserver["afterCall"]>(),
+    };
+    const runtime = new PiAgentRuntime({ modelCallObserver: defaultObserver });
+    let releaseFirst!: () => void;
+    let enteredFirst!: () => void;
+    const firstEntered = new Promise<void>((resolve) => {
+      enteredFirst = resolve;
+    });
+    const firstGate = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    const inputs = [request(), request()];
+    const scopes = inputs.map((input, index) => {
+      const order: string[] = [];
+      const beforeCall = vi.fn<ModelCallObserver["beforeCall"]>(async ({ callId }) => {
+        order.push("reserve");
+        if (index === 0) {
+          enteredFirst();
+          await firstGate;
+        }
+        return callId;
+      });
+      const onUsage = vi.fn<NonNullable<AgentRunRequest["onUsage"]>>(async () => {
+        order.push("usage");
+      });
+      const afterCall = vi.fn<ModelCallObserver["afterCall"]>(async () => {
+        order.push("settle");
+      });
+      input.runId = `run-${index}`;
+      input.threadId = `thread-${index}`;
+      input.modelCallObserver = { beforeCall, afterCall };
+      input.onUsage = onUsage;
+      return { beforeCall, afterCall, onUsage, order };
+    });
+    providerState.stream.mockImplementation((target: Model<"openai-completions">) =>
+      stream(target, message(target, [{ type: "text", text: "answer" }], "stop")),
+    );
+    const firstRun = run(inputs[0]!, [], runtime);
+    let secondEvents: AgentRuntimeEvent[];
+    try {
+      await firstEntered;
+      secondEvents = await run(inputs[1]!, [], runtime);
+      expect(scopes[0]!.onUsage).not.toHaveBeenCalled();
+      expect(scopes[0]!.afterCall).not.toHaveBeenCalled();
+      expect(providerState.stream).toHaveBeenCalledOnce();
+    } finally {
+      releaseFirst();
+    }
+    const firstEvents = await firstRun;
+    const callIds: string[] = [];
+    for (const [index, events] of [firstEvents, secondEvents!].entries()) {
+      const scope = scopes[index]!;
+      expect(scope.beforeCall).toHaveBeenCalledOnce();
+      expect(scope.onUsage).toHaveBeenCalledOnce();
+      expect(scope.afterCall).toHaveBeenCalledOnce();
+      const callId = scope.beforeCall.mock.calls[0]![0].callId;
+      expect(callId).toEqual(expect.any(String));
+      expect(scope.onUsage.mock.calls[0]![0]).toMatchObject({ callId });
+      expect(scope.afterCall.mock.calls[0]![0]).toBe(callId);
+      expect(scope.order).toEqual(["reserve", "usage", "settle"]);
+      expect(events.filter((event) => event.type === "usage")).toEqual([
+        expect.objectContaining({ callId, accounted: true }),
+      ]);
+      callIds.push(callId);
+    }
+    expect(new Set(callIds).size).toBe(2);
+    expect(defaultObserver.beforeCall).not.toHaveBeenCalled();
+    expect(defaultObserver.afterCall).not.toHaveBeenCalled();
+    expect(providerState.stream).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([false, true])("request observer denial prevents dispatch (async=%s)", async (async) => {
+    const beforeCall = vi.fn<ModelCallObserver["beforeCall"]>(() => {
+      const error = new Error("request budget denied");
+      if (async) return Promise.reject(error);
+      throw error;
+    });
+    const afterCall = vi.fn<ModelCallObserver["afterCall"]>();
+    const onUsage = vi.fn<NonNullable<AgentRunRequest["onUsage"]>>();
+    const defaultBeforeCall = vi.fn<ModelCallObserver["beforeCall"]>(() => "default");
+    const input = request([{ provider: backupA.provider, id: backupA.id, apiKey: "backup-key" }]);
+    input.modelCallObserver = { beforeCall, afterCall };
+    input.onUsage = onUsage;
+    await expect(
+      run(
+        input,
+        [],
+        new PiAgentRuntime({
+          modelCallObserver: {
+            beforeCall: defaultBeforeCall,
+            afterCall: vi.fn(),
+          },
+        }),
+      ),
+    ).rejects.toThrow("request budget denied");
+    expect(beforeCall).toHaveBeenCalledOnce();
+    expect(beforeCall.mock.calls[0]![0]).toMatchObject({ callId: expect.any(String) });
+    expect(providerState.stream).not.toHaveBeenCalled();
+    expect(defaultBeforeCall).not.toHaveBeenCalled();
+    expect(afterCall).not.toHaveBeenCalled();
+    expect(onUsage).not.toHaveBeenCalled();
+  });
+
   it.each([false, true])(
     "bills configured model ids with switched=%s despite provider response ids",
     async (switched) => {
@@ -551,6 +657,7 @@ describe("Pi runtime ordered model fallback", () => {
         switched ? [{ provider: backupA.provider, id: backupA.id, apiKey: "backup-key" }] : [],
       );
       input.onUsage = onUsage;
+      input.modelCallObserver = { beforeCall, afterCall };
       providerState.stream.mockImplementation((target: Model<"openai-completions">) => {
         const failure = switched && target.provider === primary.provider;
         const result = message(
@@ -564,11 +671,7 @@ describe("Pi runtime ordered model fallback", () => {
         result.responseModel = "reported-model-2026-10-08";
         return stream(target, result);
       });
-      const events = await run(
-        input,
-        [],
-        new PiAgentRuntime({ modelCallObserver: { beforeCall, afterCall } }),
-      );
+      const events = await run(input);
       const targets = switched ? [primary, backupA] : [primary];
       expect(beforeCall.mock.calls.map(([call]) => call)).toEqual(
         targets.map((target) =>
@@ -586,6 +689,9 @@ describe("Pi runtime ordered model fallback", () => {
         ),
       );
       expect(afterCall).toHaveBeenCalledTimes(targets.length);
+      const callIds = beforeCall.mock.calls.map(([call]) => call.callId);
+      expect(new Set(callIds).size).toBe(targets.length);
+      expect(onUsage.mock.calls.map(([event]) => event.callId)).toEqual(callIds);
       expect(events.filter((event) => event.type === "usage")).toEqual(
         targets.map((target) =>
           expect.objectContaining({ provider: target.provider, model: target.id, accounted: true }),

@@ -265,6 +265,7 @@ export function observedPiStream(
       const preparedContext = hooks?.prepareContext?.(context, model) ?? context;
       reservation = observer
         ? await observer.beforeCall({
+            callId,
             provider: model.provider,
             modelId: model.id,
             inputTokensEstimate: estimateModelContextTokens(preparedContext, hooks?.imageTokens),

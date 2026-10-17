@@ -442,6 +442,8 @@ export type AgentContextStrategy = "current" | "retrieval" | "snapshots" | "cach
 export const DEFAULT_CONTEXT_STRATEGY: AgentContextStrategy = "retrieval";
 
 export interface AgentRunRequest {
+  /** Per-run dispatch guard; takes precedence over the runtime default observer. */
+  modelCallObserver?: ModelCallObserver;
   /** Awaited producer-side accounting, independent of event-consumer cancellation. */
   onUsage?: (event: Extract<AgentRuntimeEvent, { type: "usage" }>) => void | Promise<void>;
   contextStrategy?: AgentContextStrategy;
@@ -525,6 +527,8 @@ export type UsageOperationKind = "answer" | "setup" | "retrieval" | "subagent" |
 
 export interface ModelCallObserver {
   beforeCall(call: {
+    /** The same invocation ID emitted to onUsage; use it to correlate the reservation. */
+    callId: string;
     provider: string;
     modelId: string;
     inputTokensEstimate: number;
