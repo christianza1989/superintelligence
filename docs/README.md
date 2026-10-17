@@ -13,6 +13,10 @@
 
 Prieštaravimo tvarka: naujesnis aiškus priimtas DECISIONS sprendimas → ROADMAP vartai → IMPLEMENTATION faktai → teminė specifikacija. Faktinis testas negali būti paneigtas planu, o vien testas nepakeičia vartų apimties. Neaiškumą fiksuoti kaip konkretų ADR, ne spėti, kad senas checkbox jau PASS.
 
+## MCP ir papildinių tyrimas
+
+[Codex ir Claude Code prijungimas](research/MCP-AND-PLUGINS-2026-10-17.md) — 2026-10-17 oficialių sąsajų, svetainės diegimo ir gyvo native Codex palyginimo tyrimas. Įgyvendinimo apimtį nustato priimti sprendimai ir bendras roadmapas.
+
 ## Runbook ir metodika
 
 - [LOCAL-LAB.md](LOCAL-LAB.md) — palaikomas receptas / ribotos foundation apimties aprašas; ne visas produkto acceptance.
