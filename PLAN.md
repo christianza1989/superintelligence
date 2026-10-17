@@ -4,7 +4,7 @@ Atnaujinta 2026-10-17 po nepriklausomo Astra audito ir abipusės sprendimų per�
 
 **Vienas Rakazo pagrindas, vienas užduoties autoritetas, plonas reuse sluoksnis esamame worker.** React ir bendri UI paketai, esamas Graphile/PostgreSQL vykdymas. CLI lieka eksperimento ar backend adapteriu. Naujas scheduler, universalus kontraktų variklis ir mikroservisų tinklas šiuo metu nepagrįsti.
 
-Trys įėjimai: **New task**, savarankiška **Library** ir **MCP iš Codex / Claude Code**. Native klientas valdo pokalbį, pagrindinį modelį/auth bei kodo redagavimą; Zero teikia tas pačias reuse funkcijas ir savo worker paruošimo/patikros jobs. [MCP kontraktas](docs/MCP-INTEGRATION.md) dar neįgyvendintas. Bibliotekoje žmogus ieško, filtruoja, išsaugo ir perduoda pasirinktą repo į projekto kūrimą be pradinio AI pokalbio. Paieška ir populiarumo rūšiavimas nenaudoja mokamo LLM.
+Trys įėjimai: **New task**, savarankiška **Library** ir **MCP iš Codex / Claude Code**. Native klientas valdo pokalbį, pagrindinį modelį/auth bei kodo redagavimą; Zero teikia tas pačias reuse funkcijas ir savo worker paruošimo/patikros jobs. [MCP kontrakto](docs/MCP-INTEGRATION.md) discovery dalis įgyvendinta ir patikrinta Codex; execution bei platinamas papildinys dar nepriimti. Bibliotekoje žmogus ieško, filtruoja, išsaugo ir perduoda pasirinktą repo į projekto kūrimą be pradinio AI pokalbio. Paieška ir populiarumo rūšiavimas nenaudoja mokamo LLM.
 
 ```mermaid
 flowchart LR

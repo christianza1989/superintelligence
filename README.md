@@ -4,6 +4,8 @@ RepositoryZero kuriamas kaip atviro kodo AI darbo platforma, kuri prieš rašyda
 
 **Stadija: įgyvendintas foundation ir vietinis Zero Lab; visas produkto MVP dar nepriimtas.** Yra Rakazo adaptacija, katalogo paieška, offline atrankos/budget primityvai ir tikri CLI eksperimentai. Automatinė grandinė „repo atranka → paruošimas → naudojimas worker → nepriklausoma patikra“ dar neužbaigta. Bendras greičio, kainos ar kokybės pranašumas neįrodytas.
 
+Vietinis discovery MCP jau įgyvendintas ir iškviestas iš tikro naujo Codex pokalbio. [Paruošimas ir prijungimas](docs/MCP-SETUP.md), [patikros ir ribos](docs/experiments/MCP-PREVIEW-2026-10-17.md). Native prepare/verify ir plugin platinimas dar neužbaigti.
+
 | Ko reikia | Kur pradėti |
 |---|---|
 | Dabartinė būsena, blokai ir komandos | [IMPLEMENTATION](docs/IMPLEMENTATION.md) |

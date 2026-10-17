@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import {
   repositoryCategories,
   repositorySnapshot,
@@ -9,8 +10,8 @@ import {
 import { z } from "zod";
 import { repositorySearchFromTool } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.1.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.0.0";
+export const ZERO_MCP_SERVER_VERSION = "0.1.1";
+export const ZERO_MCP_SCHEMA_VERSION = "1.1.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -62,6 +63,7 @@ const statusOutput = z.strictObject({
   }),
   profile: z.literal("discovery-only"),
   backend: z.literal("unavailable"),
+  protocolVersion: z.string().max(64).nullable(),
   operations: z.tuple([
     z.literal("zero_search"),
     z.literal("zero_inspect"),
@@ -82,14 +84,59 @@ const annotations = {
   openWorldHint: false,
 };
 
+// SDK-level errors (including unknown tool names) can echo unbounded input.
+// Keep the public error boundary on every transport, including in-memory tests.
+class DiscoveryMcpServer extends McpServer {
+  protocolVersion: string | null = null;
+
+  override async connect(transport: Transport): Promise<void> {
+    const send = transport.send.bind(transport);
+    transport.send = (message, options) => {
+      if ("result" in message && typeof message.result.protocolVersion === "string") {
+        this.protocolVersion = message.result.protocolVersion;
+      }
+      if ("result" in message && message.result.isError === true) {
+        for (const code of ["source_data_unavailable", "output_limit_exceeded"] as const) {
+          const result = outputError(code);
+          if (JSON.stringify(message.result.content) === JSON.stringify(result.content)) {
+            return send({ ...message, result }, options);
+          }
+        }
+        return send(
+          {
+            ...message,
+            result: {
+              isError: true,
+              content: [
+                {
+                  type: "text",
+                  text: "Tool not found, invalid arguments, or unavailable source data. Check the tool name and its input schema.",
+                },
+              ],
+            },
+          },
+          options,
+        );
+      }
+      if ("error" in message) {
+        return send(
+          { ...message, error: { code: message.error.code, message: "Invalid MCP request." } },
+          options,
+        );
+      }
+      return send(message, options);
+    };
+    await super.connect(transport);
+  }
+}
+
 /** Reject oversized or invalid catalog data without leaking it or silently truncating facts. */
 function boundedResult(
   schema: z.ZodType,
   data: Record<string, unknown>,
   maxBytes: number,
 ): CallToolResult {
-  if (!schema.safeParse(data).success)
-    return outputError("source_data_unavailable");
+  if (!schema.safeParse(data).success) return outputError("source_data_unavailable");
   const result: CallToolResult = {
     content: [{ type: "text", text: JSON.stringify(data) }],
     structuredContent: data,
@@ -100,9 +147,7 @@ function boundedResult(
   return result;
 }
 
-function outputError(
-  code: "source_data_unavailable" | "output_limit_exceeded",
-): CallToolResult {
+function outputError(code: "source_data_unavailable" | "output_limit_exceeded"): CallToolResult {
   return {
     isError: true,
     content: [{ type: "text", text: JSON.stringify({ error: code }) }],
@@ -111,7 +156,7 @@ function outputError(
 
 /** Register discovery only. The caller owns transport connection and process lifecycle. */
 export function createZeroMcpServer(): McpServer {
-  const server = new McpServer(
+  const server = new DiscoveryMcpServer(
     { name: "repositoryzero", version: ZERO_MCP_SERVER_VERSION },
     {
       instructions:
@@ -130,13 +175,8 @@ export function createZeroMcpServer(): McpServer {
             .string()
             .min(1)
             .max(256)
-            .refine(
-              (query) => query.trim().length > 0,
-              "query must not be blank",
-            ),
-          category: z
-            .enum(repositoryCategories as [string, ...string[]])
-            .optional(),
+            .refine((query) => query.trim().length > 0, "query must not be blank"),
+          category: z.enum(repositoryCategories as [string, ...string[]]).optional(),
         },
         { error: "Invalid discovery arguments" },
       ),
@@ -170,17 +210,12 @@ export function createZeroMcpServer(): McpServer {
     {
       description:
         "Inspect one canonical candidateId returned by zero_search. Returns bundled source, pin and license facts only; no URL fetch, filesystem read, install or execution.",
-      inputSchema: z.strictObject(
-        { candidateId },
-        { error: "Invalid discovery arguments" },
-      ),
+      inputSchema: z.strictObject({ candidateId }, { error: "Invalid discovery arguments" }),
       outputSchema: inspectOutput,
       annotations,
     },
     ({ candidateId: id }) => {
-      const entry = repositorySnapshot.records.find(
-        (candidate) => candidate.repository === id,
-      );
+      const entry = repositorySnapshot.records.find((candidate) => candidate.repository === id);
       return boundedResult(
         inspectOutput,
         {
@@ -231,12 +266,11 @@ export function createZeroMcpServer(): McpServer {
           server: { name: "repositoryzero", version: ZERO_MCP_SERVER_VERSION },
           profile: "discovery-only",
           backend: "unavailable",
+          protocolVersion: server.protocolVersion,
           operations: [...operations],
           catalog: {
             researchDate: repositorySnapshot.researchDate,
-            sha256: createHash("sha256")
-              .update(JSON.stringify(repositorySnapshot))
-              .digest("hex"),
+            sha256: createHash("sha256").update(JSON.stringify(repositorySnapshot)).digest("hex"),
             records: repositorySnapshot.records.length,
           },
           checkedAt: new Date().toISOString(),

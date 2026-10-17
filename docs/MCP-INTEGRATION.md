@@ -1,6 +1,6 @@
 # MCP, papildiniai ir prijungimas iš įprasto coding kliento
 
-**Priimta įgyvendinimo kryptis · 2026-10-17 · runtime dar neįgyvendintas.** [Sprendimai A13–A16](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [faktinė būsena](IMPLEMENTATION.md). Priimtas ir kritiškai patikslintas Astra pasiūlymas; peržiūrėtas source pagrindas 01645b085ed6f592cd450ee06537dfb958cc9c94. Žemiau esantys kontraktai yra įgyvendinimo reikalavimai, ne veikiančio serverio ataskaita.
+**Priimta įgyvendinimo kryptis · 2026-10-17 · discovery runtime įgyvendintas, execution dar nepriimtas.** [Sprendimai A13–A16](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [faktinė būsena](IMPLEMENTATION.md). Priimtas ir kritiškai patikslintas Astra pasiūlymas; peržiūrėtas source pagrindas 01645b085ed6f592cd450ee06537dfb958cc9c94. Žemiau esantys kontraktai yra visos integracijos reikalavimai. Dabartinis serveris teikia tris discovery tools; [tikro Codex ryšio ataskaita](experiments/MCP-PREVIEW-2026-10-17.md) aprašo patikrintą ribotą profilį.
 
 Tikslas — žmogui likti savo Codex ar Claude Code, o RepositoryZero naudoti komponentų paieškai, paruošimui ir patikrai. Pirmas klientas — Codex desktop su dabartine naudotojo paskyra. Claude Code kvalifikuojamas atskirai. [Native palyginimo protokolas](NATIVE-CODEX-BENCHMARK.md) atskirtas nuo [istorinio Claude CLI Lab](LOCAL-LAB.md).
 
@@ -148,7 +148,7 @@ Zero negali patikimai sustabdyti visų native host model calls, jo shell ar kit�
 
 Oficialūs Codex dokumentai aprašo vietinį STDIO bei Streamable HTTP ir projekto konfigūraciją. Desktop setup nurodo restart; dabartinio aktyvaus pokalbio hot-load nežadėti. [Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli). Claude Code taip pat dokumentuoja STDIO ir HTTP bei projekto roots; vieno host veikimas nepatvirtina kito host conformance. [Claude MCP](https://code.claude.com/docs/en/mcp).
 
-Pirmas execution profilis: **Linux x86_64/WSL, ir projektas, ir Zero worker tame pačiame Linux filesystem**. Windows desktop paleidžia pinned vietinį STDIO entrypoint per fiksuotą WSL distribution/user ir absoliučius vykdomojo failo argumentus, be interpoliuojamos shell eilutės. Tai priimtas pirmo bridge projekto profilis; Windows Codex → WSL proceso lifecycle ir roots mapping dar turi būti realiai patikrinti.
+Pirmas execution profilis: **Linux x86_64/WSL, ir projektas, ir Zero worker tame pačiame Linux filesystem**. Windows desktop paleidžia pinned vietinį STDIO entrypoint per fiksuotą WSL distribution/user ir absoliučius vykdomojo failo argumentus, be interpoliuojamos shell eilutės. Tai priimtas pirmo bridge projekto profilis; Windows Codex → WSL discovery ryšys patikrintas realiais tools; execution roots mapping ir patvaraus darbo lifecycle dar turi atskirus vartus.
 
 `C:\...`, `/mnt/c/...`, WSL `/home/...` ir UNC keliai nėra tarpusavyje keičiami vien string replace. V1 palaiko vieną aiškų mapping; kitus roots atmeta su aiškia priežastimi. Host prieiga prie paruošto artefakto turi būti patikrinta realiu file read/hash, o ne vien gražiu `file://` link. Jei host ir worker skirtinguose hosts, reikia atskiro content transfer profilio; nuotoliniam serveriui nepaduoti tariamai vietinio kelio.
 
@@ -182,11 +182,11 @@ Reikalingos būsenos ir veiksmai: `not configured → setup started → trust/co
 
 Disconnect pašalina arba išjungia host binding ir atšaukia Zero project grant; jei job jau vyksta, žmogui aišku, ar jis atšaukiamas, ar baigsis pagal esamą deadline. Tai nėra duomenų ištrynimas. Remote disconnect turi ir token/session revocation. Update rodo installed/available/verified versijas, išsaugo aktyvių jobs pins, prašo naujo trust tik pakitus atitinkamoms teisėms ir reikalauja pakartotinės compatibility patikros. Revoked profilis blokuoja naujus jobs; automatinis rollback į revoked versiją neleistinas. Šiems vietinio piloto veiksmams nereikia kurti naujo visų OS auto-updater.
 
-### Pradinė support matrica — visi Zero connection įrodymai dar NOT_RUN
+### Dabartinė support matrica — discovery ir execution vertinami atskirai
 
 | Klientas / OS / execution | Transportas ir setup | Versijos faktas | Priėmimo riba |
 |---|---|---|---|
-| Codex desktop Windows → WSL Linux x86_64 projektas | Vietinis STDIO per fiksuotą WSL launcher; direct setup arba žinomo marketplace install flow | Desktop build ir distro/Node/server versijas užfiksuoti per P1X.3; connection dar netikrintas | Pirmas pasirinktas tikras native profilis; bridge/process/roots dar NOT_RUN |
+| Codex desktop Windows → WSL Linux x86_64 projektas | Vietinis STDIO per fiksuotą WSL launcher; direct setup arba žinomo marketplace install flow | OpenAI.Codex 26.1007.9446.0; Node 24.19.0; server 0.1.1 / schema 1.1.0; protocol 2025-06-18 | Discovery PASS 2026-10-17; [įrodymai](experiments/MCP-PREVIEW-2026-10-17.md). Execution roots ir useful-result NOT_RUN |
 | Codex desktop Linux, vietinis projektas | STDIO; native setup | Exact desktop build + server/SDK/protocol prieš kvalifikaciją | Atskira eilutė, nepaveldi Windows/WSL PASS |
 | Codex desktop macOS, vietinis projektas | Potencialus STDIO setup, tik po realios patikros | Minimum version nenustatyta | Planuojama, ne skelbiamas support |
 | Codex CLI Windows/WSL/Linux | STDIO, dokumentuotas `mcp add` | Windows CLI 0.159.3 ir MCP add help patikrinti; Zero connection/auth nebandytas | CLI nėra desktop A/B pakaitalas; OAuth bandymai tebėra atidėti |

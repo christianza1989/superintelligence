@@ -1,0 +1,82 @@
+name: Zero offline foundation
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zero-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - name: Install the frozen workspace without lifecycle scripts
+        run: npm run setup
+      - name: Generate local database types without connecting to a database
+        run: npm run db:generate
+      - name: Check documentation and selected package types
+        run: |
+          npm run check:docs
+          npm run check:zero
+      - name: Run offline foundation, MCP and observer regressions
+        run: |
+          npm run test:foundation -- --maxWorkers=2
+          npm run test:mcp -- --maxWorkers=2
+          npm run test:observer -- --maxWorkers=2
+          npm run test:scope -- --maxWorkers=2
+          npm run test:worker -- --maxWorkers=2
+      - name: Check the MCP launcher syntax
+        run: node --check scripts/zero-mcp.mjs
+
+  csv-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.6
+        env:
+          POSTGRES_USER: zero_fixture
+          POSTGRES_PASSWORD: fixture_only_password
+          POSTGRES_DB: zero_csv_test_ci
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U zero_fixture -d zero_csv_test_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgresql://zero_fixture:fixture_only_password@127.0.0.1:5432/zero_csv_test_ci
+      ZERO_CSV_TEST_DATABASE_URL: postgresql://zero_fixture:fixture_only_password@127.0.0.1:5432/zero_csv_test_ci
+      VERIFY_ZERO_CSV_DATABASE: "1"
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - name: Install and generate database types
+        run: |
+          npm run setup
+          npm run db:generate
+      - name: Migrate the disposable fixture database
+        run: npm run db:migrate
+      - name: Check application and worker types
+        run: node scripts/platform.mjs --filter @rakazo/api --filter @rakazo/worker check
+      - name: Exercise real Graphile jobs and authenticated application routes
+        run: |
+          npm run test:csv:postgres -- --maxWorkers=1
+          npm run test:csv:api -- --maxWorkers=1

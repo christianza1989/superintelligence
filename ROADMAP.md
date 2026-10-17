@@ -21,7 +21,7 @@ Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai
 
 - [x] DOC.1 Priimtas Astra auditas, aptartos ir susiaurintos rekomendacijos, sutvarkytas dabarties indeksas ir karantinas; tai dokumentų, ne produkto kokybės rezultatas.
 - [ ] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Dokumentų CI vienas to neuždaro.
-- [ ] OBS1 Request-scoped observer per AgentRunRequest; tas pats callId beforeCall/usage/reservation. Du lygiagretūs runs nesumaišo observer, atsisakymas duoda 0 dispatch. Jokio global mutable currentRun ar DB migracijos vien dėl jungties.
+- [x] OBS1 Request-scoped observer per AgentRunRequest; tas pats callId beforeCall/usage/reservation. Du lygiagretūs runs nesumaišo observer, atsisakymas duoda 0 dispatch. 125 offline regresijos; onUsage lieka apskaitos autoritetas. OBS2 account/cap integracija atskirai atvira; DB migracija nepridėta.
 - [ ] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Emuliuotas modelis aiškiai pažymėtas; galima vykdyti lygiagrečiai OBS darbams.
 - [ ] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti; nuo TP1. Tai siaura aprėptis, ne visas G1.
 - [ ] NEED1 Poreikių ir fit/no-fit retrieval rinkinys su hard constraints bei LT/EN sinonimais. Užfiksuoti dev/holdout atskyrimą; 48 užklausos (24/24) pradinis pasiūlymas, o ne įrodytas optimumas. Singleton netinkamas source negali būti rekomenduotas vien dėl to, kad vienintelis.
@@ -38,11 +38,11 @@ Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai
 
 ## P1X. MCP ir native klientai — MVP dalis
 
-Priimta [MCP architektūra ir profilių mapping](docs/MCP-INTEGRATION.md). Pirmas Codex desktop; Claude Code ir kiekvienas OS/transport atskirai. MCP eksportas dalijasi esamu core/worker, host valdo pokalbį ir coding. P1X.1 yra dokumentinis vartas; likę darbai neužbaigti.
+Priimta [MCP architektūra ir profilių mapping](docs/MCP-INTEGRATION.md). Pirmas Codex desktop; Claude Code ir kiekvienas OS/transport atskirai. MCP eksportas dalijasi esamu core/worker, host valdo pokalbį ir coding. P1X.1 yra dokumentinis vartas; discovery ryšys patikrintas, o execution ir platinimo vartai lieka atviri.
 
-- [x] P1X.1 Priimti A13–A16: trečias MCP įėjimas, native host / Zero job autoritetas, vienas service/worker, profilių vartai ir native allowance matomumas. Kritiškai peržiūrėtas Astra pasiūlymas; serveris dar neįgyvendintas.
+- [x] P1X.1 Priimti A13–A16: trečias MCP įėjimas, native host / Zero job autoritetas, vienas service/worker, profilių vartai ir native allowance matomumas. Kritiškai peržiūrėtas Astra pasiūlymas; faktinė įgyvendinimo būsena pateikta IMPLEMENTATION.
 - [ ] P1X.2 Plonas STDIO discovery serveris: zero_search/zero_inspect/zero_status, strict bounded schemas, pinned SDK, tik protokolas stdout. Offline initialize/list/call/invalid-input/output-limit/shutdown patikros ir TP0 merge kontrolė; be DB/modelio kvietimo.
-- [ ] P1X.3 Pirmas tikras Codex desktop ryšys naujame pokalbyje: atranda ir kviečia preview tools. Exact host/build/OS/transport/server/protocol ir setup/restart įrodymai; Windows–WSL bridge/roots patikrinti. SDK klientas ar CLI help to neuždaro; nuo P1X.2. Claude turi atskirą P1X.10 eilutę.
+- [x] P1X.3 Pirmas tikras Codex desktop discovery ryšys naujame pokalbyje: Windows–WSL STDIO kvietė status/search/inspect. Host paketas, server/schema/catalog versijos ir nonce įrodymai [ataskaitoje](docs/experiments/MCP-PREVIEW-2026-10-17.md); naujame procese serveris 0.1.1 / schema 1.1.0 užfiksavo tikrą negotiated protocol 2025-06-18. Po WSL persikrovimo seno transporto FAIL išsaugotas atskirai. Discovery projekto roots nenaudoja; execution roots lieka P1X.4. Claude ir useful-result atskirai P1X.10.
 - [ ] P1X.4 Operator-approved project scope ir immutable snapshot; roots sankirta arba aiškus root, private-file exclusion, traversal/symlink/Windows–WSL mapping ir cross-project/job ACL. Grant recheck prieš vykdymą; nuo P1X.1, prieš prepare/verify.
 - [ ] P1X.5 Prepare/job/artifact/cancel per esamą patvarų worker: idempotency ir key conflict/expiry, lease/fence, timeout/unknown, reconnect bei wrapper/backend restart. Jokio antro scheduler; nuo P1X.4, P1X.8 limitų ir TP1/TP2 būsenos darbų.
 - [ ] P1X.6 Vienas PREP1/NEED1 komponento profilis su pin/lock/license/runtime, staging artefaktu ir host handoff; host tikrai perskaito/integruoja, TRACE1 actual use evidence. Ne universalus installer; nuo P1X.5.

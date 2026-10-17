@@ -7,6 +7,15 @@
     "node": "^22.22.2 || ^24.0.0 || >=26.0.0"
   },
   "scripts": {
+    "setup:mcp": "node scripts/platform.mjs install --frozen-lockfile --ignore-scripts --filter @rakazo/adapters... --filter @rakazo/testkit...",
+    "mcp:serve": "node scripts/zero-mcp.mjs",
+    "test:mcp": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-server.test.ts packages/adapters/src/zero-mcp-stdio.test.ts",
+    "test:observer": "node scripts/platform.mjs exec vitest run packages/adapters/src/pi-runtime-fallback.test.ts packages/adapters/src/pi-usage.test.ts packages/adapters/src/pi-runtime-provider-prefix.test.ts packages/adapters/src/pi-cache-protocol.test.ts",
+    "test:scope": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-project-snapshot.test.ts packages/adapters/src/file-handle-path.test.ts",
+    "test:worker": "node scripts/platform.mjs exec vitest run packages/adapter-kit/src/background-jobs.test.ts packages/adapters/src/zero-csv-profile.test.ts packages/adapters/src/wakeup-graphile-host.test.ts packages/adapters/src/wakeup.test.ts",
+    "test:csv:postgres": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-csv-preparation.postgres.test.ts",
+    "test:csv:api": "node scripts/platform.mjs exec vitest run apps/api/src/zero-csv.postgres.test.ts",
+    "check:zero": "node scripts/platform.mjs --filter @rakazo/adapter-kit --filter @rakazo/adapters check",
     "setup": "node scripts/platform.mjs install --frozen-lockfile --ignore-scripts --filter @rakazo/web... --filter @rakazo/www... --filter @rakazo/api... --filter @rakazo/worker... --filter @rakazo/testkit...",
     "dev": "node scripts/platform.mjs --filter @rakazo/web dev",
     "dev:site": "node scripts/platform.mjs --filter @rakazo/www dev --host 127.0.0.1 --port 4321",
