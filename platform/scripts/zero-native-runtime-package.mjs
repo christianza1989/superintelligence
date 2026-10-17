@@ -8,6 +8,7 @@ import { copyRuntimePackageClosure } from "./lib/runtime-package-closure.mjs";
 import { nativeRuntimeBuildProfile, assertNativeMessagingNotShipped } from "./lib/native-runtime-build-profile.mjs";
 import { bundledRuntimePackages, copyBundledRuntimeNotices, validateCopiedRuntimePackageMetadata } from "./lib/native-runtime-notices.mjs";
 import { nativeRuntimeStageArguments, nativeRuntimeLicenseEvidence, requireNativeRuntimeLicenseEvidence } from "./lib/native-runtime-stage-policy.mjs";
+import { nativeMigrationEngine, nativeMigrationSources } from "./lib/native-runtime-migration.mjs";
 
 // Source-built staging only. Uses existing entries/installed versions; never
 // installs, starts services, downloads, runs migrations or claims qualification.
@@ -115,30 +116,10 @@ try {
   await cp(path.join(workspace, "packages/db/prisma"), path.join(output, "db/prisma"), { recursive: true, errorOnExist: true });
   for (const name of ["LICENSE", "NOTICE"]) await cp(path.join(root, name), path.join(output, name), { errorOnExist: true });
   // Explicit URL, fixed source schema/migrations, no developer dotenv loader.
-  await writeFile(path.join(output, "db/prisma.config.mjs"), [
-    'import { defineConfig } from "prisma/config";',
-    'import { fileURLToPath } from "node:url";',
-    'const url = process.env.DATABASE_URL;',
-    'if (!url) throw new Error("DATABASE_URL is required");',
-    'const parsed = new URL(url);',
-    'if (!["postgres:", "postgresql:"].includes(parsed.protocol) || !parsed.hostname || parsed.pathname.length <= 1) throw new Error("Invalid DATABASE_URL");',
-    'export default defineConfig({ schema: fileURLToPath(new URL("./prisma/schema.prisma", import.meta.url)), migrations: { path: fileURLToPath(new URL("./prisma/migrations", import.meta.url)) }, datasource: { url } });',
-    "",
-  ].join("\n"), { flag: "wx" });
-  await writeFile(path.join(output, "migrate.mjs"), [
-    'import { spawn } from "node:child_process";',
-    'import { fileURLToPath } from "node:url";',
-    'if (process.argv.length !== 2) throw new Error("Migration launcher takes no arguments");',
-    'const url = process.env.DATABASE_URL;',
-    'if (!url) throw new Error("DATABASE_URL is required");',
-    'const parsed = new URL(url);',
-    'if (!["postgres:", "postgresql:"].includes(parsed.protocol) || !parsed.hostname || parsed.pathname.length <= 1) throw new Error("Invalid DATABASE_URL");',
-    'const child = spawn(process.execPath, [fileURLToPath(new URL("./node_modules/prisma/build/index.js", import.meta.url)), "migrate", "deploy", "--config", fileURLToPath(new URL("./db/prisma.config.mjs", import.meta.url))], { cwd: fileURLToPath(new URL("./db/", import.meta.url)), env: { DATABASE_URL: url, CHECKPOINT_DISABLE: "1", PRISMA_HIDE_UPDATE_MESSAGE: "1", NODE_ENV: "production" }, stdio: "inherit" });',
-    'child.once("error", () => { process.exitCode = 1; });',
-    'child.once("exit", (code) => { process.exitCode = code ?? 1; });',
-    'for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => child.kill(signal));',
-    "",
-  ].join("\n"), { flag: "wx" });
+  report.migrationEngine = await nativeMigrationEngine(output, report.closure);
+  const migration = nativeMigrationSources(report.migrationEngine);
+  await writeFile(path.join(output, "db/prisma.config.mjs"), migration.config, { flag: "wx" });
+  await writeFile(path.join(output, "migrate.mjs"), migration.launcher, { flag: "wx" });
   // Preserve licenses for every bundled package, in addition to full external
   // closures. Do not infer license approval from successful package copying.
   const shippedInputs = new Set();
