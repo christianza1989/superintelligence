@@ -3,6 +3,7 @@ import type { Actor } from "@rakazo/contracts";
 import { IsolationError } from "@rakazo/db";
 import { z } from "zod";
 import { ZERO_BROWSER_STATIC_PROFILE } from "./zero-browser-contract.js";
+import { ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS } from "./zero-component-input.js";
 import type { ZeroBrowserBinding, ZeroPdfBinding } from "./zero-component-services.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
@@ -72,6 +73,7 @@ const files = z
             (value) =>
               !path.posix.isAbsolute(value) &&
               !/[\\:%]/u.test(value) &&
+              value.split("/").length <= ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS &&
               value
                 .split("/")
                 .every((segment) => segment !== "" && segment !== "." && segment !== ".."),

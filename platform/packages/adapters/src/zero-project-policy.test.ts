@@ -85,6 +85,15 @@ describe.skipIf(process.platform !== "linux")("trusted operator project policy",
     expect(await policy.resolveBrowser(principal)).toMatchObject({
       runtime: { imageId: browser.imageId },
     });
+    const deepestPath = `${Array.from({ length: 11 }, (_, index) => `d${index}`).join("/")}/source.pdf`;
+    await writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        grants: [{ ...principal, pdf: { ...pdf, files: [{ ...files[0], path: deepestPath }] } }],
+      }),
+    );
+    expect((await policy.resolvePdf(principal))?.files[0]?.path).toBe(deepestPath);
     await writeFile(file, JSON.stringify({ version: 1, grants: [principal] }));
     expect(await policy.resolvePdf(principal)).toBeUndefined();
     expect(await policy.resolveBrowser(principal)).toBeUndefined();
@@ -95,6 +104,15 @@ describe.skipIf(process.platform !== "linux")("trusted operator project policy",
         files: Array.from({ length: 11 }, (_, index) => ({ ...files[0], fileId: `file-${index}` })),
       },
       { ...pdf, files: [{ ...files[0], path: "../private.pdf" }] },
+      {
+        ...pdf,
+        files: [
+          {
+            ...files[0],
+            path: `${Array.from({ length: 12 }, (_, index) => `d${index}`).join("/")}/source.pdf`,
+          },
+        ],
+      },
     ]) {
       await writeFile(
         file,

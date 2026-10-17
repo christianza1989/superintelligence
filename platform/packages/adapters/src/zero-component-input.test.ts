@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { IsolationError } from "@rakazo/db";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LocalArtifactStore } from "./artifacts.js";
@@ -47,6 +47,56 @@ async function fixture(family: "pdf" | "browser") {
   return { root, bytes, principal, deps, binding, get, put, recheck: vi.fn(async () => undefined) };
 }
 describe("owned immutable component input", () => {
+  it("rejects paths beyond cleanup depth before capture, then captures the deepest allowed path and another file without orphans", async () => {
+    const f = await fixture("pdf");
+    const tooDeep = `${Array.from({ length: 15 }, (_, i) => `d${i}`).join("/")}/source`;
+    const deepestAllowed = `${Array.from({ length: 11 }, (_, i) => `a${i}`).join("/")}/source`;
+    for (const relative of [tooDeep, deepestAllowed]) {
+      await mkdir(`${f.root}/project/${relative.slice(0, relative.lastIndexOf("/"))}`, {
+        recursive: true,
+        mode: 0o700,
+      });
+      await writeFile(`${f.root}/project/${relative}`, f.bytes, { mode: 0o600 });
+    }
+    f.binding.files[0]!.path = tooDeep;
+    await expect(
+      captureZeroComponentInput(
+        f.deps as never,
+        "pdf",
+        f.principal,
+        "source",
+        f.binding,
+        f.recheck,
+      ),
+    ).rejects.toBeInstanceOf(IsolationError);
+    expect(f.put).not.toHaveBeenCalled();
+    expect(f.deps.prisma.artifact.create).not.toHaveBeenCalled();
+    expect(await readdir(f.binding.snapshot.stagingRoot)).toEqual([]);
+
+    f.binding.files[0]!.path = deepestAllowed;
+    await captureZeroComponentInput(
+      f.deps as never,
+      "pdf",
+      f.principal,
+      "source",
+      f.binding,
+      f.recheck,
+    );
+    f.binding.files[0]!.path = "source";
+    await captureZeroComponentInput(
+      f.deps as never,
+      "pdf",
+      f.principal,
+      "source",
+      f.binding,
+      f.recheck,
+    );
+    expect(f.put).toHaveBeenCalledTimes(2);
+    expect(f.deps.prisma.artifact.create).toHaveBeenCalledTimes(2);
+    const scopes = await readdir(f.binding.snapshot.stagingRoot);
+    expect(scopes).toHaveLength(1);
+    expect(await readdir(`${f.binding.snapshot.stagingRoot}/${scopes[0]}`)).toEqual([]);
+  });
   it.each(["pdf", "browser"] as const)(
     "captures %s from the snapshotter files directory, then verifies the owned artifact",
     async (family) => {

@@ -21,6 +21,9 @@ export interface ZeroComponentInputRef {
   bytes: number;
 }
 type Family = "pdf" | "browser";
+// Includes the filename. Snapshot wrapper directories and manifest entries must
+// fit inside reserve()'s unchanged depth-16 / entry-64 cleanup walk.
+export const ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS = 12;
 type Dependencies = {
   prisma: PrismaClient;
   artifacts: ArtifactStore;
@@ -116,7 +119,12 @@ function selected(binding: ZeroComponentInputBinding, fileId: string) {
   )
     throw new IsolationError();
   const file = binding.files.find((entry) => entry.fileId === fileId);
-  if (!file || !/^[a-f0-9]{64}$/u.test(file.sha256)) throw new IsolationError();
+  if (
+    !file ||
+    !/^[a-f0-9]{64}$/u.test(file.sha256) ||
+    file.path.split("/").length > ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS
+  )
+    throw new IsolationError();
   return file;
 }
 /** Validate owned input metadata before the worker reads any private source bytes. */
