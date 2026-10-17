@@ -5,6 +5,7 @@
 - [MCP discovery preview ir native Codex ryšys](MCP-PREVIEW-2026-10-17.md).
 - [Pirmas gyvas Jev worker profilis](JEV-WORKER-2026-10-17.md).
 - [50 scenarijų patvarumo kvalifikacija](DURABILITY-2026-10-17.md).
+- [LT/EN poreikių paieškos kūrimo rinkinys](NEED-RETRIEVAL-2026-10-17.md).
 - [Claude / Sonnet / SprintDesk](CLAUDE-CALIBRATION.md).
 - [Lean konfigūracija](LEAN-CALIBRATION.md).
 - [Haiku / StockDesk](STOCKDESK-CALIBRATION.md).
