@@ -14,6 +14,7 @@ export function libraryReturnPath(): string {
       "license",
       "runtime",
       "archived",
+      "language",
       "sort",
       "view",
       "repo",

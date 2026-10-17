@@ -12,13 +12,13 @@ describe("Library return navigation", () => {
       sessionStorage: {
         getItem: (key: string) =>
           key === LIBRARY_FILTERS_KEY
-            ? "q=image+editor&category=images&repo=KDE%2Fkrita&view=saved&redirect=https%3A%2F%2Fexample.test"
+            ? "q=image+editor&category=images&language=C%2B%2B&sort=indexed&repo=KDE%2Fkrita&view=saved&redirect=https%3A%2F%2Fexample.test"
             : null,
       },
     });
     const path = libraryReturnPath();
     expect(path).toBe(
-      "/discover?q=image+editor&category=images&view=saved&repo=KDE%2Fkrita",
+      "/discover?q=image+editor&category=images&language=C%2B%2B&sort=indexed&view=saved&repo=KDE%2Fkrita",
     );
   });
   it("handles missing, blocked and oversized stored state", () => {
