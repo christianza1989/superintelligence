@@ -5,6 +5,8 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { copyRuntimePackageClosure } from "./lib/runtime-package-closure.mjs";
+import { nativeRuntimeBuildProfile, assertNativeMessagingNotShipped } from "./lib/native-runtime-build-profile.mjs";
+import { bundledRuntimePackages, copyBundledRuntimeNotices } from "./lib/native-runtime-notices.mjs";
 
 // Source-built staging only. Uses existing entries/installed versions; never
 // installs, starts services, downloads, runs migrations or claims qualification.
@@ -72,6 +74,8 @@ try {
       }
     }
   }
+  const runtimeProfile = await nativeRuntimeBuildProfile(workspace);
+  report.buildProfile = runtimeProfile.manifest;
   const result = await build({
     absWorkingDir: workspace, entryPoints: { api: "apps/api/src/index.ts", worker: "apps/worker/src/index.ts" },
     outdir: path.join(output, "app"), outExtension: { ".js": ".mjs" },
@@ -80,7 +84,7 @@ try {
     legalComments: "inline", logLevel: "silent", external,
     define: { ZERO_RUNTIME_BUNDLED: "true", ZERO_OPERATOR_BUNDLED: "false" },
     banner: { js: 'import { createRequire as zeroRuntimeRequire } from "node:module"; const require = zeroRuntimeRequire(import.meta.url);' },
-    plugins: [{ name: "declared-workspace-source-exports", setup(build) {
+    plugins: [runtimeProfile.plugin, { name: "declared-workspace-source-exports", setup(build) {
       build.onResolve({ filter: /^@rakazo\// }, args => {
         const file = exports.get(args.path);
         return file ? { path: file } : { errors: [{ text: "Missing workspace source export: " + args.path }] };
@@ -103,6 +107,7 @@ try {
     path: path.relative(output, file.path), bytes: file.contents.byteLength,
     sha256: hash(file.contents),
   }));
+  assertNativeMessagingNotShipped(result.metafile);
   await cp(path.join(workspace, "pnpm-lock.yaml"), path.join(output, "pnpm-lock.yaml"), { errorOnExist: true });
   await mkdir(path.join(output, "db"));
   await cp(path.join(workspace, "packages/db/prisma"), path.join(output, "db/prisma"), { recursive: true, errorOnExist: true });
@@ -134,35 +139,16 @@ try {
   ].join("\n"), { flag: "wx" });
   // Preserve licenses for every bundled package, in addition to full external
   // closures. Do not infer license approval from successful package copying.
-  const packages = new Map();
-  for (const input of Object.keys(result.metafile.inputs)) {
-    if (!input.includes("node_modules/")) continue;
-    let folder = path.dirname(path.resolve(workspace, input));
-    while (folder !== path.dirname(folder)) {
-      try {
-        const data = JSON.parse(await readFile(path.join(folder, "package.json"), "utf8"));
-        if (typeof data.name === "string" && typeof data.version === "string") {
-          packages.set(data.name + "@" + data.version, { folder, data }); break;
-        }
-      } catch (error) { if (error.code !== "ENOENT") throw error; }
-      folder = path.dirname(folder);
+  const shippedInputs = new Set();
+  for (const bundle of Object.values(result.metafile.outputs)) {
+    for (const [input, contribution] of Object.entries(bundle.inputs)) {
+      if (contribution.bytesInOutput > 0) shippedInputs.add(input);
     }
   }
-  const notices = [];
-  for (const [id, { folder, data }] of [...packages].sort(([a], [b]) => a.localeCompare(b))) {
-    const files = [];
-    for (const name of (await readdir(folder)).sort()) {
-      if (!/^(licen[cs]e|copying|notice)([._-]|$)/i.test(name) || !(await lstat(path.join(folder, name))).isFile()) continue;
-      const relative = path.join("third-party", id.replace(/[^a-zA-Z0-9._-]/g, "_"), name);
-      await mkdir(path.dirname(path.join(output, relative)), { recursive: true });
-      await cp(path.join(folder, name), path.join(output, relative), { errorOnExist: true });
-      files.push(relative);
-    }
-    const metadataFile = path.join("third-party", id.replace(/[^a-zA-Z0-9._-]/g, "_"), "package.json");
-    await mkdir(path.dirname(path.join(output, metadataFile)), { recursive: true });
-    await cp(path.join(folder, "package.json"), path.join(output, metadataFile), { errorOnExist: true });
-    notices.push({ package: data.name, version: data.version, license: data.license ?? "unknown", metadataFile, files });
-  }
+  for (const pkg of report.closure.packages) shippedInputs.add("node_modules/.pnpm/" + pkg.instance + "/package.json");
+  const packages = await bundledRuntimePackages(workspace, [...shippedInputs]);
+  const notices = await copyBundledRuntimeNotices({ packages, output });
+  report.noticeScope = "positive-bundled-byte-contributions-and-all-copied-external-packages";
   await writeFile(path.join(output, "THIRD-PARTY-NOTICES.json"), JSON.stringify(notices, null, 2) + "\n", { flag: "wx" });
   report.missingBundledLicenseFiles = notices.filter(notice => !notice.files.length).map(notice => ({
     package: notice.package, version: notice.version, declaredLicense: notice.license,
