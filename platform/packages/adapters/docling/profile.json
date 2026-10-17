@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "id": "docling-2.140.0-pdf-cpu-v1",
+  "scope": "born-digital tables only; OCR disabled; no scanned-document claim",
+  "package": {
+    "name": "docling-slim",
+    "version": "2.140.0",
+    "extras": [
+      "convert-core",
+      "format-pdf",
+      "models-local"
+    ],
+    "sha256": "91ab66bc79c471aa4c23d956a6c4887344d84673a496dcc867ec6a3ada8e41d5",
+    "license": "MIT",
+    "source": "https://github.com/docling-project/docling/tree/0e54294231b69bc2cf7a39873235495788f76b57",
+    "sourceCommit": "0e54294231b69bc2cf7a39873235495788f76b57",
+    "licenseSource": "https://raw.githubusercontent.com/docling-project/docling/0e54294231b69bc2cf7a39873235495788f76b57/LICENSE",
+    "licenseSha256": "edb765d1e3e60d0c7a7d5fba5f2bb2c3c29f7465cecb5c22cf1185c884954e4c"
+  },
+  "pythonImage": "python@sha256:8a00ecb83ed9d0864dfd102a1bdb2067fda907ceb30bb86d09da9ee558b19590",
+  "pythonImageCompressedBytes": 49907229,
+  "platform": "linux/amd64",
+  "torch": "2.8.0+cpu",
+  "torchvision": "0.23.0+cpu",
+  "models": [
+    {
+      "repo": "docling-project/docling-layout-heron",
+      "revision": "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8",
+      "license": "Apache-2.0",
+      "files": [
+        {
+          "file": "model.safetensors",
+          "bytes": 171658996,
+          "sha256": "00333a43451945aaf89db8ca9c0a17e75d1537c17db60fdb91aa95f4c7929e0c",
+          "url": "https://huggingface.co/docling-project/docling-layout-heron/resolve/8f39ad3c0b4c58e9c2d2c84a38465abf757272d8/model.safetensors"
+        },
+        {
+          "file": "config.json",
+          "url": "https://huggingface.co/docling-project/docling-layout-heron/resolve/8f39ad3c0b4c58e9c2d2c84a38465abf757272d8/config.json",
+          "bytes": 3268,
+          "sha256": "fdea30805ce2f5666b147fca941dcdd27ad468e27d6ed21902207d3da056a97d"
+        },
+        {
+          "file": "preprocessor_config.json",
+          "url": "https://huggingface.co/docling-project/docling-layout-heron/resolve/8f39ad3c0b4c58e9c2d2c84a38465abf757272d8/preprocessor_config.json",
+          "bytes": 444,
+          "sha256": "cd38cd59999e7a95d68e487fbe5132df3d4e5c32a0836add57e6126ba0c4eaf1"
+        },
+        {
+          "file": "README.md",
+          "url": "https://huggingface.co/docling-project/docling-layout-heron/resolve/8f39ad3c0b4c58e9c2d2c84a38465abf757272d8/README.md",
+          "bytes": 3219,
+          "sha256": "175700839bc7808eac6af1d0c23e4f483606ab2276fe01122f4093e61a1a65b6"
+        }
+      ]
+    },
+    {
+      "repo": "docling-project/docling-models",
+      "revision": "fc0f2d45e2218ea24bce5045f58a389aed16dc23",
+      "license": "CDLA-Permissive-2.0",
+      "files": [
+        {
+          "file": "model_artifacts/tableformer/accurate/tableformer_accurate.safetensors",
+          "bytes": 212758388,
+          "sha256": "2a7d6c924b3cd12fb99a09280ca9c33a89c5d60b93253617d2e088c1a40374d9",
+          "url": "https://huggingface.co/docling-project/docling-models/resolve/fc0f2d45e2218ea24bce5045f58a389aed16dc23/model_artifacts/tableformer/accurate/tableformer_accurate.safetensors"
+        },
+        {
+          "file": "model_artifacts/tableformer/accurate/tm_config.json",
+          "url": "https://huggingface.co/docling-project/docling-models/resolve/fc0f2d45e2218ea24bce5045f58a389aed16dc23/model_artifacts/tableformer/accurate/tm_config.json",
+          "bytes": 7060,
+          "sha256": "984e122ceb8ccf84d84c9d2882f6f2302a44b4f1e577babd6289892c36f3cffd"
+        },
+        {
+          "file": "README.md",
+          "url": "https://huggingface.co/docling-project/docling-models/resolve/fc0f2d45e2218ea24bce5045f58a389aed16dc23/README.md",
+          "bytes": 3413,
+          "sha256": "d17f233378eff1240b623b36da76ee8b40afcca05d505949713bf03f7e00822a"
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "dependencyDownloadBytes": 2147483648,
+    "modelDownloadBytes": 1073741824,
+    "installedCacheBytes": 6442450944,
+    "prepareMs": 600000,
+    "inputBytes": 1048576,
+    "pages": 5,
+    "outputBytes": 1048576,
+    "runtimeMs": 120000,
+    "memoryBytes": 2147483648,
+    "threads": 2
+  },
+  "fixtureManifestSha256": "3be8cd41fda8e39cf24d7f97dbdc77de46ab059f4cb486ea53194ca289738d8f",
+  "licenses": {
+    "code": "MIT",
+    "layoutWeights": "Apache-2.0",
+    "tableWeights": "CDLA-Permissive-2.0",
+    "dependencyRedistributionReview": "not completed by this runtime spike"
+  },
+  "defaultDownloads": 0
+}
