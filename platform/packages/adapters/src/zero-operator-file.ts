@@ -7,11 +7,14 @@ import { fileHandlePath } from "./zero-operator-file-path.js";
 export const ZERO_OPERATOR_FILE_MAX_BYTES = 65_536;
 // The packager sets this compile-time flag. Host environment cannot relax it.
 declare const ZERO_OPERATOR_BUNDLED: boolean;
+declare const ZERO_RUNTIME_BUNDLED: boolean;
 const protectedRoot = fileURLToPath(
   new URL(
-    typeof ZERO_OPERATOR_BUNDLED !== "undefined" && ZERO_OPERATOR_BUNDLED
+    typeof ZERO_RUNTIME_BUNDLED !== "undefined" && ZERO_RUNTIME_BUNDLED
       ? "../"
-      : "../../../../",
+      : typeof ZERO_OPERATOR_BUNDLED !== "undefined" && ZERO_OPERATOR_BUNDLED
+        ? "../"
+        : "../../../../",
     import.meta.url,
   ),
 );

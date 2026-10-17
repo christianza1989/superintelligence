@@ -4,6 +4,9 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { csvParseRows } from "d3-dsv";
 
+// Application runtime layout is fixed by its own packager, separate from plugins.
+declare const ZERO_RUNTIME_BUNDLED: boolean;
+
 export const ZERO_CSV_PROFILE = "d3-dsv-3.0.1/strict-table-v1";
 export const ZERO_CSV_LIMITS = Object.freeze({
   inputBytes: 16_384,
@@ -115,7 +118,15 @@ export async function prepareZeroCsvComponent() {
     sha256: zeroCsvHash(packageContent),
     content: packageContent,
   });
-  const lock = await readFile(new URL("../../../pnpm-lock.yaml", import.meta.url), "utf8");
+  const lock = await readFile(
+    new URL(
+      typeof ZERO_RUNTIME_BUNDLED !== "undefined" && ZERO_RUNTIME_BUNDLED
+        ? "../pnpm-lock.yaml"
+        : "../../../pnpm-lock.yaml",
+      import.meta.url,
+    ),
+    "utf8",
+  );
   if (!lock.includes("d3-dsv@3.0.1:")) throw new Error("component_lock_mismatch");
   return {
     name: "d3-dsv",

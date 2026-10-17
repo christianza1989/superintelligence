@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "measurement": "staged-application-payload-not-whole-installed-production",
+  "profile": "native-mcp-local-v1",
+  "status": "failed-license-stage",
+  "sourceRevision": "ddcbed9210471b931f3d2681f9bf980256348c95",
+  "sourceDirtyPaths": [
+    "platform/packages/adapters/src/zero-csv-profile.ts",
+    "platform/packages/adapters/src/zero-operator-file.ts",
+    "platform/packages/core/src/node/load-root-env.ts",
+    "platform/scripts/lib/native-runtime-profile.test.mjs",
+    "platform/scripts/zero-native-runtime-package.mjs"
+  ],
+  "sourceHelperSha256": "685521d608bf82969556ac0ff43e56c670b90bbc794e5a020a33800976132e85",
+  "measuredAt": "2026-10-17T20:00:01.172Z",
+  "failedReportSha256": "c095b5915aca16ac13a59697b7704c619a3317e2f53d02eabdde9804eb44bf20",
+  "esbuildVersion": "0.28.2",
+  "packageStagesCompleted": [
+    "exact-installed-external-closure-copy",
+    "api-worker-source-bundle",
+    "canonical-lock-and-migrations-copy",
+    "explicit-url-migration-launcher"
+  ],
+  "packageStagesIncomplete": [
+    "bundled-third-party-license-inventory",
+    "full-file-hash-manifest"
+  ],
+  "externalPackages": [
+    "d3-dsv",
+    "graphile-worker",
+    "jsdom",
+    "koffi",
+    "prisma",
+    "sharp"
+  ],
+  "externalPackageInstances": 260,
+  "externalClosureFileBytes": 339982149,
+  "externalClosureFileCount": 13910,
+  "externalClosureApparentBytes": 349156584,
+  "externalClosureAllocatedBytes": 369659904,
+  "bundleFileBytes": 35257970,
+  "bundleInputFiles": 5464,
+  "warnings": [],
+  "failure": {
+    "name": "Error",
+    "code": null,
+    "message": "Bundled dependency lacks a license file: @better-auth/utils@0.4.2"
+  },
+  "knownLicenseGap": {
+    "package": "@better-auth/utils",
+    "version": "0.4.2",
+    "declaredLicense": "MIT",
+    "installedLicenseFilePresent": false,
+    "licenseApproval": "unknown"
+  },
+  "runtimeQualified": false,
+  "installedProductionBytes": null,
+  "physicalDedupBytes": null,
+  "originalFailureRetained": true,
+  "noServicesMigrationsOrDownloadsRun": true,
+  "requirementsNotQualifiedByPackaging": [
+    "actual package-only API/worker startup and model/auth isolation",
+    "existing PostgreSQL/Graphile authority, jobs, restart and recovery",
+    "shared compiled web UI plus serving; no web output included yet",
+    "pinned verifier image and actual CSV/browser/PDF qualifications",
+    "explicit native Compose profile and external private operator configuration",
+    "whole install including images, Docker, initialized PG/WAL and bounded data"
+  ],
+  "afterAttemptChanges": [
+    "retain completed bundle metafile and output hashes before later failures",
+    "preserve original bundled dependency metadata",
+    "collect all missing bundled license identities before strict failure",
+    "add private-file-mode and lock-tamper assertions"
+  ],
+  "afterAttemptValidation": {
+    "runtimeProfileTests": 5,
+    "pass": 5,
+    "covers": [
+      "runtime cwd/ancestor dotenv ignored",
+      "source dotenv behavior preserved",
+      "whole runtime package policy exclusion and private external mode enforcement",
+      "copied pinned d3 sources, source tamper and lock tamper",
+      "source CSV canonical lock remains supported"
+    ]
+  },
+  "attemptNotRepeatedAfterChanges": true
+}

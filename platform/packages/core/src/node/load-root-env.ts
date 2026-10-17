@@ -2,7 +2,12 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
 
+// Set only by the standalone application runtime packager.
+declare const ZERO_RUNTIME_BUNDLED: boolean;
+
 export function loadRootEnv(options: { allowInTests?: boolean } = {}) {
+  // Runtime configuration is injected explicitly; never search the host filesystem.
+  if (typeof ZERO_RUNTIME_BUNDLED !== "undefined" && ZERO_RUNTIME_BUNDLED) return;
   // Test runners and verification CLIs supply their own isolated environment.
   // Loading a developer's credentials here also changes otherwise offline tests.
   if (process.env.NODE_ENV === "test" && !options.allowInTests) return;
