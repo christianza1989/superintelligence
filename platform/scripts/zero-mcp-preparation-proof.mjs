@@ -1,7 +1,7 @@
 /** Explicit local conformance against a disposable test database. No model/provider dispatch. */
 import assert from "node:assert/strict";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -27,6 +27,9 @@ const scratch = await mkdtemp(path.join(tmpdir(), "zero-native-preparation-proof
 const dataDir = path.join(scratch, "data");
 const policyFile = path.join(scratch, "project-policy.json");
 const bindingFile = path.join(scratch, "application-binding.json");
+const verifyEnabled = process.env.VERIFY_ZERO_CSV_PROJECT_DOCKER === "1";
+const projectRoot = path.join(scratch, "host-project");
+const stagingRoot = path.join(scratch, "verification-staging");
 const origin = "http://127.0.0.1:5173";
 const secret = () => randomBytes(32).toString("hex");
 Object.assign(process.env, {
@@ -91,7 +94,16 @@ try {
   assert.equal(me.status, 200);
   const { json: actor } = await me.json();
   const grant = { spaceId: actor.spaceId, userId: actor.userId, scopeId: "csv-process-fixture", policyRevision: "fixture-v1", expiresAt: new Date(Date.now() + 5 * 60_000).toISOString() };
-  const policy = { version: 1, grants: [grant] };
+  const verification = verifyEnabled ? {
+    profile: "zero-csv-project-v1", projectRoot, stagingRoot, dockerExecutable: "/usr/bin/docker",
+    imageId: process.env.ZERO_CSV_PROJECT_IMAGE_ID,
+    limits: { maxFiles: 5, maxFileBytes: 131072, maxTotalBytes: 262144 },
+  } : undefined;
+  if (verification) {
+    assert.match(verification.imageId ?? "", /^sha256:[a-f0-9]{64}$/u, "Explicit local test image required");
+    await mkdir(projectRoot); await mkdir(stagingRoot);
+  }
+  const policy = { version: 1, grants: [{ ...grant, ...(verification ? { verification } : {}) }] };
   await writeFile(policyFile, JSON.stringify(policy), { mode: 0o600 });
   const binding = { apiUrl: firstUrl, spaceId: actor.spaceId, scopeId: grant.scopeId, sessionToken: cookie.slice(cookie.indexOf("=") + 1), expiresAt: grant.expiresAt };
   await writeFile(bindingFile, JSON.stringify(binding), { mode: 0o600 });
@@ -99,8 +111,8 @@ try {
   await connect();
   const status = await call("zero_status", { nonce: "process-before-restart" });
   assert.equal(status.backend, "available");
-  assert.equal(status.profile, "csv-preparation-only");
-  assert.equal((await client.listTools()).tools.length, 7);
+  assert.equal(status.profile, verifyEnabled ? "csv-preparation-and-verification" : "csv-preparation-only");
+  assert.equal((await client.listTools()).tools.length, 8);
   const input = { profile: "d3-dsv-3.0.1/strict-table-v1", csv: 'name,value\n"one,two",3\n', idempotencyKey: randomUUID(), deadline: new Date(Date.now() + 60_000).toISOString() };
   const submitted = await call("zero_prepare", input);
   assert.equal((await call("zero_job", { jobId: submitted.jobId })).job.state, "queued");
@@ -114,6 +126,7 @@ try {
   await worker.start(createBackgroundJobHandlers({
     prisma: workerDb.prisma, artifacts: new LocalArtifactStore(dataDir), jobs: handles.jobs,
     authorizeZeroCsv: policyGuard.authorize, workerId: "mcp-process-fixture-worker",
+    resolveZeroCsvVerifier: policyGuard.resolveVerifier,
     executor: { continueRun: forbiddenModel }, runtime: { run: forbiddenModel },
   }));
   await connect();
@@ -153,12 +166,55 @@ try {
   assert.equal(await workerDb.prisma.artifact.count({ where: { rootArtifactId: submitted.jobId, name: "zero-csv-receipt.json" } }), 1);
   assert.equal(await workerDb.prisma.usageRecord.count({ where: { spaceId: actor.spaceId } }), 0);
   assert.equal(modelDispatches, 0);
+  if (verification) {
+    stage = "host-integration";
+    // This process is the host fixture: it reads the hash-verified preparation
+    // artifact and deliberately integrates its pinned component into its own project.
+    for (const file of receipt.component.files) {
+      assert.ok(["src/csv.js", "src/dsv.js", "LICENSE", "package.json"].includes(file.path));
+      assert.equal(createHash("sha256").update(file.content).digest("hex"), file.sha256);
+      const target = path.join(projectRoot, "vendor/d3-dsv", file.path);
+      await mkdir(path.dirname(target), { recursive: true });
+      await writeFile(target, file.content);
+    }
+    await writeFile(path.join(projectRoot, "app.mjs"), "import {csvParseRows} from './vendor/d3-dsv/src/csv.js'; export function parseCsv(input){return csvParseRows(input);}\n");
+    const params = { preparationJobId: submitted.jobId, idempotencyKey: randomUUID(), deadline: new Date(Date.now()+30_000).toISOString() };
+    const checked = await call("zero_verify", params);
+    assert.equal((await call("zero_verify", params)).jobId, checked.jobId);
+    const until = Date.now()+20_000;
+    let checkedJob;
+    do {
+      checkedJob = (await call("zero_job", {jobId:checked.jobId})).job;
+      if (["succeeded","failed","blocked","cancelled"].includes(checkedJob.state)) break;
+      await new Promise(resolve=>setTimeout(resolve,25));
+    } while (Date.now()<until);
+    assert.equal(checkedJob.state,"succeeded");
+    const parts=[]; let cursor=0;
+    do {
+      const page = await call("zero_artifact",{jobId:checked.jobId,offset:cursor,limit:8192});
+      parts.push(Buffer.from(page.contentBase64,"base64"));
+      cursor=page.nextOffset;
+    } while (cursor!==null);
+    const verifiedBytes=Buffer.concat(parts);
+    assert.equal(createHash("sha256").update(verifiedBytes).digest("hex"),checkedJob.sha256);
+    const verified=JSON.parse(verifiedBytes);
+    assert.equal(verified.profile,"zero-csv-project-v1");
+    assert.equal(verified.preparationJobId,submitted.jobId);
+    assert.equal(verified.preparationArtifactSha256,job.sha256);
+    assert.equal(verified.verification.outcome,"pass");
+    assert.equal(verified.freshness.state,"unchanged");
+    assert.equal(verified.verification.cases.length,3);
+    assert.ok(verified.verification.cases.every(item=>item.actualUse.calls===1));
+    assert.ok(!JSON.stringify(verified).includes(scratch));
+    assert.equal(await workerDb.prisma.usageRecord.count({where:{spaceId:actor.spaceId}}),0);
+    assert.equal(modelDispatches,0);
+  }
   stage = "revocation";
   await writeFile(policyFile, JSON.stringify({ version: 1, grants: [] }), { mode: 0o600 });
   assert.equal((await call("zero_status", { nonce: "after-revocation" })).backend, "blocked");
   assert.equal((await client.callTool({ name: "zero_job", arguments: { jobId: submitted.jobId } })).isError, true);
   succeeded = true;
-  console.log(JSON.stringify({ status: "PASS", profile: "csv-preparation-only", processTransport: true, apiRestart: true, clientRestart: true, graphile: true, artifactHashVerified: true, pages, singleReceipt: true, revocation: "blocked", paidModelCalls: 0, limitations: "No host-project integration/verify, native-host tool event or independent holdout proof" }));
+  console.log(JSON.stringify({ status: "PASS", profile: verifyEnabled ? "csv-preparation-and-verification" : "csv-preparation-only", processTransport: true, apiRestart: true, clientRestart: true, graphile: true, artifactHashVerified: true, pages, hostFixtureIntegration:verifyEnabled, dockerVerification:verifyEnabled, singleReceipt: true, revocation: "blocked", paidModelCalls: 0, limitations: "Fixed development suite; not a native-host tool event or independent holdout proof" }));
 } catch {
   console.error(`MCP preparation proof failed at ${stage}; private fixture retained.`);
   process.exitCode = 1;

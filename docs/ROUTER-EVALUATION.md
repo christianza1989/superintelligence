@@ -1,6 +1,6 @@
 # Jev profilio kvalifikavimo protokolas
 
-2026-10-17. **Produkto gyvas worker ToolSelector profilis nepriimtas.** Tai skiriasi nuo jau atliktų standalone Lab API bandymų. [J0–J3 apimtis](JEV-APPLICATIONS.md), [norminiai darbai](../ROADMAP.md) ir [dabartinė būsena](IMPLEMENTATION.md).
+2026-10-17. **Pirmas ribotas gyvas worker ToolSelector profilis praėjo tris kūrimo conformance atvejus.** [Faktiniai rezultatai, kainos ir išnaudotas rezervų cap](experiments/JEV-WORKER-2026-10-17.md). Tai nėra palyginamas naudos tyrimas ar visų užduočių priėmimas. [J0–J3 apimtis](JEV-APPLICATIONS.md), [norminiai darbai](../ROADMAP.md) ir [dabartinė būsena](IMPLEMENTATION.md). Toliau išlieka kvalifikavimo taisyklės naujam profiliui / versijai.
 
 1. Užrakinti tikrą endpoint/model ID, SDK/transporto ir schemos versiją; tikrinti faktinę paskyros prieigą, o ne laikyti sename source minėtą `typesafe/jev-1.13` amžinai prieinamu produktu.
 2. Patikima jungtis išsprendžia account/credentials. Prieš dispatch atomiškai rezervuoti account ir routing lane ribas; count apima retry/helper. Nežinomas usage lieka hold, nekainuoja tariamai 0.

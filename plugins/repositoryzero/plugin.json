@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "repositoryzero",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Search and inspect RepositoryZero source candidates from your coding assistant. Discovery preview; preparation and verification are separate gates.",
   "extensions": {
     "com.openai": {

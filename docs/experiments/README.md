@@ -3,6 +3,8 @@
 Šios ataskaitos išsaugo konkrečias modelio/CLI/prompt/grader epochas ir nesėkmes. Jos nėra nurodymas tęsti seną „aktyvią“ kohortą. Aktualus [kalibravimo metodas](../CALIBRATION.md), [produkto būsena](../IMPLEMENTATION.md).
 
 - [MCP discovery preview ir native Codex ryšys](MCP-PREVIEW-2026-10-17.md).
+- [Pirmas gyvas Jev worker profilis](JEV-WORKER-2026-10-17.md).
+- [50 scenarijų patvarumo kvalifikacija](DURABILITY-2026-10-17.md).
 - [Claude / Sonnet / SprintDesk](CLAUDE-CALIBRATION.md).
 - [Lean konfigūracija](LEAN-CALIBRATION.md).
 - [Haiku / StockDesk](STOCKDESK-CALIBRATION.md).

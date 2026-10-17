@@ -17,8 +17,8 @@ try {
   const server = createZeroMcpServer({
     executionStatus: async () => {
       try {
-        await client.status();
-        return "available";
+        const status = await client.status();
+        return { backend: "available", profile: status.execution };
       } catch (error) {
         return error instanceof ZeroCsvApplicationError &&
           [

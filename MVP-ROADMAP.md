@@ -26,8 +26,8 @@ Pirmas read-only discovery ir tikras Codex desktop ryšys. Prieš prepare/verify
 TP0 yra pristatymo kontrolė; offline vertikalė gali būti kuriama lygiagrečiai observer ir Library. Emuliuotas modelis aiškiai pažymimas. Šis etapas neuždaro MVP.
 
 - [x] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Offline ir tikro PostgreSQL/Graphile/auth API jobs PASS [run 39040117652](https://github.com/christianza1989/superintelligence/actions/runs/39040117652), commit 3aeec19. Dokumentų CI vienas to neuždaro.
-- [ ] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Emuliuotas modelis aiškiai pažymėtas; galima vykdyti lygiagrečiai OBS darbams.
-- [ ] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti; nuo TP1. Tai siaura aprėptis, ne visas G1.
+- [x] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Deterministiniame profilyje modelio kvietimų 0; tikras PostgreSQL/Graphile ir MCP proceso proof PASS. [Įrodymai](docs/experiments/MCP-PREVIEW-2026-10-17.md).
+- [x] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti. API/MCP proceso restart, Graphile host stop/start, timeout ir vieno terminal receipt kontrolės PASS. Tai siaura aprėptis, ne visas G1 ar worker SIGKILL kvalifikacija.
 
 ## Native Codex pilotas ir atskiras naudos tyrimas
 
@@ -66,7 +66,7 @@ Rakazo jau pasirinktas. Lieka kvalifikuoti švarų Linux x86_64 profilį, tikrą
 Esami primityvai turi veikti vienoje worker grandinėje. G1 išlaiko 50 fault vykdymų, backup/reconnect/cancel ir resursų matavimą. OBS3 būtinas tik jei leidžiami fallback/paid child; iki tol tie keliai išjungti.
 
 - [x] OBS1 Request-scoped observer per AgentRunRequest; tas pats callId beforeCall/usage/reservation. Du lygiagretūs runs nesumaišo observer, atsisakymas duoda 0 dispatch. 125 offline regresijos; onUsage lieka apskaitos autoritetas. OBS2 account/cap integracija atskirai atvira; DB migracija nepridėta.
-- [ ] OBS2 Vieno live profilio trusted connection/account mapping ir atominis account + routing lane rezervas. Vienas callId, existing onUsage autoritetas; unknown hold, cap0 neleidžia dispatch. Priklauso nuo OBS1; mokami fallback/child išjungti iki OBS3.
+- [x] OBS2 Vieno live profilio trusted connection/account mapping ir atominis account + routing lane rezervas. Jev kvalifikacijoje tas pats callId sieja DB rezervą, originalų cumulative ledger, awaited recordUsage ir receipt; unknown hold / cap0 / replay kontrolės PASS. [Profilio ribos ir sąnaudos](docs/experiments/JEV-WORKER-2026-10-17.md). Tai nėra visų provider/model/host išlaidų enforcement; fallback/child išjungti iki OBS3.
 - [ ] OBS3 Jei profilis leidžia fallback/paid child, kiekvienas actual target turi teisingą account/model/callID ir rezervą, įskaitant helpers/repair. Iki kvalifikacijos šie keliai turi būti išjungti, o ne tyliai paveldėti primary account.
 - [ ] P1.1 Pasirinktos bazės repo struktūra ir upstream tracking; aiškūs core/API/UI/contracts/adapters/evals sluoksniai. Rakazo variante pirmiausia pernaudoti ir tikrinti esamus sluoksnius; lockfiles ir pinned build toolchain.
 - [ ] P1.2 Projekto, užduoties, žingsnio ir attempt duomenų modelio trūkstamos dalys su migracijomis; Rakazo Artifact/ExternalEffect/Lease modelius pirmiausia pernaudoti ir fault-testinti.
@@ -86,16 +86,16 @@ Esami primityvai turi veikti vienoje worker grandinėje. G1 išlaiko 50 fault vy
 - [ ] P1.16 Pernaudotas realus pasirinkto UI workspace/composer ir task/tool/artifact projection; vienas autoritetingas runtime, be dubliuoto auth/agent scheduler.
 - [ ] P1.17 Preview/Changes/Checks, Stop/blocked/unknown/reconnect ir accessibility; juoda/salotinė default su semantiniais tokens, theme registry/persist/fallback ir testine alternatyva, daugiau išbaigtų temų vėliau.
 - [ ] NEED1 Poreikių ir fit/no-fit retrieval rinkinys su hard constraints bei LT/EN sinonimais. Užfiksuoti dev/holdout atskyrimą; 48 užklausos (24/24) pradinis pasiūlymas, o ne įrodytas optimumas. Singleton netinkamas source negali būti rekomenduotas vien dėl to, kad vienintelis.
-- [ ] PREP1 Vienas ribotas source/package preparer su exact pin/lock, source kilme, tikru entrypoint/runtime/license/permissions patikrinimu ir reuse receipt. Inspectable ir execution-ready atskiri; neprivalomas didelis universalus variklis.
+- [x] PREP1 Vienas ribotas source/package preparer su exact pin/lock, source kilme, tikru entrypoint/runtime/license/permissions patikrinimu ir reuse receipt. d3-dsv3.0.1 / ISC profilis tikrina tikslius failų hash ir lock, perduoda notices, vykdo ribotą parserį ir nepriklausomą reference; projekto actual use patikra atskira. Tai ne viso katalogo runtime approval.
 - [ ] TRACE1 Backend runner ir verifier susieja poreikio/atrankos/paruošimo/invocation/artifact revision/verification receipts; pradžiai bounded JSON artefaktai. Nepriklausomas panaudojimo ir outcome įrodymas, modelio PASS nepakanka.
 
 ## Pasirinktas Jev profilis ir atskiras matavimas
 
 J0–J2 reikalingi naudotojo pasirinktai gyvai integracijai. J3 yra atskiras naudos tyrimas; jo atlikimas gali parodyti ir neigiamą rezultatą. Baseline ar visų užduočių abstain neuždaro J2.
 
-- [ ] J0 Pasirinkto ToolSelector adapterio offline conformance ir worker kontraktas; esami offline primitives tik dalis vartų.
-- [ ] J1 Užrakintas ir realiai pasiekiamas pasirinktas Jev API/model/auth/connection profilis su baigtiniu cap; nuo OBS2.
-- [ ] J2 Gyvas Jev per esamą worker teisingai pasirenka ir realiai panaudoja leistiną tool, no-fit abstain ir schema/timeout/grant/cap atvejai turi receipts. Baseline ar visi abstain neuždaro; nuo J0/J1 ir veikiančio tool.
+- [x] J0 Pasirinkto ToolSelector adapterio offline conformance ir esamo worker kontraktas: strict shortlist/abstain/schema/timeout/grant, usage sink failure, private-byte authorization ir budget/replay patikros PASS; atskiras tikras PostgreSQL/Graphile kelias.
+- [x] J1 Užrakintas ir realiai pasiekiamas typesafe/jev-1.13 System One profilis, stored encrypted credential, trusted payer/routing cap ir originalus cumulative ledger. Faktinis reported model typesafe/jev-1.13-20260917. 2026-10-17 live PASS; originalus 1 USD dabar pilnai rezervuotas, nauji mokami dispatch blocked iki reconciliacijos ar papildomo leidimo.
+- [x] J2 Gyvas Jev per esamą worker teisingai parinko ir realiai panaudojo CSV bei JSON tools ir atsisakė 3D no-fit: 3/3 PASS, trys provider usage receipts. Schema/timeout/grant/cap neigiamos kontrolės emuliuotos ir aiškiai atskirtos. [Rezultatai ir ribos](docs/experiments/JEV-WORKER-2026-10-17.md); tai ne J3 naudos ar visų kalbų kokybės įrodymas.
 - [ ] J3 Atliktas užšaldytas B prieš tą patį B+Jev C palyginimas: kokybė, aprėptis, klaidingi pasirinkimai, visas laikas/kaina ir sąžininga išvada. „Atliktas“ nereiškia „nauda įrodyta“; nuo J2/NEED1.
 - [ ] P1D.7 Keičiamas ToolSelector adapteris baseline+MVP Jev/OpenRouter pagal P0.26, vėlesniam Laya paliekant tą patį kontraktą; shortlist IDs/abstain, secret/schema/policy CAS, pasirinktas routing cap atskirai nuo public masinio intake0.
 
@@ -103,8 +103,8 @@ J0–J2 reikalingi naudotojo pasirinktai gyvai integracijai. J3 yra atskiras nau
 
 MVP reikalauja L1–L5. Paieška veikia be AI užduoties ir mokamų LLM; Compare, Trending ir Collections nėra šio etapo priklausomybė. L5 priklauso nuo P2.14.
 
-- [ ] L1 Nuolatinis Library navigacijos įėjimas be AI užduoties; paieška pagal repo/paskirtį/aprašą/capability, filtrai kategorijai, žinomai kalbai, licencijos faktams ir patikros būsenai. Unknown ir archived matomi, search/filter išlieka grįžus; 0 mokamų LLM.
-- [ ] L2 Tikri stars su source ir nuskaitymo data; „Daugiausia stars“ / „Neseniai įtraukta į mūsų indeksą“. Missing nėra 0, aprėptis nėra visas GitHub. Esamą popularity snapshot susieti canonical repo ID ir timestamp offset, nesėkmingas refresh neapsimeta nauju.
+- [x] L1 Nuolatinis Library navigacijos įėjimas be AI užduoties; paieška pagal repo/paskirtį/aprašą/capability, filtrai kategorijai, žinomai kalbai, licencijos faktams ir patikros būsenai. Unknown ir archived matomi, search/filter išlieka grįžus; 0 mokamų LLM. Commit 1e24881; 43 unit, web/core typecheck ir 8 desktop/mobile browser scenarijai PASS.
+- [x] L2 Tikri stars su source ir nuskaitymo data; „Daugiausia stars“ / „Neseniai įtraukta į mūsų indeksą“. Missing nėra 0, aprėptis nėra visas GitHub. Esamą popularity snapshot susieti canonical repo ID ir timestamp offset, nesėkmingas refresh neapsimeta nauju. Indeksavimo data yra pirmas patvirtintas Git įrašo buvimas, ankstesnė unknown; 89 repo stars ir 725 žinomos pirminės kalbos yra datuoti atskiri faktai, ne runtime PASS.
 - [x] L3 Repo detalės rodo panaudojimą/upstream/license source/metadata datą ir atskirus source/pin/tested/runtime-ready faktus. Source-only gali būti naršomas; populiarumas nėra patikros ženklas. Įgyvendinta Library; 35 unit ir desktop/mobile/keyboard patikros PASS, commit 4467296.
 - [x] L4 Vietinis Saved išlieka tarp sesijų; browse/save nieko neįdiegia ir nereikalauja cloud paskyros. Canonical ID persistence, nežinomi ID ir pilna saugykla patikrinti; tas pats Library commit.
 - [ ] L5 Start project perduoda konkretų repo ir faktus esamam project srautui kaip foundation/component/reference; source-only pirma tiriamas ir paruošiamas. Ne vien tuščias composer; priklauso nuo projekto kelio P2.14.

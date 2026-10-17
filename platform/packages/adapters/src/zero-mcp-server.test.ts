@@ -194,6 +194,46 @@ describe("RepositoryZero discovery MCP protocol", () => {
     ]);
   });
 
+  it("separates dated metadata, identity conflict and pin presence from runtime readiness", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network forbidden"));
+    const found = content(
+      await call("zero_inspect", { candidateId: "microsoft/playwright" }),
+      ZERO_MCP_OUTPUT_LIMITS.inspect,
+    );
+    expect(found).toMatchObject({
+      readiness: "source-only",
+      candidate: {
+        licenseApproved: false,
+        runtimeTested: false,
+        metadata: {
+          githubStatus: "observed",
+          language: "TypeScript",
+          sourcePin: { status: "present" },
+          firstIndexed: { status: "first-git-presence" },
+        },
+      },
+    });
+    const conflict = content(
+      await call("zero_inspect", { candidateId: "get-convex/agent" }),
+      ZERO_MCP_OUTPUT_LIMITS.inspect,
+    );
+    expect(conflict).toMatchObject({
+      readiness: "source-only",
+      candidate: {
+        runtimeTested: false,
+        metadata: { githubStatus: "identity-conflict", sourcePin: { status: "not-checked" } },
+      },
+    });
+    expect((conflict.candidate as { metadata: object }).metadata).not.toHaveProperty("language");
+    const status = content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status);
+    expect(status.metadata).toMatchObject({
+      records: 796,
+      basis: "dated-source-facts-only",
+      sha256: expect.stringMatching(/^[a-f0-9]{64}$/u),
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it("can inspect every bundled canonical ID within the declared output contract", async () => {
     for (const entry of repositorySnapshot.records) {
       const result = content(

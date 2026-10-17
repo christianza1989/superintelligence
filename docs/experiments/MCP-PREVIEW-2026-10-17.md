@@ -41,14 +41,24 @@ Serverio 0.2.0 / schema 1.2.0 pasirenkamas operator-bound profilis prideda zero_
 
 Papildomai toje pačioje izoliuotoje DB praėjo **13 worker ir 7 autentifikuoto API patikros**. Offline: **12 MCP execution schema/bounds patikrų, 32 application client patikros ir 30 operator policy patikrų** PASS. Rasta ir pataisyta ISO offset su nebaigtine data priėmimo klaida; neigiama kontrolė atmeta įvestį iki artifact lookup / dispatch. Šie skaičiai nėra bendras nepriklausomų produkto užduočių skaičius.
 
-Ankstesnis CI [39043109961](https://github.com/christianza1989/superintelligence/actions/runs/39043109961) ant commit 5168543 patvirtino abu foundation ir real PostgreSQL jobs bei atskirą plugin proceso proof. Jis dar neapima vėlesnio 0.2.0 execution pakeitimo; naujo head CI tikrinamas atskirai.
+CI [39045943940](https://github.com/christianza1989/superintelligence/actions/runs/39045943940) ant commit ef1b361 patvirtino abu offline ir real PostgreSQL jobs, įskaitant naują 0.2.0 API/MCP restart paruošimo proceso proof bei savarankiško discovery plugin proceso proof. Vėlesnių commit patikros atskiros.
 
-Library pridėta savarankiškai naršyti, peržiūrėti detales ir saugoti canonical repo ID lokaliai. 35 focused unit patikros, pilnas web/core typecheck ir desktop/mobile/keyboard browser scenarijai PASS; šaltinių žvaigždės rodo datą, nežinomos nėra 0. Svetainės client/OS STDIO vedlio Astro build/check ir vizualinė peržiūra PASS. Library projekto handoff bei metaduomenų papildymas atskiri; vedlio Copy command neįrodo ryšio.
+Library pridėta savarankiškai naršyti, peržiūrėti detales ir saugoti canonical repo ID lokaliai. Papildžius kalbas ir indeksavimo datas: 43 focused unit patikros, pilnas web/core typecheck ir 8 desktop/mobile/keyboard browser scenarijai PASS; šaltinių žvaigždės rodo datą, nežinomos nėra 0. Atskira GitHub patikra rado 755 exact-identity katalogo pin objektus; jokio runtime PASS iš to nesuteikta. Svetainės client/OS STDIO vedlio Astro build/check ir vizualinė peržiūra PASS. Library projekto handoff atskiras; vedlio Copy command neįrodo ryšio.
 
-## Kas dar atvira
+## 0.3.0: patvarus host fixture tikrinimas
 
-Linux snapshotter yra ribotas failų kopijavimo pagrindas; jo sujungimas su patvariu operator-bound projekto verify dar nepriimtas. Read-only failų teisės nėra hostile same-user izoliacija.
+2026-10-17 16:01 UTC serveris 0.3.0 / schema 1.3.0 papildytas zero_verify ir atskirais datuotais source metadata. Numatytasis serveris išlaiko tik tris read-only discovery tools; operator-bound kompozicija turi aštuonis tools. Actual status profilis gaunamas iš autorizuoto API, ne iš naršyklės paspaudimo.
+
+Tikras STDIO → HTTP API → Graphile → Docker bandymas PASS: API/MCP restart išlaikė prepare job, host fixture perskaitė dvi base64 dalis, patikrino SHA-256 ir pats integravo grąžintus vendor failus. zero_verify susietas su tuo pačiu preparation artifact SHA, patikslintu penkių failų snapshot ir exact vietiniu image ID. Trijose fiksuotose užduotyse užfiksuota po vieną realų parserio kvietimą ir teisingą rezultatą; freshness=unchanged, receipt be privačių kelių. Dubliuotas verify idempotency key nesukūrė antro job, revoke atmetė tolesnį skaitymą, paidModelCalls=0. Tai host fixture proceso proof, dar ne tikras native Codex coding pokalbis ar independent holdout.
+
+37 discovery/proceso ir 46 execution/client patikros bei adapter-kit/adapters typecheck PASS. Atskiri worker PG/Docker scenarijai apima unused / tamper / stale / cancel / revoked-before-private-read / staging cap; API kvalifikacija ir Jev turi savo vardiklius. Vėlesnė shared CSV/Jev transporto integracija dar tikrinama naujame head CI.
+
+Vietinis repositoryzero0.2.0 discovery plugin taip pat tikrai įdiegtas per Codex CLI, užkrautas naujame desktop pokalbyje su reuse skill ir atlikti trys native MCP kvietimai. Server/schema/protocol=0.2.0/1.2.0/2025-06-18, source-only,796records, nonce sutapo. Plugin install/new-session discovery yra atskiras PASS; jis nepakeičia 0.3.0 native execution ar plugin update/uninstall vartų.
+
+## Likę vartai
+
+Linux snapshotter sujungtas su patvariu operator-bound projekto verifier ir proceso proof praėjo; pilna native host eiga dar nepriimta. Read-only failų teisės nėra hostile same-user izoliacija.
 
 CSV paruošimas turi operator policy ir MCP client jungtį; nepateikus privataus binding/policy, vykdymas neprieinamas. Atskiras Docker verifier tikrina tikslius penkis host failus, pinned vendor baitus, faktinį parserio kvietimą ir rezultatą; teigiamos bei unused/tamper/stale/cancel kontrolės praėjo su vietiniu exact image ID. Tai dar nėra užbaigtas native host snapshot → integracija → patvarus verify kelias. Pilni crash/lease-expiry, staging retention ir naujo žmogaus setup vartai atviri; API/MCP proceso restart nėra worker crash recovery įrodymas.
 
-Savarankiškas plugin paketas ir svetainės vietinio STDIO vedlys įgyvendinti; native plugin install/uninstall, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).
+Savarankiškas plugin paketas, jo native Codex discovery install/new-session patikra ir svetainės STDIO vedlys įgyvendinti; plugin update/uninstall, native execution, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).

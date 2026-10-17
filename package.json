@@ -24,7 +24,7 @@
     "build:web": "node scripts/platform.mjs --filter @rakazo/web build",
     "build:site": "node scripts/platform.mjs --filter @rakazo/www build",
     "check:web": "node scripts/platform.mjs --filter @rakazo/web check",
-    "test:foundation": "node scripts/platform.mjs exec vitest run packages/core/src/zero-catalog.test.ts packages/adapters/src/zero-tool-selector.test.ts packages/adapters/src/zero-systemone.test.ts packages/adapters/src/zero-model-selector.test.ts packages/adapters/src/zero-repository-selector.test.ts packages/adapters/src/zero-repository-tools.test.ts packages/ui-tokens/src/appearance.test.ts apps/web/src/lib/ui-appearance.test.ts apps/web/src/lib/ui-locale.test.ts packages/adapters/src/pi-runtime-tool-schema.test.ts",
+    "test:foundation": "node scripts/platform.mjs exec vitest run packages/core/src/zero-catalog.test.ts packages/core/src/zero-library-metadata.test.ts packages/adapters/src/zero-tool-selector.test.ts packages/adapters/src/zero-systemone.test.ts packages/adapters/src/zero-model-selector.test.ts packages/adapters/src/zero-repository-selector.test.ts packages/adapters/src/zero-repository-tools.test.ts packages/ui-tokens/src/appearance.test.ts apps/web/src/lib/ui-appearance.test.ts apps/web/src/lib/ui-locale.test.ts packages/adapters/src/pi-runtime-tool-schema.test.ts",
     "db:generate": "node scripts/platform.mjs --filter @rakazo/db generate",
     "catalog:sync": "node platform/scripts/sync-zero-catalog.mjs",
     "init:local": "node scripts/init-local.mjs",
@@ -34,6 +34,7 @@
     "dev:worker": "node scripts/platform.mjs --filter @rakazo/worker dev",
     "db:status": "node scripts/local-db.mjs status",
     "test:durability": "node platform/scripts/verify-zero-foundation.mjs",
+    "qualify:durability": "node platform/scripts/qualify-zero-durability.mjs",
     "test:budgets": "node platform/scripts/verify-zero-foundation.mjs --budget",
     "demo:reuse": "node platform/scripts/zero-self-reuse.mjs",
     "test:reuse-build": "node platform/scripts/verify-reuse-build.mjs",
@@ -66,6 +67,12 @@
     "check:docs": "node scripts/docs.mjs",
     "test:library": "node scripts/platform.mjs exec vitest run apps/web/src/lib/repository-library.test.ts apps/web/src/lib/repository-library-navigation.test.ts",
     "test:csv:mcp": "node scripts/platform.mjs exec tsx scripts/zero-mcp-preparation-proof.mjs",
-    "test:mcp:execution": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-csv-tools.test.ts packages/adapters/src/zero-csv-application-client.test.ts"
+    "test:mcp:execution": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-csv-tools.test.ts packages/adapters/src/zero-csv-application-client.test.ts",
+    "test:jev": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-jev-profile.test.ts packages/adapters/src/zero-systemone-usage.test.ts packages/adapters/src/zero-jev-read-authorization.test.ts packages/adapters/src/zero-jev-policy.test.ts packages/adapters/src/zero-jev-application-client.test.ts",
+    "test:jev:postgres": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-jev-worker.postgres.test.ts",
+    "test:jev:api": "node scripts/platform.mjs exec vitest run apps/api/src/zero-jev.postgres.test.ts",
+    "test:jev:pricing": "node scripts/platform.mjs exec tsx --test scripts/zero-jev-live-pricing.test.mjs",
+    "test:jev:composition": "node scripts/platform.mjs exec tsx scripts/zero-jev-live-proof.mjs --offline-proof",
+    "qualify:jev:live": "node scripts/platform.mjs exec tsx scripts/zero-jev-live-proof.mjs --live"
   }
 }

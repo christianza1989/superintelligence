@@ -14,6 +14,7 @@ export const ZERO_MCP_CSV_OPERATIONS = [
   "zero_job",
   "zero_artifact",
   "zero_cancel",
+  "zero_verify",
 ] as const;
 const jobId = z.uuid();
 const annotations = {
@@ -60,7 +61,9 @@ export function registerZeroCsvMcpTools(server: McpServer, client: ZeroCsvApplic
           .max(16_384)
           .refine((value) => Buffer.byteLength(value) <= 16_384),
         idempotencyKey: z.string().min(1).max(128),
-        deadline: z.iso.datetime({ offset: true }),
+        deadline: z.iso
+          .datetime({ offset: true })
+          .refine((value) => Number.isFinite(Date.parse(value))),
       }),
       outputSchema: zeroCsvPreparedSchema,
       annotations: { ...annotations, readOnlyHint: false },
@@ -82,7 +85,7 @@ export function registerZeroCsvMcpTools(server: McpServer, client: ZeroCsvApplic
     "zero_artifact",
     {
       description:
-        "Read a bounded base64 page of a committed job artifact. Reassemble pages and verify the advertised SHA-256 before using it. A prepared component is not a verified host project. No arbitrary file paths.",
+        "Read a bounded base64 page of a committed preparation or verification receipt. Reassemble pages and verify the advertised SHA-256 before using it. A prepared component is not a verified host project. No arbitrary file paths.",
       inputSchema: z.strictObject({
         jobId,
         offset: z.number().int().nonnegative().max(98_304).default(0),
@@ -103,5 +106,22 @@ export function registerZeroCsvMcpTools(server: McpServer, client: ZeroCsvApplic
       annotations: { ...annotations, readOnlyHint: false },
     },
     ({ jobId }) => result(() => client.cancel(jobId)),
+  );
+  server.registerTool(
+    "zero_verify",
+    {
+      description:
+        "Verify the fixed five-file CSV host project snapshot in the existing worker using the operator-approved root, finite snapshot limits and pinned local Docker image. Requires a succeeded preparation job in this scope. Returns a durable verification job ID; poll zero_job and read its artifact. Only this fixed suite is checked, with freshness and actual parser-use evidence; no general application quality or independent holdout claim.",
+      inputSchema: z.strictObject({
+        preparationJobId: jobId,
+        idempotencyKey: z.string().min(1).max(128),
+        deadline: z.iso
+          .datetime({ offset: true })
+          .refine((value) => Number.isFinite(Date.parse(value))),
+      }),
+      outputSchema: zeroCsvPreparedSchema,
+      annotations: { ...annotations, readOnlyHint: false },
+    },
+    (input) => result(() => client.verify(input)),
   );
 }

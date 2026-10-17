@@ -25,7 +25,7 @@ codex plugin marketplace add /absolute/path/to/generated/package
 
 Šis veiksmas registruoja vietinį marketplace. Po to įdiegti `repositoryzero` iš to šaltinio programos Plugins sąraše; peržiūrėti trust ir atidaryti naują pokalbį. Nukopijuoti komandą nėra jos vykdymas ar connection patikra. Jei naudojamas Windows klientas, komandai pateikti Windows pasiekiamą paketo kelią, ne Linux kelią.
 
-Įdiegimo/cache/new-chat/uninstall eiga šiame host dar nekvalifikuota. Nekeičiame globalaus config vien tam, kad dokumente atsirastų PASS. [Oficialus packaging ir marketplace kelias](https://developers.openai.com/plugins/build/plugins), [vietinio serverio platinimo ribos](https://developers.openai.com/plugins/deploy/desktop-only). Viešo katalogo priėmimo ir universalaus Install mygtuko šis paketas neturi.
+2026-10-17 vietinis marketplace registruotas oficialiu Codex CLI0.159.3 keliu, repositoryzero0.2.0 įdiegtas į host cache. Naujame Codex desktop pokalbyje užkrauta jo reuse skill ir tikrais MCP tools iškviesti status/search/inspect: server0.2.0, schema1.2.0, protocol2025-06-18, discovery-only, backendunavailable,796records, tas pats catalog SHA ir tikslus nonce. Tai tikras plugin install/new-session discovery PASS. Uninstall/update ir vykdymo profilio lifecycle dar nepriimti. [Oficialus packaging ir marketplace kelias](https://developers.openai.com/plugins/build/plugins), [vietinio serverio platinimo ribos](https://developers.openai.com/plugins/deploy/desktop-only). Viešo katalogo priėmimo ir universalaus Install mygtuko šis paketas neturi.
 
 ## Claude Code
 

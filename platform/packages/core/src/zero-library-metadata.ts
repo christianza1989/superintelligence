@@ -1,6 +1,9 @@
 import catalog from "./zero-catalog-data.json" with { type: "json" };
 import snapshot from "../../../../catalog/library-metadata.json" with { type: "json" };
 
+/** Exact additive snapshot for provenance; never replaces the frozen catalog. */
+export const repositoryMetadataSnapshot = snapshot;
+
 type GithubStatus =
   "observed" | "identity-conflict" | "not-found-or-inaccessible" | "unavailable";
 export type RepositoryPinStatus =

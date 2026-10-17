@@ -183,6 +183,7 @@ export {
   getRepositoryMetadata,
   projectRepositoryMetadata,
   repositoryLanguages,
+  repositoryMetadataSnapshot,
 } from "./zero-library-metadata.js";
 export type {
   RepositoryMetadata,

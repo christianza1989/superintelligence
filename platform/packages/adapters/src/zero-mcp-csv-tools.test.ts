@@ -41,6 +41,10 @@ describe("optional CSV MCP application boundary", () => {
         jobId,
         requestDigest: hash,
       })),
+      verify: vi.fn<ZeroCsvApplicationClient["verify"]>(async () => ({
+        jobId,
+        requestDigest: hash,
+      })),
       get: vi.fn<ZeroCsvApplicationClient["get"]>(async () => ({
         ...terminal,
         revision: 2,
@@ -87,13 +91,14 @@ describe("optional CSV MCP application boundary", () => {
       "zero_job",
       "zero_artifact",
       "zero_cancel",
+      "zero_verify",
     ]);
     for (const tool of tools) {
       expect(tool.inputSchema.additionalProperties).toBe(false);
       expect(tool.outputSchema?.type).toBe("object");
       expect(tool.outputSchema?.additionalProperties).toBe(false);
       expect(tool.annotations?.readOnlyHint).toBe(
-        !["zero_prepare", "zero_cancel"].includes(tool.name),
+        !["zero_prepare", "zero_cancel", "zero_verify"].includes(tool.name),
       );
     }
     const status = await call("zero_status", { nonce: "bound-probe" });
@@ -112,6 +117,36 @@ describe("optional CSV MCP application boundary", () => {
     });
     const { profile: _profile, ...expected } = args;
     expect(api.prepare).toHaveBeenCalledWith(expected);
+  });
+  it("forwards verification by preparation reference and rejects caller authority", async () => {
+    const args = {
+      preparationJobId: jobId,
+      idempotencyKey: "verify-fixture",
+      deadline: input().deadline,
+    };
+    expect((await call("zero_verify", args)).structuredContent).toEqual({
+      jobId,
+      requestDigest: hash,
+    });
+    expect(api.verify).toHaveBeenCalledWith(args);
+    for (const field of [
+      "root",
+      "imageId",
+      "files",
+      "userId",
+      "scopeId",
+      "command",
+      "sessionToken",
+    ]) {
+      expect((await call("zero_verify", { ...args, [field]: "caller-authority" })).isError).toBe(
+        true,
+      );
+    }
+    expect(api.verify).toHaveBeenCalledTimes(1);
+    expect(
+      (await call("zero_verify", { ...args, deadline: "2026-10-17T00:00:00+99:99" })).isError,
+    ).toBe(true);
+    expect(api.verify).toHaveBeenCalledTimes(1);
   });
   it.each(["userId", "spaceId", "scopeId", "root", "apiUrl", "sessionToken"])(
     "rejects caller authority field %s before dispatch",
