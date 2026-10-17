@@ -15,6 +15,12 @@ export const ZERO_PDF_LIMITS = Object.freeze({
   allowlistedFiles: 10,
   stagingBytes: 2_097_152,
 });
+export const ZERO_PDF_JOB_LIMITS = Object.freeze({
+  inputBytes: ZERO_PDF_LIMITS.inputBytes,
+  runtimeMs: ZERO_PDF_LIMITS.runtimeMs,
+  artifactBytes: ZERO_PDF_LIMITS.outputBytes + 16_384,
+  outstandingJobsPerScope: 4,
+});
 export const ZERO_PDF_BUNDLE = Object.freeze([
   {
     name: "profile.json",
