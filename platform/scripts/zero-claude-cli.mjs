@@ -8,6 +8,7 @@ import { promisify } from "node:util";
 import { codexEnvironment } from "./zero-codex-cli.mjs";
 
 export const CLAUDE_MODEL = "claude-sonnet-5-5";
+export const CLAUDE_MODELS = Object.freeze([CLAUDE_MODEL, "claude-haiku-5-5"]);
 export const CLAUDE_REASONING = "high";
 export const CLAUDE_TOOLS = "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch";
 export const CLAUDE_LOCAL_TOOLS = "Bash,Read,Write,Edit";
@@ -16,13 +17,14 @@ export const claudeEnvironment = (source = process.env) => {
   delete env.CODEX_HOME;
   return env;
 };
-export function claudeArguments({ tools = CLAUDE_TOOLS, reasoning = CLAUDE_REASONING, systemPromptMode = "default" } = {}) {
+export function claudeArguments({ model = CLAUDE_MODEL, tools = CLAUDE_TOOLS, reasoning = CLAUDE_REASONING, systemPromptMode = "default", maxTurns = 60 } = {}) {
+  if (!CLAUDE_MODELS.includes(model) || !Number.isSafeInteger(maxTurns) || maxTurns < 1 || maxTurns > 100) throw new Error("Unsupported bounded Claude model/turn contract.");
   if (!["high", "medium", "low"].includes(reasoning) || !["default", "lean-v1"].includes(systemPromptMode)) throw new Error("Unsupported declared Claude configuration.");
   if (![CLAUDE_TOOLS, CLAUDE_LOCAL_TOOLS].includes(tools)) throw new Error("Unsupported bounded Claude tool profile.");
-  return ["--safe-mode", "--print", "--model", CLAUDE_MODEL, "--effort", reasoning, ...(systemPromptMode === "lean-v1" ? ["--system-prompt", LEAN_SYSTEM_PROMPT] : []),
+  return ["--safe-mode", "--print", "--model", model, "--effort", reasoning, ...(systemPromptMode === "lean-v1" ? ["--system-prompt", LEAN_SYSTEM_PROMPT] : []),
     "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk",
     "--permission-prompts", "none", "--tools", tools, "--allowedTools", tools,
-    "--strict-mcp-config", "--no-session-persistence", "--disable-slash-commands", "--max-turns", "60"];
+    "--strict-mcp-config", "--no-session-persistence", "--disable-slash-commands", "--max-turns", String(maxTurns)];
 }
 function failure(text) {
   if (/unauthorized|not logged in|authentication|401\b/i.test(text)) return "auth_required";
@@ -34,6 +36,8 @@ function failure(text) {
 const count = value => Number.isSafeInteger(value) && value >= 0;
 const record = value => value !== null && typeof value === "object" && !Array.isArray(value);
 export function createClaudeEventParser(options = {}) {
+  const model = options.model ?? CLAUDE_MODEL;
+  if (!CLAUDE_MODELS.includes(model)) throw new Error("Unsupported expected Claude model.");
   const decoder = new StringDecoder("utf8"), tools = new Set(), toolErrors = new Set(), models = new Set();
   let pending = "", malformed = false, results = 0, receipt, reportedFailure, assistantFailure;
   const eventCounts = {};
@@ -59,7 +63,7 @@ export function createClaudeEventParser(options = {}) {
       if (event.message.model !== undefined) {
         if (typeof event.message.model !== "string" || !event.message.model || event.message.model.length > 128) { invalidate(); return; }
         models.add(event.message.model);
-        if (event.message.model !== CLAUDE_MODEL) reportedFailure = "model_unavailable";
+        if (event.message.model !== model) reportedFailure = "model_unavailable";
       }
       if (event.error !== undefined) {
         const category = failure(JSON.stringify(event.error));
@@ -101,11 +105,11 @@ export function createClaudeEventParser(options = {}) {
       for (const name of Object.keys(event.modelUsage ?? {})) models.add(name);
       // Error placeholders are not a provider model identity. Preserve the actual
       // auth/quota/network failure instead of replacing it with model_unavailable.
-      if (!errorResult && [...models].some(name => name !== CLAUDE_MODEL)) reportedFailure = "model_unavailable";
+      if (!errorResult && [...models].some(name => name !== model)) reportedFailure = "model_unavailable";
       receipt = {
         usage: { inputTokens: input, outputTokens: u.output_tokens, cachedInputTokens: u.cache_read_input_tokens ?? 0,
           cacheCreationInputTokens: u.cache_creation_input_tokens ?? 0, uncachedInputTokens: u.input_tokens, totalTokens: input + u.output_tokens },
-        finalText: event.result, actualModel: models.size === 1 && models.has(CLAUDE_MODEL) ? CLAUDE_MODEL : null,
+        finalText: event.result, actualModel: models.size === 1 && models.has(model) ? model : null,
         apiEquivalentCostEstimateUsd: typeof event.total_cost_usd === "number" && Number.isFinite(event.total_cost_usd) && event.total_cost_usd >= 0 ? event.total_cost_usd : null,
         reportedTurns: count(event.num_turns) ? event.num_turns : null,
         permissionDenials: Array.isArray(event.permission_denials) ? event.permission_denials.length : null,
@@ -123,8 +127,8 @@ export function createClaudeEventParser(options = {}) {
     },
     finish() {
       pending += decoder.end(); if (pending) consume(pending);
-      const valid = !malformed && results === 1 && receipt !== undefined && receipt.actualModel === CLAUDE_MODEL &&
-        models.size === 1 && models.has(CLAUDE_MODEL) && !reportedFailure;
+      const valid = !malformed && results === 1 && receipt !== undefined && receipt.actualModel === model &&
+        models.size === 1 && models.has(model) && !reportedFailure;
       return { ...receipt, valid, failure: reportedFailure ?? (valid ? null : "invalid_cli_events"), eventCounts,
         toolActions: tools.size, toolFailures: toolErrors.size };
     },
@@ -148,14 +152,14 @@ export async function runClaudeCli(options, deps = {}) {
   const timeoutMs = options.timeoutMs ?? 900000, maxOutputBytes = options.maxOutputBytes ?? 4194304;
   const toolLimit = options.maxObservedToolActions ?? 60;
   if (typeof options.prompt !== "string" || !options.prompt.trim() || Buffer.byteLength(options.prompt) > 32768 ||
-    typeof options.workspace !== "string" || !path.isAbsolute(options.workspace) || !count(timeoutMs) || timeoutMs < 100 || timeoutMs > 900000 ||
+    typeof options.workspace !== "string" || !path.isAbsolute(options.workspace) || !count(timeoutMs) || timeoutMs < 100 || timeoutMs > 1200000 ||
     !count(toolLimit) || toolLimit < 1 || toolLimit > 100 || !count(maxOutputBytes) || maxOutputBytes < 1024 || maxOutputBytes > 8388608)
     throw new Error("Invalid bounded Claude invocation.");
   const env = claudeEnvironment(deps.env ?? process.env);
-  const args = claudeArguments({ tools: options.tools, reasoning: options.reasoning, systemPromptMode: options.systemPromptMode });
+  const args = claudeArguments({ model: options.model, maxTurns: options.maxTurns, tools: options.tools, reasoning: options.reasoning, systemPromptMode: options.systemPromptMode });
   const workspace = await realpath(options.workspace);
   if (!(await stat(workspace)).isDirectory()) throw new Error("Claude workspace must be a directory.");
-  const base = { requestedModel: CLAUDE_MODEL, requestedReasoning: options.reasoning ?? CLAUDE_REASONING, actualCostUsd: null,
+  const base = { requestedModel: options.model ?? CLAUDE_MODEL, requestedReasoning: options.reasoning ?? CLAUDE_REASONING, actualCostUsd: null,
     systemPromptMode: options.systemPromptMode ?? "default", systemPromptDigest: options.systemPromptMode === "lean-v1" ? LEAN_SYSTEM_PROMPT_DIGEST : null,
     sandbox: "cli_permissions_dontAsk_not_os_isolation", actualModel: null, enabledTools: options.tools ?? CLAUDE_TOOLS };
   if (options.signal?.aborted) return { ...base, status: "cancelled", reason: "cancelled_before_start" };
@@ -182,6 +186,7 @@ export async function runClaudeCli(options, deps = {}) {
     };
     const cancel = () => stop("cancelled");
     const parser = createClaudeEventParser({
+      model: options.model,
       onToolAction: n => { if (n > toolLimit) stop("observed_tool_limit"); },
       onInvalidEvent: () => stop("invalid_cli_events"),
     });

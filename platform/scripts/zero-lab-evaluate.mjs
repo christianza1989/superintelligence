@@ -8,6 +8,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
+import { STOCKDESK_PROBE_CODE } from './zero-stockdesk-contract.mjs';
+
 export const SPRINTDESK_IMAGE = "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f";
 export const SPRINTDESK_PROFILE = Object.freeze({
   id: "sprintdesk-node24-prebuilt-linux-x64-v2",
@@ -46,7 +48,7 @@ async function dockerCommand(args, options) {
     return { stdout: result.stdout, stderr: result.stderr, exitCode: 0 };
   } catch (error) {
     // Candidate logs and tool errors are untrusted and may contain sensitive text.
-    return { stdout: "", stderr: "", exitCode: -1, interrupted: options.signal?.aborted === true };
+    return { stdout: args.includes("/grader/acceptance.mjs") && args.includes("--test") && typeof error.stdout === "string" ? error.stdout : "", stderr: "", exitCode: -1, interrupted: options.signal?.aborted === true };
   }
 }
 
@@ -112,7 +114,7 @@ export async function snapshotSprintDesk(candidatePath, target) {
   return { sourceDigest: sha256(JSON.stringify(files)), sourceFiles: files.length, sourceBytes: bytes };
 }
 
-export function parseSprintDeskAcceptance(tap) {
+export function parseSprintDeskAcceptance(tap, expectedTests = 8) {
   if (typeof tap !== "string") return null;
   const count = (field) => {
     const found = [...tap.matchAll(new RegExp(`^# ${field} (\\d+)$`, "gm"))];
@@ -120,9 +122,9 @@ export function parseSprintDeskAcceptance(tap) {
   };
   const tests = count("tests"), passed = count("pass"), failed = count("fail");
   // Seven independent subtests plus their parent test, with no skipped cases.
-  if (tests !== 8 || passed !== 8 || failed !== 0 || count("cancelled") !== 0 || count("skipped") !== 0)
+  if (tests !== expectedTests || passed !== expectedTests || failed !== 0 || count("cancelled") !== 0 || count("skipped") !== 0)
     return null;
-  return { status: "passed", tests, passed, failed, subtests: 7, outputSha256: sha256(tap) };
+  return { status: "passed", tests, passed, failed, subtests: expectedTests - 1, outputSha256: sha256(tap) };
 }
 
 const probeCode = `
@@ -189,6 +191,8 @@ const expected = JSON.parse(process.argv[1]);
 const tables = db.prepare("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT 33").all();
 assert.ok(tables.length <= 32);
 let scanned = 0, stored = false;
+const groups = expected.requiredRows ?? [[expected.id,expected.title]];
+const found = groups.map(() => false);
 function strings(value, out, depth = 0) {
   if (depth > 8 || out.size > 256) return;
   if (typeof value === 'string') {
@@ -206,7 +210,8 @@ for (const table of tables) {
   scanned += rows.length; assert.ok(scanned <= 512);
   for (const row of rows) {
     const values = new Set(); strings(row, values);
-    if (values.has(expected.id) && values.has(expected.title)) { stored = true; break; }
+    groups.forEach((group,index) => { if (group.every(value => values.has(value))) found[index] = true; });
+    stored = found.every(Boolean); if (stored) break;
   }
   if (stored) break;
 }
@@ -216,12 +221,16 @@ process.stdout.write(JSON.stringify({ sqliteHeader: true, quickCheck: 'ok', sqli
 
 /** No model dispatch. Caller must explicitly authorize this controlled local code profile. */
 export async function evaluateSprintDesk(options, deps = {}) {
+  if (options?.suite !== undefined && !["sprintdesk-v1", "stockdesk-v1"].includes(options.suite)) throw new Error("Unsupported evaluator suite.");
+  const stockdesk = options?.suite === "stockdesk-v1";
+  const selectedAcceptance = stockdesk ? path.join(root, "benchmarks/stockdesk-v1/acceptance.mjs") : acceptancePath;
+  const selectedProbe = stockdesk ? STOCKDESK_PROBE_CODE : probeCode;
   const report = {
-    version: 1, suite: "sprintdesk-v1", status: "error", functionalStatus: "not_run",
+    version: 1, suite: stockdesk ? "stockdesk-v1" : "sprintdesk-v1", status: "error", functionalStatus: "not_run",
     qualityComplete: false, trustProfile: options?.trustProfile ?? null,
     api: { status: "not_run" }, persistence: { status: "not_run" },
     ui: { status: "not_run", reason: "desktop_mobile_keyboard_browser_profile_not_implemented" },
-    image: SPRINTDESK_IMAGE, profile: SPRINTDESK_PROFILE, paidModelCalls: 0, cleanup: "not_needed",
+    image: SPRINTDESK_IMAGE, profile: stockdesk ? { ...SPRINTDESK_PROFILE, id: "stockdesk-node24-prebuilt-linux-x64-v1", sqliteRecordProbe: "product_and_each_seed_movement_real_rows" } : SPRINTDESK_PROFILE, paidModelCalls: 0, cleanup: "not_needed",
     limitations: [
       "Linux x64, prebuilt Node24 builtins-only artifacts; no dependency installation",
       "Explicit controlled local code grant, not a human audit claim or hostile upstream PR sandbox",
@@ -236,7 +245,7 @@ export async function evaluateSprintDesk(options, deps = {}) {
   const runDocker = deps.runDocker ?? dockerCommand;
   const timeoutMs = options?.timeoutMs ?? 120_000;
   let dockerEnv;
-  const call = async (args, limit = 30_000, cleanup = false) => {
+  const call = async (args, limit = 30_000, cleanup = false, captureFailure = false) => {
     if (!cleanup && options?.signal?.aborted) throw new EvaluationError("evaluation_cancelled", "cancelled");
     const remaining = timeoutMs - (performance.now() - started);
     if (!cleanup && remaining <= 0) throw new EvaluationError("evaluation_deadline", "failed");
@@ -244,6 +253,7 @@ export async function evaluateSprintDesk(options, deps = {}) {
       env: dockerEnv, cwd: scratch, timeoutMs: cleanup ? 5_000 : Math.max(1, Math.min(limit, remaining)),
       signal: cleanup ? undefined : options?.signal,
     });
+    if (captureFailure) return result;
     if (result.exitCode !== 0) {
       if (options?.signal?.aborted && !cleanup) throw new EvaluationError("evaluation_cancelled", "cancelled");
       throw new EvaluationError(cleanup ? "owned_container_cleanup_failed" : "docker_stage_failed");
@@ -263,7 +273,7 @@ export async function evaluateSprintDesk(options, deps = {}) {
     for (const directory of [input, grader, path.join(scratch, "docker-config")])
       await mkdir(directory, { mode: 0o755 });
     Object.assign(report, await snapshotSprintDesk(options.candidatePath, input));
-    await copyFile(acceptancePath, path.join(grader, "acceptance.mjs"));
+    await copyFile(selectedAcceptance, path.join(grader, "acceptance.mjs"));
     await chmod(path.join(grader, "acceptance.mjs"), 0o444);
     report.acceptanceDigest = sha256(await readFile(path.join(grader, "acceptance.mjs")));
     dockerEnv = {
@@ -330,7 +340,7 @@ export async function evaluateSprintDesk(options, deps = {}) {
     };
     await call(["start", app]);
     let sequence = 0;
-    const grade = async (nodeArgs, { database = false, limit = 30_000 } = {}) => {
+    const grade = async (nodeArgs, { database = false, limit = 30_000, captureFailure = false } = {}) => {
       const name = `${app}-grade-${++sequence}`;
       owned.add(name);
       const out = await call([
@@ -341,13 +351,13 @@ export async function evaluateSprintDesk(options, deps = {}) {
         ...(database ? ["--tmpfs", "/sqlite-probe:rw,nosuid,nodev,size=68m,uid=1000,gid=1000,mode=0700"] : []),
         "--env", `BENCHMARK_ORIGIN=http://127.0.0.1:${port}`, "--env", "HOME=/tmp",
         "--entrypoint", "node", SPRINTDESK_IMAGE, ...nodeArgs,
-      ], limit);
+      ], limit, false, captureFailure);
       return out;
     };
     const marker = `restart-${id}`;
     let expected;
     try {
-      expected = JSON.parse(await grade(["-e", probeCode, "seed", marker]));
+      expected = JSON.parse(await grade(["-e", selectedProbe, "seed", marker]));
       if (typeof expected?.id !== "string" || expected.id.length > 256 || expected.title !== marker)
         throw new Error("invalid_seed_result");
     } catch (error) {
@@ -355,18 +365,31 @@ export async function evaluateSprintDesk(options, deps = {}) {
       throw new EvaluationError("startup_or_persistence_seed_failed");
     }
     try {
-      const tap = await grade(["--test", "--test-reporter=tap", "/grader/acceptance.mjs"], { limit: 60_000 });
-      const api = parseSprintDeskAcceptance(tap);
+      const graded = await grade(["--test", "--test-reporter=tap", "/grader/acceptance.mjs"], { limit: 60_000, captureFailure: stockdesk });
+      const tap = stockdesk ? graded.stdout : graded;
+      if (stockdesk) {
+        const trustedNames = [...(await readFile(selectedAcceptance,"utf8")).matchAll(/t\.test\('([^']+)'/g)].map(m=>m[1]);
+        const count = field => { const m = new RegExp("^# " + field + " (\\d+)$", "m").exec(tap); return m ? Number(m[1]) : null; };
+        report.api = { status: "failed", tests: count("tests"), passed: count("pass"), failed: count("fail"), failedCases: [...tap.matchAll(/^\s*not ok \d+ - (.+)$/gm)].map(m=>m[1]).filter(name=>trustedNames.includes(name)), outputSha256: sha256(tap) };
+        if(options.artifactDirectory) {
+          if (!path.isAbsolute(options.artifactDirectory)) throw new EvaluationError("invalid_artifact_directory", "error");
+          await mkdir(options.artifactDirectory,{recursive:true,mode:0o700});
+          const info = await lstat(options.artifactDirectory); if(!info.isDirectory()||info.isSymbolicLink()) throw new EvaluationError("invalid_artifact_directory", "error");
+          await writeFile(path.join(options.artifactDirectory,"api.tap.txt"),tap,{flag:"wx",mode:0o600});
+        }
+        if(graded.exitCode !== 0) throw new Error("failed_acceptance");
+      }
+      const api = parseSprintDeskAcceptance(tap, stockdesk ? 13 : 8);
       if (!api) throw new Error("incomplete_acceptance");
       report.api = api;
     } catch (error) {
-      report.api = { status: "failed" };
+      if (report.api.status !== "failed") report.api = { status: "failed" };
       if (error.status === "cancelled") throw error;
       throw new EvaluationError("independent_api_acceptance_failed");
     }
     try {
       await call(["restart", "--time", "2", app], 15_000);
-      const preserved = JSON.parse(await grade(["-e", probeCode, "verify", marker, JSON.stringify(expected)]));
+      const preserved = JSON.parse(await grade(["-e", selectedProbe, "verify", marker, JSON.stringify(expected)]));
       if (preserved.preserved !== true) throw new Error("missing_persistence");
       await call(["stop", "--time", "2", app], 10_000);
       const integrity = JSON.parse(await grade(["-e", sqliteCode, JSON.stringify(expected)], { database: true }));

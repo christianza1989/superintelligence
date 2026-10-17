@@ -10,6 +10,8 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { snapshotSprintDesk, SPRINTDESK_IMAGE } from "./zero-lab-evaluate.mjs";
 
+import { STOCKDESK_BROWSER_CHECKS, STOCKDESK_BROWSER_STAGES } from './zero-stockdesk-contract.mjs';
+
 export const SPRINTDESK_BROWSER_PROFILE = Object.freeze({
   id: "sprintdesk-controlled-system-chromium-linux-x64-v1", image: SPRINTDESK_IMAGE,
   platform: "linux", arch: "x64", playwrightVersion: "1.63.0",
@@ -150,15 +152,18 @@ export async function prepareSystemChromium(target) {
   return { bytes, files: manifest.length, digest: hash(JSON.stringify(manifest)), playwrightVersion: client.version };
 }
 
-export function parseBrowserReceipt(text) {
+export function parseBrowserReceipt(text, { suite = "sprintdesk-v1" } = {}) {
+  if (!["sprintdesk-v1", "stockdesk-v1"].includes(suite)) return null;
+  const stockdesk = suite === "stockdesk-v1";
+  const stages = stockdesk ? new RegExp("^(?:browser_(?:start|cleanup)|(?:desktop|mobile)_(?:" + STOCKDESK_BROWSER_STAGES.join("|") + "))$") : /^(?:browser_(?:start|cleanup)|(?:desktop|mobile)_(?:load|layout|keyboard_create|keyboard_move|reload|layout_after_actions|runtime_errors))$/;
   let receipt;
   try { receipt = JSON.parse(text); } catch { return null; }
   if (!receipt || receipt.version !== 1 || !["passed", "failed"].includes(receipt.status) ||
     (receipt.browserVersion !== null && (typeof receipt.browserVersion !== "string" || !/^\d+(?:\.\d+){1,3}$/.test(receipt.browserVersion))) ||
-    (receipt.failedCheck !== null && (typeof receipt.failedCheck !== "string" || !/^(?:browser_(?:start|cleanup)|(?:desktop|mobile)_(?:load|layout|keyboard_create|keyboard_move|reload|layout_after_actions|runtime_errors))$/.test(receipt.failedCheck))) ||
+    (receipt.failedCheck !== null && (typeof receipt.failedCheck !== "string" || !stages.test(receipt.failedCheck))) ||
     (receipt.status === "failed" && receipt.failedCheck === null) ||
     !receipt.checks || typeof receipt.checks !== "object" || Array.isArray(receipt.checks) || !Array.isArray(receipt.captures) || receipt.captures.length > 2) return null;
-  const expected = ["load", "noHorizontalOverflow", "keyboardCreate", "keyboardMoveApiReadback", "reloadReadback", "noJavaScriptOrConsoleErrors", "noExternalRequestsOrPopups"];
+  const expected = stockdesk ? STOCKDESK_BROWSER_CHECKS : ["load", "noHorizontalOverflow", "keyboardCreate", "keyboardMoveApiReadback", "reloadReadback", "noJavaScriptOrConsoleErrors", "noExternalRequestsOrPopups"];
   for (const [name, checks] of Object.entries(receipt.checks)) {
     if (!["desktop", "mobile"].includes(name) || !checks || typeof checks !== "object" || Array.isArray(checks) ||
       Object.entries(checks).some(([key, value]) => !expected.includes(key) || value !== true)) return null;
@@ -192,9 +197,12 @@ async function docker(args, options) {
 }
 
 export async function evaluateSprintDeskBrowser(options, deps = {}) {
+  if (options?.suite !== undefined && !["sprintdesk-v1", "stockdesk-v1"].includes(options.suite)) throw new Error("Unsupported browser suite.");
+  const stockdesk = options?.suite === "stockdesk-v1";
+  const selectedGrader = stockdesk ? fileURLToPath(new URL("../../benchmarks/stockdesk-v1/browser-grader.cjs", import.meta.url)) : graderPath;
   const report = {
-    version: 1, suite: "sprintdesk-v1", status: "error", automatedContractComplete: false,
-    visualQualityAssessed: false, paidModelCalls: 0, profile: SPRINTDESK_BROWSER_PROFILE,
+    version: 1, suite: stockdesk ? "stockdesk-v1" : "sprintdesk-v1", status: "error", automatedContractComplete: false,
+    visualQualityAssessed: false, paidModelCalls: 0, profile: stockdesk ? { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v1", accessibleContract: "StockDesk prompt v1", coverage: STOCKDESK_BROWSER_CHECKS.join(",") } : SPRINTDESK_BROWSER_PROFILE,
     executionKind: deps.runDocker ? "injected_executor_test_not_browser_evidence" : "docker_system_chromium",
     checks: {}, screenshots: [], cleanup: "not_needed",
     limitations: ["Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
@@ -202,7 +210,7 @@ export async function evaluateSprintDeskBrowser(options, deps = {}) {
       "Chromium sandbox disabled inside the bounded Docker controlled-code profile; not hostile upstream PR isolation"],
   };
   const started = performance.now(), owned = new Set(); let scratch, dockerEnv;
-  const timeoutMs = options?.timeoutMs ?? 120000, run = deps.runDocker ?? docker;
+  const timeoutMs = options?.timeoutMs ?? (stockdesk ? 180000 : 120000), run = deps.runDocker ?? docker;
   const call = async (args, { limit = 30000, cleanup = false, allowFailure = false } = {}) => {
     if (!cleanup && options.signal?.aborted) throw new BrowserError("browser_evaluation_cancelled", "cancelled");
     const remaining = timeoutMs - (performance.now() - started);
@@ -228,7 +236,7 @@ export async function evaluateSprintDeskBrowser(options, deps = {}) {
       if (error.status === "unsupported") throw new BrowserError("candidate_outside_prebuilt_support_contract", "unsupported");
       throw error;
     }
-    await copyFile(graderPath, path.join(grader, "browser-grader.cjs"));
+    await copyFile(selectedGrader, path.join(grader, "browser-grader.cjs"));
     report.graderDigest = hash(await readFile(path.join(grader, "browser-grader.cjs")));
     try { report.browserAssets = await (deps.prepareBrowser ?? prepareSystemChromium)(assets); }
     catch (error) {
@@ -268,8 +276,8 @@ export async function evaluateSprintDeskBrowser(options, deps = {}) {
     report.isolation = { network: "none_shared_candidate_namespace", nonroot: true, readOnlyRoot: true, readOnlyHostBinds: true,
       inheritedSecretEnvironment: false, hostBrowserUsed: false, hostSocketMounted: false, candidateDataLimitBytes: 67108864 };
     await call(["start", app]);
-    const graded = await call(["start", "--attach", browser], { limit: 90000, allowFailure: true });
-    const receipt = parseBrowserReceipt(graded.stdout);
+    const graded = await call(["start", "--attach", browser], { limit: stockdesk ? 150000 : 90000, allowFailure: true });
+    const receipt = parseBrowserReceipt(graded.stdout, { suite: stockdesk ? "stockdesk-v1" : "sprintdesk-v1" });
     if (!receipt || ![0, 1].includes(graded.exitCode) || (receipt.status === "passed") !== (graded.exitCode === 0))
       throw new BrowserError("invalid_or_missing_browser_grader_receipt");
     report.browserVersion = receipt.browserVersion; report.checks = receipt.checks;

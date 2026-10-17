@@ -10,19 +10,25 @@ export const SPRINTDESK_ACCEPTANCE_PROFILE = Object.freeze({
   coverage: "api_contract_sqlite_restart_desktop_mobile_keyboard_create_move_reload",
   visualQualityAssessed: false,
 });
+export const STOCKDESK_ACCEPTANCE_PROFILE = Object.freeze({
+  ...SPRINTDESK_ACCEPTANCE_PROFILE, id: "stockdesk-automated-v1",
+  functional: { ...SPRINTDESK_PROFILE, id: "stockdesk-node24-prebuilt-linux-x64-v1", sqliteRecordProbe: "product_and_each_seed_movement_real_rows" },
+  browser: { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v1", accessibleContract: "StockDesk prompt v1", coverage: "keyboard_product_adjustment_transfer_CSV_preview_commit_replay_validation_filters_export_safe_text_reload" },
+  coverage: "stockdesk_API_CSV_atomicity_idempotency_concurrency_SQLite_UI_workflows",
+});
 const digest = value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
 
 export async function evaluateSprintDeskAcceptance(options, deps = {}) {
   const started = performance.now();
   const report = {
-    version: 1, suite: "sprintdesk-v1", profile: SPRINTDESK_ACCEPTANCE_PROFILE,
+    version: 1, suite: options?.suite ?? "sprintdesk-v1", profile: options?.suite === "stockdesk-v1" ? STOCKDESK_ACCEPTANCE_PROFILE : SPRINTDESK_ACCEPTANCE_PROFILE,
     status: "error", functionalStatus: "not_run", qualityComplete: false,
     automatedContractComplete: false, visualQualityAssessed: false,
     api: { status: "not_run" }, persistence: { status: "not_run" }, ui: { status: "not_run" },
     cleanup: "not_needed", paidModelCalls: 0,
     limitations: [
       "Automated contract conformance is not a subjective design or comprehensive product-quality score",
-      "UI coverage is create, move, API readback, reload, overflow and runtime errors; other UI flows require further review",
+      options?.suite === "stockdesk-v1" ? "StockDesk UI workflow checks cover the declared sampled flows; visual design and exhaustive accessibility remain unscored" : "UI coverage is create, move, API readback, reload, overflow and runtime errors; other UI flows require further review",
       "Controlled local code only; Docker shares its host kernel and Chromium runs without its own process sandbox",
       "Persistence is checked across application-container restart, not host power loss",
     ],

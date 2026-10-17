@@ -1,0 +1,1 @@
+{"name":"stockdesk-synthetic-grader-control","private":true,"type":"module","scripts":{"start":"node server.mjs"}}

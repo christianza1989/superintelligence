@@ -33,6 +33,7 @@ export async function buildLabPlan({ promptVersion = 1 } = {}) {
     "platform/scripts/zero-lab-jev.mjs",
     "platform/scripts/zero-lab-prepare.mjs",
     "platform/scripts/zero-lab-evaluate.mjs",
+    "platform/scripts/zero-stockdesk-contract.mjs",
     "platform/scripts/zero-lab-acceptance.mjs",
     "platform/scripts/zero-lab-browser.mjs",
     "platform/packages/testkit/fixtures/zero-lab-ui/browser-grader.cjs",

@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "kind": "benchmark_proposal_not_implemented",
+  "kind": "stockdesk_frozen_experiment_contract",
   "suite": "stockdesk-v1",
   "split": "calibration",
-  "status": "task_and_design_prepared_not_run",
+  "status": "harness_ready_before_first_generation",
   "codingModel": "claude-haiku-5-5",
   "reasoning": "high",
   "systemPromptMode": "default",
@@ -12,14 +12,15 @@
   "taskPromptSha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
   "taskPromptBytes": 9556,
   "protocolPath": "benchmarks/stockdesk-v1/README.md",
-  "protocolSha256": "b06f3379d198ebc3c64ddfa1e18865eae859d6740cef5167b3552698440dcc88",
+  "protocolSha256": "fb7d861eed49b0c0901e81c50fb3e59bbfe60bcde9affa0b62fdf4ec6aa2dc1d",
   "proposedControls": {
     "codingTimeoutMs": 1200000,
     "maxObservedToolActions": 100,
     "screeningPairs": 1,
     "confirmationPairs": 3,
     "order": "AB/BA/AB",
-    "automaticRetries": 0
+    "automaticRetries": 0,
+    "maxCliTurns": 100
   },
   "objective": "quality_time_cost_tradeoff_no_fixed_percentage_target",
   "gatePriority": "complete_quality_acceptance_before_speed_or_price_comparison",
@@ -46,11 +47,11 @@
     "commonTask": true,
     "experimentalDesign": true,
     "sourcePack": false,
-    "stockdeskIndependentApiGrader": false,
-    "stockdeskIndependentBrowserGrader": false,
-    "negativeControls": false,
-    "liveRunnerIntegration": false,
-    "confirmedModelAccess": false
+    "stockdeskIndependentApiGrader": true,
+    "stockdeskIndependentBrowserGrader": true,
+    "negativeControls": true,
+    "liveRunnerIntegration": true,
+    "confirmedModelAccess": true
   },
   "stockdeskCodingAttempts": 0,
   "modelFallback": false,
@@ -59,5 +60,7 @@
     "sharedOriginalLedgerRequired": true,
     "authorizedTotalUsd": 1,
     "newRequestsThisPreparation": 0
-  }
+  },
+  "asOf": "before_first_stockdesk_coding_run",
+  "selectionRule": "If B/C inputs identical, selection tie and prefer deterministic B without another coding screen. Else choose accepted assisted lane by total estimate then coding-plus-preparation time; no eligible lane means no confirmation."
 }
