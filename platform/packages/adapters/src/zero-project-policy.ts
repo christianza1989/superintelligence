@@ -71,9 +71,15 @@ export class ZeroProjectPolicyError extends IsolationError {
 }
 
 /** Compatibility boundary: policy consumers retain the IsolationError subclass. */
-export async function readZeroOperatorFile(file: string, maxBytes: number = ZERO_PROJECT_POLICY_LIMITS.bytes): Promise<Uint8Array> {
-  try { return await readOperatorFile(file, maxBytes); }
-  catch { throw new ZeroProjectPolicyError(); }
+export async function readZeroOperatorFile(
+  file: string,
+  maxBytes: number = ZERO_PROJECT_POLICY_LIMITS.bytes,
+): Promise<Uint8Array> {
+  try {
+    return await readOperatorFile(file, maxBytes);
+  } catch {
+    throw new ZeroProjectPolicyError();
+  }
 }
 
 async function readPolicy(file: string) {

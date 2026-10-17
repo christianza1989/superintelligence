@@ -1,8 +1,10 @@
 {
   "name": "repositoryzero",
   "version": "0.4.0",
-  "description": "RepositoryZero source discovery preview.",
-  "author": { "name": "RepositoryZero contributors" },
+  "description": "RepositoryZero source discovery by default; optional operator-bound Linux CSV preparation and verification through the existing Zero backend.",
+  "author": {
+    "name": "RepositoryZero contributors"
+  },
   "homepage": "https://github.com/christianza1989/superintelligence",
   "license": "Apache-2.0"
 }

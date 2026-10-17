@@ -1,7 +1,7 @@
 {
   "name": "repositoryzero",
   "version": "0.4.0",
-  "description": "RepositoryZero source discovery preview.",
+  "description": "RepositoryZero source discovery by default; optional operator-bound Linux CSV preparation and verification through the existing Zero backend.",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "requires_local_executor": true,
@@ -9,6 +9,9 @@
     "displayName": "RepositoryZero",
     "shortDescription": "Find reusable source components",
     "developerName": "RepositoryZero contributors",
-    "capabilities": ["Read"]
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
   }
 }

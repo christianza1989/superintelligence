@@ -1,6 +1,6 @@
-# Vietinis discovery papildinio paketas
+# Vietinis MCP papildinio paketas
 
-2026-10-17. Tai discovery preview: trys katalogo įrankiai ir vienas reuse skill. Paruošimo bei verification įrankiai dar neįtraukti. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas.
+2026-10-17. Numatytasis profilis — trys discovery įrankiai ir vienas reuse skill. Tas pats paketas turi pasirenkamą Linux operator-bound CSV paruošimo ir patikros transportą per esamą Zero API/Graphile. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas.
 
 ## Sukurti ir patikrinti
 
@@ -9,11 +9,12 @@ Iš paruošto Git checkout su `npm run setup` priklausomybėmis:
 ```bash
 npm run package:mcp
 node scripts/test-mcp-plugin.mjs /absolute/path/printed/by/build
+node scripts/test-mcp-plugin-portable.mjs /absolute/path/printed/by/build
 ```
 
-Build sukuria naują katalogą `.artifacts/plugins`, išsaugodamas ankstesnius ir nesėkmingus bandymus. Pakete yra savarankiškas `server/index.mjs`, katalogo snapshot, manifestai, skill, LICENSE/NOTICE ir visų aštuonių bundled dependency licencijos. Node 24 ar naujesnis vis dar reikalingas; runtime install ar projekto node_modules nereikia. BUILD.json pateikia tikslių serverio baitų SHA-256; testas jį patikrina prieš vykdymą.
+Build sukuria naują katalogą `.artifacts/plugins`, išsaugodamas ankstesnius ir nesėkmingus bandymus. Pakete yra mažas `server/index.mjs` bootstrap, atskiri `discovery.mjs` bei `execution.mjs`, katalogo snapshot, manifestai, skill, LICENSE/NOTICE ir bundled dependency licencijų inventorius. Node 24 ar naujesnis vis dar reikalingas; runtime install ar projekto node_modules nereikia. BUILD.json pateikia visų trijų serverio failų baitų SHA-256 ir profilių ribas; testas juos patikrina prieš vykdymą. Build atmeta DB, worker, verifier ir native koffi priklausomybes bei external runtime paketus.
 
-Testas paleidžia tikrą proceso transportą iš atskiro tuščio katalogo pagal portable ir compatibility MCP konfigūraciją. Tikrina initialize, tool sąrašą, nonce, versijas, search/inspect faktus ir švarų stderr. Tai nėra host plugin įdiegimo imitacija ar jo PASS.
+Testas paleidžia tikrą proceso transportą iš atskiro tuščio katalogo pagal portable ir compatibility MCP konfigūraciją. Tikrina initialize, tool sąrašą, nonce, versijas, search/inspect faktus ir švarų stderr. Linux teste papildomai naudojamas nukopijuotas paketas be .git ir tikras STDIO klientas su vietiniu HTTP fixture: opt-in, devyni tools, private binding reread/restart/revocation, neteisingo binding bei package/export katalogo atmetimas ir redacted klaidos. Tai transporto conformance; fixture nevykdo Graphile worker ir nėra native host plugin įdiegimo PASS.
 
 ## Codex vietinis marketplace
 
@@ -31,7 +32,21 @@ codex plugin marketplace add /absolute/path/to/generated/package
 
 Pakete yra atskiras `.claude-plugin/plugin.json` ir `.mcp.json`, naudojantis dokumentuotą CLAUDE_PLUGIN_ROOT. Oficialus `claude plugin validate` šiam manifestui praėjo. Tai schemos patikra; tikras Claude įrankių kvietimas ir įdiegimo lifecycle dar NOT_RUN. [Claude manifestų ir kelių dokumentacija](https://code.claude.com/docs/en/plugins-reference).
 
-Laikinam development bandymui naudoti host dokumentuotą `--plugin-dir` su sugeneruotu katalogu. Neperkelti Codex ar Claude prenumeratos auth į paketą. Serveris neskaito projekto failų, nekviečia mokamų modelių ir nereikalauja API rakto.
+Laikinam development bandymui naudoti host dokumentuotą `--plugin-dir` su sugeneruotu katalogu. Neperkelti Codex ar Claude prenumeratos auth į paketą. Default discovery neskaito projekto failų, nekviečia mokamų modelių ir nereikalauja API rakto. Pasirenkamas execution skaito tik privatų operatoriaus binding ir perduoda ribotus užsakymus esamam backend; šiame pakete nėra DB, worker ar projekto verifier.
+
+## Pasirenkamas Linux execution
+
+Be nonempty ZERO_MCP_BINDING_FILE bootstrap importuoja tik discovery. Windows Node išlaiko šį trijų tools profilį; Windows native execution nepalaikomas. Linux operatorius gali aiškiai paleisti jau sukurtą paketą:
+
+```bash
+ZERO_MCP_BINDING_FILE=/absolute/private/operator.json node /absolute/generated/package/server/index.mjs
+```
+
+Tai vietinės operatoriaus reikšmės: paketas jų nesukuria, nenuspėja distro/Node/projekto root ir nerašo host global config. Privatus failas turi likti už bet kurio Git checkout ir paties paketo/export katalogo, absoliučiame canonical Linux kelyje, current UID, exact0600, vieno link ir be symlink. Paketo ribą įtvirtina compile-time flag; environment negali jos išjungti. Binding schema ir trusted backend/grant setup — [MCP-SETUP](MCP-SETUP.md). Host prenumeratos credentials neperduodami.
+
+Opt-in prijungia zero_prepare, zero_job, zero_artifact, zero_cancel, zero_verify ir zero_freshness prie esamo application client. Tikras zero_status nonce/profile/backend atsakymas tikrina dabartinį API ir leidimą; tools sąrašas nėra authorization ar patikros PASS. Neteisingas, expired ar pašalintas binding užblokuoja operaciją be privataus turinio klaidoje. Endpoint ir sesija perskaitomi kiekvienai operacijai; discovery nepakeičiamas į tariamai veikiančią execution būseną.
+
+Nauja proceso sesija be binding grįžta prie discovery. Atnaujinant paketą tikrinti naują BUILD.json, host pasirinkto paketo/cache versiją ir naujos sesijos zero_status; package pakeitimas nėra įrodytas host update. Uninstall nėra backend sesijos ar grant revocation: juos atšaukti atskirai pagal operatoriaus politiką. Vietinis paketo failo ištrynimas nėra host cache uninstall. Native install/update/uninstall priėmimas dokumentuojamas tik po tikro host bandymo; šis source/bundle testas jo neuždaro.
 
 ## Dabartiniai įrodymai ir išjungimas
 
