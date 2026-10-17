@@ -1,7 +1,7 @@
 /** One selected-profile job on the existing queue. No default paid activation or retry. */
 import { randomUUID } from "node:crypto";
 import type { AdapterContext, ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
-import type { PrismaClient } from "@rakazo/db";
+import type { Artifact, PrismaClient } from "@rakazo/db";
 import { IsolationError, Prisma, recordUsage, reserveBudgetInvocation } from "@rakazo/db";
 import type { Pool } from "pg";
 import { z } from "zod";
@@ -45,6 +45,17 @@ const requestSchema = z
   })
   .strict();
 type Request = z.infer<typeof requestSchema>;
+interface Header {
+  row: Artifact;
+  principal: ZeroCsvPrincipal;
+  digest: string;
+  callId: string | null;
+  model: string | null;
+  profileRevision: string | null;
+  deadline: string | null;
+  profileDigest: string | null;
+  connectionDigest: string | null;
+}
 export interface ZeroJevWorkerDependencies {
   prisma: PrismaClient;
   pool?: Pool;
@@ -122,7 +133,11 @@ async function recheck(deps: ZeroJevWorkerDependencies, request: Request) {
     throw new IsolationError();
   return current;
 }
-async function receipt(deps: ZeroJevWorkerDependencies, request: Request, id: string) {
+async function receipt(
+  deps: ZeroJevWorkerDependencies,
+  request: Pick<Request, "principal">,
+  id: string,
+) {
   return deps.prisma.artifact.findUnique({
     where: {
       spaceId_userId_clientNonce: {
@@ -133,7 +148,11 @@ async function receipt(deps: ZeroJevWorkerDependencies, request: Request, id: st
     },
   });
 }
-async function load(deps: ZeroJevWorkerDependencies, id: string, principal?: ZeroCsvPrincipal) {
+async function loadHeader(
+  deps: ZeroJevWorkerDependencies,
+  id: string,
+  principal?: ZeroCsvPrincipal,
+): Promise<Header> {
   z.string().uuid().parse(id);
   const row = await deps.prisma.artifact.findFirst({
     where: {
@@ -143,11 +162,62 @@ async function load(deps: ZeroJevWorkerDependencies, id: string, principal?: Zer
     },
   });
   if (!row || row.size > ZERO_JEV_LIMITS.artifactBytes) throw new IsolationError();
-  const owner = zeroJevPrincipalSchema.parse(JSON.parse(row.description ?? "null")?.principal);
+  const metadata = z
+    .object({
+      principal: zeroJevPrincipalSchema,
+      digest: z.string().regex(/^[a-f0-9]{64}$/),
+      callId: z.string().uuid().optional(),
+      model: z.string().min(1).max(200).optional(),
+      profileRevision: z.string().min(1).max(128).optional(),
+      deadline: instant.optional(),
+      profileDigest: z
+        .string()
+        .regex(/^[a-f0-9]{64}$/)
+        .optional(),
+      connectionDigest: z
+        .string()
+        .regex(/^[a-f0-9]{64}$/)
+        .optional(),
+    })
+    .strict()
+    .parse(JSON.parse(row.description ?? "null"));
+  const owner = metadata.principal;
   if (
     row.spaceId !== owner.spaceId ||
     row.userId !== owner.userId ||
     (principal && JSON.stringify(principal) !== JSON.stringify(owner))
+  )
+    throw new IsolationError();
+  return {
+    row,
+    principal: owner,
+    digest: metadata.digest,
+    callId: metadata.callId ?? null,
+    model: metadata.model ?? null,
+    profileRevision: metadata.profileRevision ?? null,
+    deadline: metadata.deadline ?? null,
+    profileDigest: metadata.profileDigest ?? null,
+    connectionDigest: metadata.connectionDigest ?? null,
+  };
+}
+async function load(
+  deps: ZeroJevWorkerDependencies,
+  id: string,
+  principal?: ZeroCsvPrincipal,
+  cached?: Header,
+) {
+  const header = cached ?? (await loadHeader(deps, id, principal));
+  const { row, principal: owner } = header;
+  // Metadata-only authorization precedes every private request read. Original principal never renews itself.
+  const current = await connection(deps, principal ?? owner);
+  if (
+    !header.callId ||
+    !header.deadline ||
+    header.model !== current.profile.model ||
+    header.profileRevision !== current.profile.revision ||
+    header.profileDigest !== zeroCsvHash(JSON.stringify(current.profile)) ||
+    header.connectionDigest !== current.connectionDigest ||
+    Date.parse(header.deadline) <= Date.now()
   )
     throw new IsolationError();
   const bytes = await deps.artifacts.get(row.storageKey, context(owner, id));
@@ -159,15 +229,20 @@ async function load(deps: ZeroJevWorkerDependencies, id: string, principal?: Zer
   const { digest, callId: _, ...binding } = request;
   if (
     zeroCsvHash(JSON.stringify(binding)) !== digest ||
-    JSON.stringify(request.principal) !== JSON.stringify(owner)
+    digest !== header.digest ||
+    request.callId !== header.callId ||
+    request.input.deadline !== header.deadline ||
+    JSON.stringify(request.principal) !== JSON.stringify(owner) ||
+    JSON.stringify(current.profile) !== JSON.stringify(request.profile) ||
+    current.connectionDigest !== request.connectionDigest
   )
-    throw new Error("request_binding_failed");
+    throw new IsolationError();
   return request;
 }
 
 async function publish(
   deps: ZeroJevWorkerDependencies,
-  request: Request,
+  request: Request | Header,
   id: string,
   details: Record<string, unknown>,
 ) {
@@ -177,9 +252,9 @@ async function publish(
       jobId: id,
       callId: request.callId,
       requestDigest: request.digest,
-      inputSha256: zeroCsvHash(request.input.data),
-      model: request.profile.model,
-      profileRevision: request.profile.revision,
+      ...("input" in request ? { inputSha256: zeroCsvHash(request.input.data) } : {}),
+      model: "profile" in request ? request.profile.model : request.model,
+      profileRevision: "profile" in request ? request.profile.revision : request.profileRevision,
       ...details,
       finishedAt: new Date().toISOString(),
     }),
@@ -206,6 +281,7 @@ async function publish(
         });
         if (existing) return existing;
         if (details.state === "succeeded") {
+          if (!("input" in request)) throw new IsolationError();
           await recheck(deps, request);
           if (Date.now() - Date.parse(String(details.startedAt)) >= ZERO_JEV_LIMITS.runtimeMs)
             throw new Error("job_runtime_exceeded");
@@ -237,6 +313,73 @@ async function publish(
   } finally {
     if (!committed) await deps.artifacts.remove(staged.id, ctx).catch(() => undefined);
   }
+}
+
+/** A read-only check, never a reservation or proof of provider entitlement/pricing. */
+export async function getZeroJevAvailability(
+  deps: ZeroJevWorkerDependencies,
+  principal: ZeroCsvPrincipal,
+) {
+  const resolved = await connection(deps, principal);
+  if (!deps.pool) throw new Error("routing_budget_unavailable");
+  const available = await deps.pool.query(
+    'SELECT 1 FROM zero_budget_accounts a JOIN zero_budget_lanes l ON l."accountId" = a.id WHERE a.id = $1 AND l.id = $2 AND a.enabled AND l.enabled AND a."reservedCalls" < a."callLimit" AND l."reservedCalls" < l."callLimit" AND a."usdLimitMicros" - a."reservedUsdMicros" >= $3 AND l."usdLimitMicros" - l."reservedUsdMicros" >= $3 AND a."tokenLimit" - a."reservedTokens" >= $4 AND l."tokenLimit" - l."reservedTokens" >= $4',
+    [
+      resolved.profile.payerAccountId,
+      resolved.profile.lane,
+      resolved.profile.reserveUsdMicros,
+      resolved.profile.reserveTokens,
+    ],
+  );
+  if (!available.rowCount) throw new Error("routing_budget_unavailable");
+  return {
+    profile: "jev-tool-selector-v1" as const,
+    backend: "available" as const,
+    execution: "jev-tool-selection" as const,
+    paidModelCalls: 0 as const,
+    profileRevision: resolved.profile.revision,
+    model: resolved.profile.model,
+    tools: resolved.profile.tools,
+    limits: ZERO_JEV_LIMITS,
+  };
+}
+async function lookupReceipt(
+  deps: ZeroJevWorkerDependencies,
+  principal: ZeroCsvPrincipal,
+  id: string,
+) {
+  await connection(deps, principal);
+  const header = await loadHeader(deps, id, principal);
+  const row = await receipt(deps, header, id);
+  if (
+    row &&
+    (row.name !== "zero-jev-receipt.json" ||
+      row.rootArtifactId !== id ||
+      row.version !== 2 ||
+      row.spaceId !== principal.spaceId ||
+      row.userId !== principal.userId ||
+      row.size > ZERO_JEV_LIMITS.artifactBytes)
+  )
+    throw new IsolationError();
+  return { header, row };
+}
+async function readReceipt(
+  deps: ZeroJevWorkerDependencies,
+  principal: ZeroCsvPrincipal,
+  id: string,
+) {
+  const { header, row } = await lookupReceipt(deps, principal, id);
+  if (!row) throw new IsolationError();
+  // Receipt bytes may contain task output: authorize immediately before reading them too.
+  await connection(deps, principal);
+  const bytes = await deps.artifacts.get(row.storageKey, context(principal, id));
+  if (bytes.byteLength !== row.size || zeroCsvHash(bytes) !== row.hash)
+    throw new Error("receipt_integrity_failed");
+  const content = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  const body = JSON.parse(content);
+  if (body.jobId !== id || body.requestDigest !== header.digest || body.callId !== header.callId)
+    throw new Error("receipt_binding_failed");
+  return { artifactId: row.id, revision: 2 as const, sha256: row.hash, content };
 }
 
 /** Application supplies its authenticated principal; no public identity fields exist here. */
@@ -324,7 +467,16 @@ export function createZeroJevToolService(
                 hash: zeroCsvHash(bytes),
                 version: 1,
                 clientNonce: nonce,
-                description: JSON.stringify({ principal, digest }),
+                description: JSON.stringify({
+                  principal,
+                  digest,
+                  callId,
+                  model: binding.profile.model,
+                  profileRevision: binding.profile.revision,
+                  deadline: params.deadline,
+                  profileDigest: zeroCsvHash(JSON.stringify(binding.profile)),
+                  connectionDigest: binding.connectionDigest,
+                }),
               },
             });
             committed = true;
@@ -346,35 +498,59 @@ export function createZeroJevToolService(
         });
       return { jobId: row.id, callId: request.callId, requestDigest: request.digest };
     },
-    async get(id: string) {
-      await connection(deps, principal);
-      const request = await load(deps, id, principal);
-      const row = await receipt(deps, request, id);
+    async job(id: string) {
+      const { header, row } = await lookupReceipt(deps, principal, id);
       if (!row)
         return {
           jobId: id,
-          callId: request.callId,
+          callId: header.callId,
+          state: "unknown" as const,
+          reason: "no_terminal_receipt" as const,
+        };
+      const metadata = z
+        .object({
+          state: z.enum(["succeeded", "failed", "blocked", "abstained", "unknown"]),
+          callId: z.string().uuid().nullable(),
+          requestDigest: z.string().regex(/^[a-f0-9]{64}$/),
+        })
+        .strict()
+        .parse(JSON.parse(row.description ?? "null"));
+      if (metadata.callId !== header.callId || metadata.requestDigest !== header.digest)
+        throw new IsolationError();
+      return { jobId: id, ...metadata, artifactId: row.id, revision: 2 as const, sha256: row.hash };
+    },
+    artifact: (id: string) => readReceipt(deps, principal, id),
+    async get(id: string) {
+      const { header, row } = await lookupReceipt(deps, principal, id);
+      if (!row)
+        return {
+          jobId: id,
+          callId: header.callId,
           state: "unknown",
           reason: "no_terminal_receipt",
         };
-      if (
-        row.name !== "zero-jev-receipt.json" ||
-        row.rootArtifactId !== id ||
-        row.version !== 2 ||
-        row.size > ZERO_JEV_LIMITS.artifactBytes
-      )
-        throw new Error("receipt_binding_failed");
-      const bytes = await deps.artifacts.get(row.storageKey, context(principal, id));
-      if (bytes.byteLength !== row.size || zeroCsvHash(bytes) !== row.hash)
-        throw new Error("receipt_integrity_failed");
-      return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+      return JSON.parse((await readReceipt(deps, principal, id)).content);
     },
   };
 }
 
 export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string) {
-  const request = await load(deps, id);
-  if (await receipt(deps, request, id)) return;
+  const header = await loadHeader(deps, id);
+  if (await receipt(deps, header, id)) return;
+  let request: Request;
+  try {
+    request = await load(deps, id, undefined, header);
+  } catch (error) {
+    if (!(error instanceof IsolationError)) throw error;
+    await publish(deps, header, id, {
+      state: "blocked",
+      reason: "project_scope_rejected",
+      dispatchAttempts: 0,
+      tool: null,
+      usage: null,
+    });
+    return;
+  }
   const startedAt = Date.now();
   let usage: SystemOneUsageEvent | null = null;
   let priorInvocation = false;
