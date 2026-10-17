@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "status": "source-only-runplan-not-executed",
+  "profile": "native-mcp-local-v1",
+  "runtimeQualified": false,
+  "g0Qualified": false,
+  "distributionReady": false,
+  "hostFeasibility": {
+    "entry": "node platform/scripts/qualify-zero-native-runtime.mjs",
+    "requiredArguments": ["--run", "--package <absolute sealed package>", "--postgres-image <installed sha256 image ID>", "--expected-source <committed 40-hex revision>", "--build-sha256 <64-hex BUILD.json hash>"],
+    "prerequisites": ["Coordinator releases the heavy slot", "Backend composition is integrated and the candidate source revision is chosen", "A new bounded experimental stage succeeds with a clean source inventory", "The exact already installed Linux amd64 PostgreSQL 18.6 image is explicitly supplied"],
+    "bounds": {"operationDeadlineMs": 240000, "commandDeadlineMs": 20000, "cleanupDeadlineMs": 15000, "nodeHeapMiBPerProcess": 512, "postgresMemoryMiB": 512, "postgresCpus": 1, "postgresPids": 128, "capturedOutputBytesPerProcess": 1048576, "packageFileCount": 200000, "packagePayloadBytes": 1200000000},
+    "isolation": ["Hash-verify every inventoried package file before and after relocation; reject unlisted files and source-escaping symlinks", "Use unrelated fresh temporary cwd, HOME, XDG directories, data and explicit private fake secrets; no ambient environment spread", "Use unchanged packaged API, worker and canonical Prisma migration entries", "Instrument ordinary Node module/file/network access and nested Node migration CLI; deny source/home/dotenv access and nonfixture TCP destinations", "No paid models or external API calls; actual scripted runtime and Graphile authority", "Own only uniquely labelled fixture processes/container and retain private state, logs and initialized bind data on failure"],
+    "acceptance": ["Exact PostgreSQL server_version_num 180006 and PG18 data parent", "Every sealed canonical migration appears finished in PostgreSQL", "Real API and worker start, readiness succeeds, real local session obtains private scope grant", "Actual CSV prepare, idempotent replay, Graphile execution, paginated receipt hash and verification pass", "Zero paid-model receipt calls and zero usage rows for fixture scope", "Graceful API/worker termination, closed package module audit, fixture-only Node network and owned cleanup"],
+    "limitations": ["Host Node and reusable Docker daemon are not a clean-container installation", "Node instrumentation is not an OS sandbox or native-engine network monitor", "No complete process-tree peak RAM, hard kernel-I/O deadline or physical deduplication claim", "Web, native host connection and three-family verifier acceptance remain separate"]
+  },
+  "g0Accounting": {
+    "limitBytes": 2000000000,
+    "suppliedImageLogicalBytes": {"staticBrowser": 866583952, "pdfIncrementOverSharedBase": 103114001, "postgres186": 644156657},
+    "suppliedImageUnionBytes": 1613854610,
+    "remainingBeforeApplicationToolsDataBytes": 386145390,
+    "oldDistinctCsvImageBytes": 243473588,
+    "oldCsvImageStillRequiredUntilReplacementQualified": true,
+    "requiredUnmeasuredCategories": ["New integrated sealed application including compiled shared web, exact external/native closures, migrations, licenses and BUILD metadata", "Shared glibc Node runtime image and OS libraries unless already counted by exact layer identity", "Docker engine, CLI, Compose and required initialized engine metadata", "PostgreSQL initialized data, WAL, indexes and bounded application/artifact data", "External private operator files and installed native MCP/plugin payload", "Profile configuration and any required verifier assets not included in supplied union"],
+    "separateMeasurements": ["Logical bytes and actual allocated bytes with exact image-layer deduplication evidence", "Peak download/cache/build bytes", "Retained old image and failed experiment bytes", "Peak complete process-tree memory and bounded data growth"],
+    "qualifiedReplacementOptions": ["Actually qualify CSV on the shared pinned glibc Node image", "Start a new PostgreSQL 18.6 Alpine durability epoch with its own complete evidence"],
+    "wholeInstalledProductionBytes": null,
+    "physicalDedupBytes": null
+  },
+  "composePlan": {
+    "status": "plan-only-no-compose-installation",
+    "services": ["api", "worker", "postgres"],
+    "authority": "Existing API, worker, Graphile and PostgreSQL; no replacement scheduler or service",
+    "requiredLabel": "repositoryzero.profile=native-mcp-local-v1",
+    "identity": "Standard Compose project and config_files labels plus exact profile label",
+    "sharedData": {"type": "explicit host bind", "containerDestination": "/var/lib/repositoryzero", "consumers": ["api", "worker"], "namedVolume": false},
+    "postgresData": {"type": "explicit host bind", "containerDestination": "/var/lib/postgresql", "version": "18.6"},
+    "operatorConfig": "Private explicit env/auth/policy and bind paths live outside package; expose API on loopback only",
+    "backupContract": "Prequiesced API and worker, exact mount/label validation, no automatic stop/start; retain canonical migrations and metadata",
+    "web": "Compile the existing shared Vite app, serve it from a fixed trusted package directory through the same API; no second web service"
+  },
+  "webServingPlan": {
+    "status": "approved-concept-awaiting-shared-app-owner-commit",
+    "composition": "Optional trusted createApp webRoot; package API composition passes only its fixed inventoried web directory",
+    "sameOriginEvidence": ["Browser RPC client uses window.location.origin + /rpc", "Auth capabilities use relative /api/auth/capabilities", "Vite /api and /rpc proxy targets are dev/preview server plumbing"],
+    "rules": ["GET and HEAD only; decode paths once and reject traversal, malformed encoding and symlink escapes", "Serve inventoried real assets with explicit MIME and cache policy; immutable only for fingerprinted assets", "HTML navigation fallback only for known non-API, non-asset routes", "Preserve /api/auth, /rpc, /health, readiness, websocket and internal-route semantics; unknown protected routes remain 404", "No HTTP-selected, ambient-env or HOME-derived filesystem root"],
+    "requiredVerification": ["Real built index and fingerprinted assets from the existing app", "Same-origin local auth/RPC with no personal build URL", "GET/HEAD MIME/cache behavior, SPA navigation and all protected-route 404 regressions", "Traversal, encoded separator and symlink escape regressions", "Whole package conformance and clean-container production accounting"]
+  }
+}
