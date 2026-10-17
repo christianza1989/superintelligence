@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "id": "pdfplumber-0.11.10-born-digital-lines-v1",
+  "epoch": "2026-10-17-explicit-light-candidate-v1",
+  "scope": "Born-digital PDFs with explicit rectangular ruled table cells; no OCR, ML, text-strategy fallback, or merged-cell support.",
+  "package": {
+    "name": "pdfplumber",
+    "version": "0.11.10",
+    "source": "https://github.com/jsvine/pdfplumber/tree/7d4f2f582f2d99f9e60ba522fdf7afd2f6d54c62",
+    "sourceCommit": "7d4f2f582f2d99f9e60ba522fdf7afd2f6d54c62",
+    "sha256": "7741ea81bf165b474b153e6789d10d18e06b6ddcf3ec84289c3ef2fed6802580",
+    "license": "MIT",
+    "licenseSource": "https://raw.githubusercontent.com/jsvine/pdfplumber/7d4f2f582f2d99f9e60ba522fdf7afd2f6d54c62/LICENSE.txt",
+    "licenseSha256": "0d48994da4d1321e395b5e64a724ed4dec63fb96b88ac5b88fc014771e690821"
+  },
+  "pythonImage": "python@sha256:8a00ecb83ed9d0864dfd102a1bdb2067fda907ceb30bb86d09da9ee558b19590",
+  "pythonImageCompressedBytes": 49907229,
+  "platform": "linux/amd64",
+  "models": [],
+  "limits": {
+    "dependencyDownloadBytes": 67108864,
+    "modelDownloadBytes": 0,
+    "installedCacheBytes": 536870912,
+    "prepareMs": 180000,
+    "inputBytes": 1048576,
+    "pages": 5,
+    "outputBytes": 1048576,
+    "runtimeMs": 30000,
+    "memoryBytes": 536870912,
+    "threads": 2
+  },
+  "tableSettings": {
+    "vertical_strategy": "lines",
+    "horizontal_strategy": "lines",
+    "snap_tolerance": 3,
+    "join_tolerance": 3,
+    "intersection_tolerance": 3,
+    "edge_min_length": 3
+  },
+  "fixtureManifestSha256": "3be8cd41fda8e39cf24d7f97dbdc77de46ab059f4cb486ea53194ca289738d8f",
+  "graderSha256": "eaf565a8d25e30ad754c6a2fd0f891865a8e0717b613a58e42370e374ecf8974",
+  "defaultDownloads": 0,
+  "licenses": {
+    "code": "MIT",
+    "dependencyRedistributionReview": "Not completed; each pinned wheel license and bundled notices remain distinct."
+  },
+  "discovery": {
+    "profile": "discovery-only",
+    "backend": "unavailable",
+    "candidateId": "jsvine/pdfplumber",
+    "catalogSourceRevision": "4c64b92d5caccd71c645e98e0fabb0c4dba7ff45",
+    "catalogRuntimeTested": false,
+    "catalogLicenseApproved": false
+  }
+}
