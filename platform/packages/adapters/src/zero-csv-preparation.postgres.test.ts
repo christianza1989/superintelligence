@@ -8,11 +8,18 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { LocalArtifactStore } from "./artifacts.js";
 import { createBackgroundJobHandlers } from "./background-job-handlers.js";
 import { GraphileJobPublisher, GraphileJobWorkerHost } from "./wakeup.js";
+import type { ZeroComponentFamily } from "./zero-component-jobs.js";
+import {
+  publishZeroComponent,
+  submitZeroComponent,
+  zeroComponentDigest,
+} from "./zero-component-jobs.js";
 import type { ZeroCsvAuthorize, ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import { createZeroCsvPreparationService } from "./zero-csv-preparation.js";
-import { prepareZeroCsvComponent, zeroCsvHash } from "./zero-csv-profile.js";
+import { prepareZeroCsvComponent, ZERO_CSV_PROFILE, zeroCsvHash } from "./zero-csv-profile.js";
 import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
 import * as projectVerifier from "./zero-csv-project-verifier.js";
+import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 
 const databaseUrl = process.env.ZERO_CSV_TEST_DATABASE_URL;
 const postgres =
@@ -424,6 +431,63 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     });
     await service.cancel(jobId);
     await start();
+  });
+
+  it("serializes the four-job quota across CSV, browser and PDF request families", async () => {
+    await stop();
+    // This tests the shared PostgreSQL lifecycle, independently of family business
+    // decoding or runtime qualification. No browser/PDF execution is claimed.
+    const queue = { enqueue: vi.fn(async () => undefined), cancel: vi.fn(async () => undefined) };
+    const deps = { prisma: db.prisma, artifacts, jobs: queue as never, authorize };
+    const make = (family: ZeroComponentFamily) => {
+      const body = {
+        principal,
+        kind: `zero.${family}.request.v1`,
+        profile:
+          family === "csv"
+            ? ZERO_CSV_PROFILE
+            : family === "pdf"
+              ? ZERO_PDF_PROFILE
+              : "zero-browser-static-v1",
+        deadline: new Date(Date.now() + 60_000).toISOString(),
+      };
+      return { ...body, requestDigest: zeroComponentDigest(body) };
+    };
+    const accepted: Array<{
+      family: ZeroComponentFamily;
+      jobId: string;
+      request: ReturnType<typeof make>;
+    }> = [];
+    const submit = async (family: ZeroComponentFamily) => {
+      const request = make(family);
+      const result = await submitZeroComponent(deps, family, principal, request, randomUUID());
+      const item = { family, jobId: result.jobId, request };
+      accepted.push(item);
+      return item;
+    };
+    try {
+      for (const family of ["csv", "browser", "pdf"] as const) await submit(family);
+      const race = await Promise.allSettled([submit("csv"), submit("pdf")]);
+      expect(accepted).toHaveLength(4);
+      expect(race.filter((result) => result.status === "rejected")).toHaveLength(1);
+      expect(
+        (race.find((result) => result.status === "rejected") as PromiseRejectedResult).reason
+          .message,
+      ).toBe("scope_job_limit_exceeded");
+      expect(queue.enqueue).toHaveBeenCalledTimes(4);
+    } finally {
+      for (const item of accepted)
+        await publishZeroComponent(
+          deps,
+          item.family,
+          item.jobId,
+          item.request,
+          "cancelled",
+          { reason: "principal_cancelled" },
+          principal,
+        );
+      await start();
+    }
   });
 
   it("allows a renewed same-scope grant to recover stranded quota without gaining execution rights", async () => {
