@@ -123,6 +123,8 @@ import {
 } from "./team-chat-startup.js";
 import { mountVoiceHttpRoutes } from "./voice.js";
 import { mountWebhookHttpRoutes } from "./webhook.js";
+import type { ZeroCsvScopePolicy } from "./zero-csv.js";
+import { mountZeroCsvRoutes } from "./zero-csv.js";
 
 /**
  * Native clients always send the app scheme, including in Expo Go, so no
@@ -168,6 +170,7 @@ export async function createApp(
     logger?: Logger;
     runtime?: AgentRuntime;
     contextStrategy?: AgentContextStrategy;
+    zeroCsvScopes?: ZeroCsvScopePolicy;
   } = {},
 ): Promise<AppHandles> {
   const {
@@ -183,6 +186,7 @@ export async function createApp(
     logger: loggerOverride,
     runtime: runtimeOverride,
     contextStrategy,
+    zeroCsvScopes,
     ...envOverrides
   } = overrides;
   const env = { ...loadEnv(process.env), ...envOverrides };
@@ -499,6 +503,8 @@ export async function createApp(
   });
 
   const jobHandlers = createBackgroundJobHandlers({
+    artifacts,
+    authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
     executor,
     prisma,
     sandbox,
@@ -640,6 +646,14 @@ export async function createApp(
     return actor && { actor, sessionId: session.session.id };
   };
   const sessionActor = async (request: Request) => (await requestSession(request))?.actor ?? null;
+  mountZeroCsvRoutes(app, {
+    prisma,
+    artifacts,
+    jobs,
+    policy: zeroCsvScopes,
+    authenticate: sessionActor,
+    trustedOrigin: (origin) => isTrustedOrigin(origin, env),
+  });
   app.use("/rpc/*", async (c, next) => {
     const session = await requestSession(c.req.raw);
     const actor = session?.actor ?? null;
