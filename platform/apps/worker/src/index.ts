@@ -47,6 +47,7 @@ import {
   SpaceMemoryProviderResolver,
   sandboxProviderOptionsFromEnv,
   withSecretPersistence,
+  zeroProjectPolicyFromEnv,
 } from "@rakazo/adapters";
 import { resolveEncryptionKey, resolveSupervisorToken } from "@rakazo/core";
 import {
@@ -228,8 +229,10 @@ async function main() {
     cloudAgent,
   });
 
+  const zeroCsvScopes = zeroProjectPolicyFromEnv();
   const jobHandlers = createBackgroundJobHandlers({
     artifacts,
+    authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
     executor,
     prisma,
     sandbox,

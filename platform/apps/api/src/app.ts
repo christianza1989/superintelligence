@@ -70,6 +70,7 @@ import {
   stripeBillingConfigFromEnv,
   toTeamChatInbound,
   withSecretPersistence,
+  zeroProjectPolicyFromEnv,
 } from "@rakazo/adapters";
 import { createAuth, isBlockedAuthPath, loopbackTwinOrigins } from "@rakazo/auth";
 import type { Actor, AuthCapabilities } from "@rakazo/contracts";
@@ -186,10 +187,11 @@ export async function createApp(
     logger: loggerOverride,
     runtime: runtimeOverride,
     contextStrategy,
-    zeroCsvScopes,
+    zeroCsvScopes: zeroCsvScopesOverride,
     ...envOverrides
   } = overrides;
   const env = { ...loadEnv(process.env), ...envOverrides };
+  const zeroCsvScopes = zeroCsvScopesOverride ?? zeroProjectPolicyFromEnv();
   const logger = loggerOverride ?? createServiceLogger({ service: SERVICE_NAMES.api });
   installLogger(logger);
   const created = prismaOverride
