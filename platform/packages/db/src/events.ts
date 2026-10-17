@@ -1206,6 +1206,7 @@ async function finalizeRunOnce(
         status: "running",
         leaseOwner: input.leaseOwner,
         leaseFence: input.leaseFence,
+        leaseExpiresAt: { gt: now },
       },
       data: {
         status: input.outcome,

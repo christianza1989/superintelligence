@@ -406,7 +406,7 @@ describeIntegration("run executor lifecycle", () => {
     async function startContinuation(runId: string) {
       const run = await handles.prisma.run.update({
         where: { id: runId },
-        data: { status: "running", ...lease },
+        data: { status: "running", leaseExpiresAt: new Date(Date.now() + 60_000), ...lease },
       });
       const attempt = await handles.prisma.attempt.create({
         data: { runId, fence: lease.leaseFence, status: "running" },
