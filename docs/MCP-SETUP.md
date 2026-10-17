@@ -55,3 +55,15 @@ Jeigu serverio įrankiai nepasirodo, tikrinti konkretaus kliento enabled/trusted
 Norint išjungti, nustatyti enabled=false atitinkamoje projekto serverio lentelėje arba naudoti kliento pašalinimo veiksmą. Neištrinti kitų serverių ar viso config. Prieš formalų [A/B bandymą](NATIVE-CODEX-BENCHMARK.md) A profilyje Zero tools ir jų metadata turi būti iš tikrųjų neįkelti.
 
 Claude Code ir plugin paketai turi atskirą host kvalifikaciją; šis runbook jų palaikymo nepatvirtina. [Būsena](IMPLEMENTATION.md), [visas roadmapas](../ROADMAP.md).
+
+## Pasirenkamas autentifikuotas paruošimas
+
+Source serveris 0.2.0 / schema 1.2.0 turi papildomą csv-preparation-only profilį. Default ir standalone plugin lieka discovery. Operatorius gali prijungti zero_prepare, zero_job, zero_artifact ir zero_cancel per tą pačią application API ir Graphile worker. zero_verify dar neprijungtas.
+
+API ir worker naudoja tą patį ZERO_PROJECT_POLICY_FILE. Jo JSON yra version:1 ir grants masyvas; kiekvienas leidimas turi spaceId, userId, scopeId, policyRevision ir baigtinį expiresAt. MCP atskiras ZERO_MCP_BINDING_FILE turi apiUrl, spaceId, scopeId, sessionToken ir expiresAt. Tai esamos Zero BetterAuth sesijos binding; coding host prenumeratos autentifikacija neperduodama. Šių privačių reikšmių nedėti į pokalbį ar Git.
+
+Abu failai turi būti Linux absoliučiuose keliuose už Git checkout ribų, current-UID savininko, tikslaus 0600 režimo, be symlink ar hardlink. Failai skaitomi iš naujo kiekvienai operacijai. HTTP klientas leidžia tik literal loopback adresą su portu, neseka redirect ir riboja atsakymą bei laiką. Tool argumentai negali pasirinkti identity, scope, root, API URL ar credential. Šis profilis projektų failų neskaito; CSV input saugomas kaip nekintamas request artefaktas.
+
+Status available reikalauja tikros autentifikuotos API ir grant patikros. Tai nėra projekto verification PASS. Atnaujintas to paties user/space/scope leidimas gali perskaityti ar atšaukti istorines užduotis; worker tikrina originalų nekintamą vykdymo leidimą. Same-UID hostile izoliacijos failų režimas nežada.
+
+Po pilno setup ir db:generate paleisti test:mcp:execution. test:csv:mcp reikalauja VERIFY_ZERO_CSV_DATABASE=1 ir ZERO_CSV_TEST_DATABASE_URL su specialiu zero_csv_test DB vardu. Šis proceso testas su netikru vietiniu naudotoju tikrina API ir kliento restart, Graphile, hash, idempotency ir revocation; modelių tiekėjų nekviečia. Native host ir host projekto panaudojimas yra atskiri vartai.

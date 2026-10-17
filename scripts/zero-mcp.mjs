@@ -15,7 +15,9 @@ if (process.argv.length !== 2) {
     const loader = require.resolve("tsx");
     const child = spawn(process.execPath, [
       "--import", loader,
-      resolve(root, "platform/packages/adapters/src/zero-mcp-stdio.ts"),
+      resolve(root, process.env.ZERO_MCP_BINDING_FILE
+        ? "platform/packages/adapters/src/zero-mcp-execution-stdio.ts"
+        : "platform/packages/adapters/src/zero-mcp-stdio.ts"),
     ], { cwd: root, stdio: "inherit" });
     const interrupt = () => child.kill("SIGINT");
     const terminate = () => child.kill("SIGTERM");

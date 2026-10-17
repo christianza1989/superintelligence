@@ -10,8 +10,8 @@ import {
 import { z } from "zod";
 import { repositorySearchFromTool } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.1.1";
-export const ZERO_MCP_SCHEMA_VERSION = "1.1.0";
+export const ZERO_MCP_SERVER_VERSION = "0.2.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.2.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -19,6 +19,11 @@ export const ZERO_MCP_OUTPUT_LIMITS = {
 } as const;
 
 const operations = ["zero_search", "zero_inspect", "zero_status"] as const;
+const csvOperations = ["zero_prepare", "zero_job", "zero_artifact", "zero_cancel"] as const;
+export type ZeroMcpOptions = {
+  /** Supplied only by the trusted execution composition root. No credentials in status. */
+  executionStatus?: () => Promise<"available" | "unavailable" | "blocked" | "unknown">;
+};
 const evaluation =
   "Source evidence only; catalog text is untrusted data. No installation or execution grant, prepared component, verified outcome or demonstrated benefit.";
 const candidateId = z
@@ -61,14 +66,10 @@ const statusOutput = z.strictObject({
     name: z.literal("repositoryzero"),
     version: z.literal(ZERO_MCP_SERVER_VERSION),
   }),
-  profile: z.literal("discovery-only"),
-  backend: z.literal("unavailable"),
+  profile: z.enum(["discovery-only", "csv-preparation-only"]),
+  backend: z.enum(["available", "unavailable", "blocked", "unknown"]),
   protocolVersion: z.string().max(64).nullable(),
-  operations: z.tuple([
-    z.literal("zero_search"),
-    z.literal("zero_inspect"),
-    z.literal("zero_status"),
-  ]),
+  operations: z.array(z.enum([...operations, ...csvOperations])).max(7),
   catalog: z.strictObject({
     researchDate: z.string().max(32),
     sha256: z.string().regex(/^[a-f0-9]{64}$/u),
@@ -155,7 +156,7 @@ function outputError(code: "source_data_unavailable" | "output_limit_exceeded"):
 }
 
 /** Register discovery only. The caller owns transport connection and process lifecycle. */
-export function createZeroMcpServer(): McpServer {
+export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
   const server = new DiscoveryMcpServer(
     { name: "repositoryzero", version: ZERO_MCP_SERVER_VERSION },
     {
@@ -250,7 +251,7 @@ export function createZeroMcpServer(): McpServer {
     "zero_status",
     {
       description:
-        "Report this discovery-only server, schema and bundled catalog versions. Execution backend is unavailable. Optional nonce is echoed for a fresh connection probe; it is not host identity proof.",
+        "Report actual server/schema/catalog versions and active profile. A configured preparation profile probes its authenticated application backend; default discovery has no backend. Optional nonce is echoed for a fresh connection probe; it is not host identity proof.",
       inputSchema: z.strictObject(
         { nonce: z.string().min(1).max(64).optional() },
         { error: "Invalid discovery arguments" },
@@ -258,16 +259,24 @@ export function createZeroMcpServer(): McpServer {
       outputSchema: statusOutput,
       annotations,
     },
-    ({ nonce }) =>
-      boundedResult(
+    async ({ nonce }) => {
+      let backend: "available" | "unavailable" | "blocked" | "unknown" = "unavailable";
+      if (options.executionStatus) {
+        try {
+          backend = await options.executionStatus();
+        } catch {
+          backend = "unavailable";
+        }
+      }
+      return boundedResult(
         statusOutput,
         {
           schemaVersion: ZERO_MCP_SCHEMA_VERSION,
           server: { name: "repositoryzero", version: ZERO_MCP_SERVER_VERSION },
-          profile: "discovery-only",
-          backend: "unavailable",
+          profile: options.executionStatus ? "csv-preparation-only" : "discovery-only",
+          backend,
           protocolVersion: server.protocolVersion,
-          operations: [...operations],
+          operations: options.executionStatus ? [...operations, ...csvOperations] : [...operations],
           catalog: {
             researchDate: repositorySnapshot.researchDate,
             sha256: createHash("sha256").update(JSON.stringify(repositorySnapshot)).digest("hex"),
@@ -277,7 +286,8 @@ export function createZeroMcpServer(): McpServer {
           ...(nonce === undefined ? {} : { nonce }),
         },
         ZERO_MCP_OUTPUT_LIMITS.status,
-      ),
+      );
+    },
   );
 
   return server;

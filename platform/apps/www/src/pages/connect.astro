@@ -21,7 +21,7 @@ const recipes = {
     linux: "claude mcp add --scope local --transport stdio repositoryzero -- node /absolute/path/to/repositoryzero/scripts/zero-mcp.mjs",
   },
 };
-const verification = 'Call zero_status with a fresh clientNonce. Report the returned nonce, checkedAt, serverVersion, schemaVersion, protocolVersion, mode and executionBackend. Then call zero_search for "playwright" and zero_inspect with a returned candidateId. Report source facts and any unavailable capabilities.';
+const verification = 'Call zero_status with a fresh nonce. Report the returned nonce, checkedAt, server.version, schemaVersion, protocolVersion, profile and backend. Then call zero_search for "playwright" and zero_inspect with a returned candidateId. Report source facts and any unavailable capabilities.';
 ---
 <SiteFrame title="Connect RepositoryZero" description="Set up local source discovery in Codex or Claude Code. Choose your environment, copy a setup recipe, and check the tools in your host.">
   <section class="page-intro connect-intro">

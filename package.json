@@ -13,8 +13,8 @@
     "mcp:serve": "node scripts/zero-mcp.mjs",
     "test:mcp": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-server.test.ts packages/adapters/src/zero-mcp-stdio.test.ts",
     "test:observer": "node scripts/platform.mjs exec vitest run packages/adapters/src/pi-runtime-fallback.test.ts packages/adapters/src/pi-usage.test.ts packages/adapters/src/pi-runtime-provider-prefix.test.ts packages/adapters/src/pi-cache-protocol.test.ts",
-    "test:scope": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-project-snapshot.test.ts packages/adapters/src/file-handle-path.test.ts",
-    "test:worker": "node scripts/platform.mjs exec vitest run packages/adapter-kit/src/background-jobs.test.ts packages/adapters/src/zero-csv-profile.test.ts packages/adapters/src/wakeup-graphile-host.test.ts packages/adapters/src/wakeup.test.ts",
+    "test:scope": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-project-snapshot.test.ts packages/adapters/src/file-handle-path.test.ts packages/adapters/src/zero-project-policy.test.ts",
+    "test:worker": "node scripts/platform.mjs exec vitest run packages/adapter-kit/src/background-jobs.test.ts packages/adapters/src/zero-csv-profile.test.ts packages/adapters/src/wakeup-graphile-host.test.ts packages/adapters/src/wakeup.test.ts packages/adapters/src/zero-csv-preparation-input.test.ts packages/adapters/src/zero-csv-project-verifier.test.ts",
     "test:csv:postgres": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-csv-preparation.postgres.test.ts",
     "test:csv:api": "node scripts/platform.mjs exec vitest run apps/api/src/zero-csv.postgres.test.ts",
     "check:zero": "node scripts/platform.mjs --filter @rakazo/adapter-kit --filter @rakazo/adapters check",
@@ -63,6 +63,9 @@
     "test:stockdesk": "node scripts/platform.mjs exec tsx --test scripts/zero-stockdesk.test.mjs",
     "test:stockdesk-docker": "ZERO_STOCKDESK_DOCKER_TESTS=1 node scripts/platform.mjs exec tsx --test scripts/zero-stockdesk.test.mjs",
     "docs:sync": "node scripts/docs.mjs --write",
-    "check:docs": "node scripts/docs.mjs"
+    "check:docs": "node scripts/docs.mjs",
+    "test:library": "node scripts/platform.mjs exec vitest run apps/web/src/lib/repository-library.test.ts apps/web/src/lib/repository-library-navigation.test.ts",
+    "test:csv:mcp": "node scripts/platform.mjs exec tsx scripts/zero-mcp-preparation-proof.mjs",
+    "test:mcp:execution": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-csv-tools.test.ts packages/adapters/src/zero-csv-application-client.test.ts"
   }
 }

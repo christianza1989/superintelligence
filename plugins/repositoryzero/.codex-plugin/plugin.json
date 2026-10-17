@@ -1,6 +1,6 @@
 {
   "name": "repositoryzero",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "RepositoryZero source discovery preview.",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

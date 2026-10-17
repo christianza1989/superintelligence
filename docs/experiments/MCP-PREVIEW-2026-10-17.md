@@ -33,10 +33,22 @@ SDK transporto bei tikro proceso testai tikrina initialize/list/call, griežtą 
 
 Nesėkmingi kūrimo bandymai išsaugoti vietiniuose vykdymo įrašuose. Pataisos nekeičia užšaldytų ankstesnių CLI kohortų. Naujas request-scoped observer turi atskirą 125 testų conformance: vienas callId prieš dispatch ir usage, lygiagrečių runs atskyrimas, onUsage apskaitos autoritetas, denial=0 dispatch. Tai OBS1, ne OBS2 trusted-account/budget integracija.
 
+## Vėlesnis autentifikuoto paruošimo proceso bandymas
+
+Serverio 0.2.0 / schema 1.2.0 pasirenkamas operator-bound profilis prideda zero_prepare, zero_job, zero_artifact ir zero_cancel. Numatytasis serveris ir generuojamas savarankiškas plugin išlieka discovery-only. Application principal kyla iš tikros BetterAuth sesijos ir operatoriaus grant, o ne iš tool argumentų; privatus binding ir policy perskaitomi iš naujo. Tai Zero sesija, ne host prenumeratos auth eksportas.
+
+2026-10-17 15:26 UTC atskirame PostgreSQL 18.6 fixture paleistas `test:csv:mcp`: tikras STDIO procesas → loopback HTTP API → esamas Graphile worker → Artifact. Pateikus job iki worker start, uždaryti ir iš naujo paleisti API bei MCP procesai; tas pats patvarus job sėkmingai užbaigtas. Dvi artefakto puslapio dalys sujungtos ir SHA-256 sutapo; pinned d3-dsv 3.0.1 rezultatas bei atskiras parserio palyginimas PASS. Pakartotas idempotency key grąžino tą patį job; atšaukus jau baigtą darbą išliko tikroji succeeded būsena ir vienas terminal receipt. Atšaukus grant, naujas status probe rodė blocked, o job skaitymas atmestas. Modelio dispatch ir UsageRecord: **0**. Tai proceso proof su sintetiniu account, ne native Codex tool įvykis ar host projekto verify.
+
+Papildomai toje pačioje izoliuotoje DB praėjo **13 worker ir 7 autentifikuoto API patikros**. Offline: **12 MCP execution schema/bounds patikrų, 32 application client patikros ir 30 operator policy patikrų** PASS. Rasta ir pataisyta ISO offset su nebaigtine data priėmimo klaida; neigiama kontrolė atmeta įvestį iki artifact lookup / dispatch. Šie skaičiai nėra bendras nepriklausomų produkto užduočių skaičius.
+
+Ankstesnis CI [39043109961](https://github.com/christianza1989/superintelligence/actions/runs/39043109961) ant commit 5168543 patvirtino abu foundation ir real PostgreSQL jobs bei atskirą plugin proceso proof. Jis dar neapima vėlesnio 0.2.0 execution pakeitimo; naujo head CI tikrinamas atskirai.
+
+Library pridėta savarankiškai naršyti, peržiūrėti detales ir saugoti canonical repo ID lokaliai. 35 focused unit patikros, pilnas web/core typecheck ir desktop/mobile/keyboard browser scenarijai PASS; šaltinių žvaigždės rodo datą, nežinomos nėra 0. Svetainės client/OS STDIO vedlio Astro build/check ir vizualinė peržiūra PASS. Library projekto handoff bei metaduomenų papildymas atskiri; vedlio Copy command neįrodo ryšio.
+
 ## Kas dar atvira
 
-Linux snapshotter yra ribotas failų kopijavimo pagrindas; jam dar reikia tikro principal/grant/expiry/revocation ir MCP roots binding. Read-only failų teisės nėra hostile same-user izoliacija.
+Linux snapshotter yra ribotas failų kopijavimo pagrindas; jo sujungimas su patvariu operator-bound projekto verify dar nepriimtas. Read-only failų teisės nėra hostile same-user izoliacija.
 
-CSV paruošimo job naudoja tą pačią Graphile eilę ir versijuotus Artifact įrašus; atskirame testiniame PostgreSQL įrodytos paruošimo, dubliavimo ir atšaukimo baigtys. Tai nėra užbaigtas host projekto snapshot → integracija → nepriklausomas verify kelias. Application API papildomai patikrinta šešiais tikro BetterAuth/PostgreSQL/application worker testais: session cookie ir Bearer kelias, idempotency, bounded hash-checked artifact puslapiai, atšaukimas, svetimas/expired/revoked scope, worker authorization ir 0 model UsageRecord. Operator authorizer nepriskirtas pagal nutylėjimą: execution lieka blocked. Pilni crash/lease-expiry, staged-byte cleanup ir MCP/backend restart vartai atviri.
+CSV paruošimas turi operator policy ir MCP client jungtį; nepateikus privataus binding/policy, vykdymas neprieinamas. Atskiras Docker verifier tikrina tikslius penkis host failus, pinned vendor baitus, faktinį parserio kvietimą ir rezultatą; teigiamos bei unused/tamper/stale/cancel kontrolės praėjo su vietiniu exact image ID. Tai dar nėra užbaigtas native host snapshot → integracija → patvarus verify kelias. Pilni crash/lease-expiry, staging retention ir naujo žmogaus setup vartai atviri; API/MCP proceso restart nėra worker crash recovery įrodymas.
 
-Plugin paketas, website install mygtukai, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).
+Savarankiškas plugin paketas ir svetainės vietinio STDIO vedlys įgyvendinti; native plugin install/uninstall, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).

@@ -34,7 +34,9 @@ jobs:
       - name: Run offline foundation, MCP and observer regressions
         run: |
           npm run test:foundation -- --maxWorkers=2
+          npm run test:library -- --maxWorkers=2
           npm run test:mcp -- --maxWorkers=2
+          npm run test:mcp:execution -- --maxWorkers=2
           npm run test:observer -- --maxWorkers=2
           npm run test:scope -- --maxWorkers=2
           npm run test:worker -- --maxWorkers=2
@@ -84,3 +86,4 @@ jobs:
         run: |
           npm run test:csv:postgres -- --maxWorkers=1
           npm run test:csv:api -- --maxWorkers=1
+          npm run test:csv:mcp
