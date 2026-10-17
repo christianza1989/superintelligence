@@ -24,11 +24,14 @@ export async function nativeRuntimeBuildProfile(workspace) {
   };
 }
 
-export function assertNativeMessagingNotShipped(metafile) {
-  const forbidden = /(?:^|\/)node_modules\/(?:chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark)\//;
+export function assertNativeMessagingNotShipped(metafile, copiedPackages = []) {
+  const names = /^(?:chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)$/;
+  const forbidden = /(?:^|\/)node_modules\/(chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)\//;
   for (const output of Object.values(metafile.outputs)) {
     for (const [input, contribution] of Object.entries(output.inputs)) {
       if (contribution.bytesInOutput > 0 && forbidden.test(input)) throw new Error("Unsupported messaging dependency contributes to native runtime");
     }
   }
+  if (copiedPackages.some(pkg => names.test(pkg.name))) throw new Error("Unsupported messaging dependency copied into native runtime");
+  return { positiveForbiddenBundleContributions: 0, copiedForbiddenPackages: 0 };
 }

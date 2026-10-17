@@ -1,0 +1,2 @@
+# These upstream bytes are pinned in manifest.json, including original whitespace.
+*.txt -text -whitespace

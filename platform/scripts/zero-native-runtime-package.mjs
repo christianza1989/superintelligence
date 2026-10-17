@@ -6,11 +6,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { copyRuntimePackageClosure } from "./lib/runtime-package-closure.mjs";
 import { nativeRuntimeBuildProfile, assertNativeMessagingNotShipped } from "./lib/native-runtime-build-profile.mjs";
-import { bundledRuntimePackages, copyBundledRuntimeNotices } from "./lib/native-runtime-notices.mjs";
+import { bundledRuntimePackages, copyBundledRuntimeNotices, validateCopiedRuntimePackageMetadata } from "./lib/native-runtime-notices.mjs";
+import { nativeRuntimeStageArguments, nativeRuntimeLicenseEvidence, requireNativeRuntimeLicenseEvidence } from "./lib/native-runtime-stage-policy.mjs";
 
 // Source-built staging only. Uses existing entries/installed versions; never
 // installs, starts services, downloads, runs migrations or claims qualification.
-if (process.argv.length !== 2) throw new Error("This packager takes no arguments");
+const stageMode = nativeRuntimeStageArguments(process.argv.slice(2));
 if (process.platform !== "linux" || process.arch !== "x64")
   throw new Error("The first staged native runtime profile requires Linux x64");
 const workspace = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -23,6 +24,7 @@ const attempt = path.join(root, ".artifacts", "native-runtime-" + randomUUID());
 const output = path.join(attempt, "runtime");
 await mkdir(attempt, { recursive: true });
 const report = {
+  ...stageMode,
   schemaVersion: 1, profile: "native-mcp-local-v1", sourceRevision:
     execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
   sourceDirtyPaths: [...new Set([
@@ -107,7 +109,7 @@ try {
     path: path.relative(output, file.path), bytes: file.contents.byteLength,
     sha256: hash(file.contents),
   }));
-  assertNativeMessagingNotShipped(result.metafile);
+  report.nativeMessagingExclusion = assertNativeMessagingNotShipped(result.metafile, report.closure.packages);
   await cp(path.join(workspace, "pnpm-lock.yaml"), path.join(output, "pnpm-lock.yaml"), { errorOnExist: true });
   await mkdir(path.join(output, "db"));
   await cp(path.join(workspace, "packages/db/prisma"), path.join(output, "db/prisma"), { recursive: true, errorOnExist: true });
@@ -147,15 +149,19 @@ try {
   }
   for (const pkg of report.closure.packages) shippedInputs.add("node_modules/.pnpm/" + pkg.instance + "/package.json");
   const packages = await bundledRuntimePackages(workspace, [...shippedInputs]);
-  const notices = await copyBundledRuntimeNotices({ packages, output });
+  await validateCopiedRuntimePackageMetadata({ output, closure: report.closure, packages });
+  const evidenceRoot = path.join(workspace, "runtime/native-license-evidence");
+  const evidenceBytes = await readFile(path.join(evidenceRoot, "manifest.json"));
+  const evidence = JSON.parse(evidenceBytes);
+  report.licenseEvidenceManifestSha256 = hash(evidenceBytes);
+  const notices = await copyBundledRuntimeNotices({ packages, output, evidenceRoot, evidence: evidence.entries });
   report.noticeScope = "positive-bundled-byte-contributions-and-all-copied-external-packages";
   await writeFile(path.join(output, "THIRD-PARTY-NOTICES.json"), JSON.stringify(notices, null, 2) + "\n", { flag: "wx" });
   report.missingBundledLicenseFiles = notices.filter(notice => !notice.files.length).map(notice => ({
     package: notice.package, version: notice.version, declaredLicense: notice.license,
   }));
-  if (report.missingBundledLicenseFiles.length) {
-    throw new Error("Bundled dependencies lack license files; see missingBundledLicenseFiles");
-  }
+  Object.assign(report, nativeRuntimeLicenseEvidence({ notices, packages, knownUnresolved: evidence.unresolved }));
+  requireNativeRuntimeLicenseEvidence(stageMode, report);
   await writeFile(path.join(output, "package.json"), JSON.stringify({
     name: "repositoryzero-native-runtime-stage", private: true, type: "module",
     engines: { node: ">=24 <25" },
@@ -181,8 +187,17 @@ try {
   }
   await walk(output);
   report.files = files;
+  report.migrationAssets = files.filter(file => /(?:schema-engine-|query_compiler.*(?:wasm|base64))/.test(file.path));
+  report.requiredRuntimeDependencies = [
+    "external pinned Node 24 Linux x64 glibc runtime and compatible OpenSSL",
+    "existing PostgreSQL service and initialized canonical schema/Graphile migrations",
+    "full exact Prisma CLI closure and copied schema engine for canonical migrate deploy",
+    "generated Prisma client and bundled PostgreSQL WASM query compiler",
+    "copied Graphile worker migrations and native/dynamic external package assets",
+    "external private operator configuration, auth and explicit shared data bind",
+  ];
   report.payloadFileBytesExcludingBuildManifest = bytes;
-  report.status = "staged-not-runtime-qualified";
+  report.status = stageMode.experimentalStage ? "experimental-local-stage-not-distributable" : "staged-not-runtime-qualified";
   await writeFile(path.join(output, "BUILD.json"), JSON.stringify(report, null, 2) + "\n", { flag: "wx" });
   console.log(JSON.stringify({ status: report.status, bundleFileBytes: bundleBytes, payloadFileBytesExcludingBuildManifest: bytes, buildManifestBytes: (await lstat(path.join(output, "BUILD.json"))).size, output: path.relative(root, output) }));
 } catch (error) {

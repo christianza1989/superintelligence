@@ -1,0 +1,754 @@
+{
+  "schemaVersion": 1,
+  "scope": "retained-prior-positive-bundle-contributions-plus-all-actual-stage-external-packages",
+  "exactStageMetafileUnavailable": true,
+  "licenseApproval": "unknown",
+  "distributionReady": false,
+  "entries": [
+    {
+      "package": "@earendil-works/pi-ai",
+      "version": "0.87.1",
+      "packageJsonSha256": "0422fc7227a158c3c843c1540edfff017d2103be33ee48b882e2ff9032a5f7d2",
+      "files": [
+        {
+          "file": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40earendil-works%2Fpi-ai/0.87.1",
+            "registryMetadataSha256": "f20f180e1fbaad6a1121eedfb8262b55f97357861bc4dac17058306159f46538",
+            "npmGitHead": "f07218c4d4bbc12bef056a7058c3dd49dfe41abe",
+            "repository": {
+              "url": "git+https://github.com/earendil-works/pi.git",
+              "type": "git",
+              "directory": "packages/ai"
+            },
+            "url": "https://raw.githubusercontent.com/earendil-works/pi/f07218c4d4bbc12bef056a7058c3dd49dfe41abe/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "data-uri-to-buffer",
+      "version": "4.0.1",
+      "packageJsonSha256": "ad4f90a737ab5d8af4dad265e9218456e3779ca5beb70df38dd5feecf80121dd",
+      "files": [
+        {
+          "file": "README.md",
+          "outputName": "README.md",
+          "evidenceKind": "installed-readme-full-license",
+          "sha256": "a7cc4332acfa1f9b6530e01aac77fefe74f2efa32579215fddaa473013f9a25c",
+          "source": {
+            "kind": "exact-installed-package-readme",
+            "registryUrl": "https://registry.npmjs.org/data-uri-to-buffer/4.0.1",
+            "registryMetadataSha256": "b33dd8eb4e7686d1d875154d435816f2a0582162d6bb4c50aa269cde4d0d97d4"
+          }
+        }
+      ]
+    },
+    {
+      "package": "pg-types",
+      "version": "2.2.0",
+      "packageJsonSha256": "3ec0293cb38cc8d9475e3eb32ac5f19d195bf9fccc8b19a0714e6ecd6e7c2cf0",
+      "files": [
+        {
+          "file": "README.md",
+          "outputName": "README.md",
+          "evidenceKind": "installed-readme-full-license",
+          "sha256": "ecda9bca71d3f0cee4e600d1dd2bef336213f39ef2e8fca6a1a1c1c8723f643a",
+          "source": {
+            "kind": "exact-installed-package-readme",
+            "registryUrl": "https://registry.npmjs.org/pg-types/2.2.0",
+            "registryMetadataSha256": "a9d61026999df90498f658bf0bc1e02d68818ba1aea319dcc6b17320b09a3c09"
+          }
+        }
+      ]
+    },
+    {
+      "package": "pgpass",
+      "version": "1.0.5",
+      "packageJsonSha256": "d75240eb4fe759c10db9f903838275348676a8bdc1f329e20a833713cd7c99bd",
+      "files": [
+        {
+          "file": "README.md",
+          "outputName": "README.md",
+          "evidenceKind": "installed-readme-full-license",
+          "sha256": "62549909404b5a0dcb2b4b74c9a930baf8095dbcfa1543c4ffc79378acd22b57",
+          "source": {
+            "kind": "exact-installed-package-readme",
+            "registryUrl": "https://registry.npmjs.org/pgpass/1.0.5",
+            "registryMetadataSha256": "753a7666f79449faed8e9c9676c6398dd43bca237c92e8fbfff27a66e116961d"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@connectrpc/connect",
+      "version": "2.1.2",
+      "packageJsonSha256": "2a6a26b2ed4811a12883d1d86503fdff9fdfee180bddb802b13f8c0e48e5ab02",
+      "files": [
+        {
+          "file": "445e3398edab2a40d8d5e5c1a1d533af6464fbae8378ecc0caaf2668e9bbea73.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "445e3398edab2a40d8d5e5c1a1d533af6464fbae8378ecc0caaf2668e9bbea73",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40connectrpc%2Fconnect/2.1.2",
+            "registryMetadataSha256": "d8149fae19845f5c13d57119b269f6f6c9288e007b62d2459d3d0671e1164f46",
+            "npmGitHead": "104238c58152e324ac16a99563f5eeea8ae7136d",
+            "repository": {
+              "url": "git+https://github.com/connectrpc/connect-es.git",
+              "type": "git",
+              "directory": "packages/connect"
+            },
+            "url": "https://raw.githubusercontent.com/connectrpc/connect-es/104238c58152e324ac16a99563f5eeea8ae7136d/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@bufbuild/protobuf",
+      "version": "2.14.1",
+      "packageJsonSha256": "bbe6ac30115d7b793eddd45e177908b151d0298258b80e894ad47e3bc17e15cf",
+      "files": [
+        {
+          "file": "c04b4216f1cd4c5a4f7fb2f2a1b0ae70d847e9e0cac7c9dee9bf8cc03177c449.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "c04b4216f1cd4c5a4f7fb2f2a1b0ae70d847e9e0cac7c9dee9bf8cc03177c449",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40bufbuild%2Fprotobuf/2.14.1",
+            "registryMetadataSha256": "5fe194f56ae88f18bbd3d31f563d5285dab3ac9726d71e85dd088e206d51a9af",
+            "npmGitHead": "09c98f182a86cd6d4bb89a418f261812d8eb2108",
+            "repository": {
+              "url": "git+https://github.com/bufbuild/protobuf-es.git",
+              "type": "git",
+              "directory": "packages/protobuf"
+            },
+            "url": "https://raw.githubusercontent.com/bufbuild/protobuf-es/09c98f182a86cd6d4bb89a418f261812d8eb2108/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@connectrpc/connect-web",
+      "version": "2.1.2",
+      "packageJsonSha256": "d8f270db734f49c4ee6cad2cb432e65871eac889680d5d1fd8552464c8368f3d",
+      "files": [
+        {
+          "file": "445e3398edab2a40d8d5e5c1a1d533af6464fbae8378ecc0caaf2668e9bbea73.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "445e3398edab2a40d8d5e5c1a1d533af6464fbae8378ecc0caaf2668e9bbea73",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40connectrpc%2Fconnect-web/2.1.2",
+            "registryMetadataSha256": "e18496867a8c3a4155860e306b130a74ae70b2ca40b25a8f354093976bca0f6e",
+            "npmGitHead": "104238c58152e324ac16a99563f5eeea8ae7136d",
+            "repository": {
+              "url": "git+https://github.com/connectrpc/connect-es.git",
+              "type": "git",
+              "directory": "packages/connect-web"
+            },
+            "url": "https://raw.githubusercontent.com/connectrpc/connect-es/104238c58152e324ac16a99563f5eeea8ae7136d/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "agent-base",
+      "version": "6.0.2",
+      "packageJsonSha256": "05daa619e51686fd21d15f987f943f6692c56b9f489f555cbaf42a4263d5c5e8",
+      "files": [
+        {
+          "file": "README.md",
+          "outputName": "README.md",
+          "evidenceKind": "installed-readme-full-license",
+          "sha256": "f1425c3b72330fe4fb2aa5a2fb152e939bdf534692a32b5f0b38f74147b98556",
+          "source": {
+            "kind": "exact-installed-package-readme",
+            "registryUrl": "https://registry.npmjs.org/agent-base/6.0.2",
+            "registryMetadataSha256": "b4670f909dc2ae3092fee34a0c817e721ca1a6a85b3735d748e8ac78228146a0"
+          }
+        }
+      ]
+    },
+    {
+      "package": "https-proxy-agent",
+      "version": "5.0.1",
+      "packageJsonSha256": "d41d9127cbed43df8e2d404bfaf41361942a8afeb82eb57ccf8515e04eb33d1d",
+      "files": [
+        {
+          "file": "README.md",
+          "outputName": "README.md",
+          "evidenceKind": "installed-readme-full-license",
+          "sha256": "32f0856d2c43df7d05cca960fdee84e1e38ab545bd7b2186433dfa41aa90a712",
+          "source": {
+            "kind": "exact-installed-package-readme",
+            "registryUrl": "https://registry.npmjs.org/https-proxy-agent/5.0.1",
+            "registryMetadataSha256": "9ed34fec5e4151933a940a610a49aa084fbf625f5f43fd5d841f4ecc64e0d08b"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@daytona/api-client",
+      "version": "0.211.2",
+      "packageJsonSha256": "e111c03d57cb0d2db78791888920656362469441f16b2de3a68dd2f4e0226ece",
+      "files": [
+        {
+          "file": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Fapi-client/0.211.2",
+            "registryMetadataSha256": "d2ecbd937b54dafe1d41bcb1ed423734a151170780227f8e165926b09de51909",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        },
+        {
+          "file": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6.txt",
+          "outputName": "NOTICE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Fapi-client/0.211.2",
+            "registryMetadataSha256": "d2ecbd937b54dafe1d41bcb1ed423734a151170780227f8e165926b09de51909",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/NOTICE",
+            "sourcePath": "NOTICE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@daytona/analytics-api-client",
+      "version": "0.211.2",
+      "packageJsonSha256": "66ba18aaff6863befaac092188ea6d21e5ed6d16a36e871ab6b08eadff7a0bd0",
+      "files": [
+        {
+          "file": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Fanalytics-api-client/0.211.2",
+            "registryMetadataSha256": "7f5ae10a10e42373d8c43994f769f41c39ec6d3e435d6d8ad174aa3a2a7fe100",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        },
+        {
+          "file": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6.txt",
+          "outputName": "NOTICE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Fanalytics-api-client/0.211.2",
+            "registryMetadataSha256": "7f5ae10a10e42373d8c43994f769f41c39ec6d3e435d6d8ad174aa3a2a7fe100",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/NOTICE",
+            "sourcePath": "NOTICE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@daytona/toolbox-api-client",
+      "version": "0.211.2",
+      "packageJsonSha256": "e20fb60c79c6057dda6addadfc6c8fec4ed1755251485db3c57952409d7a5efe",
+      "files": [
+        {
+          "file": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0f511238e5bc5495aecff989ebe599312dfd276c35e2468c887f0dd19639e586",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Ftoolbox-api-client/0.211.2",
+            "registryMetadataSha256": "593f69e1ae7358b6bd6d0b63ca10df91f18d409cf9eb1f98dd27ebbf7f49a1fb",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        },
+        {
+          "file": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6.txt",
+          "outputName": "NOTICE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "8ae88d7e6bb152f6651c0c22b32b8674a7c5fc46070d580eaecec2dcbfa17ce6",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40daytona%2Ftoolbox-api-client/0.211.2",
+            "registryMetadataSha256": "593f69e1ae7358b6bd6d0b63ca10df91f18d409cf9eb1f98dd27ebbf7f49a1fb",
+            "npmGitHead": "4e2d4fe18412cb33cbeb369050b1c8a263e17010",
+            "repository": {
+              "url": "git+https://github.com/daytona/clients.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/daytona/clients/4e2d4fe18412cb33cbeb369050b1c8a263e17010/NOTICE",
+            "sourcePath": "NOTICE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@earendil-works/pi-telemetry",
+      "version": "0.87.1",
+      "packageJsonSha256": "779ed2fb46846eb4826e82722af9817493c055a86d3c59061e3ed40ce46e14f5",
+      "files": [
+        {
+          "file": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40earendil-works%2Fpi-telemetry/0.87.1",
+            "registryMetadataSha256": "fb62a661eb3bd4f75d1faba71eb6dc5ded15451cc8cacb01897fc09c57699f90",
+            "npmGitHead": "f07218c4d4bbc12bef056a7058c3dd49dfe41abe",
+            "repository": {
+              "url": "git+https://github.com/earendil-works/pi.git",
+              "type": "git",
+              "directory": "packages/telemetry"
+            },
+            "url": "https://raw.githubusercontent.com/earendil-works/pi/f07218c4d4bbc12bef056a7058c3dd49dfe41abe/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@earendil-works/pi-agent-core",
+      "version": "0.87.1",
+      "packageJsonSha256": "26f991ea26187d52978c303811f32032c9fcdaec197d4dcf08d793bedffdb87c",
+      "files": [
+        {
+          "file": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40earendil-works%2Fpi-agent-core/0.87.1",
+            "registryMetadataSha256": "f766c3c48e542c58841c7d94cf5bfe3c4f577185ebc311c0758543ba19a447fe",
+            "npmGitHead": "f07218c4d4bbc12bef056a7058c3dd49dfe41abe",
+            "repository": {
+              "url": "git+https://github.com/earendil-works/pi.git",
+              "type": "git",
+              "directory": "packages/agent"
+            },
+            "url": "https://raw.githubusercontent.com/earendil-works/pi/f07218c4d4bbc12bef056a7058c3dd49dfe41abe/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@earendil-works/chord",
+      "version": "0.87.1",
+      "packageJsonSha256": "d0d7fdfbbdc99dcae01311b589bd1b8b0861892d7a2bb09e666a134bf870e692",
+      "files": [
+        {
+          "file": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40earendil-works%2Fchord/0.87.1",
+            "registryMetadataSha256": "85d96cac8710388dd6e7f31811e80dccb6840f976b480802d2a29ebfcef06757",
+            "npmGitHead": "f07218c4d4bbc12bef056a7058c3dd49dfe41abe",
+            "repository": {
+              "url": "git+https://github.com/earendil-works/pi.git",
+              "type": "git",
+              "directory": "packages/chord"
+            },
+            "url": "https://raw.githubusercontent.com/earendil-works/pi/f07218c4d4bbc12bef056a7058c3dd49dfe41abe/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@cfworker/json-schema",
+      "version": "4.1.1",
+      "packageJsonSha256": "22eea38eb34f98c1413cb9af8e5d67d6b36200ccb4a0920eab72458e475b6df9",
+      "files": [
+        {
+          "file": "376944252ab78ca6b41aee44ddea8894927ee67891e77e61eb9d59af63e35094.txt",
+          "outputName": "LICENSE.md",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "376944252ab78ca6b41aee44ddea8894927ee67891e77e61eb9d59af63e35094",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40cfworker%2Fjson-schema/4.1.1",
+            "registryMetadataSha256": "ae474e5b08b09be3c2d8388583eb0b7807c9d80805b7a1172f3eb4f119148d75",
+            "npmGitHead": "5409fdc2bd144f68e8b28c61c71fcb16600000a6",
+            "repository": {
+              "url": "git+https://github.com/cfworker/cfworker.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/cfworker/cfworker/5409fdc2bd144f68e8b28c61c71fcb16600000a6/LICENSE.md",
+            "sourcePath": "LICENSE.md"
+          }
+        }
+      ]
+    },
+    {
+      "package": "chat-adapter-sendblue",
+      "version": "0.2.0",
+      "packageJsonSha256": "e708e94aa65bf76caa27d5b1dbb1888e7ad984e015fb141b0a8bfa560efe6a17",
+      "files": [
+        {
+          "file": "454c8b1306eebc7583640cbf53c20a215833ef58fc1dcb872a72f579109c2867.txt",
+          "outputName": "UPSTREAM-ROOT-LICENSE.review.txt",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "454c8b1306eebc7583640cbf53c20a215833ef58fc1dcb872a72f579109c2867",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/chat-adapter-sendblue/0.2.0",
+            "registryMetadataSha256": "5a03c68dc39a69a901a5554b5513381029c2e9cc248ec613d23e2269198db52d",
+            "npmGitHead": "fd98a014b50f64b04cfb646440cbc592ffed8ba9",
+            "repository": {
+              "url": "git+https://github.com/midday-ai/midday.git",
+              "type": "git",
+              "directory": "packages/chat-adapter-sendblue"
+            },
+            "url": "https://raw.githubusercontent.com/midday-ai/midday/fd98a014b50f64b04cfb646440cbc592ffed8ba9/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "saxes",
+      "version": "6.0.0",
+      "packageJsonSha256": "32052572b41c2a890ed0854798c48454cc5991dcaafe5fb1718a4253046acfd3",
+      "files": [
+        {
+          "file": "0fac2374380621b22e6b50451057721a9c52935b02d16d106a9f04897f061d0e.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0fac2374380621b22e6b50451057721a9c52935b02d16d106a9f04897f061d0e",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/saxes/6.0.0",
+            "registryMetadataSha256": "49e633171169d15e096b3a85f976a723bfcd25f97d2d63915901e0990b0e8c42",
+            "npmGitHead": "211fa0ebec9b628affc09219199639887174bfc3",
+            "repository": {
+              "url": "git+https://github.com/lddubeau/saxes.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/lddubeau/saxes/211fa0ebec9b628affc09219199639887174bfc3/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "standardwebhooks",
+      "version": "1.1.1",
+      "packageJsonSha256": "686397f0f0202e0b693cfd3f6241d7a8da3df326f9642867a484fbbd295690b6",
+      "files": [
+        {
+          "file": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/standardwebhooks/1.1.1",
+            "registryMetadataSha256": "99d04c194edcd30c91b31b8a10e983bed938f27d1becbf45af4a9eb3e84cc27c",
+            "npmGitHead": "b4d2c14fc5b4ccff3ff271e3b087dff812254c59",
+            "repository": {
+              "url": "git+https://github.com/standard-webhooks/standard-webhooks.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/standard-webhooks/standard-webhooks/b4d2c14fc5b4ccff3ff271e3b087dff812254c59/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@img/sharp-libvips-linux-x64",
+      "version": "1.3.3",
+      "packageJsonSha256": "446bda1246555d4a128d57414c7d55019573462b13b7f379da1053db001445da",
+      "files": [
+        {
+          "file": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1.txt",
+          "outputName": "UPSTREAM-ROOT-LICENSE.review.txt",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40img%2Fsharp-libvips-linux-x64/1.3.3",
+            "registryMetadataSha256": "776f6cf928e96a1ab537914741d9eb67fcc6087832589a23506065e873466666",
+            "npmGitHead": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+            "repository": {
+              "url": "git+https://github.com/lovell/sharp-libvips.git",
+              "type": "git",
+              "directory": "npm/linux-x64"
+            },
+            "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@img/sharp-libvips-linuxmusl-x64",
+      "version": "1.3.3",
+      "packageJsonSha256": "2b779e786b820ce2ad802395f9b74b50d7d0417ccdc2cdc581d384bbdbf2ead1",
+      "files": [
+        {
+          "file": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1.txt",
+          "outputName": "UPSTREAM-ROOT-LICENSE.review.txt",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40img%2Fsharp-libvips-linuxmusl-x64/1.3.3",
+            "registryMetadataSha256": "53ffb4d129811370bfc430eb65d09d3dc573fffa210be455aff17ab27c9d00e3",
+            "npmGitHead": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+            "repository": {
+              "url": "git+https://github.com/lovell/sharp-libvips.git",
+              "type": "git",
+              "directory": "npm/linuxmusl-x64"
+            },
+            "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@radix-ui/react-compose-refs",
+      "version": "1.1.2",
+      "packageJsonSha256": "4373969b0a688de99b33ed5c24cf91d707f638573f24fbd2dd2ad2c441c9b34c",
+      "files": [
+        {
+          "file": "0e80a2d229d2fd4fc7e8636142ec5d0ff0bc031f14c15b682e2ac01dfd5b5138.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0e80a2d229d2fd4fc7e8636142ec5d0ff0bc031f14c15b682e2ac01dfd5b5138",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40radix-ui%2Freact-compose-refs/1.1.2",
+            "registryMetadataSha256": "a2446f7b24a5ea03f100d759c2daefe2379e4178e5415e860289272e28934e1a",
+            "npmGitHead": "fcef0668a5c827e5a4baac405474d75680f9a4eb",
+            "repository": {
+              "url": "git+https://github.com/radix-ui/primitives.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/radix-ui/primitives/fcef0668a5c827e5a4baac405474d75680f9a4eb/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "@radix-ui/react-use-layout-effect",
+      "version": "1.1.1",
+      "packageJsonSha256": "b18e430ab5bbaf53945f55b495838dd71582f4203193747a939e2a7593f76744",
+      "files": [
+        {
+          "file": "0e80a2d229d2fd4fc7e8636142ec5d0ff0bc031f14c15b682e2ac01dfd5b5138.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0e80a2d229d2fd4fc7e8636142ec5d0ff0bc031f14c15b682e2ac01dfd5b5138",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/%40radix-ui%2Freact-use-layout-effect/1.1.1",
+            "registryMetadataSha256": "680e00911e47a18faae7cf93c18675483730ed86a56d89c586764617d3ef904d",
+            "npmGitHead": "fcef0668a5c827e5a4baac405474d75680f9a4eb",
+            "repository": {
+              "url": "git+https://github.com/radix-ui/primitives.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/radix-ui/primitives/fcef0668a5c827e5a4baac405474d75680f9a4eb/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "postgres",
+      "version": "3.4.7",
+      "packageJsonSha256": "7324573388770786378751cf5e4267587261e694319be41924dcd2420262eb85",
+      "files": [
+        {
+          "file": "b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c.txt",
+          "outputName": "UNLICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/postgres/3.4.7",
+            "registryMetadataSha256": "19b7bd20e44f405a4401bb9107b8d8c128ddc6d9143e3de265cd5cdd605397b7",
+            "npmGitHead": "9b92b65da6a5121545581a6dd5de859c2a70177f",
+            "repository": {
+              "url": "git+https://github.com/porsager/postgres.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/porsager/postgres/9b92b65da6a5121545581a6dd5de859c2a70177f/UNLICENSE",
+            "sourcePath": "UNLICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "package": "remeda",
+      "version": "2.33.4",
+      "packageJsonSha256": "f81a9ca416118b1f62fd60cff9141895da782c441e5d0b2db60338031e9ffadf",
+      "files": [
+        {
+          "file": "acf30083045d768ce20640237313ee31a45d548d66ef76df5bb5fb0745479535.txt",
+          "outputName": "LICENSE",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "acf30083045d768ce20640237313ee31a45d548d66ef76df5bb5fb0745479535",
+          "source": {
+            "registryUrl": "https://registry.npmjs.org/remeda/2.33.4",
+            "registryMetadataSha256": "40149b67865b0b7188dcf60105eac5401b474434cbb54e81c6434468b1a4984c",
+            "npmGitHead": "f9e681a707fd8cac00c43c10591c44e17f577610",
+            "repository": {
+              "url": "git+https://github.com/remeda/remeda.git",
+              "type": "git"
+            },
+            "url": "https://raw.githubusercontent.com/remeda/remeda/f9e681a707fd8cac00c43c10591c44e17f577610/LICENSE",
+            "sourcePath": "LICENSE"
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "package": "@better-auth/utils",
+      "version": "0.5.0",
+      "packageJsonSha256": "79113ffa86ff97e35c95c96ca93119b3ac22112bcf52c494e0d27ee6bb296b84",
+      "declaredLicense": "MIT",
+      "reason": "Exact version metadata and README declare MIT, but neither installed files nor official exact-version source tag provide complete license/copyright text.",
+      "registryUrl": "https://registry.npmjs.org/%40better-auth%2Futils/0.5.0",
+      "registryMetadataSha256": "54673ada898b091ecd875277538f4849bf03b1b6da29a04dd4590ac30c307b63",
+      "officialTagEvidence": {
+        "package": "@better-auth/utils",
+        "version": "0.5.0",
+        "attempts": [
+          {
+            "url": "https://api.github.com/repos/better-auth/utils/git/ref/tags/v0.5.0",
+            "status": 200
+          }
+        ],
+        "tag": "v0.5.0",
+        "commit": "f03c1c76aff7bfa3f4de4af47b112315c770a0d1",
+        "tagMetadataSha256": "aec14bbe23f02ab598e1927f154cb59edc0dfb908b34a41e8858fea0402f8250",
+        "sourceIdentity": {
+          "name": "@better-auth/utils",
+          "version": "0.5.0",
+          "license": "MIT",
+          "sha256": "fdb7322b122e3518951392c46942c076215612474d86b750e1bd3dc32a8aab1d"
+        },
+        "sourceFiles": []
+      }
+    },
+    {
+      "package": "@better-auth/utils",
+      "version": "0.4.2",
+      "packageJsonSha256": "b481d52c32f0d74fa1b0599b653326df21e649a2217506770f676e8d8385acf3",
+      "declaredLicense": "MIT",
+      "reason": "Exact version metadata and README declare MIT, but neither installed files nor official exact-version source tag provide complete license/copyright text.",
+      "registryUrl": "https://registry.npmjs.org/%40better-auth%2Futils/0.4.2",
+      "registryMetadataSha256": "bba9c8d8fa4050cd1a0a2c6ffd6beb7abf0390cadf0d6f3fe30197d8e0cefbb6",
+      "officialTagEvidence": {
+        "package": "@better-auth/utils",
+        "version": "0.4.2",
+        "attempts": [
+          {
+            "url": "https://api.github.com/repos/better-auth/utils/git/ref/tags/v0.4.2",
+            "status": 200
+          }
+        ],
+        "tag": "v0.4.2",
+        "commit": "b20329a32d78f1f9bcc088bbd6f982b28c4192f1",
+        "tagMetadataSha256": "c09bd7d7c85b96654d9b1b22e8b0d579b5a94dd94af4674a4eed02837700e359",
+        "sourceIdentity": {
+          "name": "@better-auth/utils",
+          "version": "0.4.2",
+          "license": "MIT",
+          "sha256": "df71dac9f973ddd249e30dc559656c1593bb89948ad863d092dabd2efe7e5406"
+        },
+        "sourceFiles": []
+      }
+    },
+    {
+      "package": "@bufbuild/protobuf",
+      "version": "2.14.1",
+      "packageJsonSha256": "bbe6ac30115d7b793eddd45e177908b151d0298258b80e894ad47e3bc17e15cf",
+      "declaredLicense": "(Apache-2.0 AND BSD-3-Clause)",
+      "reason": "Declared Apache-2.0 AND BSD-3-Clause; retrieved exact source root LICENSE covers Apache only. Required BSD notice coverage remains unresolved.",
+      "registryUrl": "https://registry.npmjs.org/%40bufbuild%2Fprotobuf/2.14.1",
+      "registryMetadataSha256": "5fe194f56ae88f18bbd3d31f563d5285dab3ac9726d71e85dd088e206d51a9af"
+    },
+    {
+      "package": "chat-adapter-sendblue",
+      "version": "0.2.0",
+      "packageJsonSha256": "e708e94aa65bf76caa27d5b1dbb1888e7ad984e015fb141b0a8bfa560efe6a17",
+      "declaredLicense": "MIT",
+      "reason": "Package metadata declares MIT; exact source repository root LICENSE is AGPL-3.0 and package directory has no separate license. Applicable package license is unresolved.",
+      "registryUrl": "https://registry.npmjs.org/chat-adapter-sendblue/0.2.0",
+      "registryMetadataSha256": "5a03c68dc39a69a901a5554b5513381029c2e9cc248ec613d23e2269198db52d"
+    },
+    {
+      "package": "@img/sharp-libvips-linux-x64",
+      "version": "1.3.3",
+      "packageJsonSha256": "446bda1246555d4a128d57414c7d55019573462b13b7f379da1053db001445da",
+      "declaredLicense": "LGPL-3.0-or-later",
+      "reason": "Binary declares LGPL-3.0-or-later; source repository root Apache license describes build code. Native library notices, corresponding-source/relinking obligations and distribution review remain unresolved.",
+      "registryUrl": "https://registry.npmjs.org/%40img%2Fsharp-libvips-linux-x64/1.3.3",
+      "registryMetadataSha256": "776f6cf928e96a1ab537914741d9eb67fcc6087832589a23506065e873466666"
+    },
+    {
+      "package": "@img/sharp-libvips-linuxmusl-x64",
+      "version": "1.3.3",
+      "packageJsonSha256": "2b779e786b820ce2ad802395f9b74b50d7d0417ccdc2cdc581d384bbdbf2ead1",
+      "declaredLicense": "LGPL-3.0-or-later",
+      "reason": "Binary declares LGPL-3.0-or-later; source repository root Apache license describes build code. Native library notices, corresponding-source/relinking obligations and distribution review remain unresolved.",
+      "registryUrl": "https://registry.npmjs.org/%40img%2Fsharp-libvips-linuxmusl-x64/1.3.3",
+      "registryMetadataSha256": "53ffb4d129811370bfc430eb65d09d3dc573fffa210be455aff17ab27c9d00e3"
+    },
+    {
+      "package": "@koromix/koffi-linux-x64",
+      "version": "3.2.1",
+      "packageJsonSha256": "f23f23934912fc895739ee3d852c76c3cb0e1ba2d209e0fd8ad0f4c0a1214830",
+      "declaredLicense": "MIT",
+      "reason": "Copied native binaries declare MIT but contain no complete license text; npm version metadata supplies no exact gitHead. Exact binary/source license provenance remains unresolved.",
+      "registryUrl": "https://registry.npmjs.org/%40koromix%2Fkoffi-linux-x64/3.2.1",
+      "registryMetadataSha256": "5c59977ac58ff66f29473621d8ff241d4f9fb785b355b2e87776b269342c8bf4"
+    },
+    {
+      "package": "@prisma/dev",
+      "version": "0.24.17",
+      "packageJsonSha256": "424c6be2d6fcf99c226a2199951a97ab2d215d9d9545dd7c669e27a33716adaf",
+      "declaredLicense": "ISC",
+      "reason": "Copied full canonical Prisma CLI closure includes this ISC-declared package without complete license text, repository or gitHead in exact npm metadata.",
+      "registryUrl": "https://registry.npmjs.org/%40prisma%2Fdev/0.24.17",
+      "registryMetadataSha256": "9734b85bf6bc0ae8035e5dc9d4c5872cbc8e8f16b8838d7dd08f6148dc98405b"
+    }
+  ]
+}

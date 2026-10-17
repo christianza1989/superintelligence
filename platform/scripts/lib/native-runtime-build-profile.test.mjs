@@ -52,4 +52,5 @@ test("native guard uses positive shipped bytes and fails a surviving messaging v
   const name = "node_modules/.pnpm/chat-adapter-sendblue@0.2.0/node_modules/chat-adapter-sendblue/dist/index.js";
   assert.doesNotThrow(() => assertNativeMessagingNotShipped({ outputs: { "app.mjs": { inputs: { [name]: { bytesInOutput: 0 } } } } }));
   assert.throws(() => assertNativeMessagingNotShipped({ outputs: { "app.mjs": { inputs: { [name]: { bytesInOutput: 1 } } } } }), /Unsupported messaging dependency/);
+  assert.throws(() => assertNativeMessagingNotShipped({ outputs: {} }, [{ name: "sendblue" }]), /copied/);
 });

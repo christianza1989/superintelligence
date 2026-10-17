@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promis
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import { bundledRuntimePackages, copyBundledRuntimeNotices } from "./native-runtime-notices.mjs";
 
 const hash = bytes => createHash("sha256").update(bytes).digest("hex");
@@ -61,3 +62,17 @@ test("bundled input symlink outside installed store fails", async () => fixture(
   await symlink(outside, path.join(folder, "outside.js"));
   await assert.rejects(bundledRuntimePackages(root, [path.relative(root, path.join(folder, "outside.js"))]), /escapes/);
 }));
+test("reviewed exact-source license assets retain their original pinned bytes", async () => {
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../runtime/native-license-evidence");
+  const manifest = JSON.parse(await readFile(path.join(root, "manifest.json"), "utf8"));
+  for (const entry of manifest.entries) {
+    for (const file of entry.files) {
+      if (file.evidenceKind !== "official-exact-commit-license") continue;
+      const bytes = await readFile(path.join(root, file.file));
+      assert.ok(bytes.length <= 65_536);
+      assert.equal(hash(bytes), file.sha256);
+    }
+  }
+  assert.equal(manifest.distributionReady, false);
+  assert.equal(manifest.unresolved.length, 8);
+});

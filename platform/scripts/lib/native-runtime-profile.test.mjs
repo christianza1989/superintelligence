@@ -8,6 +8,7 @@ import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { copyRuntimePackageClosure } from "./runtime-package-closure.mjs";
+import { bundledRuntimePackages, validateCopiedRuntimePackageMetadata } from "./native-runtime-notices.mjs";
 
 const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const require = createRequire(path.join(workspace, "package.json"));
@@ -76,12 +77,14 @@ test("runtime operator reader blocks the whole package and permits private exter
 }));
 test("runtime CSV bundle consumes copied pinned sources and package lock", async () => fixture(async (directory) => {
   const root = path.join(directory, "runtime");
-  await copyRuntimePackageClosure({
+  const closure = await copyRuntimePackageClosure({
     workspaceRoot: workspace,
     importers: [{ file: path.join(workspace, "packages/adapters/package.json"), packages: ["d3-dsv"] }],
     outputDirectory: root,
     maxBytes: 2_000_000,
   });
+  const packages = await bundledRuntimePackages(workspace, closure.packages.map(pkg => "node_modules/.pnpm/" + pkg.instance + "/package.json"));
+  await validateCopiedRuntimePackageMetadata({ output: root, closure, packages });
   const app = path.join(root, "app/csv.mjs");
   const lock = await readFile(path.join(workspace, "pnpm-lock.yaml"));
   await writeFile(path.join(root, "pnpm-lock.yaml"), lock);
@@ -98,6 +101,8 @@ test("runtime CSV bundle consumes copied pinned sources and package lock", async
   const packageRoot = path.dirname(path.dirname(packageRequire.resolve("d3-dsv")));
   await writeFile(path.join(packageRoot, "src/csv.js"), "// changed fixture source\n");
   await assert.rejects(mod.prepareZeroCsvComponent(), /component_source_mismatch/);
+  await writeFile(path.join(packageRoot, "package.json"), JSON.stringify({ name: "d3-dsv", version: "wrong" }));
+  await assert.rejects(validateCopiedRuntimePackageMetadata({ output: root, closure, packages }), /identity mismatch/);
 }));
 test("source CSV module still consumes the canonical source lock and pinned sources", async () => {
   const entry = path.join(workspace, "packages/adapters/src/zero-csv-profile.ts");
