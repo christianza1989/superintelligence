@@ -43,6 +43,7 @@ let handles, server, worker, client;
 let stage = "startup";
 let succeeded = false;
 let modelDispatches = 0;
+let failureKind;
 const forbiddenModel = () => { modelDispatches++; throw new Error("Model dispatch forbidden in this profile"); };
 const api = async () => {
   handles = await createApp({
@@ -112,7 +113,11 @@ try {
   const status = await call("zero_status", { nonce: "process-before-restart" });
   assert.equal(status.backend, "available");
   assert.equal(status.profile, verifyEnabled ? "csv-preparation-and-verification" : "csv-preparation-only");
-  assert.equal((await client.listTools()).tools.length, 8);
+  stage = "tool-inventory";
+  const operationNames = (await client.listTools()).tools.map((tool) => tool.name).sort();
+  assert.deepEqual(operationNames, ["zero_artifact", "zero_cancel", "zero_freshness", "zero_inspect", "zero_job", "zero_prepare", "zero_search", "zero_status", "zero_verify"]);
+  assert.deepEqual([...status.operations].sort(), operationNames);
+  stage = "submit";
   const input = { profile: "d3-dsv-3.0.1/strict-table-v1", csv: 'name,value\n"one,two",3\n', idempotencyKey: randomUUID(), deadline: new Date(Date.now() + 60_000).toISOString() };
   const submitted = await call("zero_prepare", input);
   assert.equal((await call("zero_job", { jobId: submitted.jobId })).job.state, "queued");
@@ -231,7 +236,8 @@ try {
   assert.equal((await client.callTool({ name: "zero_job", arguments: { jobId: submitted.jobId } })).isError, true);
   succeeded = true;
   console.log(JSON.stringify({ status: "PASS", profile: verifyEnabled ? "csv-preparation-and-verification" : "csv-preparation-only", processTransport: true, apiRestart: true, clientRestart: true, graphile: true, artifactHashVerified: true, pages, hostFixtureIntegration:verifyEnabled, dockerVerification:verifyEnabled, singleReceipt: true, revocation: "blocked", paidModelCalls: 0, limitations: "Fixed development suite; not a native-host tool event or independent holdout proof" }));
-} catch {
+} catch (error) {
+  failureKind = error?.code === "ERR_ASSERTION" ? "assertion" : "runtime";
   console.error(`MCP preparation proof failed at ${stage}; private fixture retained.`);
   process.exitCode = 1;
 } finally {
@@ -240,5 +246,13 @@ try {
   await stopApi().catch(() => undefined);
   await workerDb.prisma.$disconnect().catch(() => undefined);
   await workerDb.pool.end().catch(() => undefined);
+  // Retain a public-safe qualification result even on an ephemeral CI runner.
+  // Private fixture bytes, errors and credentials never enter this report.
+  const reportDirectory = path.join(platform, ".local/mcp-process-proof", randomUUID());
+  await mkdir(reportDirectory, { recursive: true, mode: 0o700 });
+  await writeFile(path.join(reportDirectory, "qualification.json"), JSON.stringify({
+    status: succeeded ? "PASS" : "FAIL", stage, verifyEnabled, modelDispatches,
+    ...(failureKind ? { failureKind } : {}), finishedAt: new Date().toISOString(),
+  }, null, 2) + "\n", { mode: 0o600 });
   if (succeeded) await rm(scratch, { recursive: true, force: true });
 }

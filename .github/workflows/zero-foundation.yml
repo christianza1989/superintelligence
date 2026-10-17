@@ -153,3 +153,12 @@ jobs:
           npm run test:jev:postgres -- --maxWorkers=1
           npm run test:jev:api -- --maxWorkers=1
           npm run test:jev:composition
+      - name: Preserve redacted MCP process qualification including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: mcp-process-qualification
+          path: platform/.local/mcp-process-proof/*/qualification.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
