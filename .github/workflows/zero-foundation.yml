@@ -74,6 +74,11 @@ jobs:
           npm run test:worker -- --maxWorkers=2
           npm run test:jev -- --maxWorkers=2
           npm run test:jev:pricing
+          npm run test:browser:foundation -- --maxWorkers=1
+          npm run test:pdf:fixtures -- --maxWorkers=1
+          npm run test:pdf:profile
+          npm run test:runtime:closure
+          npm run test:docker:transport -- --maxWorkers=1
       - name: Build and exercise a self-contained discovery plugin
         run: |
           task_plugin_dir="$(node scripts/package-mcp-plugin.mjs)"
@@ -116,6 +121,13 @@ jobs:
         run: npm run db:migrate
       - name: Check application and worker types
         run: node scripts/platform.mjs --filter @rakazo/api --filter @rakazo/worker check
+      - name: Prepare the pinned network-isolated CSV verifier image
+        run: |
+          task_verifier_digest="node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f"
+          docker pull "$task_verifier_digest"
+          task_verifier_id="$(docker image inspect --format '{{.Id}}' "$task_verifier_digest")"
+          printf 'ZERO_CSV_PROJECT_IMAGE_ID=%s\n' "$task_verifier_id" >> "$GITHUB_ENV"
+          printf 'VERIFY_ZERO_CSV_PROJECT_DOCKER=1\n' >> "$GITHUB_ENV"
       - name: Exercise real Graphile jobs and authenticated application routes
         run: |
           npm run test:csv:postgres -- --maxWorkers=1

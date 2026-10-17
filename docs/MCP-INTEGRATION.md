@@ -1,6 +1,6 @@
 # MCP, papildiniai ir prijungimas iš įprasto coding kliento
 
-**Priimta įgyvendinimo kryptis · 2026-10-17 · discovery runtime įgyvendintas, execution dar nepriimtas.** [Sprendimai A13–A16](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [faktinė būsena](IMPLEMENTATION.md). Priimtas ir kritiškai patikslintas Astra pasiūlymas; peržiūrėtas source pagrindas 01645b085ed6f592cd450ee06537dfb958cc9c94. Žemiau esantys kontraktai yra visos integracijos reikalavimai. Dabartinis serveris teikia tris discovery tools; [tikro Codex ryšio ataskaita](experiments/MCP-PREVIEW-2026-10-17.md) aprašo patikrintą ribotą profilį.
+**Priimta įgyvendinimo kryptis · 2026-10-17 · discovery ir ribotas native CSV execution patikrinti; platesnis MVP nepriimtas.** [Sprendimai A13–A16](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [faktinė būsena](IMPLEMENTATION.md). Priimtas ir kritiškai patikslintas Astra pasiūlymas; pradinės peržiūros source pagrindas 01645b085ed6f592cd450ee06537dfb958cc9c94. Žemiau esantys kontraktai yra visos integracijos reikalavimai. Serveris 0.4 / schema 1.4 numatytai teikia tris discovery tools, operator-bound Linux profilis devynis. [Tikro Codex ryšio ataskaita](experiments/MCP-PREVIEW-2026-10-17.md) atskiria versijas, 0.3 FAIL ir 0.4 ribotą PASS.
 
 Tikslas — žmogui likti savo Codex ar Claude Code, o RepositoryZero naudoti komponentų paieškai, paruošimui ir patikrai. Pirmas klientas — Codex desktop su dabartine naudotojo paskyra. Claude Code kvalifikuojamas atskirai. [Native palyginimo protokolas](NATIVE-CODEX-BENCHMARK.md) atskirtas nuo [istorinio Claude CLI Lab](LOCAL-LAB.md).
 
@@ -56,7 +56,7 @@ Paruošimo handler, job prieigos ir verifier jungtys ateina vėlesniais mažais 
 
 ## 3. Minimalūs tools ir tikras end-to-end kelias
 
-Toliau numatomi v1 vardai ir apimtys; jų runtime schemos dar neįgyvendintos. Pirmajame serverio pakeitime užrakinti vieną versijuotą kontraktą. Modeliui nereikia dešimčių vienas kitą dubliuojančių search įrankių.
+Toliau pateikiami pagrindiniai vardai ir apimtys. Griežtos runtime schemos įgyvendintos discovery ir fiksuotam CSV profiliui; jų buvimas nežada kitų preparer/verifier palaikymo. Modeliui nereikia dešimčių vienas kitą dubliuojančių search įrankių.
 
 | Įrankis | Discovery preview | Pilnas vietinis MCP kelias | Ribos |
 |---|---|---|---|
@@ -68,6 +68,7 @@ Toliau numatomi v1 vardai ir apimtys; jų runtime schemos dar neįgyvendintos. P
 | `zero_artifact` | Ne | Taip | Tik leidžiamo job artefakto ID/revision; ribotas tekstas ar manifestas ir patikrinama lokali pristatymo vieta. Ne bet koks agento nurodytas kelias |
 | `zero_verify` | Ne | Taip | Užfiksuotas projekto snapshot + operatoriaus leistinas verifier profile + tikrintina užduoties specifikacija → job; nepriklausomai atkuriamas rezultatas ir receipt |
 | `zero_cancel` | Ne | Taip | Patvarus konkretaus job stop prašymas, idempotent, galutinė būsena atskirai; ne „stop visus worker“ |
+| `zero_freshness` | Ne | CSV profilis | Autorizuotas dabartinio penkių failų snapshot palyginimas su konkrečiu sėkmingo verify receipt; grąžina unchanged/changed ir abu hash, nekeičia istorinio rezultato ir nevykdo projekto |
 
 Atskiras `zero_apply` ar bendras shell tool pirmajam keliui nereikalingas. Host savo native įrankiais pritaiko komponentą ir kodą. Tai sumažina concurrent-writer problemą: Zero dirba izoliuotoje staging vietoje, o host valdo originalų darbo medį.
 

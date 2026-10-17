@@ -72,10 +72,31 @@ Vietinis repositoryzero0.2.0 discovery plugin taip pat tikrai įdiegtas per Code
 
 CI [39051581047](https://github.com/christianza1989/superintelligence/actions/runs/39051581047) ant be35124 patvirtino visus tris jobs: offline, real CSV/Library/Jev PostgreSQL/API ir atskirą 50 scenarijų + 1 expiry-lock patvarumo kontrolę. Ankstesnis [39051247161](https://github.com/christianza1989/superintelligence/actions/runs/39051247161) sustojo G1 dar prieš testus dėl švariame vykdytojuje neparuošto PostgreSQL image; du kiti jobs praėjo. Pridėtas aiškus image pull ir qualification JSON išsaugojimas CI, testų assertions nekeistos.
 
+## 0.4.0: tikras native host ir atskira dabartinės versijos patikra
+
+2026-10-17 17:28:27–17:33:34 UTC naujas Codex desktop pokalbis per tikrą supakuoto STDIO serverio MCP atliko naują development epochą. Serveris 0.4.0 / schema 1.4.0, protocol 2025-06-18, backend available, csv-preparation-and-verification ir devynios operacijos patvirtinti status nonce. Ankstesnio 0.3 FAIL įrašas išlieka.
+
+| Faktas | Faktinis rezultatas |
+|---|---|
+| Native įvykiai | 14 tikrų status/prepare/job/artifact/verify/freshness įvykių; ne shell ar SDK imitacija |
+| Paruošimas | 8 241 B, du puslapiai; visas SHA ir keturių vendor failų baitai patikrinti; worker 203 ms |
+| Host integracija | Host pats įrašė keturis vendor failus ir app.mjs; produkto source ir host projekto kodas host aplinkoje nevykdyti |
+| Docker rezultatas | Receipt 4 440 B, vienas puslapis, worker 2 143 ms, nested verification.outcome=pass; trys actualUse.calls reikšmės [1,1,1] |
+| Idempotency | Prepare ir verify replay grąžino tuos pačius job ID |
+| Dabartinė versija | zero_freshness prieš pakeitimą unchanged, po vien komentaro changed; originalaus job metaduomenys ir receipt baitai išliko identiški |
+| Sąnaudos | Abu worker receipts: paidModelCalls=0; host model receipt, tokenai, cache, kaina ir infrastruktūros kaina unknown |
+| Laikas | Visa matoma eiga 307,155 s; tai setup/host/tool darbo suma vienoje epochoje, ne palyginamas speedup matavimas |
+
+Patikrinama hash grandinė: preparation receipt `ffde469224e0427e2235c7e4b3bbb64a8495ff7fe89bee4110cc7754687f92b2`; verification receipt `84425dca2e510a46740af896e58e5c30f18859b7b023ca3a56a9d6fb599abeaa`; verified snapshot `1d751022f1036d2bbc2e6110fdc1c577c9938553dccf45e4486b6db72da22a28`; current snapshot po komentaro `7e1c4642a5fc7f048ed6f6aa5c027da5d31c9a16c42b402d82ccfb773d825540`.
+
+**Ribotos native CSV 0.4 kvalifikacijos rezultatas PASS.** Trys host įrankių klaidos išsaugotos: per ilga Windows proceso komanda, pagalbinio JavaScript top-level await atmetimas ir PowerShell pridėtas CR po sėkmingo penkių failų įrašymo. MCP produkto klaidų negauta. Šių host kliūčių taisymas ar viso srauto pagreitėjimas šiuo bandymu neįrodytas. Originalūs MCP atsakymai, abi app versijos, visos klaidos, hash ataskaitos ir sintetinės DB dump išsaugoti privačiai. Baigus bandymą grant atšauktas, tik jam skirtas API/worker sustabdytas, DB konteineris ir laikinas execution entry pašalinti.
+
+Tai trijų fiksuotų development atvejų, vieno Linux projekto ir Windows–WSL host bridge įrodymas. Jis nėra independent holdout, plugin update/uninstall, visų host/OS profilių, viso MVP, formalios A/B poros ar pakartojamos naudos PASS.
+
 ## Likę vartai
 
-Linux snapshotter sujungtas su patvariu operator-bound projekto verifier ir proceso proof praėjo; pilna native host eiga dar nepriimta. Read-only failų teisės nėra hostile same-user izoliacija.
+Linux snapshotter sujungtas su patvariu operator-bound projekto verifier; ribota native CSV 0.4 eiga praėjo kartu su post-edit freshness. Read-only failų teisės nėra hostile same-user izoliacija.
 
-CSV paruošimas turi operator policy ir MCP client jungtį; nepateikus privataus binding/policy, vykdymas neprieinamas. Atskiras Docker verifier tikrina tikslius penkis host failus, pinned vendor baitus, faktinį parserio kvietimą ir rezultatą; teigiamos bei unused/tamper/stale/cancel kontrolės praėjo su vietiniu exact image ID. Tai dar nėra užbaigtas native host snapshot → integracija → patvarus verify kelias. Pilni crash/lease-expiry, staging retention ir naujo žmogaus setup vartai atviri; API/MCP proceso restart nėra worker crash recovery įrodymas.
+CSV paruošimas turi operator policy ir MCP client jungtį; nepateikus privataus binding/policy, vykdymas neprieinamas. Atskiras Docker verifier tikrina tikslius penkis host failus, pinned vendor baitus, faktinį parserio kvietimą ir rezultatą; teigiamos bei unused/tamper/stale/cancel kontrolės praėjo su vietiniu exact image ID. Pilni crash/resource, staging retention ir naujo žmogaus setup vartai atviri; API/MCP proceso restart nėra worker crash recovery įrodymas.
 
-Savarankiškas plugin paketas, jo native Codex discovery install/new-session patikra ir svetainės STDIO vedlys įgyvendinti; plugin update/uninstall, native execution, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).
+Savarankiškas plugin paketas, jo native Codex 0.2 discovery install/new-session patikra ir svetainės STDIO vedlys įgyvendinti; 0.4 plugin update/uninstall, platesnis execution lifecycle, Claude Code ryšys, formalios native A/B poros ir pakartojama nauda dar neatlikti. [Vietinis setup](../MCP-SETUP.md), [MCP planas](../MCP-INTEGRATION.md), [native A/B metodas](../NATIVE-CODEX-BENCHMARK.md), [checkboxų būsena](../../ROADMAP.md).
