@@ -78,7 +78,7 @@ const contextFor = (principal: ZeroCsvPrincipal, id: string): AdapterContext => 
 });
 
 async function authorize(
-  deps: Pick<Dependencies, "prisma" | "authorize">,
+  deps: { prisma: Pick<PrismaClient, "spaceMember">; authorize: ZeroCsvAuthorize },
   principal: ZeroCsvPrincipal,
 ) {
   principalSchema.parse(principal);
@@ -146,7 +146,7 @@ async function findReceipt(prisma: Pick<PrismaClient, "artifact">, request: Requ
 
 /** Stage bytes first; one request-row lock chooses the sole truthful terminal receipt. */
 async function publish(
-  deps: Pick<Dependencies, "prisma" | "artifacts">,
+  deps: Pick<Dependencies, "prisma" | "artifacts"> & { authorize?: ZeroCsvAuthorize },
   id: string,
   request: Request,
   state: State,
@@ -178,6 +178,13 @@ async function publish(
       await tx.$queryRaw(Prisma.sql`SELECT id FROM artifacts WHERE id = ${id} FOR UPDATE`);
       const existing = await findReceipt(tx, request, id);
       if (existing) return existing;
+      if (state === "succeeded") {
+        if (!deps.authorize) throw new IsolationError();
+        // Storage can await arbitrarily after the worker's earlier checks. Recheck the
+        // current operator grant and transaction-visible membership at publication.
+        // A separate policy store cannot be locked atomically with this DB commit.
+        await authorize({ prisma: tx, authorize: deps.authorize }, request.principal);
+      }
       if (
         state === "succeeded" &&
         Date.now() - Date.parse(String(details.startedAt)) >= ZERO_CSV_LIMITS.runtimeMs

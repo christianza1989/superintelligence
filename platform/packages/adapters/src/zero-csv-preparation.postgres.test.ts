@@ -3,7 +3,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import type { ArtifactStore } from "@rakazo/adapter-kit";
-import { createDb } from "@rakazo/db";
+import { createDb, IsolationError } from "@rakazo/db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { LocalArtifactStore } from "./artifacts.js";
 import { createBackgroundJobHandlers } from "./background-job-handlers.js";
@@ -272,6 +272,64 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     await stop();
     await start();
   });
+
+  it.each(["grant", "membership"] as const)(
+    "rechecks %s revocation after successful bytes are staged before committing a receipt",
+    async (revocation) => {
+      await stop();
+      let release!: () => void;
+      let entered!: () => void;
+      let revoked = false;
+      let removedMembership = false;
+      const gate = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const staged = new Promise<void>((resolve) => {
+        entered = resolve;
+      });
+      const membership = await db.prisma.spaceMember.findUniqueOrThrow({
+        where: { spaceId_userId: { spaceId, userId } },
+      });
+      const delayed: ArtifactStore = {
+        describe: () => artifacts.describe(),
+        get: (...args) => artifacts.get(...args),
+        remove: (...args) => artifacts.remove(...args),
+        put: async (...args) => {
+          const result = await artifacts.put(...args);
+          if (
+            args[0].name === "zero-csv-receipt.json" &&
+            JSON.parse(new TextDecoder().decode(args[0].bytes)).state === "succeeded"
+          ) {
+            entered();
+            await gate;
+          }
+          return result;
+        },
+      };
+      const { jobId } = await service.submit(input());
+      await start(delayed, async (owner) => {
+        await authorize(owner);
+        if (revoked) throw new IsolationError();
+      });
+      try {
+        await staged;
+        if (revocation === "grant") revoked = true;
+        else {
+          await db.prisma.spaceMember.delete({ where: { id: membership.id } });
+          removedMembership = true;
+        }
+      } finally {
+        release();
+        await stop();
+        if (removedMembership) await db.prisma.spaceMember.create({ data: membership });
+      }
+      const receipt = await terminal(jobId, "blocked");
+      expect(receipt.reason).toBe("project_scope_rejected");
+      expect(receipt.result).toBeUndefined();
+      expect(await db.prisma.artifact.count({ where: { rootArtifactId: jobId } })).toBe(1);
+      await start();
+    },
+  );
 
   it("records deadline exhaustion and rejects reuse of the expired idempotency key", async () => {
     await stop();
