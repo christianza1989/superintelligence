@@ -1,3 +1,4 @@
+import { libraryHandoffPath } from "../lib/library-project-handoff";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   getRepositoryMetadata,
@@ -552,6 +553,11 @@ export function RepositoryDirectoryPage() {
                   ? t`Remove from Saved`
                   : t`Save`}
               </Button>
+              <Button
+                variant="outline"
+                render={<Link to={libraryHandoffPath(selected.repository)} />}
+                className="mb-5 w-full"
+              >{t`Start project`}</Button>
               <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 gap-y-4 border-y border-border py-5 text-sm">
                 <dt className="text-muted-foreground">
                   <Trans>Source</Trans>

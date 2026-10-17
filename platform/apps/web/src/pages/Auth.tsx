@@ -1,3 +1,4 @@
+import { libraryHandoffSignInDestination } from "../lib/library-project-handoff";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { credentialIssue, signupRequiresEmailVerification } from "@rakazo/core";
 import { Button, Input, Label } from "@rakazo/ui-web";
@@ -20,6 +21,9 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
   const { t } = useLingui();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const handoffDestination = libraryHandoffSignInDestination(searchParams.get("next"));
+  const nextQuery = handoffDestination ? "?next=" + encodeURIComponent(handoffDestination) : "";
+  const onboardingDestination = "/onboarding" + nextQuery;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -114,10 +118,10 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
       clearSpaceSelection();
       navigate(
         mode === "up"
-          ? "/onboarding"
+          ? onboardingDestination
           : searchParams.get("next") === "/integrations/setup"
             ? "/integrations/setup"
-            : "/app",
+            : handoffDestination ?? "/app",
       );
     } catch {
       setError(t`Could not reach the server`);
@@ -134,13 +138,13 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
           authClient.signIn.social({
             disableRedirect,
             provider: "oidc",
-            newUserCallbackURL: callbackURL("/onboarding"),
+            newUserCallbackURL: callbackURL(onboardingDestination),
             callbackURL: callbackURL(
-              searchParams.get("next") === "/integrations/setup" ? "/integrations/setup" : "/app",
+              searchParams.get("next") === "/integrations/setup" ? "/integrations/setup" : handoffDestination ?? "/app",
             ),
             errorCallbackURL: callbackURL("/sign-in"),
           }),
-        ["/app", "/onboarding", "/integrations/setup", "/sign-in"],
+        ["/app", "/onboarding", "/integrations/setup", "/sign-in", onboardingDestination, ...(handoffDestination ? [handoffDestination] : [])],
       );
       if (result.error) setError(authErrorText(result.error, t`Could not continue`));
     } catch {
@@ -152,7 +156,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     <AuthFrame onSubmit={submit} title={title}>
       {sent ? (
         <div className="w-full text-center">
-          <Link to="/sign-in" className="font-medium text-foreground">
+          <Link to={"/sign-in" + nextQuery} className="font-medium text-foreground">
             <Trans>Back to sign in</Trans>
           </Link>
         </div>
@@ -296,19 +300,19 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
                 {mode === "in" ? (
                   <>
                     <Trans>Don’t have an account?</Trans>{" "}
-                    <Link to="/sign-up" className="font-medium text-foreground">
+                    <Link to={"/sign-up" + nextQuery} className="font-medium text-foreground">
                       <Trans>Sign up</Trans>
                     </Link>
                   </>
                 ) : mode === "up" ? (
                   <>
                     <Trans>Already have an account?</Trans>{" "}
-                    <Link to="/sign-in" className="font-medium text-foreground">
+                    <Link to={"/sign-in" + nextQuery} className="font-medium text-foreground">
                       <Trans>Sign in</Trans>
                     </Link>
                   </>
                 ) : (
-                  <Link to="/sign-in" className="font-medium text-foreground">
+                  <Link to={"/sign-in" + nextQuery} className="font-medium text-foreground">
                     <Trans>Back to sign in</Trans>
                   </Link>
                 )}

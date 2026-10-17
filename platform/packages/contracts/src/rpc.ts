@@ -1,3 +1,4 @@
+import { PrepareLibraryHandoffInput, PreparedLibraryHandoffSchema } from "./library-handoff.js";
 import { eventIterator, oc } from "@orpc/contract";
 import * as z from "zod";
 import { AiConsentQuerySchema, AiConsentStatusSchema } from "./ai-consent.js";
@@ -828,6 +829,9 @@ export const appContract = {
   autoReview: {
     get: oc.output(ActionAutoReviewSettingsSchema),
     set: oc.input(z.object({ enabled: z.boolean() })).output(ActionAutoReviewSettingsSchema),
+  },
+  library: {
+    prepare: oc.input(PrepareLibraryHandoffInput).output(PreparedLibraryHandoffSchema),
   },
   artifacts: {
     list: oc.input(botId).output(z.array(ArtifactSchema)),

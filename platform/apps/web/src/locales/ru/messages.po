@@ -5120,3 +5120,111 @@ msgstr "Не записана"
 #: src/pages/RepositoryDirectory.tsx
 msgid "Current repository metadata; source revision may differ."
 msgstr "Метаданные текущего репозитория; исходная ревизия может отличаться."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to load workspace."
+msgstr "Не удалось загрузить рабочее пространство."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to save plan."
+msgstr "Не удалось сохранить план."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to start task."
+msgstr "Не удалось запустить задачу."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Source facts"
+msgstr "Факты об источнике"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository role"
+msgstr "Роль репозитория"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Foundation candidate"
+msgstr "Кандидат на основу"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Component candidate"
+msgstr "Кандидат в компоненты"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Reference"
+msgstr "Справочный материал"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project brief"
+msgstr "Описание проекта"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Workspace agent"
+msgstr "Агент рабочего пространства"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Choose an existing agent."
+msgstr "Выберите существующего агента."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Saving plan…"
+msgstr "Сохранение плана…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save reuse plan"
+msgstr "Сохранить план повторного использования"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task accepted"
+msgstr "Задача принята"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Plan saved. No task has started."
+msgstr "План сохранён. Задача не запущена."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open reuse plan"
+msgstr "Открыть план повторного использования"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open conversation"
+msgstr "Открыть разговор"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task receipt"
+msgstr "Квитанция задачи"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Starting task…"
+msgstr "Запуск задачи…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start planning task"
+msgstr "Запустить задачу планирования"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Back to Library"
+msgstr "Вернуться в Library"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project handoff"
+msgstr "Передача проекта"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository not found."
+msgstr "Репозиторий не найден."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Select a source role and describe your project."
+msgstr "Выберите роль источника и опишите проект."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save a planning artifact first. Integration and builds require a separate prepared workflow."
+msgstr "Сначала сохраните артефакт планирования. Для интеграции и сборки нужен отдельно подготовленный процесс."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Connect a model in the workspace before starting a task."
+msgstr "Перед запуском задачи подключите модель в рабочем пространстве."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start project"
+msgstr "Начать проект"

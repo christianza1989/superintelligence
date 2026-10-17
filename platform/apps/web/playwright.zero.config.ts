@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["repository-directory.spec.ts", "repository-workspace.spec.ts"],
+  testMatch: ["repository-directory.spec.ts", "repository-workspace.spec.ts", "library-project-handoff.spec.ts"],
   workers: 1,
   reporter: "list",
   use: {

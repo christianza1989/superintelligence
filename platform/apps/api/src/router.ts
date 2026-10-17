@@ -1,3 +1,4 @@
+import { prepareLibraryHandoff } from "./zero-library-handoff.js";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { implement, ORPCError } from "@orpc/server";
 import type {
@@ -5809,6 +5810,11 @@ export function createRouter(deps: RouterDeps) {
         });
         return loadAutoReviewSettings(deps, context.actor);
       }),
+    },
+    library: {
+      prepare: authed.library.prepare.handler(({ context, input }) =>
+        prepareLibraryHandoff(deps, context.actor, input),
+      ),
     },
     artifacts: {
       list: authed.artifacts.list.handler(async ({ context, input }) => {

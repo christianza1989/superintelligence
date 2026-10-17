@@ -5120,3 +5120,111 @@ msgstr "기록되지 않음"
 #: src/pages/RepositoryDirectory.tsx
 msgid "Current repository metadata; source revision may differ."
 msgstr "현재 저장소의 메타데이터입니다. 소스 리비전과 다를 수 있습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to load workspace."
+msgstr "작업 공간을 불러오지 못했습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to save plan."
+msgstr "계획을 저장하지 못했습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to start task."
+msgstr "작업을 시작하지 못했습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Source facts"
+msgstr "소스 정보"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository role"
+msgstr "저장소 역할"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Foundation candidate"
+msgstr "기반 후보"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Component candidate"
+msgstr "구성 요소 후보"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Reference"
+msgstr "참고 자료"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project brief"
+msgstr "프로젝트 설명"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Workspace agent"
+msgstr "작업 공간 에이전트"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Choose an existing agent."
+msgstr "기존 에이전트를 선택하세요."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Saving plan…"
+msgstr "계획 저장 중…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save reuse plan"
+msgstr "재사용 계획 저장"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task accepted"
+msgstr "작업 접수됨"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Plan saved. No task has started."
+msgstr "계획이 저장되었습니다. 아직 작업은 시작되지 않았습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open reuse plan"
+msgstr "재사용 계획 열기"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open conversation"
+msgstr "대화 열기"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task receipt"
+msgstr "작업 접수 내역"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Starting task…"
+msgstr "작업 시작 중…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start planning task"
+msgstr "계획 수립 작업 시작"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Back to Library"
+msgstr "Library로 돌아가기"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project handoff"
+msgstr "프로젝트 인계"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository not found."
+msgstr "저장소를 찾을 수 없습니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Select a source role and describe your project."
+msgstr "소스 역할을 선택하고 프로젝트를 설명하세요."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save a planning artifact first. Integration and builds require a separate prepared workflow."
+msgstr "먼저 계획 산출물을 저장하세요. 통합과 빌드에는 별도로 준비된 작업 흐름이 필요합니다."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Connect a model in the workspace before starting a task."
+msgstr "작업을 시작하기 전에 작업 공간에서 모델을 연결하세요."
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start project"
+msgstr "프로젝트 시작"

@@ -1,3 +1,4 @@
+import { LIBRARY_HANDOFF_PATH, libraryHandoffSignInDestination } from "./lib/library-project-handoff";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { LinkFavicons } from "@rakazo/chat-ui/web";
 import { LinkFaviconsContext, RemoteImagesContext } from "@rakazo/chat-ui/web";
@@ -38,6 +39,8 @@ const RepositoryDirectoryPage = lazy(() =>
     default: module.RepositoryDirectoryPage,
   })),
 );
+
+const LibraryProjectHandoffPage = lazy(() => import("./pages/LibraryProjectHandoff").then((module) => ({ default: module.LibraryProjectHandoffPage })));
 
 const AuthPage = lazy(() =>
   import("./pages/Auth").then((module) => ({ default: module.AuthPage })),
@@ -100,8 +103,17 @@ export function App() {
 
 function SessionApp() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const handoffDestination = libraryHandoffSignInDestination(
+    location.pathname + location.search,
+  );
+  const requestedHandoff = libraryHandoffSignInDestination(searchParams.get("next"));
   const signInDestination =
-    searchParams.get("next") === "/integrations/setup" ? "/integrations/setup" : "/app";
+    searchParams.get("next") === "/integrations/setup"
+      ? "/integrations/setup"
+      : requestedHandoff ?? "/app";
+  const onboardingDestination =
+    "/onboarding" + (requestedHandoff ? "?next=" + encodeURIComponent(requestedHandoff) : "");
   const ticketBoardEnabled = useSyncExternalStore(
     subscribeTicketBoardEnabled,
     getTicketBoardEnabled,
@@ -149,7 +161,7 @@ function SessionApp() {
           />
           <Route
             path="/sign-up"
-            element={user ? <Navigate to="/onboarding" replace /> : <AuthPage key="up" mode="up" />}
+            element={user ? <Navigate to={onboardingDestination} replace /> : <AuthPage key="up" mode="up" />}
           />
           <Route
             path="/forgot-password"
@@ -179,11 +191,12 @@ function SessionApp() {
                   <Outlet />
                 </SubscriptionGate>
               ) : (
-                <Navigate to="/sign-in" replace />
+                <Navigate to={handoffDestination ? "/sign-in?next=" + encodeURIComponent(handoffDestination) : "/sign-in"} replace />
               )
             }
           >
             <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path={LIBRARY_HANDOFF_PATH} element={<LibraryProjectHandoffPage key={searchParams.get("repo") ?? ""} />} />
             <Route path="/app" element={<ShellPage />} />
             <Route path="/app/g/:groupId" element={<ShellPage />} />
             <Route path="/app/artifacts" element={<ArtifactsPage />} />

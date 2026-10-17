@@ -5120,3 +5120,111 @@ msgstr "दर्ज नहीं है"
 #: src/pages/RepositoryDirectory.tsx
 msgid "Current repository metadata; source revision may differ."
 msgstr "वर्तमान रिपॉज़िटरी का मेटाडेटा; स्रोत रिविज़न अलग हो सकता है।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to load workspace."
+msgstr "कार्यस्थान लोड नहीं हो सका।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to save plan."
+msgstr "योजना सहेजी नहीं जा सकी।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Failed to start task."
+msgstr "कार्य शुरू नहीं हो सका।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Source facts"
+msgstr "स्रोत के तथ्य"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository role"
+msgstr "रिपॉज़िटरी की भूमिका"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Foundation candidate"
+msgstr "आधार का उम्मीदवार"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Component candidate"
+msgstr "घटक का उम्मीदवार"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Reference"
+msgstr "संदर्भ"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project brief"
+msgstr "परियोजना का विवरण"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Workspace agent"
+msgstr "कार्यस्थान एजेंट"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Choose an existing agent."
+msgstr "मौजूदा एजेंट चुनें।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Saving plan…"
+msgstr "योजना सहेजी जा रही है…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save reuse plan"
+msgstr "पुनः उपयोग योजना सहेजें"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task accepted"
+msgstr "कार्य स्वीकार किया गया"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Plan saved. No task has started."
+msgstr "योजना सहेजी गई। कोई कार्य शुरू नहीं हुआ है।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open reuse plan"
+msgstr "पुनः उपयोग योजना खोलें"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Open conversation"
+msgstr "बातचीत खोलें"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Task receipt"
+msgstr "कार्य की रसीद"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Starting task…"
+msgstr "कार्य शुरू हो रहा है…"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start planning task"
+msgstr "योजना बनाने का कार्य शुरू करें"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Back to Library"
+msgstr "Library पर वापस जाएँ"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Project handoff"
+msgstr "परियोजना हस्तांतरण"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Repository not found."
+msgstr "रिपॉज़िटरी नहीं मिली।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Select a source role and describe your project."
+msgstr "स्रोत की भूमिका चुनें और अपनी परियोजना बताएँ।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Save a planning artifact first. Integration and builds require a separate prepared workflow."
+msgstr "पहले योजना का आर्टिफ़ैक्ट सहेजें। एकीकरण और बिल्ड के लिए अलग से तैयार कार्यप्रवाह चाहिए।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Connect a model in the workspace before starting a task."
+msgstr "कार्य शुरू करने से पहले कार्यस्थान में मॉडल कनेक्ट करें।"
+
+#: src/pages/LibraryProjectHandoff.tsx
+msgid "Start project"
+msgstr "परियोजना शुरू करें"

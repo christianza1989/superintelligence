@@ -190,3 +190,5 @@ export type {
   RepositoryMetadataInput,
   RepositoryPinStatus,
 } from "./zero-library-metadata.js";
+
+export { createRepositoryReusePlan, InvalidRepositoryReusePlan } from "./zero-reuse-plan.js";

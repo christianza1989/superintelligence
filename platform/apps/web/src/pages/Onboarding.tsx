@@ -1,3 +1,4 @@
+import { libraryHandoffSignInDestination } from "../lib/library-project-handoff";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import {
   CLOUDFLARE_AI_GATEWAY_PROVIDER_ID,
@@ -34,7 +35,7 @@ import {
 } from "@rakazo/ui-web";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { IntegrationSetup } from "../components/integrations/IntegrationSetup";
 import {
   ModelPreflightFeedback,
@@ -125,6 +126,7 @@ function nextStepAfterModel(needsIntegrationSetup: boolean): "integrations" | "b
 export function OnboardingPage() {
   const { t } = useLingui();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const fieldId = useId();
   const [step, setStep] = useState<"loading" | "model" | "integrations" | "bot">("loading");
   const [integrationSetup, setIntegrationSetup] = useState<IntegrationSetupState | null>(null);
@@ -543,7 +545,7 @@ export function OnboardingPage() {
       if (started) {
         await rpc.onboarding.promptFocus({ botId: bot.id }).catch(() => undefined);
       }
-      navigate(`/app/${bot.id}`);
+      navigate(libraryHandoffSignInDestination(searchParams.get("next")) ?? `/app/${bot.id}`);
     } catch (err) {
       createStartedRef.current = false;
       setError(errorText(err, t`Could not create your bot`));

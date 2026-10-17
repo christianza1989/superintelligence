@@ -322,12 +322,14 @@ describe("independent human Library", () => {
     }
   });
   it("provides every Library message in all existing UI locale catalogs", () => {
-    const page = readFileSync(
-      fileURLToPath(
-        new URL("../pages/RepositoryDirectory.tsx", import.meta.url),
-      ),
-      "utf8",
-    );
+    const page = ["RepositoryDirectory", "LibraryProjectHandoff"]
+      .map((name) =>
+        readFileSync(
+          fileURLToPath(new URL("../pages/" + name + ".tsx", import.meta.url)),
+          "utf8",
+        ),
+      )
+      .join("\n");
     const messages = new Set(
       [
         ...page.matchAll(/t`([^`]+)`/gu),
