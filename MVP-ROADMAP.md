@@ -102,7 +102,7 @@ Browser/research, PDF lentelės ir coding su mažu naujo projekto reuse keliu. I
 - [ ] P1L.2 Parengti MVP UI/form/login/status/errors ir pagrindinių svetainės puslapių vertimai, Unicode/Cyrillic/CJK/escaping/plural/tekstų ilgio ir time/number/currency testai.
 - [ ] P1L.3 EN/RU technical quickstart, kitoms trumpas palaikomo MVP guide su source revision ir aprėptimi; input/schema/capability/grant faktai nekeičia reikšmės vertime.
 - [ ] P1L.4 UI locale neapsimeta modelio/voice kalbų palaikymu; router/search testai pagal realiai deklaruojamas input kalbas, lokalizuoti sinonimai nekviečia paid model po kiekvieno search.
-- [ ] P4.1 5 nepriklausomi bandomieji naudotojai, kiekvienas baigia bent vieną tikrą sutartą užduotį švarioje aplinkoje.
+- [ ] MVP1 Naujas žmogus be autoriaus pagalbos paleidžia palaikomą techninio MVP profilį, gauna vieną sutartą patikrintą artefaktą ir supranta failed/unknown bei tikrintuvo aprėptį. P4.1 penkių nepriklausomų beta naudotojų vartai lieka atskiri ir nepanaikinti.
 
 ## Po techninio MVP
 

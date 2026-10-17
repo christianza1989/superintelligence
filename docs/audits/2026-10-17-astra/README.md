@@ -10,3 +10,5 @@ Public `probe.mjs` uses the current working directory as the checkout, requires 
 
 Sanitized logs use a `.log.txt` suffix so the repository log-ignore rule does not omit the linked evidence.
 Public logs also normalize CRLF/trailing whitespace and remove ANSI color escapes; private originals retain their original formatting. Test outcomes and timings are unchanged.
+
+[Baigiamoji dokumentų peržiūra ir pataisa](FINAL-REVIEW.md).

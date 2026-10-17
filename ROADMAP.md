@@ -44,6 +44,8 @@ Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai
 - [ ] L6 Compare 2–3 repo pagal tuos pačius turimus faktus, be LLM; maža vėlesnė iteracija, ne L1–L5 blokas.
 - [ ] L7 Trending rodo datuotą source rank arba tikrą palyginamą augimo intervalą ir aprėptį; bendri stars nėra 7 d. augimas. Collections/personalizacija tik pagal poreikį, po L1–L5.
 
+- [ ] MVP1 Naujas žmogus be autoriaus pagalbos paleidžia palaikomą techninio MVP profilį, gauna vieną sutartą patikrintą artefaktą ir supranta failed/unknown bei tikrintuvo aprėptį. P4.1 penkių nepriklausomų beta naudotojų vartai lieka atskiri ir nepanaikinti.
+
 **Library vartai:** L1–L5 naudojami žmogaus be AI pokalbio; L5 perduoda pasirinktą repo veikiančiam projekto keliui. Naršymas gali būti įgyvendinamas lygiagrečiai offline worker, net kai live profilis blocked.
 
 ## Bendra darbų seka
