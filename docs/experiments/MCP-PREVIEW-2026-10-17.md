@@ -55,6 +55,23 @@ Tikras STDIO → HTTP API → Graphile → Docker bandymas PASS: API/MCP restart
 
 Vietinis repositoryzero0.2.0 discovery plugin taip pat tikrai įdiegtas per Codex CLI, užkrautas naujame desktop pokalbyje su reuse skill ir atlikti trys native MCP kvietimai. Server/schema/protocol=0.2.0/1.2.0/2025-06-18, source-only,796records, nonce sutapo. Plugin install/new-session discovery yra atskiras PASS; jis nepakeičia 0.3.0 native execution ar plugin update/uninstall vartų.
 
+## 0.3.0: tikras native host ir rasta freshness spraga
+
+2026-10-17 16:54:53–16:57:47 UTC naujas Codex desktop pokalbis per tikrus atskiro operator-bound serverio status/prepare/job/artifact/verify MCP įvykius atliko komponento integraciją. Patvirtintas serveris 0.3.0 / schema 1.3.0, backend available, csv-preparation-and-verification profilis ir šviežias sutampantis nonce. Host per įprastus failų įrankius pats įrašė keturis iš artefakto gautus vendor failus ir mažą app.mjs į naują tuščią operatoriaus patvirtintą Linux projektą; produkto source nekeistas, kodas host aplinkoje nevykdytas.
+
+| Faktas | Rezultatas |
+|---|---|
+| Preparation artefaktas | 8 241 B, 3 puslapiai, viso SHA-256 patikrintas; worker vykdymas 256 ms |
+| Verification artefaktas | 4 440 B, 2 puslapiai, viso SHA-256 patikrintas; worker vykdymas 2 206 ms |
+| Faktinis panaudojimas ir rezultatas | Trims fiksuotiems atvejams po vieną parserio kvietimą, išvesties hash sutapo, nested verification.outcome=pass |
+| Snapshot / idempotency | Penki tikslūs failai; preparation ir verification replay grąžino tuos pačius job ID |
+| Sąnaudos | Zero paid model dispatch 0; host modelio tokenai/cache/kaina unknown; visas matomas srautas apie 174 s, ne palyginamas greičio įrodymas |
+| Po host pakeitimo | Vien app.mjs komentaras pakeitė dabartinį snapshot, bet zero_job nesiūlė naujos freshness patikros. Immutable receipt teisingai liko apie originalų snapshot |
+
+**Bendras šios native kvalifikacijos rezultatas FAIL:** trūko atskiro dabartinių failų palyginimo po jau užbaigto PASS. Funkcinis originalaus snapshot PASS nėra dabartinės projekto versijos garantija. Originalūs gauti puslapiai, receipt/hash grandinė, programos versijos, nesėkmė ir sintetinės DB kopija išsaugoti privačiai. Baigus bandymą grant atšauktas, tik jam skirtas API/worker ir DB sustabdyti, laikinas execution entry pašalintas iš host konfigūracijos išlaikant discovery. Tolesnė pataisa ir pakartojimas bus nauja versija / epocha; šis FAIL neperrašomas.
+
+CI [39051581047](https://github.com/christianza1989/superintelligence/actions/runs/39051581047) ant be35124 patvirtino visus tris jobs: offline, real CSV/Library/Jev PostgreSQL/API ir atskirą 50 scenarijų + 1 expiry-lock patvarumo kontrolę. Ankstesnis [39051247161](https://github.com/christianza1989/superintelligence/actions/runs/39051247161) sustojo G1 dar prieš testus dėl švariame vykdytojuje neparuošto PostgreSQL image; du kiti jobs praėjo. Pridėtas aiškus image pull ir qualification JSON išsaugojimas CI, testų assertions nekeistos.
+
 ## Likę vartai
 
 Linux snapshotter sujungtas su patvariu operator-bound projekto verifier ir proceso proof praėjo; pilna native host eiga dar nepriimta. Read-only failų teisės nėra hostile same-user izoliacija.
