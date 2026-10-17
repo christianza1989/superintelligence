@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "stockdesk_matched_haiku_calibration",
   "clientDate": "2026-10-17",
-  "updatedAtUtc": "2026-10-17T07:53:17.048Z",
+  "updatedAtUtc": "2026-10-17T08:37:46.230Z",
   "codingModel": "claude-haiku-5-5",
   "reasoning": "high",
   "objective": "measured_quality_time_cost_tradeoff_no_fixed_percentage_target",
@@ -41,10 +41,14 @@
         "platform/packages/testkit/fixtures/stockdesk/ui.html": "279369f3648155e8eb20893fc3826aea4667ae20468a73b744417da847095384"
       },
       "taskDigest": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+      "taskPromptVersion": 1,
+      "taskPromptPath": "benchmarks/stockdesk-v1/PROMPT.md",
       "stage": "system",
       "pairs": 1,
       "status": "completed",
       "startedAtUtc": "2026-10-17T07:28:05.301Z",
+      "elapsedMs": 1040223,
+      "wallElapsedMs": 1040128,
       "finishedAtUtc": "2026-10-17T07:45:25.430Z",
       "reportSha256": "ebf2655770e7717ba5e3d4c68c0a3ccf523eff8f38edff2415c83e9cb20a75c3",
       "settings": {
@@ -198,6 +202,7 @@
           "gradingMs": 37026,
           "trialMs": 550733,
           "stagingMs": 3,
+          "cliGuardMs": null,
           "generation": {
             "requestedModel": "claude-haiku-5-5",
             "requestedReasoning": "high",
@@ -334,6 +339,7 @@
           "gradingMs": 34131,
           "trialMs": 487012,
           "stagingMs": 3,
+          "cliGuardMs": null,
           "generation": {
             "requestedModel": "claude-haiku-5-5",
             "requestedReasoning": "high",
@@ -455,6 +461,413 @@
                   "height": 844,
                   "bytes": 36256,
                   "sha256": "66a1c6e04def49560d3ba0c1c5c6fc2579830d4855de9a96431975d8a5897742",
+                  "file": "mobile.png"
+                }
+              ]
+            },
+            "cleanup": "passed",
+            "reason": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "2026-10-17T07-57-03-508Z-6ea881a693d3",
+      "sourceCommit": "d6ed167dfa85801d5879ea459822641fadc88e22",
+      "sourceDigests": {
+        "package.json": "40f10d3e4f3ecf982068b59301f194f845584f3883c020143a1348f7e0020432",
+        "benchmarks/stockdesk-v1/PROMPT.md": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+        "benchmarks/stockdesk-v1/README.md": "dc0b008e819f87cefdb915a5269afaba8a0a684550fb33b67558d420c71586ba",
+        "benchmarks/stockdesk-v1/proposal.json": "9d80796022a8da659a727e51e52de9e1cd4e3fce85e2a5445c9c80b0f699e7b0",
+        "benchmarks/stockdesk-v1/acceptance.mjs": "02c1a78b307221ac8f399a699a067dded13b1d439066dde97f1595ca5e32f4ff",
+        "benchmarks/stockdesk-v1/browser-grader.cjs": "ddce027db346f3329ac253284947fde65e0bf44165f984c3117816ae8460d272",
+        "platform/scripts/zero-stockdesk-plan.mjs": "e19bcf1052d9aa61c677a1ef185ae99be6c9c448baecb8f296fbaa6bec0a2518",
+        "platform/scripts/zero-stockdesk-contract.mjs": "62ef17289b7ea75cc4635eec8fcf3886ed56300c6d9758231f645dfa4084826f",
+        "platform/scripts/zero-stockdesk-prepare.mjs": "0159241834bc628456573cea905bcc52e8856aa6cfdf3cc0af13fbc2484632b7",
+        "platform/scripts/zero-stockdesk-run.mjs": "8897c3e4a170a424220cbc1c816bf38e4376b5fa8cc97c8dd6cb23941dbdee23",
+        "platform/scripts/zero-stockdesk.test.mjs": "3585ff9a939debe2b66cd0eb0fb0418996e73091b470d3d8c01cb32ee4d0fd59",
+        "platform/scripts/zero-claude-cli.mjs": "29ad15f5c56f621a2985286efd12a4389ab3c2b4d90e11d6ba29fa22acc04401",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-lab-strategies.mjs": "596fe1026d286e81c55d2dd97a68329f41f3f2c03973efbe6915d140a6c59417",
+        "platform/scripts/zero-lab-config.mjs": "945e3ae87ce8b675c691927c22469516e0e631874b47b5e60cec8442bd10766f",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-reuse.mjs": "798dd87303a86b12e130d001ad6bcf584a7b6a80048e12733caf0b22f496ea6b",
+        "platform/scripts/zero-lab-jev.mjs": "c56cef3129ffc097d23e69aec0be6bcbd0ab59b5714a8d6aede12c85a2ba9059",
+        "platform/scripts/zero-lab-evaluate.mjs": "049fc871fa56267a7b17f1dd159feb224c59671879dc53b5d6a47817eadaa640",
+        "platform/scripts/zero-lab-browser.mjs": "a1e5e45402d00a114387ced2eadf6652b4a4021dd3372eb1765ebcc3b9d84ed7",
+        "platform/scripts/zero-lab-acceptance.mjs": "1127b27d5e07e0cc01207befc7396c2dfe2228bb754c0f27de94194365e0cb32",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/testkit/fixtures/stockdesk/package.json": "24d2d2a4ff9a98f0a702eb594653e15481911d73fa37ac8a767367571175365c",
+        "platform/packages/testkit/fixtures/stockdesk/server.mjs": "9c66957b3440cacdee2466fd48f5c0c34be09d13238405e1e2a59f6dc3574d78",
+        "platform/packages/testkit/fixtures/stockdesk/ui.html": "279369f3648155e8eb20893fc3826aea4667ae20468a73b744417da847095384"
+      },
+      "taskDigest": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+      "taskPromptVersion": 1,
+      "taskPromptPath": "benchmarks/stockdesk-v1/PROMPT.md",
+      "stage": "jev",
+      "pairs": 1,
+      "status": "completed",
+      "startedAtUtc": "2026-10-17T07:57:03.525Z",
+      "elapsedMs": 1701039,
+      "wallElapsedMs": 1700787,
+      "finishedAtUtc": "2026-10-17T08:25:24.314Z",
+      "reportSha256": "e1bda74013434f562f3e37d10b22eb997238a1989ca4903c76178ba4f0e48643",
+      "settings": {
+        "cliVersion": "2.1.301",
+        "model": "claude-haiku-5-5",
+        "reasoning": "high",
+        "systemPromptMode": "default",
+        "tools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+        "timeoutMs": 1200000,
+        "maxObservedToolActions": 100,
+        "maxTurns": 100
+      },
+      "effectiveArguments": [
+        "--safe-mode",
+        "--print",
+        "--model",
+        "claude-haiku-5-5",
+        "--effort",
+        "high",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "dontAsk",
+        "--permission-prompts",
+        "none",
+        "--tools",
+        "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+        "--allowedTools",
+        "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+        "--strict-mcp-config",
+        "--no-session-persistence",
+        "--disable-slash-commands",
+        "--max-turns",
+        "100"
+      ],
+      "executionProfile": {
+        "platform": "linux",
+        "arch": "x64",
+        "nodeVersion": "v24.19.0",
+        "cliExecutableSha256": "bc1aad9982c7b59c7d889ff92595d61cf46e0a6eae074cb551d932a989bcd222"
+      },
+      "cliVersion": "2.1.301",
+      "cliIntegrity": "passed",
+      "costEstimateValidation": "supported_model_cli_estimate_not_invoice",
+      "cliInvocationAttempts": 2,
+      "modelDispatchAttempts": null,
+      "sourceIntegrity": "passed",
+      "timingIntegrity": "passed",
+      "summary": {
+        "status": "not_comparable",
+        "reasons": [
+          "not_all_planned_apps_accepted"
+        ],
+        "metrics": null,
+        "winner": "not_assessed",
+        "automaticPromotion": false,
+        "actualSubscriptionCostUsd": null,
+        "lanes": {
+          "B": {
+            "planned": 1,
+            "attempted": 1,
+            "accepted": 0,
+            "outcomes": [
+              "functional_failed"
+            ],
+            "codingMs": 666052,
+            "gradingMs": 4600,
+            "trialMs": 672513,
+            "preparationMs": 7504,
+            "codingAndPreparationMs": 673556,
+            "workflowMs": 680017,
+            "trialMedianMs": 672513,
+            "inputTokens": 3725467,
+            "outputTokens": 143326,
+            "cacheReadTokens": 3562496,
+            "cacheCreationTokens": 162907,
+            "uncachedInputTokens": 64,
+            "totalTokens": 3868793,
+            "cliApiEquivalentEstimateUsd": 0.43754899999999997,
+            "jevActualCostUsd": 0,
+            "combinedEstimateUsd": 0.43754899999999997
+          },
+          "C": {
+            "planned": 1,
+            "attempted": 1,
+            "accepted": 1,
+            "outcomes": [
+              "passed"
+            ],
+            "codingMs": 962704,
+            "gradingMs": 41876,
+            "trialMs": 1007144,
+            "preparationMs": 8632,
+            "codingAndPreparationMs": 971336,
+            "workflowMs": 1015776,
+            "trialMedianMs": 1007144,
+            "inputTokens": 5751039,
+            "outputTokens": 139001,
+            "cacheReadTokens": 5594924,
+            "cacheCreationTokens": 156003,
+            "uncachedInputTokens": 112,
+            "totalTokens": 5890040,
+            "cliApiEquivalentEstimateUsd": 0.47324953999999997,
+            "jevActualCostUsd": 0.00015414,
+            "combinedEstimateUsd": 0.47340368
+          }
+        }
+      },
+      "trials": [
+        {
+          "pair": 1,
+          "lane": "B",
+          "promptDigest": "3a8507d0f53eec6199d89ffe19e5997a61e7e4e358c3835071096e957a16685a",
+          "taskDigest": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+          "outcome": "functional_failed",
+          "codingMs": 666052,
+          "gradingMs": 4600,
+          "trialMs": 672513,
+          "stagingMs": 1811,
+          "cliGuardMs": 1748,
+          "generation": {
+            "requestedModel": "claude-haiku-5-5",
+            "requestedReasoning": "high",
+            "actualCostUsd": null,
+            "systemPromptMode": "default",
+            "systemPromptDigest": null,
+            "sandbox": "cli_permissions_dontAsk_not_os_isolation",
+            "actualModel": "claude-haiku-5-5",
+            "enabledTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+            "usage": {
+              "inputTokens": 3725467,
+              "outputTokens": 143326,
+              "cachedInputTokens": 3562496,
+              "cacheCreationInputTokens": 162907,
+              "uncachedInputTokens": 64,
+              "totalTokens": 3868793
+            },
+            "apiEquivalentCostEstimateUsd": 0.43754899999999997,
+            "reportedTurns": 47,
+            "permissionDenials": 0,
+            "terminalSubtype": "success",
+            "apiErrorStatus": null,
+            "eventCounts": {
+              "system": 328,
+              "assistant": 105,
+              "rate_limit_event": 4,
+              "user": 46,
+              "result": 1
+            },
+            "toolActions": 46,
+            "toolFailures": 2,
+            "status": "completed",
+            "reason": null,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 665914,
+            "outputBytes": 994541
+          },
+          "reusePlanDigest": "b4382825c0df0144695244f3e6199a76ba8ad4f70ae2712136bfaec2b653415e",
+          "reuseIntegrity": {
+            "assets": [
+              {
+                "name": "vendor/http.mjs",
+                "originalSha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04",
+                "actualSha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04",
+                "unchanged": true
+              },
+              {
+                "name": "vendor/LICENSE.hono",
+                "originalSha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115",
+                "actualSha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115",
+                "unchanged": true
+              },
+              {
+                "name": "vendor/LICENSE.node-server",
+                "originalSha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733",
+                "actualSha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733",
+                "unchanged": true
+              },
+              {
+                "name": "vendor/README.md",
+                "originalSha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a",
+                "actualSha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a",
+                "unchanged": true
+              }
+            ],
+            "noticesPreserved": true
+          },
+          "evaluation": {
+            "status": "failed",
+            "functionalStatus": "failed",
+            "automatedContractComplete": false,
+            "visualQualityAssessed": false,
+            "sourceDigest": "f61e20118954cc78c314ca4a025cf40ed4416564c6ec258d6d515376fcbf223b",
+            "acceptanceDigest": "02c1a78b307221ac8f399a699a067dded13b1d439066dde97f1595ca5e32f4ff",
+            "api": {
+              "status": "failed",
+              "tests": 13,
+              "passed": 11,
+              "failed": 2,
+              "failedCases": [
+                "combined filters, movement order and complete escaped export"
+              ],
+              "outputSha256": "a56f0c0a533d0746faad2bb4682b5f00e4e73a55cb7aab475cdb275d4a4fb740"
+            },
+            "persistence": {
+              "status": "not_run"
+            },
+            "ui": {
+              "status": "not_run",
+              "failedCheck": null,
+              "checks": {},
+              "browserAssets": null,
+              "browserVersion": null,
+              "graderDigest": null,
+              "screenshots": []
+            },
+            "cleanup": "passed",
+            "reason": "independent_api_acceptance_failed"
+          }
+        },
+        {
+          "pair": 1,
+          "lane": "C",
+          "promptDigest": "3a592d2168ccb252c6ec9c88886c9868b534e3378ac69ef8936144f366796f24",
+          "taskDigest": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+          "outcome": "passed",
+          "codingMs": 962704,
+          "gradingMs": 41876,
+          "trialMs": 1007144,
+          "stagingMs": 2491,
+          "cliGuardMs": 2489,
+          "generation": {
+            "requestedModel": "claude-haiku-5-5",
+            "requestedReasoning": "high",
+            "actualCostUsd": null,
+            "systemPromptMode": "default",
+            "systemPromptDigest": null,
+            "sandbox": "cli_permissions_dontAsk_not_os_isolation",
+            "actualModel": "claude-haiku-5-5",
+            "enabledTools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+            "usage": {
+              "inputTokens": 5751039,
+              "outputTokens": 139001,
+              "cachedInputTokens": 5594924,
+              "cacheCreationInputTokens": 156003,
+              "uncachedInputTokens": 112,
+              "totalTokens": 5890040
+            },
+            "apiEquivalentCostEstimateUsd": 0.47324953999999997,
+            "reportedTurns": 56,
+            "permissionDenials": 0,
+            "terminalSubtype": "success",
+            "apiErrorStatus": null,
+            "eventCounts": {
+              "system": 327,
+              "assistant": 137,
+              "rate_limit_event": 4,
+              "user": 55,
+              "other": 9,
+              "result": 1
+            },
+            "toolActions": 55,
+            "toolFailures": 3,
+            "status": "completed",
+            "reason": null,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 962612,
+            "outputBytes": 1116123
+          },
+          "reusePlanDigest": "384682bb8ee1546991a8396857f4a594692e7c555fe7f8f35eeac2e7f0e2b222",
+          "reuseIntegrity": {
+            "assets": [],
+            "noticesPreserved": true
+          },
+          "evaluation": {
+            "status": "passed",
+            "functionalStatus": "passed",
+            "automatedContractComplete": true,
+            "visualQualityAssessed": false,
+            "sourceDigest": "9c4715b416580eb091b6fa36c30f43c562ac570918b23edfc45e01a8a94fa5c0",
+            "acceptanceDigest": "02c1a78b307221ac8f399a699a067dded13b1d439066dde97f1595ca5e32f4ff",
+            "api": {
+              "status": "passed",
+              "tests": 13,
+              "passed": 13,
+              "failed": 0,
+              "subtests": 12,
+              "outputSha256": "86bf54480b3117d4eb1068e758f670abd3f6364863cc7735fa1e7553160f7f53"
+            },
+            "persistence": {
+              "status": "passed",
+              "coldContainerRestart": true,
+              "fieldsPreserved": true,
+              "sqliteHeader": true,
+              "quickCheck": "ok",
+              "sqliteTaskStored": true,
+              "sqliteProbeCopy": true
+            },
+            "ui": {
+              "status": "passed",
+              "failedCheck": null,
+              "checks": {
+                "desktop": {
+                  "load": true,
+                  "noHorizontalOverflow": true,
+                  "keyboardCreate": true,
+                  "keyboardTransferApiReadback": true,
+                  "csvPreviewCommitReplay": true,
+                  "validation": true,
+                  "filtersAndExport": true,
+                  "safeText": true,
+                  "reloadReadback": true,
+                  "noJavaScriptOrConsoleErrors": true,
+                  "noExternalRequestsOrPopups": true
+                },
+                "mobile": {
+                  "load": true,
+                  "noHorizontalOverflow": true,
+                  "keyboardCreate": true,
+                  "keyboardTransferApiReadback": true,
+                  "csvPreviewCommitReplay": true,
+                  "validation": true,
+                  "filtersAndExport": true,
+                  "safeText": true,
+                  "reloadReadback": true,
+                  "noJavaScriptOrConsoleErrors": true,
+                  "noExternalRequestsOrPopups": true
+                }
+              },
+              "browserAssets": {
+                "bytes": 461392285,
+                "files": 236,
+                "digest": "bd3560d82968e237678e374081a1ecbebd0718d5c03c16f1d85f1094be6e8c06",
+                "playwrightVersion": "1.63.0"
+              },
+              "browserVersion": "155.0.8059.79",
+              "graderDigest": "ddce027db346f3329ac253284947fde65e0bf44165f984c3117816ae8460d272",
+              "screenshots": [
+                {
+                  "name": "desktop",
+                  "width": 1440,
+                  "height": 900,
+                  "bytes": 56168,
+                  "sha256": "34ceea3c482f4d3f8b16c42870241cedd7d220c8d3bc517a647e169f273c0d57",
+                  "file": "desktop.png"
+                },
+                {
+                  "name": "mobile",
+                  "width": 390,
+                  "height": 844,
+                  "bytes": 28074,
+                  "sha256": "7df10b24749d8335fbab449ec104d05ab9113e1d34cd127f8fccf877f2d73a55",
                   "file": "mobile.png"
                 }
               ]
@@ -667,17 +1080,219 @@
       "elapsedMs": 4444,
       "wallElapsedMs": 4440,
       "timingIntegrity": "passed"
+    },
+    {
+      "id": "2026-10-17T07-56-26-475Z-faf4da0ec649",
+      "status": "ready",
+      "reportSha256": "43e0c82b647e250b9bc45d28e168fa38eff1db2fe8b65b0e08c9f7f2a7dc2f10",
+      "sourceDigests": {
+        "package.json": "40f10d3e4f3ecf982068b59301f194f845584f3883c020143a1348f7e0020432",
+        "benchmarks/stockdesk-v1/PROMPT.md": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+        "benchmarks/stockdesk-v1/README.md": "dc0b008e819f87cefdb915a5269afaba8a0a684550fb33b67558d420c71586ba",
+        "benchmarks/stockdesk-v1/proposal.json": "9d80796022a8da659a727e51e52de9e1cd4e3fce85e2a5445c9c80b0f699e7b0",
+        "benchmarks/stockdesk-v1/acceptance.mjs": "02c1a78b307221ac8f399a699a067dded13b1d439066dde97f1595ca5e32f4ff",
+        "benchmarks/stockdesk-v1/browser-grader.cjs": "ddce027db346f3329ac253284947fde65e0bf44165f984c3117816ae8460d272",
+        "platform/scripts/zero-stockdesk-plan.mjs": "e19bcf1052d9aa61c677a1ef185ae99be6c9c448baecb8f296fbaa6bec0a2518",
+        "platform/scripts/zero-stockdesk-contract.mjs": "62ef17289b7ea75cc4635eec8fcf3886ed56300c6d9758231f645dfa4084826f",
+        "platform/scripts/zero-stockdesk-prepare.mjs": "0159241834bc628456573cea905bcc52e8856aa6cfdf3cc0af13fbc2484632b7",
+        "platform/scripts/zero-stockdesk-run.mjs": "8897c3e4a170a424220cbc1c816bf38e4376b5fa8cc97c8dd6cb23941dbdee23",
+        "platform/scripts/zero-stockdesk.test.mjs": "3585ff9a939debe2b66cd0eb0fb0418996e73091b470d3d8c01cb32ee4d0fd59",
+        "platform/scripts/zero-claude-cli.mjs": "29ad15f5c56f621a2985286efd12a4389ab3c2b4d90e11d6ba29fa22acc04401",
+        "platform/scripts/zero-codex-cli.mjs": "26adb19d00a84b75b161af39f94e21fd71bac88fe5b2151db0313d5c5efd39d5",
+        "platform/scripts/zero-lab-strategies.mjs": "596fe1026d286e81c55d2dd97a68329f41f3f2c03973efbe6915d140a6c59417",
+        "platform/scripts/zero-lab-config.mjs": "945e3ae87ce8b675c691927c22469516e0e631874b47b5e60cec8442bd10766f",
+        "platform/scripts/zero-lab-prepare.mjs": "97f9f9498ebb9d0bc3aef61d0f623be96fb7142b3bf2bf9d8b28d5fb6582c73c",
+        "platform/scripts/zero-lab-reuse.mjs": "798dd87303a86b12e130d001ad6bcf584a7b6a80048e12733caf0b22f496ea6b",
+        "platform/scripts/zero-lab-jev.mjs": "c56cef3129ffc097d23e69aec0be6bcbd0ab59b5714a8d6aede12c85a2ba9059",
+        "platform/scripts/zero-lab-evaluate.mjs": "049fc871fa56267a7b17f1dd159feb224c59671879dc53b5d6a47817eadaa640",
+        "platform/scripts/zero-lab-browser.mjs": "a1e5e45402d00a114387ced2eadf6652b4a4021dd3372eb1765ebcc3b9d84ed7",
+        "platform/scripts/zero-lab-acceptance.mjs": "1127b27d5e07e0cc01207befc7396c2dfe2228bb754c0f27de94194365e0cb32",
+        "platform/packages/adapters/src/zero-systemone.ts": "329f6a6342db5c4b2a5049858d4de20d427ba8276900818823dd3c0ce67303e5",
+        "platform/packages/adapters/src/zero-repository-tools.ts": "6a1a989746920931b34070d132a7d9c64ae3fef4286347f30e9828845141a6ce",
+        "platform/packages/adapters/src/zero-repository-selector.ts": "35f9da987a50e0f2263500559e78f9cac5c3b898de263e2f85a47ca5cab48cfd",
+        "platform/packages/core/src/zero-catalog-data.json": "3a1996509088db65ae212dda14c577c48b0ba5013c646fe287a246fa80fceeea",
+        "platform/packages/testkit/fixtures/stockdesk/package.json": "24d2d2a4ff9a98f0a702eb594653e15481911d73fa37ac8a767367571175365c",
+        "platform/packages/testkit/fixtures/stockdesk/server.mjs": "9c66957b3440cacdee2466fd48f5c0c34be09d13238405e1e2a59f6dc3574d78",
+        "platform/packages/testkit/fixtures/stockdesk/ui.html": "279369f3648155e8eb20893fc3826aea4667ae20468a73b744417da847095384"
+      },
+      "eligiblePool": [
+        {
+          "id": "http",
+          "kind": "verified_prebuilt_HTTP",
+          "sources": [
+            {
+              "repository": "honojs/hono",
+              "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+              "license": "MIT",
+              "entry": "src/hono.ts",
+              "exports": "Hono"
+            },
+            {
+              "repository": "honojs/node-server",
+              "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+              "license": "MIT",
+              "entry": "src/server.ts",
+              "exports": "serve"
+            }
+          ],
+          "verification": "passed",
+          "scope": "generic_HTTP_library_only_no_task_solution"
+        },
+        {
+          "id": "source0",
+          "kind": "metadata_only_not_prebuilt",
+          "repository": "simonw/sqlite-utils",
+          "category": "knowledge-search",
+          "capability": "",
+          "source": "https://github.com/simonw/sqlite-utils/tree/9c66bafa52ae23d40499c74b0db3b635bcddb876",
+          "sourceRevision": "9c66bafa52ae23d40499c74b0db3b635bcddb876",
+          "sourceAvailable": true,
+          "licenseSource": "Apache-2.0",
+          "licenseApproved": false,
+          "runtimeTested": false,
+          "archived": false
+        },
+        {
+          "id": "source1",
+          "kind": "metadata_only_not_prebuilt",
+          "repository": "sqlite/sqlite",
+          "category": "foundation",
+          "capability": "",
+          "source": "https://github.com/sqlite/sqlite/tree/14913b9e281d8fad7ec6a3e76e3d59c411caa06e",
+          "sourceRevision": "14913b9e281d8fad7ec6a3e76e3d59c411caa06e",
+          "sourceAvailable": true,
+          "licenseSource": "Public-domain/Unlicense (inspect)",
+          "licenseApproved": false,
+          "runtimeTested": false,
+          "archived": false
+        },
+        {
+          "id": "source2",
+          "kind": "metadata_only_not_prebuilt",
+          "repository": "sqlitebrowser/sqlitebrowser",
+          "category": "knowledge-search",
+          "capability": "",
+          "source": "https://github.com/sqlitebrowser/sqlitebrowser/tree/ea751049a0c42e51063c3ee2b56d1cf472491d3a",
+          "sourceRevision": "ea751049a0c42e51063c3ee2b56d1cf472491d3a",
+          "sourceAvailable": true,
+          "licenseSource": "GPL (inspect exact version/exceptions); MIT; MPL-2.0",
+          "licenseApproved": false,
+          "runtimeTested": false,
+          "archived": false
+        }
+      ],
+      "packs": {
+        "B": {
+          "file": "B.json",
+          "selectedIds": [
+            "http"
+          ],
+          "elapsedMs": 7504,
+          "apiActualCostUsd": 0
+        },
+        "C": {
+          "file": "C.json",
+          "selectedIds": [],
+          "elapsedMs": 8632,
+          "apiActualCostUsd": 0.00015414
+        }
+      },
+      "api": {
+        "status": "answered",
+        "model": "typesafe/jev-1.13",
+        "modelDispatchAttempts": 1,
+        "actualCostUsd": 0.00015414,
+        "httpStatus": 200,
+        "actualModel": "typesafe/jev-1.13-20260917",
+        "usage": {
+          "inputTokens": 3670,
+          "outputTokens": 71,
+          "cost": 0.00015414
+        },
+        "elapsedMs": 845,
+        "answers": {
+          "http": {
+            "type": "noul",
+            "noul": 0.18
+          },
+          "source0": {
+            "type": "noul",
+            "noul": 0.1
+          },
+          "source1": {
+            "type": "noul",
+            "noul": 0.09
+          },
+          "source2": {
+            "type": "noul",
+            "noul": 0.04
+          }
+        },
+        "conservativelyReservedUsd": 0.7
+      },
+      "library": {
+        "assets": [
+          {
+            "name": "vendor/http.mjs",
+            "file": "library/http.mjs",
+            "bytes": 40851,
+            "sha256": "f88ccbbd1dacf83ace384ff6318173434c01ba75f15179e9ff5e2ec98412fc04"
+          },
+          {
+            "name": "vendor/LICENSE.hono",
+            "file": "library/LICENSE.hono",
+            "bytes": 1101,
+            "sha256": "a6ab98e5c77b9070c443eaff2ff81034a6f8cc05a7524d5098eb0f24defa0115"
+          },
+          {
+            "name": "vendor/LICENSE.node-server",
+            "file": "library/LICENSE.node-server",
+            "bytes": 1101,
+            "sha256": "6895190430d809c4c57a7582ecc2f99acbc2ea39a5dfad20262a41d5b3e91733"
+          },
+          {
+            "name": "vendor/README.md",
+            "file": "library/README.md",
+            "bytes": 684,
+            "sha256": "b6f0964c2acdb7161b51dc3bee44dd55a8b48e7a46395f2f1d3e3529f085f39a"
+          }
+        ],
+        "sources": [
+          {
+            "repository": "honojs/hono",
+            "revision": "588ec13fa68ea44fed1b5e1b503341db2bf09d70",
+            "license": "MIT",
+            "entry": "src/hono.ts",
+            "exports": "Hono"
+          },
+          {
+            "repository": "honojs/node-server",
+            "revision": "4b47a0d8a5c12ed69a9f8493df69918f62fb61c0",
+            "license": "MIT",
+            "entry": "src/server.ts",
+            "exports": "serve"
+          }
+        ],
+        "elapsedMs": 7452,
+        "verification": "passed",
+        "scope": "generic_HTTP_library_only_no_task_solution",
+        "bytes": 43737
+      },
+      "elapsedMs": 8659,
+      "wallElapsedMs": 8659,
+      "timingIntegrity": "passed"
     }
   ],
   "costAccounting": {
     "actualSubscriptionCostUsd": null,
+    "cliEstimateSumScope": "raw_cli_receipts_mixed_versions_older_Haiku_price_unvalidated_not_invoice",
     "jevAuthorizedTotalUsd": 1,
-    "jevConservativelyReservedUsd": 0.6,
-    "jevUniqueApiRequests": 6,
+    "jevConservativelyReservedUsd": 0.7,
+    "jevUniqueApiRequests": 7,
     "jevPriorReportedActualUsd": 0.000576954,
-    "jevNewReportedActualUsd": 0.00015414,
-    "jevGlobalReportedActualUsd": 0.000731094,
-    "codingCliApiEquivalentEstimateSumUsd": 7.5312048
+    "jevNewReportedActualUsd": 0.00030828,
+    "jevGlobalReportedActualUsd": 0.0008852339999999999,
+    "codingCliApiEquivalentEstimateSumUsd": 8.44200334
   },
   "limitations": [
     "Screening and confirmation stay separate; do not pool different sources or prompts",

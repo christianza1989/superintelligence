@@ -3,16 +3,16 @@
   "kind": "stockdesk_frozen_experiment_contract",
   "suite": "stockdesk-v1",
   "split": "calibration",
-  "status": "harness_ready_for_supported_cli_new_cohorts",
+  "status": "v2_contract_and_harness_verified_source_plan_pending",
   "codingModel": "claude-haiku-5-5",
   "reasoning": "high",
   "systemPromptMode": "default",
   "tools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
-  "taskPromptPath": "benchmarks/stockdesk-v1/PROMPT.md",
-  "taskPromptSha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
-  "taskPromptBytes": 9556,
+  "taskPromptPath": "benchmarks/stockdesk-v1/PROMPT.v2.md",
+  "taskPromptSha256": "6179cdcc2a24f4b6f83ee3384bcd335a0bf9ae7f13452f0e69ead20522ec98a1",
+  "taskPromptBytes": 10102,
   "protocolPath": "benchmarks/stockdesk-v1/README.md",
-  "protocolSha256": "dc0b008e819f87cefdb915a5269afaba8a0a684550fb33b67558d420c71586ba",
+  "protocolSha256": "31c91a4658abae4e396aedfe73b7c018f2eac3ed531a785b57650c19bc3aebee",
   "proposedControls": {
     "codingTimeoutMs": 1200000,
     "maxObservedToolActions": 100,
@@ -46,14 +46,13 @@
   "readiness": {
     "commonTask": true,
     "experimentalDesign": true,
-    "sourcePack": false,
+    "sourcePreparerImplemented": true,
     "stockdeskIndependentApiGrader": true,
     "stockdeskIndependentBrowserGrader": true,
     "negativeControls": true,
     "liveRunnerIntegration": true,
-    "confirmedModelAccess": true
+    "modelIdentityVerifiedInPriorSupportedCliRun": true
   },
-  "stockdeskCodingAttempts": 0,
   "modelFallback": false,
   "actualSubscriptionCostUsd": null,
   "jevBudget": {
@@ -61,8 +60,19 @@
     "authorizedTotalUsd": 1,
     "newRequestsThisPreparation": 0
   },
-  "asOf": "before_first_stockdesk_coding_run",
+  "asOf": "v2_contract_definition_before_source_preparation",
   "selectionRule": "If B/C inputs identical, selection tie and prefer deterministic B without another coding screen. Else choose accepted assisted lane by total estimate then coding-plus-preparation time; no eligible lane means no confirmation.",
   "cliVersion": "2.1.301",
-  "cliExecutablePolicy": "resolve_immutable_version_target_and_verify_sha256_before_each_lane"
+  "cliExecutablePolicy": "resolve_immutable_version_target_and_verify_sha256_before_each_lane",
+  "taskPromptVersion": 2,
+  "originalPrompt": {
+    "path": "benchmarks/stockdesk-v1/PROMPT.md",
+    "sha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926"
+  },
+  "preservedV1Cohorts": [
+    "2026-10-17T07-28-05-298Z-eb61d99afd31",
+    "2026-10-17T07-57-03-508Z-6ea881a693d3"
+  ],
+  "liveEvidenceRef": "catalog/stockdesk-results-2026-10-17.json",
+  "expectedGraderProfile": "stockdesk-automated-v2"
 }

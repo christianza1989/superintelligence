@@ -9,7 +9,7 @@ import {repositorySearchFromTool} from '../packages/adapters/src/zero-repository
 import {withJevLabBudget} from './zero-lab-jev.mjs';
 import {prepareHttpReuseLibrary} from './zero-lab-reuse.mjs';
 import {SPRINTDESK_IMAGE} from './zero-lab-evaluate.mjs';
-import {STOCKDESK_ROOT,STOCKDESK_SETTINGS,stockHash,stockSnapshot} from './zero-stockdesk-plan.mjs';
+import {STOCKDESK_ROOT,STOCKDESK_SETTINGS,STOCKDESK_TASK,stockHash,stockSnapshot} from './zero-stockdesk-plan.mjs';
 export async function prepareStockDesk({live=false,connection,budgetLedger}={}){
  const sources=await stockSnapshot();if(!live)return{status:'prepared_not_run',modelDispatchAttempts:0,sources};
  if(connection?.provider!=='openrouter-systemone'||connection.enabled!==true||!Array.isArray(connection.roles)||!connection.roles.includes('repo_selection')||connection.model!=='typesafe/jev-1.13'||typeof connection.apiKey!=='string'||!connection.apiKey.trim())throw Error('Explicit Jev connection required');
@@ -17,7 +17,7 @@ export async function prepareStockDesk({live=false,connection,budgetLedger}={}){
  const report={version:1,kind:'stockdesk-source-preparation',status:'preparing',sourceDigests:sources,api:{status:'not_run',model:'typesafe/jev-1.13',modelDispatchAttempts:0,actualCostUsd:null},packs:{},startedAtUtc:new Date().toISOString()};
  const save=()=>writeFile(path.join(directory,'preparation.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});await save();
  try{
- const task=await readFile(path.join(STOCKDESK_ROOT,'benchmarks/stockdesk-v1/PROMPT.md'),'utf8');const taskDigest=stockHash(task);const library=await prepareHttpReuseLibrary(directory,SPRINTDESK_IMAGE);
+ const task=await readFile(path.join(STOCKDESK_ROOT,STOCKDESK_TASK.promptPath),'utf8');const taskDigest=stockHash(task);const library=await prepareHttpReuseLibrary(directory,SPRINTDESK_IMAGE);
  const discovery=[...new Map(['honojs/hono','sqlite','csv'].flatMap(query=>repositorySearchFromTool({query}).candidates??[]).filter(c=>c.sourceAvailable&&c.sourceRevision&&!c.archived).map(c=>[c.repository,c])).values()].filter(c=>c.repository!=='honojs/hono').slice(0,5);
  const pool=[{id:'http',kind:'verified_prebuilt_HTTP',sources:library.sources,verification:library.verification,scope:library.scope},...discovery.map((c,i)=>({id:'source'+i,kind:'metadata_only_not_prebuilt',...c}))];report.eligiblePool=pool;report.library=library;
  const baseElapsedMs=Math.round(performance.now()-started);report.deterministicPolicy='select_only_verified_generic_HTTP_operator_policy';report.jevThreshold=0.7;report.maximumContextBytes=8192;

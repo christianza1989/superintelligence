@@ -202,7 +202,7 @@ export async function evaluateSprintDeskBrowser(options, deps = {}) {
   const selectedGrader = stockdesk ? fileURLToPath(new URL("../../benchmarks/stockdesk-v1/browser-grader.cjs", import.meta.url)) : graderPath;
   const report = {
     version: 1, suite: stockdesk ? "stockdesk-v1" : "sprintdesk-v1", status: "error", automatedContractComplete: false,
-    visualQualityAssessed: false, paidModelCalls: 0, profile: stockdesk ? { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v1", accessibleContract: "StockDesk prompt v1", coverage: STOCKDESK_BROWSER_CHECKS.join(",") } : SPRINTDESK_BROWSER_PROFILE,
+    visualQualityAssessed: false, paidModelCalls: 0, profile: stockdesk ? { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v2", accessibleContract: "StockDesk prompt v2", coverage: STOCKDESK_BROWSER_CHECKS.join(",") } : SPRINTDESK_BROWSER_PROFILE,
     executionKind: deps.runDocker ? "injected_executor_test_not_browser_evidence" : "docker_system_chromium",
     checks: {}, screenshots: [], cleanup: "not_needed",
     limitations: ["Two viewport samples and one keyboard flow per viewport, not exhaustive accessibility or visual quality",
@@ -238,6 +238,11 @@ export async function evaluateSprintDeskBrowser(options, deps = {}) {
     }
     await copyFile(selectedGrader, path.join(grader, "browser-grader.cjs"));
     report.graderDigest = hash(await readFile(path.join(grader, "browser-grader.cjs")));
+    if(stockdesk) {
+      await copyFile(fileURLToPath(new URL("../../benchmarks/stockdesk-v1/csv-export.mjs",import.meta.url)),path.join(grader,"csv-export.mjs"));
+      report.graderSupportDigest=hash(await readFile(path.join(grader,"csv-export.mjs")));
+      report.graderDigest=hash(JSON.stringify([report.graderDigest,report.graderSupportDigest]));
+    }
     try { report.browserAssets = await (deps.prepareBrowser ?? prepareSystemChromium)(assets); }
     catch (error) {
       if (["ENOENT", "ENOTDIR"].includes(error.code)) throw new BrowserError("system_browser_assets_unavailable", "unsupported");

@@ -62,5 +62,9 @@
       "Comprehensive accessibility",
       "Mobile table readability from an overflow check alone"
     ]
+  },
+  "followupAfterUnblinding": {
+    "C": "Source CSS sets table min-width:480px inside .table-wrap overflow-x:auto; missing columns in the static mobile capture are intended to be horizontally scrollable. Scroll interaction and keyboard accessibility were not manually tested.",
+    "A": "Static screenshot establishes severe character wrapping; no candidate source was modified."
   }
 }

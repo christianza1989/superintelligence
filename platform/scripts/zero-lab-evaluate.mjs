@@ -276,6 +276,11 @@ export async function evaluateSprintDesk(options, deps = {}) {
     await copyFile(selectedAcceptance, path.join(grader, "acceptance.mjs"));
     await chmod(path.join(grader, "acceptance.mjs"), 0o444);
     report.acceptanceDigest = sha256(await readFile(path.join(grader, "acceptance.mjs")));
+    if (stockdesk) {
+      await copyFile(path.join(root,"benchmarks/stockdesk-v1/csv-export.mjs"),path.join(grader,"csv-export.mjs"));
+      report.acceptanceSupportDigest=sha256(await readFile(path.join(grader,"csv-export.mjs")));
+      report.acceptanceDigest=sha256(JSON.stringify([report.acceptanceDigest,report.acceptanceSupportDigest]));
+    }
     dockerEnv = {
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
       HOME: scratch, DOCKER_CONFIG: path.join(scratch, "docker-config"),

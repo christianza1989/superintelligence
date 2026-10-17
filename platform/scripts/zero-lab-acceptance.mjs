@@ -11,9 +11,9 @@ export const SPRINTDESK_ACCEPTANCE_PROFILE = Object.freeze({
   visualQualityAssessed: false,
 });
 export const STOCKDESK_ACCEPTANCE_PROFILE = Object.freeze({
-  ...SPRINTDESK_ACCEPTANCE_PROFILE, id: "stockdesk-automated-v1",
+  ...SPRINTDESK_ACCEPTANCE_PROFILE, id: "stockdesk-automated-v2",
   functional: { ...SPRINTDESK_PROFILE, id: "stockdesk-node24-prebuilt-linux-x64-v1", sqliteRecordProbe: "product_and_each_seed_movement_real_rows" },
-  browser: { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v1", accessibleContract: "StockDesk prompt v1", coverage: "keyboard_product_adjustment_transfer_CSV_preview_commit_replay_validation_filters_export_safe_text_reload" },
+  browser: { ...SPRINTDESK_BROWSER_PROFILE, id: "stockdesk-controlled-chromium-v2", accessibleContract: "StockDesk prompt v2", coverage: "keyboard_product_adjustment_transfer_CSV_preview_commit_replay_validation_filters_export_safe_text_reload" },
   coverage: "stockdesk_API_CSV_atomicity_idempotency_concurrency_SQLite_UI_workflows",
 });
 const digest = value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
