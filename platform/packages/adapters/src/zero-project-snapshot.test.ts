@@ -250,6 +250,9 @@ describe.skipIf(process.platform !== "linux")("bounded project snapshots", () =>
       createProjectSnapshotter({ ...config, projectRoot: "/mnt/c/project" }),
     ).rejects.toMatchObject({ code: "invalid_config" });
     await expect(
+      createProjectSnapshotter({ ...config, projectRoot: "/mnt", allowedFiles: ["c/example.txt"] }),
+    ).rejects.toMatchObject({ code: "invalid_config" });
+    await expect(
       createProjectSnapshotter({ ...config, stagingRoot: path.join(root, "src") }),
     ).rejects.toMatchObject({ code: "invalid_config" });
     await symlink(root, path.join(base, "alias"));

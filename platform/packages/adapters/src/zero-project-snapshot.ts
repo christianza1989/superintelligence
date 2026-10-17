@@ -98,7 +98,8 @@ function contains(root: string, target: string): boolean {
 }
 
 async function canonicalDirectory(value: string) {
-  if (!path.isAbsolute(value) || value === "/" || value.startsWith("/mnt/")) deny("invalid_config");
+  if (!path.isAbsolute(value) || value === "/" || value === "/mnt" || value.startsWith("/mnt/"))
+    deny("invalid_config");
   const canonical = await realpath(value);
   if (canonical !== value || canonical === "/") deny("invalid_config");
   const handle = await open(
