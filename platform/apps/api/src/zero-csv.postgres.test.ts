@@ -89,6 +89,7 @@ postgres("authenticated CSV preparation application API (PostgreSQL)", () => {
   beforeAll(async () => {
     if (!new URL(databaseUrl!).pathname.startsWith("/zero_csv_test"))
       throw new Error("Explicit dedicated zero_csv_test database required");
+    vi.stubEnv("ZERO_PROJECT_POLICY_FILE", "");
     vi.stubEnv("DATABASE_URL", databaseUrl!);
     vi.stubEnv("REALTIME_DATABASE_URL", databaseUrl!);
     dataDir = await mkdtemp(path.join(tmpdir(), "zero-csv-api-proof-"));
@@ -136,6 +137,20 @@ postgres("authenticated CSV preparation application API (PostgreSQL)", () => {
       (await request(`${prefix}/prepare`, { method: "POST", body: input(), cookie: otherCookie }))
         .status,
     ).toBe(403);
+  });
+
+  it("probes backend availability only for a real authenticated project grant", async () => {
+    expect((await request(`${prefix}/status`, { cookie: "" })).status).toBe(401);
+    expect((await request(`${prefix}/status`, { cookie: otherCookie })).status).toBe(403);
+    const response = await request(`${prefix}/status`);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      profile: "d3-dsv-3.0.1/strict-table-v1",
+      backend: "available",
+      paidModelCalls: 0,
+      execution: "csv-preparation-only",
+      limits: { inputBytes: 16384, outstandingJobsPerScope: 4 },
+    });
   });
 
   it("takes principal solely from session membership and explicit operator policy", async () => {
@@ -303,6 +318,11 @@ postgres("authenticated CSV preparation application API (PostgreSQL)", () => {
       });
       expect(response.status).toBe(503);
       expect(await response.json()).toEqual({ error: "project_policy_unavailable" });
+      const status = await disabled.app.request(`${prefix}/status`, {
+        headers: { cookie, origin },
+      });
+      expect(status.status).toBe(503);
+      expect(await status.json()).toEqual({ error: "project_policy_unavailable" });
     } finally {
       await disabled.stop();
       await rm(emptyDir, { recursive: true, force: true });

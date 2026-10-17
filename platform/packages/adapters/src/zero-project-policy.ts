@@ -76,7 +76,7 @@ async function assertOperatorPath(file: string) {
 /** Secure bounded reader shared only by trusted operator configuration consumers. */
 export async function readZeroOperatorFile(
   file: string,
-  maxBytes = ZERO_PROJECT_POLICY_LIMITS.bytes,
+  maxBytes: number = ZERO_PROJECT_POLICY_LIMITS.bytes,
 ): Promise<Uint8Array> {
   try {
     if (

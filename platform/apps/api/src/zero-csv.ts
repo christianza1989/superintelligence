@@ -1,6 +1,10 @@
 import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
 import type { ZeroCsvAuthorize, ZeroCsvPrincipal } from "@rakazo/adapters";
-import { createZeroCsvPreparationService } from "@rakazo/adapters";
+import {
+  createZeroCsvPreparationService,
+  ZERO_CSV_LIMITS,
+  ZERO_CSV_PROFILE,
+} from "@rakazo/adapters";
 import type { Actor } from "@rakazo/contracts";
 import type { PrismaClient } from "@rakazo/db";
 import { IsolationError } from "@rakazo/db";
@@ -49,6 +53,11 @@ export function mountZeroCsvRoutes(
         principal.scopeId !== scopeId
       )
         throw new IsolationError();
+      if (
+        !Number.isFinite(Date.parse(principal.expiresAt)) ||
+        Date.parse(principal.expiresAt) <= Date.now()
+      )
+        throw new IsolationError();
       await deps.policy.authorize(principal);
       const service = createZeroCsvPreparationService(
         {
@@ -91,6 +100,17 @@ export function mountZeroCsvRoutes(
       return { error: c.json({ error: "invalid_json" }, 400) };
     }
   };
+  app.get(`${ZERO_CSV_API_PREFIX}/:scopeId/status`, (c) =>
+    scoped(c, async () =>
+      c.json({
+        profile: ZERO_CSV_PROFILE,
+        backend: "available",
+        paidModelCalls: 0,
+        execution: "csv-preparation-only",
+        limits: ZERO_CSV_LIMITS,
+      }),
+    ),
+  );
   app.post(`${ZERO_CSV_API_PREFIX}/:scopeId/prepare`, (c) =>
     scoped(c, async (service) => {
       const body = await jsonBody(c);
