@@ -1,0 +1,131 @@
+{
+  "qualification": "Bounded synthetic development proof; no original-page fidelity, independent holdout, G2 or complete MVP claim",
+  "profile": "zero-browser-static-v1",
+  "renderingPolicy": "inert-static-v1",
+  "epoch": 3,
+  "imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af",
+  "buildInputLockSha256": "96cd2c725060ba0dfc36688ef57cd174375c74bcf4a76d72e6a4c9108ddc90c4",
+  "imageBytes": 866584399,
+  "addedImageBytes": 1570066,
+  "applicationNoticesAndLockBytes": 1186450,
+  "frozenBeforeActualRun": true,
+  "sourceFiles": [
+    {
+      "path": "platform/packages/adapters/src/zero-browser-static-fixtures.ts",
+      "sha256": "1aa0dd5f429ab7e0a364b6a255e44e1cfb870af603252d1f57475dbce6cb4c8e"
+    },
+    {
+      "path": "platform/packages/adapters/src/zero-browser-static.docker.test.ts",
+      "sha256": "a18b4163f478e08865edecf97f3ecdef2813894bd2ebb168d7d3cf993fcbad5c"
+    },
+    {
+      "path": "platform/packages/adapters/src/zero-browser-static-entry.ts",
+      "sha256": "5dbbf5d9eb6efaba45560e3efa913efd2d09473088ff9667bf7013f77731561b"
+    },
+    {
+      "path": "platform/packages/adapters/src/zero-browser-contract.ts",
+      "sha256": "3c2cafc2f894972da43a656ed000269ff4de82d04f0e9a61930e4a6d93c0cbda"
+    },
+    {
+      "path": "platform/packages/adapters/src/zero-browser-static-runtime.ts",
+      "sha256": "0f60e371001cb0921e292a3c09d782f57cdafcb8a416c602b3dde034b8e6a53d"
+    }
+  ],
+  "result": {
+    "passed": 10,
+    "failed": 0,
+    "testExecutionMs": 32397,
+    "paidModelCalls": 0
+  },
+  "cases": [
+    {
+      "id": "article",
+      "sourceSha256": "22dfccb34ad68b344c76ab7165d490ddae9965e795c1cfe97f7f91b5d62f0c9d",
+      "renderedSha256": "ae631a1692bdb73126f6b60a0f8d1bc3595dc6233da0b3302e42bd1c7deb12d3",
+      "status": "passed"
+    },
+    {
+      "id": "catalog",
+      "sourceSha256": "8f67e1d886e9e5f47d75493a3439875d3b1eb08f38b9bfa8160801a2b0db0969",
+      "renderedSha256": "7bcd2c22f740605cb6b91de507e9440639e47fd1a4a69da31da92cb2601ea1fa",
+      "status": "passed"
+    },
+    {
+      "id": "table",
+      "sourceSha256": "df3832620ad5ab51a50cb68f57da076ec3a6cb4b4ee55054c5c07452c4fee0f5",
+      "renderedSha256": "541c88fd0d0ac7e33b17b2ecb0da38044bbb87c52747083af9420b51f05e508c",
+      "status": "passed"
+    },
+    {
+      "id": "unicode",
+      "sourceSha256": "2586285bf37fa6032c4cb4f6165c389257c6999b63ea450133b26f86d7bdfd85",
+      "renderedSha256": "3ea138d6420ff1bd795cda0be57836d40c5fb9ec596ceec13dab072a8add6268",
+      "status": "passed"
+    },
+    {
+      "id": "contact",
+      "sourceSha256": "91b59931a6422777b37417552fc8a11e498ca9ae9f366a8c450628cc7760f82a",
+      "renderedSha256": "d1a9efb25bb3dc000819841948daa0ca7ad9f0ff253d080f7b59dcb700d0578e",
+      "status": "passed"
+    },
+    {
+      "id": "hidden",
+      "sourceSha256": "17257d88e051594f559c213a7cf2d3947eebeb6ba1463d94d18ec68e4c712add",
+      "renderedSha256": "38eae9e64fea63a5a736b7742c809182bfab47bcc8c26f408a0527fb19d46c08",
+      "status": "passed"
+    },
+    {
+      "id": "scripts",
+      "sourceSha256": "29dd662f2b67302178ba55c8236138359bcc90cefebd2261e57201053056266b",
+      "renderedSha256": "0e07adccf3d764efd3c8f7799540115127f66cb72f47f885335df677827f4b20",
+      "status": "passed"
+    },
+    {
+      "id": "network",
+      "sourceSha256": "32f29c24605e8f737f6a18a0f74ff5eb76980e1b70c812fa5179f636cda8a360",
+      "renderedSha256": "c4bbc9342dae8e89b5b144be63192237fb1ae227f911845ac9d9a618dac4a5eb",
+      "status": "passed"
+    },
+    {
+      "id": "entities",
+      "sourceSha256": "07d991307753312176b5209b3adc12650dc777eeee212d4b0ce338da684fd743",
+      "renderedSha256": "89689647f07ad2d3d4ca0cda6ac4689f8f8605a2c617ff7d5072c1c7af3be2b1",
+      "status": "passed"
+    },
+    {
+      "id": "headings",
+      "sourceSha256": "7546c4be67a0609d89fe8abae1e891e681f8dc74b3a9d9430bd357ccffdabe76",
+      "renderedSha256": "d57ce7080548c35f035522559deb6bf64a6003bf7e824db5fb06f0beae89d1e7",
+      "status": "passed"
+    }
+  ],
+  "earlierRetainedResults": [
+    {
+      "epoch": 1,
+      "state": "request_guard_rejected",
+      "passed": 0,
+      "failed": 10,
+      "reason": "Harness request digest used unnormalized property order; no Docker dispatch"
+    },
+    {
+      "epoch": 2,
+      "state": "functional_partial",
+      "passed": 9,
+      "failed": 1,
+      "reason": "Original candidate external-resource case Chromium SIGXFSZ; file target/root cause not established"
+    }
+  ],
+  "unchangedCaps": {
+    "addedImageBytes": 2097152,
+    "imageBytes": 943718400,
+    "inputBytes": 16384,
+    "memoryBytes": 536870912,
+    "cpus": 2,
+    "pids": 128,
+    "tmpfsBytes": 134217728,
+    "driverMs": 15000,
+    "jobMs": 20000,
+    "network": "none",
+    "hostMounts": 0
+  }
+}
