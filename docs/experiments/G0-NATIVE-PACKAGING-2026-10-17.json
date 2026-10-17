@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "measurement": "source-bundle-feasibility-not-installed-production",
+  "sourceRevision": "43de9704c84aa947c98126b1365a975e0a9080f5",
+  "measuredAt": "2026-10-17T19:49:27.572Z",
+  "sourceDirtyPaths": [
+    "platform/scripts/zero-native-bundle-probe.mjs",
+    "platform/scripts/zero-native-runtime-inventory.mjs"
+  ],
+  "sourceHelperSha256": "90a48926f31c98182b4b9648a65572932cb759eb5dda1f1a0adad23247ec7dda",
+  "provenanceNote": "Dirty paths and exact helper hash recorded after the completed scan; helper remained unchanged between scan and provenance capture. Later helper instrumentation is not a repeated measurement.",
+  "prerequisiteRevision": "43de9704c84aa947c98126b1365a975e0a9080f5",
+  "prerequisiteValidation": "Five targeted installed-closure tests passed in the prerequisite work; not rerun because closure implementation did not change.",
+  "entryPoints": [
+    "apps/api/src/index.ts",
+    "apps/worker/src/index.ts"
+  ],
+  "resolver": "workspace source exports; exact installed third-party dependencies",
+  "buildToolVersion": "0.28.2",
+  "status": "bundle-generated-not-runtime-qualified",
+  "bundleFileBytes": 47275110,
+  "inputFiles": 6627,
+  "errors": [],
+  "warnings": 0,
+  "outputHashes": [
+    {
+      "path": "source-bundle-probe/version-OY6IYYGT.js",
+      "bytes": 121,
+      "sha256": "662ad6430e15f4c90d058d97a4e37c489d30e2fcee7e16df496d61582f366f8f"
+    },
+    {
+      "path": "source-bundle-probe/dist-TVUEXOTB.js",
+      "bytes": 13996,
+      "sha256": "1cf481621ccf9ed30a97258188a74c9401d112855c7e16c0e102ef43f370ebf8"
+    },
+    {
+      "path": "source-bundle-probe/bun-sqlite-dialect-DoOVo4ja-P5TYZ743.js",
+      "bytes": 3375,
+      "sha256": "2452a0f01d2aaae9f2cb46afe7b2bf857bf02950d32a0680f026871f6b54af16"
+    },
+    {
+      "path": "source-bundle-probe/node-sqlite-dialect-4ZPDZLBK.js",
+      "bytes": 3375,
+      "sha256": "2e15d76554d18e5c622dd4af363d5875bd1e0c37fe68d20aa3500c61fea0e397"
+    },
+    {
+      "path": "source-bundle-probe/d1-sqlite-dialect-Cru74LbR-KPGOXTVP.js",
+      "bytes": 5456,
+      "sha256": "89bee092e5475a28ad483b88036179b373806f4c9c907c6599df951a52917f45"
+    },
+    {
+      "path": "source-bundle-probe/kysely-adapter-NLDFU57Q.js",
+      "bytes": 525,
+      "sha256": "0f5e0ad7d020da14d46584ef4bd5f23c5a17885b03c230f8632cfe62633b8d39"
+    },
+    {
+      "path": "source-bundle-probe/openai-codex-responses-5XC4PKPP.js",
+      "bytes": 50902,
+      "sha256": "d86adef7d0a513792c8863900c79261df0cb4cc8300ee4be24f47c10e9a6e1ff"
+    },
+    {
+      "path": "source-bundle-probe/openrouter-images-YI4RNYDG.js",
+      "bytes": 4833,
+      "sha256": "274dd523acccaf653b8e500776d1f19c34dbe84a0caa4a51867b92186a62aaf9"
+    },
+    {
+      "path": "source-bundle-probe/pi-messages-GAHD5Q2H.js",
+      "bytes": 10352,
+      "sha256": "3d4e5cb8519e6b255a18bcd2c794e0dca353ab50ffc58100c2f318edd6d6a5d2"
+    },
+    {
+      "path": "source-bundle-probe/dist-RRKV5JLL.js",
+      "bytes": 192770,
+      "sha256": "877df15560b54956fc36bfb7a4d53621fe6ea1da9268ffe9b812ff4b167f4092"
+    },
+    {
+      "path": "source-bundle-probe/api-5VDJFHL6.js",
+      "bytes": 113,
+      "sha256": "6e10f47a135bfb588a6fad586d53f1e84cce826a151ef5e1ebe163fd5f91c586"
+    },
+    {
+      "path": "source-bundle-probe/undici-ISUPFJHU.js",
+      "bytes": 1063414,
+      "sha256": "00077d74d95b5379c5e7f0450b982bb1943959c8a071e11897fc3d9b589dc2f3"
+    },
+    {
+      "path": "source-bundle-probe/pusher-BJRGR5L5.js",
+      "bytes": 358857,
+      "sha256": "254d359c75db528e96ed3c44817d45ab9a99b49c7733263194ce0125ab47850d"
+    },
+    {
+      "path": "source-bundle-probe/esm-MTSFE52T.js",
+      "bytes": 1082,
+      "sha256": "db985d3869c86cce3359b958ce5f14b28b9d5ca17d5ad1fc07cb0c90924aa4cd"
+    },
+    {
+      "path": "source-bundle-probe/azure-openai-responses-7VNUWZVD.js",
+      "bytes": 10376,
+      "sha256": "4e47275c3b9cfe5b5e0b8e953239322c68b973cae946c9130a280a3ddf2db61b"
+    },
+    {
+      "path": "source-bundle-probe/openai-responses-XY2BUDP6.js",
+      "bytes": 11941,
+      "sha256": "316dc896b2b6af2f2b59f270c5c7f3f3478f7a49a38b835342cb1c0954455647"
+    },
+    {
+      "path": "source-bundle-probe/chunk-JBGJTKMF.js",
+      "bytes": 25170,
+      "sha256": "85e412b89348cc25261181cf69e5cef347fa10786e298130b293ee6cf9f3b11f"
+    },
+    {
+      "path": "source-bundle-probe/dist-2RARTX3I.js",
+      "bytes": 18092,
+      "sha256": "64ba5dc8c13a68861358abb4c64cf7e081ae5d67050220fd036f95184eab9f1e"
+    },
+    {
+      "path": "source-bundle-probe/multipart-parser-CKTWDIEM.js",
+      "bytes": 11466,
+      "sha256": "1d3a724efab4dbba198f70659de01d605f1b78f8b398661f0a7e00fb24186d17"
+    },
+    {
+      "path": "source-bundle-probe/src-ODHV2EZO.js",
+      "bytes": 47137,
+      "sha256": "4ca08d92b610b9eee68c628fc77698d6136b9ca600bc9dfbc0731bea6fd89226"
+    },
+    {
+      "path": "source-bundle-probe/chunk-25KEVV7M.js",
+      "bytes": 206112,
+      "sha256": "1bd72b8e5037d565a18ba2b9e2bff41f186abaf5059e05e3f2ce060c07ff7713"
+    },
+    {
+      "path": "source-bundle-probe/google-generative-ai-GAYCEYV4.js",
+      "bytes": 13920,
+      "sha256": "6d8773cb59e8d2de8deee11733d7bc0c4aaf1a63eac9399cfe1528abb6957ffa"
+    },
+    {
+      "path": "source-bundle-probe/google-vertex-WBWNB7X3.js",
+      "bytes": 16029,
+      "sha256": "8da72bb2803e3a24b472f9cbe894c851a025384063f8e292e00b6f091cfba651"
+    },
+    {
+      "path": "source-bundle-probe/chunk-XZLLSBEL.js",
+      "bytes": 1304618,
+      "sha256": "891156d01274ff3d7abecd118d2779a0a7330dfae6ead2c555406971c60005f3"
+    },
+    {
+      "path": "source-bundle-probe/mistral-conversations-5I6CJ2Y4.js",
+      "bytes": 26394,
+      "sha256": "0a33c159ca1b3bdc9cf025319e21caad9bc1430e007dec51a2f242cd9d9f880f"
+    },
+    {
+      "path": "source-bundle-probe/api.js",
+      "bytes": 1754958,
+      "sha256": "ce2aad3630b7f4001d25f2887b161b667a7a33ff75921403e190aa89383297ed"
+    },
+    {
+      "path": "source-bundle-probe/chunk-XZNXNERS.js",
+      "bytes": 230276,
+      "sha256": "f5bd0baa0e56f423c38abee366ecd1f5faf32bf9525e854c3cf263ea932a946b"
+    },
+    {
+      "path": "source-bundle-probe/chunk-DG22WXBL.js",
+      "bytes": 95489,
+      "sha256": "9c51575dc39cc4e0ca60590b1cb7ac58eb6a0c9259f69a23919d60b49a175b8b"
+    },
+    {
+      "path": "source-bundle-probe/chunk-3JD465Q6.js",
+      "bytes": 416,
+      "sha256": "f099875d2fca33af2e87c330f61ac8b08ed6c9c2c3ab7438f52758ab1f38261f"
+    },
+    {
+      "path": "source-bundle-probe/chunk-YDJADVUE.js",
+      "bytes": 1909,
+      "sha256": "8b32cadafae360d0ec721c5285da738ce6bcb71ff1d2823c6f0d7fb67431c5dc"
+    },
+    {
+      "path": "source-bundle-probe/chunk-G2BBRUC3.js",
+      "bytes": 303098,
+      "sha256": "bc082eeff1b3b405ad246e94daeec8902c0f16f5e9487789a53d9f9b8ca2b67c"
+    },
+    {
+      "path": "source-bundle-probe/worker.js",
+      "bytes": 10592,
+      "sha256": "16ed32c80bb8339ecc9708517c31c9b0d03793de7792ec70ea69de3820a31237"
+    },
+    {
+      "path": "source-bundle-probe/chunk-GNNHQK6T.js",
+      "bytes": 22138527,
+      "sha256": "2bdb51bb733ec16b68718a6bcd07bd715a30b3c7a3f26c690e8a92bc60b0cace"
+    },
+    {
+      "path": "source-bundle-probe/chunk-BNMOZHF6.js",
+      "bytes": 3736,
+      "sha256": "6530e120c78ae446d3dec103adac830af070f83b4fca279521d1bdf2a7379161"
+    },
+    {
+      "path": "source-bundle-probe/chunk-GBRFFBB3.js",
+      "bytes": 762175,
+      "sha256": "0001e6270fa74d0d39b2250f86c40497d5154c642714b9a072e4f760b86d47af"
+    },
+    {
+      "path": "source-bundle-probe/chunk-O6RKMHTN.js",
+      "bytes": 2400,
+      "sha256": "9354ff0bee456c0619aa077c46309105e838d356030b92a2c135a565b5cb6725"
+    },
+    {
+      "path": "source-bundle-probe/chunk-6COGSEQY.js",
+      "bytes": 67942,
+      "sha256": "a5825dc06c79477062da4560d1795fcad5887c23bc553a97d1744d049039fbfe"
+    },
+    {
+      "path": "source-bundle-probe/chunk-GBW3NZ7Y.js",
+      "bytes": 12605885,
+      "sha256": "cbc72e14ef4ad616c3edc46c555cbd8ce93821f6103e4b11801cc9096b48cd44"
+    },
+    {
+      "path": "source-bundle-probe/chunk-D7AP772R.js",
+      "bytes": 37615,
+      "sha256": "8a419a242768a59a9ba5d0da114d76194c41c9180829c9fb6fe7d3793b7958f5"
+    },
+    {
+      "path": "source-bundle-probe/chunk-MW6IY3XG.js",
+      "bytes": 22530,
+      "sha256": "6006d7d146ce5d04848b3c8af30ed7d32d6ca86869073d7420f8270f2a6c7e10"
+    },
+    {
+      "path": "source-bundle-probe/chunk-Z5V5W3TU.js",
+      "bytes": 140635,
+      "sha256": "788ece0560b7404681ae4a62d03c5592a899aa228aa7e94254f3fcdbb949ec06"
+    },
+    {
+      "path": "source-bundle-probe/query_compiler_fast_bg.postgresql-QYJBELPL.js",
+      "bytes": 8064,
+      "sha256": "2fe2dd82d3298c5e8abdc8b8a25dd7e1577f1cc22b06c2d08af709c58d0228cd"
+    },
+    {
+      "path": "source-bundle-probe/query_compiler_fast_bg.postgresql.wasm-base64-5W5H3MRO.js",
+      "bytes": 4583298,
+      "sha256": "8edd3b7988168e8c502a6c984a44b4cbb41787b7fb102b59f2b1e6585d339848"
+    },
+    {
+      "path": "source-bundle-probe/openai-completions-H4LQOBVL.js",
+      "bytes": 49313,
+      "sha256": "6fbf93ba442b3481bc0cdbdcafac12bc15494cb3ec10a2ba3489afed4ca3525b"
+    },
+    {
+      "path": "source-bundle-probe/chunk-V5KXRSNX.js",
+      "bytes": 558,
+      "sha256": "cd897f5951f6393fee2c4940591367a31b332985dd3315687addef61c47956e9"
+    },
+    {
+      "path": "source-bundle-probe/chunk-ZBFQINUV.js",
+      "bytes": 341277,
+      "sha256": "61927f55f01dd172c9c5fc467fc582fd23229afe379ccc6783f57c506055722c"
+    },
+    {
+      "path": "source-bundle-probe/chunk-44GCHOZL.js",
+      "bytes": 2999,
+      "sha256": "8a88180d800d82f1f5bb2cde0c64494e8179651b4cb98d4c97b5de5d40c23daa"
+    },
+    {
+      "path": "source-bundle-probe/chunk-5DEMYLHZ.js",
+      "bytes": 689,
+      "sha256": "538cba470819c854cd9cde6f79bc40d9b5e3ab5cf9f643a48072f3323214d914"
+    },
+    {
+      "path": "source-bundle-probe/node-5VQWUKSC.js",
+      "bytes": 209,
+      "sha256": "f085d6dcfa06c125f7b0afaa40d36b400935be3eb70612a43fdf76e0c98ac4cf"
+    },
+    {
+      "path": "source-bundle-probe/node-23C22DJB.js",
+      "bytes": 87847,
+      "sha256": "92bfd62494aa418738301111bf001e6050b52a1b473cb83f4408ac2327140bde"
+    },
+    {
+      "path": "source-bundle-probe/chunk-TEZVGOA5.js",
+      "bytes": 447,
+      "sha256": "ab0ced96da149f940e441eca0d6aa4ad063455a63f7b313d09bfddf6fff7295d"
+    },
+    {
+      "path": "source-bundle-probe/anthropic-messages-7TJE4UN4.js",
+      "bytes": 40706,
+      "sha256": "1412815fd21a2ab998f7a822b500c6daa93fb391848267f89fdc2454cd6b2ff8"
+    },
+    {
+      "path": "source-bundle-probe/chunk-7I7OAT4O.js",
+      "bytes": 1058,
+      "sha256": "9f8824b95169ba7f46912d05f128f912115559b56a8bca2591c0a85a85106594"
+    },
+    {
+      "path": "source-bundle-probe/chunk-W2ABULUC.js",
+      "bytes": 3256,
+      "sha256": "1eaa28b61b679865394e4fb33adcf2b8bf996fd0a8f42b5357b6444907729d44"
+    },
+    {
+      "path": "source-bundle-probe/chunk-QXIZYOD7.js",
+      "bytes": 21191,
+      "sha256": "3808423ab4633e7ab2a97547dcfecb23e51f7e71728e8c82d0ce563a78a3aa54"
+    },
+    {
+      "path": "source-bundle-probe/chunk-CAPRHRZQ.js",
+      "bytes": 383,
+      "sha256": "58cbaa81c5350e5bff5891e7d50b49498f03d0ba132f623d8b317b7379223cdd"
+    },
+    {
+      "path": "source-bundle-probe/chunk-LE4A33KD.js",
+      "bytes": 685,
+      "sha256": "cd7be44734ed3362ddacd29dbb66076efe0d1bd5a330dac47b07c4ed371b81ad"
+    },
+    {
+      "path": "source-bundle-probe/chunk-NTU7IWA5.js",
+      "bytes": 1117,
+      "sha256": "20eeecf923050507e139baf39f66df0a30b5e526a3198bf01d7176436a244efa"
+    },
+    {
+      "path": "source-bundle-probe/chunk-W7QVQGD2.js",
+      "bytes": 11980,
+      "sha256": "a2d93880ece165b12583a7ff1cf01799e036b6ff43198b4f99dc3c7f9cf9660c"
+    },
+    {
+      "path": "source-bundle-probe/chunk-RSVSXBDE.js",
+      "bytes": 40179,
+      "sha256": "6a4b40578bd9140c0dcaa2c8c40e5aced9873e6e08c2cac0c57366c434d7132b"
+    },
+    {
+      "path": "source-bundle-probe/chunk-E6BMWMK2.js",
+      "bytes": 3690,
+      "sha256": "7ec2cfb466b646be295653ba11e3fa9bcf0b189c6f14408c690e38c71e1b8c53"
+    },
+    {
+      "path": "source-bundle-probe/chunk-7M6ZQWGN.js",
+      "bytes": 495307,
+      "sha256": "527ed308905fb98f15a2797911ceb393e7b63ef6b522b7d0793d15eca977f134"
+    },
+    {
+      "path": "source-bundle-probe/chunk-75QCMCYK.js",
+      "bytes": 2248,
+      "sha256": "d89fdea2b08961bb51a1a9f044b7c552bfa5c901aee957300ca0a31e0585196c"
+    }
+  ],
+  "runtimeQualified": false,
+  "installedProductionBytes": null,
+  "physicalDedupBytes": null,
+  "priorAttempts": [
+    {
+      "status": "failed",
+      "phase": "default installed-link resolution",
+      "cause": "Worker importer has no installed workspace dependency directory; declared workspace imports could not resolve.",
+      "retained": true
+    },
+    {
+      "status": "host-launch-failed",
+      "phase": "source-mapped scan startup",
+      "errorClass": "System.OutOfMemoryException",
+      "exitCode": -2146232797,
+      "probeStarted": "unknown; no probe output",
+      "retained": true
+    }
+  ],
+  "outstandingRuntimeRequirements": [
+    "required direct imports resolve without unrelated store fallback",
+    "preserve graphile-worker migrations and native/dynamic package closures",
+    "preserve generated Prisma runtime/WASM and canonical migrations",
+    "preserve reviewed d3-dsv source and pinned lock at qualified runtime paths",
+    "bundled operator policy protects actual package root",
+    "explicit private environment/configuration policy outside package",
+    "compile and serve existing shared web UI",
+    "qualify API/worker startup, existing-authority jobs, verifier use and restart",
+    "measure whole install including images, Docker, initialized DB/WAL and bounded data"
+  ],
+  "changesAfterMeasurement": "Only source provenance instrumentation added to the measurement helpers; syntax checked. No runtime entry, lockfile, compose or application changes."
+}
