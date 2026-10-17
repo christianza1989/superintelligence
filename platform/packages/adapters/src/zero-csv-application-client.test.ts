@@ -59,6 +59,33 @@ async function errorCode(operation: Promise<unknown>, code: string) {
 }
 
 describe("bounded authenticated CSV application client", () => {
+  it("reads current freshness separately and rejects contradictory or foreign snapshot evidence", async () => {
+    const evidence = {
+      jobId, artifactId: "receipt_fixture", revision: 2, receiptSha256: sha256,
+      verifiedSnapshotSha256: sha256, currentSnapshotSha256: sha256,
+      state: "unchanged", checkedAt: new Date().toISOString(),
+    };
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(response(evidence));
+    const client = createZeroCsvApplicationClient(binding(), { fetch });
+    expect(await client.freshness(jobId)).toEqual(evidence);
+    expect(fetch.mock.calls[0]?.[0].toString()).toMatch(/\/jobs\/[^/]+\/freshness$/u);
+    expect(fetch.mock.calls[0]?.[1]?.method).toBe("GET");
+    for (const patch of [
+      { state: "changed" },
+      { currentSnapshotSha256: "b".repeat(64) },
+      { jobId: "22222222-2222-4222-8222-222222222222" },
+      { projectRoot: "/private" },
+      { checkedAt: "2026-10-17T00:00:00+99:99" },
+    ]) {
+      fetch.mockResolvedValueOnce(response({ ...evidence, ...patch }));
+      await errorCode(client.freshness(jobId), "invalid_response");
+    }
+    fetch.mockResolvedValueOnce(response({ ...evidence, currentSnapshotSha256: "b".repeat(64), state: "changed" }));
+    expect((await client.freshness(jobId)).state).toBe("changed");
+    const calls = fetch.mock.calls.length;
+    await errorCode(client.freshness("../foreign"), "invalid_request");
+    expect(fetch).toHaveBeenCalledTimes(calls);
+  });
   it("submits verification IDs only and reads either trusted stored job profile", async () => {
     const calls: { url: string; body: unknown }[] = [];
     const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(async (url, options) => {

@@ -50,6 +50,11 @@ describe("optional CSV MCP application boundary", () => {
         revision: 2,
         sha256: hash,
       })),
+      freshness: vi.fn<ZeroCsvApplicationClient["freshness"]>(async () => ({
+        jobId, artifactId: terminal.artifactId, revision: 2, receiptSha256: hash,
+        verifiedSnapshotSha256: hash, currentSnapshotSha256: hash, state: "unchanged",
+        checkedAt: new Date().toISOString(),
+      })),
       cancel: vi.fn<ZeroCsvApplicationClient["cancel"]>(async () => terminal),
       artifactPage: vi.fn<ZeroCsvApplicationClient["artifactPage"]>(async (_id, page) => {
         const bytes = Buffer.alloc(page?.limit ?? 8192, 65);
@@ -91,6 +96,7 @@ describe("optional CSV MCP application boundary", () => {
       "zero_job",
       "zero_artifact",
       "zero_cancel",
+      "zero_freshness",
       "zero_verify",
     ]);
     for (const tool of tools) {
@@ -117,6 +123,18 @@ describe("optional CSV MCP application boundary", () => {
     });
     const { profile: _profile, ...expected } = args;
     expect(api.prepare).toHaveBeenCalledWith(expected);
+  });
+  it("checks current freshness using only an authorized verification job ID", async () => {
+    expect((await call("zero_freshness", { jobId })).structuredContent).toMatchObject({
+      jobId, receiptSha256: hash, state: "unchanged",
+    });
+    expect(api.freshness).toHaveBeenCalledWith(jobId);
+    expect((await call("zero_freshness", { jobId, projectRoot: "/" })).isError).toBe(true);
+    expect(api.freshness).toHaveBeenCalledTimes(1);
+    vi.mocked(api.freshness).mockRejectedValueOnce(Error("secret-internal-path"));
+    const denied = await call("zero_freshness", { jobId });
+    expect(denied.isError).toBe(true);
+    expect(JSON.stringify(denied)).not.toContain("secret-internal-path");
   });
   it("forwards verification by preparation reference and rejects caller authority", async () => {
     const args = {

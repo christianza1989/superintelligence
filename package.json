@@ -24,7 +24,7 @@
     "build:web": "node scripts/platform.mjs --filter @rakazo/web build",
     "build:site": "node scripts/platform.mjs --filter @rakazo/www build",
     "check:web": "node scripts/platform.mjs --filter @rakazo/web check",
-    "test:foundation": "node scripts/platform.mjs exec vitest run packages/core/src/zero-catalog.test.ts packages/core/src/zero-library-metadata.test.ts packages/adapters/src/zero-tool-selector.test.ts packages/adapters/src/zero-systemone.test.ts packages/adapters/src/zero-model-selector.test.ts packages/adapters/src/zero-repository-selector.test.ts packages/adapters/src/zero-repository-tools.test.ts packages/ui-tokens/src/appearance.test.ts apps/web/src/lib/ui-appearance.test.ts apps/web/src/lib/ui-locale.test.ts packages/adapters/src/pi-runtime-tool-schema.test.ts",
+    "test:foundation": "node scripts/platform.mjs exec vitest run packages/core/src/zero-catalog.test.ts packages/core/src/zero-need-normalization.test.ts packages/core/src/zero-need-development-corpus.test.ts packages/core/src/zero-library-metadata.test.ts packages/adapters/src/zero-tool-selector.test.ts packages/adapters/src/zero-systemone.test.ts packages/adapters/src/zero-model-selector.test.ts packages/adapters/src/zero-repository-selector.test.ts packages/adapters/src/zero-repository-tools.test.ts packages/ui-tokens/src/appearance.test.ts apps/web/src/lib/ui-appearance.test.ts apps/web/src/lib/ui-locale.test.ts packages/adapters/src/pi-runtime-tool-schema.test.ts",
     "db:generate": "node scripts/platform.mjs --filter @rakazo/db generate",
     "catalog:sync": "node platform/scripts/sync-zero-catalog.mjs",
     "init:local": "node scripts/init-local.mjs",

@@ -5,6 +5,7 @@ import type { ZeroCsvApplicationClient } from "./zero-csv-application-client.js"
 import {
   zeroCsvArtifactPageSchema,
   zeroCsvCancelledSchema,
+  zeroCsvFreshnessSchema,
   zeroCsvJobSchema,
   zeroCsvPreparedSchema,
 } from "./zero-csv-application-client.js";
@@ -15,6 +16,7 @@ export const ZERO_MCP_CSV_OPERATIONS = [
   "zero_artifact",
   "zero_cancel",
   "zero_verify",
+  "zero_freshness",
 ] as const;
 const jobId = z.uuid();
 const annotations = {
@@ -106,6 +108,17 @@ export function registerZeroCsvMcpTools(server: McpServer, client: ZeroCsvApplic
       annotations: { ...annotations, readOnlyHint: false },
     },
     ({ jobId }) => result(() => client.cancel(jobId)),
+  );
+  server.registerTool(
+    "zero_freshness",
+    {
+      description:
+        "Compare the current approved five-file project with a completed passing verification snapshot. This bounded read returns current freshness and the immutable receipt hash; it does not execute code or rerun verification. A historical PASS describes its original snapshot. Changed policy, revoked scope or unavailable files reject this check.",
+      inputSchema: z.strictObject({ jobId }),
+      outputSchema: zeroCsvFreshnessSchema,
+      annotations,
+    },
+    ({ jobId }) => result(() => client.freshness(jobId)),
   );
   server.registerTool(
     "zero_verify",

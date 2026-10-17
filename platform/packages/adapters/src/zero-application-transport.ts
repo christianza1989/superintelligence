@@ -34,6 +34,10 @@ const bindingSchema = z
 const errorCodes = [
   "verification_unavailable",
   "verification_preparation_required",
+  "verification_result_required",
+  "verification_policy_changed",
+  "verification_freshness_unavailable",
+  "verification_staging_operator_cleanup_required",
   "routing_profile_unavailable",
   "routing_budget_unavailable",
   "routing_backend_unavailable",

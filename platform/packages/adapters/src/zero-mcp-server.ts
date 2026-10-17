@@ -12,8 +12,8 @@ import {
 import { z } from "zod";
 import { repositorySearchFromTool } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.3.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.3.0";
+export const ZERO_MCP_SERVER_VERSION = "0.4.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.4.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -27,6 +27,7 @@ const csvOperations = [
   "zero_artifact",
   "zero_cancel",
   "zero_verify",
+  "zero_freshness",
 ] as const;
 type ExecutionBackend = "available" | "unavailable" | "blocked" | "unknown";
 type ExecutionProfile = "csv-preparation-only" | "csv-preparation-and-verification";
@@ -110,7 +111,7 @@ const statusOutput = z.strictObject({
   profile: z.enum(["discovery-only", "csv-preparation-only", "csv-preparation-and-verification"]),
   backend: z.enum(["available", "unavailable", "blocked", "unknown"]),
   protocolVersion: z.string().max(64).nullable(),
-  operations: z.array(z.enum([...operations, ...csvOperations])).max(8),
+  operations: z.array(z.enum([...operations, ...csvOperations])).max(operations.length + csvOperations.length),
   catalog: z.strictObject({
     researchDate: z.string().max(32),
     sha256: z.string().regex(/^[a-f0-9]{64}$/u),

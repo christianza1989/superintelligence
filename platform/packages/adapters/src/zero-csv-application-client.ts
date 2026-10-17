@@ -35,6 +35,16 @@ export const zeroCsvStatusSchema = z
   })
   .strict();
 export const zeroCsvPreparedSchema = z.object({ jobId: jobIdSchema, requestDigest: hash }).strict();
+export const zeroCsvFreshnessSchema = z.strictObject({
+  jobId: jobIdSchema,
+  artifactId: id,
+  revision: z.literal(2),
+  receiptSha256: hash,
+  verifiedSnapshotSha256: hash,
+  currentSnapshotSha256: hash,
+  state: z.enum(["unchanged", "changed"]),
+  checkedAt: z.iso.datetime({ offset: true }).refine((value) => Number.isFinite(Date.parse(value))),
+});
 const terminal = {
   jobId: jobIdSchema,
   state: z.enum(["succeeded", "failed", "blocked", "cancelled"]),
@@ -82,6 +92,7 @@ export const zeroCsvPrepareInputSchema = z
 
 export type ZeroCsvStatus = z.infer<typeof zeroCsvStatusSchema>;
 export type ZeroCsvPrepared = z.infer<typeof zeroCsvPreparedSchema>;
+export type ZeroCsvFreshness = z.infer<typeof zeroCsvFreshnessSchema>;
 export type ZeroCsvJob = z.infer<typeof zeroCsvJobSchema>;
 export type ZeroCsvCancelled = z.infer<typeof zeroCsvCancelledSchema>;
 export type ZeroCsvArtifactPage = z.infer<typeof zeroCsvArtifactPageSchema>;
@@ -110,6 +121,7 @@ export interface ZeroCsvApplicationClient {
   prepare(input: ZeroCsvPrepareInput): Promise<ZeroCsvPrepared>;
   verify(input: ZeroCsvVerifyInput): Promise<ZeroCsvPrepared>;
   get(jobId: string): Promise<ZeroCsvJob>;
+  freshness(jobId: string): Promise<ZeroCsvFreshness>;
   cancel(jobId: string): Promise<ZeroCsvCancelled>;
   artifactPage(
     jobId: string,
@@ -180,6 +192,14 @@ export function createZeroCsvApplicationClient(
       if (output.jobId !== jobId) fail("invalid_response");
       return output;
     },
+    async freshness(value) {
+      const jobId = checkedJob(value);
+      const output = await request(`/jobs/${jobId}/freshness`, zeroCsvFreshnessSchema);
+      if (output.jobId !== jobId) fail("invalid_response");
+      if ((output.state === "unchanged") !==
+        (output.currentSnapshotSha256 === output.verifiedSnapshotSha256)) fail("invalid_response");
+      return output;
+    },
     async cancel(value) {
       const jobId = checkedJob(value);
       const output = await request(`/jobs/${jobId}/cancel`, zeroCsvCancelledSchema, {});
@@ -238,6 +258,7 @@ export function createZeroCsvApplicationClientFromFile(
     prepare: async (input) => (await client()).prepare(input),
     verify: async (input) => (await client()).verify(input),
     get: async (jobId) => (await client()).get(jobId),
+    freshness: async (jobId) => (await client()).freshness(jobId),
     cancel: async (jobId) => (await client()).cancel(jobId),
     artifactPage: async (jobId, page) => (await client()).artifactPage(jobId, page),
   };
