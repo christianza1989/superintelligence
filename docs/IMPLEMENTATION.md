@@ -2,6 +2,8 @@
 
 2026-10-16 UTC. **MVP pradėtas, pirmas UI/svetainės pjūvis veikia; pilnas techninis MVP dar nepriimtas.** Šis failas skiria realų įgyvendinimą nuo ankstesnių dizaino maketų ir source tyrimo.
 
+**Aktualumo pastaba 2026-10-17:** žemiau išsaugotos pirmo MVP pjūvio patikros. Vėlesnės Claude kohortos ir atskiri gyvi Jev paruošimai jau atlikti; jų aktualūs faktai yra [SprintDesk](CLAUDE-CALIBRATION.md), [StockDesk](STOCKDESK-CALIBRATION.md) ir [viso projekto analizėje](PROJECT-ANALYSIS-2026-10-17.md). Pastaroji susieja dokumentų teiginius su kodu ir dabartinėmis regresijomis. Produkto workerio Zero selectors, bendro biudžeto ir pilno source/build ciklo integracija tebėra atvira.
+
 ## Priimti įgyvendinimo sprendimai
 
 - Rakazo exact-pin `7d5e64c886da7d556673f99e4923b013315007a9` source adaptuojamas `platform/`, su upstream Apache-2.0 ir notices. Tai tikras produkto kodo pernaudojimas, o ne ekrano perpiešimas nuo nulio.

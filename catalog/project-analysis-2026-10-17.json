@@ -1,0 +1,1100 @@
+{
+  "version": 1,
+  "kind": "repositoryzero_architecture_and_maturity_analysis",
+  "asOfUtc": "2026-10-17T08:59:16.492Z",
+  "sourceCommit": "9728b797ae4a5b599d5b5c5a3486f06546961cf5",
+  "scope": {
+    "trackedFiles": 2221,
+    "trackedBytes": 46393396,
+    "markdownFiles": 101,
+    "markdownBytes": 1759329,
+    "review": "Whole-product architecture, principal execution and selection paths, documentation-to-code consistency, local regression evidence",
+    "notCovered": [
+      "Line-by-line audit of every inherited file",
+      "Fresh review of 757 upstream repositories",
+      "Full security penetration audit",
+      "New live model or paid API races",
+      "Native OS acceptance or a clean-host installation measurement"
+    ]
+  },
+  "catalog": {
+    "records": 796,
+    "sourceAvailableAtSnapshot": 757,
+    "validRevisionPins": 756,
+    "categories": 67,
+    "withCapabilityDescription": 158,
+    "withoutCapabilityDescription": 638,
+    "markedRuntimeTested": 0,
+    "markedLicenseApproved": 0,
+    "interpretation": "Historical source index flags do not erase separate current product/harness test evidence."
+  },
+  "searchProbes": [
+    {
+      "query": "csv",
+      "results": []
+    },
+    {
+      "query": "csv import",
+      "results": []
+    },
+    {
+      "query": "inventory",
+      "results": []
+    },
+    {
+      "query": "warehouse",
+      "results": []
+    },
+    {
+      "query": "sandėlio",
+      "results": []
+    },
+    {
+      "query": "sqlite",
+      "results": [
+        "simonw/sqlite-utils",
+        "sqlite/sqlite",
+        "sqlitebrowser/sqlitebrowser"
+      ]
+    },
+    {
+      "query": "database",
+      "results": []
+    },
+    {
+      "query": "spreadsheet",
+      "results": []
+    },
+    {
+      "query": "tabular data",
+      "results": []
+    },
+    {
+      "query": "agent platform",
+      "results": [
+        "FoundationAgents/OpenManus",
+        "bytedance/UI-TARS-desktop",
+        "eigent-ai/eigent",
+        "elie222/rakazo"
+      ]
+    },
+    {
+      "query": "pdf tables",
+      "results": []
+    },
+    {
+      "query": "docling",
+      "results": [
+        "docling-project/docling"
+      ]
+    },
+    {
+      "query": "honojs/hono",
+      "results": [
+        "honojs/hono"
+      ]
+    }
+  ],
+  "symbolReferences": {
+    "selectToolWithJev": [
+      {
+        "file": "platform/packages/adapters/src/zero-tool-selector.ts",
+        "line": 33,
+        "code": "export async function selectToolWithJev("
+      }
+    ],
+    "selectModelWithJev": [
+      {
+        "file": "platform/packages/adapters/src/zero-model-selector.ts",
+        "line": 66,
+        "code": "export async function selectModelWithJev("
+      }
+    ],
+    "selectRepositoryWithJev": [
+      {
+        "file": "platform/packages/adapters/src/zero-repository-selector.ts",
+        "line": 48,
+        "code": "export async function selectRepositoryWithJev("
+      },
+      {
+        "file": "platform/scripts/verify-jev-repository.mjs",
+        "line": 6,
+        "code": "import { selectRepositoryWithJev } from \"../packages/adapters/src/zero-repository-selector.ts\";"
+      },
+      {
+        "file": "platform/scripts/verify-jev-repository.mjs",
+        "line": 133,
+        "code": "const result = await selectRepositoryWithJev("
+      }
+    ],
+    "reserveBudgetInvocation": [
+      {
+        "file": "platform/packages/db/src/zero-budget.ts",
+        "line": 112,
+        "code": "export async function reserveBudgetInvocation("
+      },
+      {
+        "file": "platform/scripts/verify-jev-repository.mjs",
+        "line": 8,
+        "code": "import { createBudgetAllocation, reserveBudgetInvocation } from \"../packages/db/src/zero-budget.ts\";"
+      },
+      {
+        "file": "platform/scripts/verify-jev-repository.mjs",
+        "line": 145,
+        "code": "reserveBudgetInvocation(pool, {"
+      }
+    ]
+  },
+  "ci": {
+    "rootWorkflows": [],
+    "nestedReferenceWorkflows": [
+      "platform/.github/workflows/ci.yml",
+      "platform/.github/workflows/computer-replay.yml",
+      "platform/.github/workflows/desktop-macos-screenshot.yml",
+      "platform/.github/workflows/mobile-android-screenshots.yml",
+      "platform/.github/workflows/model-catalog-bump.yml",
+      "platform/.github/workflows/nightly-verification.yml",
+      "platform/.github/workflows/playwright.yml",
+      "platform/.github/workflows/publish-playwright-report.yml",
+      "platform/.github/workflows/publish-server-image.yml",
+      "platform/.github/workflows/release-android-apk.yml",
+      "platform/.github/workflows/release-desktop.yml",
+      "platform/.github/workflows/topology-verification.yml"
+    ],
+    "combinedStatusRecordsAtSnapshot": 0,
+    "combinedStatusQueryScope": "Legacy commit statuses only, not a complete inventory of all possible external checks."
+  },
+  "checks": {
+    "foundation": {
+      "command": "npm run test:foundation",
+      "status": "passed",
+      "tests": 98,
+      "files": 10,
+      "initialAttempt": "85 tests passed; one suite failed to load because generated Prisma client was absent",
+      "recovery": "npm run db:generate, then the same command passed; no source modification"
+    },
+    "cliAndLabOffline": {
+      "command": "node scripts/platform.mjs exec tsx --test scripts/zero-claude-cli.test.mjs scripts/zero-codex-cli.test.mjs scripts/zero-lab-run.test.mjs scripts/zero-lab-cohort.test.mjs scripts/zero-lab-compare.test.mjs scripts/zero-lab-acceptance.test.mjs scripts/zero-lab-context.test.mjs scripts/zero-lab-prepare.test.mjs scripts/zero-lab-reuse.test.mjs scripts/zero-stockdesk.test.mjs",
+      "status": "passed",
+      "tests": 120,
+      "passed": 119,
+      "failed": 0,
+      "skipped": 1,
+      "skipReason": "real StockDesk Docker controls are opt-in",
+      "testFiles": [
+        "scripts/zero-claude-cli.test.mjs",
+        "scripts/zero-codex-cli.test.mjs",
+        "scripts/zero-lab-run.test.mjs",
+        "scripts/zero-lab-cohort.test.mjs",
+        "scripts/zero-lab-compare.test.mjs",
+        "scripts/zero-lab-acceptance.test.mjs",
+        "scripts/zero-lab-context.test.mjs",
+        "scripts/zero-lab-prepare.test.mjs",
+        "scripts/zero-lab-reuse.test.mjs",
+        "scripts/zero-stockdesk.test.mjs"
+      ]
+    },
+    "contextOffline": {
+      "command": "node scripts/platform.mjs exec vitest run packages/testkit/src/history-context.test.ts packages/adapters/src/context-selection.test.ts packages/adapters/src/runtime-context.test.ts",
+      "status": "passed",
+      "tests": 49,
+      "files": 3,
+      "provider": "loopback emulator or deterministic calls"
+    },
+    "webTypecheck": {
+      "command": "npm run check:web",
+      "status": "passed"
+    },
+    "adaptersTypecheck": {
+      "command": "node scripts/platform.mjs --filter @rakazo/adapters check",
+      "status": "passed"
+    },
+    "webBuild": {
+      "command": "npm run build:web",
+      "status": "passed",
+      "warnings": [
+        "main minified JS chunk 770.86 kB; build warning is not a measured runtime regression"
+      ]
+    },
+    "siteBuild": {
+      "command": "npm run build:site",
+      "status": "passed",
+      "staticPages": 7
+    },
+    "markdownRelativeTargets": {
+      "broken": [],
+      "scope": "Targets only; external URLs, opaque skill references and anchors excluded"
+    },
+    "newPaidModelCalls": 0,
+    "currentDatabaseProfile": "not configured in this checkout; earlier focused PostgreSQL evidence is historical, not rerun here"
+  },
+  "priorEvidence": {
+    "stockdeskRevision2Docker": {
+      "sourceRef": "catalog/stockdesk-checks-2026-10-17.json",
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "scope": "Synthetic grader controls checked before this architecture pass, not model app quality"
+    },
+    "postgres": {
+      "sourceRefs": [
+        "docs/BUDGET-FOUNDATION.md",
+        "docs/reviews/mvp-feasibility-review.md"
+      ],
+      "focusedBudgetCases": 6,
+      "focusedExecutorCases": 4,
+      "rerunForThisAnalysis": false
+    }
+  },
+  "reuseCompatibility": {
+    "availableCsvDependency": {
+      "name": "d3-dsv",
+      "version": "3.0.1",
+      "declaredIn": [
+        "platform/packages/core/package.json",
+        "platform/packages/adapters/package.json"
+      ],
+      "usedBy": "platform/packages/core/src/plot/plot-spec.ts",
+      "stockdeskPackIncludesIt": false
+    },
+    "strictCsvProbe": {
+      "method": "csvParseRows directly from installed pinned d3-dsv source",
+      "cases": [
+        {
+          "input": "\"open",
+          "rejected": false
+        },
+        {
+          "input": "a,b\"c",
+          "rejected": false
+        },
+        {
+          "input": "\"a\"tail,b",
+          "rejected": false
+        }
+      ],
+      "interpretation": "Parser is permissive on these malformed inputs; not a drop-in for StockDesk strict rejection without additional validation."
+    }
+  },
+  "documentation": [
+    {
+      "path": "MVP-ROADMAP.md",
+      "sha256": "a1103a6ecc59b8c1604c252de9532a1078fd478db1662bdb7829362b1fb926c4",
+      "bytes": 11531,
+      "title": "RepositoryZero MVP roadmapas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "PLAN.md",
+      "sha256": "b7cf90d589b691977e9960c18be002a07d1b3bfe23c796c5ca8bf66caa8caa49",
+      "bytes": 36790,
+      "title": "Projekto planas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "README.md",
+      "sha256": "866c071c5d83e845bc375d047a61780e3de66c6a3cf198b9bfb58b5f8372b609",
+      "bytes": 8617,
+      "title": "RepositoryZero",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "08c177f98482c7c885c28ccd7374fa2f04b5c970b9992930b6ce226d3710e0a8",
+      "bytes": 56702,
+      "title": "Roadmap su checkboxais ir priėmimo vartais",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/PROMPT.md",
+      "sha256": "2d2c92612489e8345bd22b5236152350d1df0d0323998c1ad69e4ba471287f31",
+      "bytes": 3786,
+      "title": "SprintDesk",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/PROMPT.v2.md",
+      "sha256": "fe9e89870a5751af605c397c305e4fc388d4abf084b8821f519c46c4de3929eb",
+      "bytes": 4098,
+      "title": "SprintDesk",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/sprintdesk-v1/README.md",
+      "sha256": "ddfe422930ae5d1fb03ea82dbf5e8e0a1d46cb47465c9e985cdf3fbda617a4a4",
+      "bytes": 2579,
+      "title": "Pirmas porinis bandymas: SprintDesk",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/PROMPT.md",
+      "sha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+      "bytes": 9556,
+      "title": "StockDesk",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/PROMPT.v2.md",
+      "sha256": "6179cdcc2a24f4b6f83ee3384bcd335a0bf9ae7f13452f0e69ead20522ec98a1",
+      "bytes": 10102,
+      "title": "StockDesk",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "benchmarks/stockdesk-v1/README.md",
+      "sha256": "31c91a4658abae4e396aedfe73b7c018f2eac3ed531a785b57650c19bc3aebee",
+      "bytes": 12654,
+      "title": "StockDesk: matched Haiku 5.5 / high experiment",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/AGENT-CAPABILITIES.md",
+      "sha256": "a7f9fb5ddbafade6c65eef5fe883bbef5a40df345fe0a6347db3e3d4f7cc5f20",
+      "bytes": 12877,
+      "title": "Kaip agentai randa ir naudoja įrankius bei skills",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/AGENT-IDENTITY.md",
+      "sha256": "91d67ce52a42d04dbad80d6178e2e0a371507bcbc05220f511c91385cb84492a",
+      "bytes": 3841,
+      "title": "Oficiali RepositoryZero agentų tapatybė",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/AUTONOMY-AND-UPDATES.md",
+      "sha256": "4bac0ff4fb4750e96382dcc4f808bd625d010c4797f61a12720160d27117e069",
+      "bytes": 33385,
+      "title": "Autonominis projektas, modulių priėmimas ir automatiniai atnaujinimai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/BUDGET-FOUNDATION.md",
+      "sha256": "5651ab33e95b5cc27b6907e572f0967311ae7abc243256603c625e08ccb711a6",
+      "bytes": 4231,
+      "title": "Pirmas patvaraus biudžeto pjūvis",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CALIBRATION.md",
+      "sha256": "a2467ee3bdbff9d1e613d62d78948ba9f1455bca8e451f9c4670b73aa705d160",
+      "bytes": 9896,
+      "title": "Kokybės, greičio ir sąnaudų kalibravimas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CAPABILITIES.md",
+      "sha256": "66a74f477d686363b2868ce5e3cb72256eb4b9876963775b026b3ba084ae9b53",
+      "bytes": 8448,
+      "title": "Gebėjimų, etapų ir dubliavimosi žemėlapis",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CLAUDE-CALIBRATION.md",
+      "sha256": "03279ffd090896a41404583e9cea7cacd0076e7a574218f7b3c6dacc0c5dff78",
+      "bytes": 21133,
+      "title": "Claude prenumeratos kalibravimas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CLOUD-WORKSPACES.md",
+      "sha256": "f35b18366e4809f4ec627b7d45ec3ab544817444205ab6fcb96b716f46067f80",
+      "bytes": 3287,
+      "title": "Projektai debesyje ir Google Drive",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/COMMUNITY-QUALITY.md",
+      "sha256": "797f0221343572e3cfe5c723fd88690c9b13edad0ba6ce7b60a47a8ea00430f0",
+      "bytes": 13834,
+      "title": "Kaip realus naudojimas pildo katalogo kokybės įrodymus",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CONTRACTS.md",
+      "sha256": "a41a0571c858e5f1aaa5ee73b3e5753bebb40bdcc8bf81f5d50b17b78866a670",
+      "bytes": 13583,
+      "title": "Modulių ir vykdymo kontraktai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/CONTRIBUTOR-PORTAL.md",
+      "sha256": "0c767a81d2f259d762742b3c20425bd9264beea9eabaeae4dda5b5e0e5e31d2e",
+      "bytes": 11307,
+      "title": "GitHub prisijungimas ir repo pateikimo portalas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/DECISIONS.md",
+      "sha256": "90ddf86e77afa92a7a16ee62a0b80e649e3ecf84c99ed4502d2d8a6729f4ec73",
+      "bytes": 14131,
+      "title": "Bendrų sprendimų žurnalas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/GROWTH-AND-OUTREACH.md",
+      "sha256": "ab404c54c3ab20516217312c6969241f5c42d01a24775d6b23ce8af0822d244c",
+      "bytes": 21321,
+      "title": "RepositoryZero augimas: integracijų kūrėjai, ženkleliai ir YouTube",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/HOSTED-AND-BYOK.md",
+      "sha256": "47c7807de34c8f5a3182b02e445d29fcab180ef59efaf59492b556ed84026826",
+      "bytes": 5057,
+      "title": "Web, desktop, savo jungtys ir mokami kreditai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/IMPLEMENTATION.md",
+      "sha256": "0b923fb3a25d2dca311943e0560e0414ffd7c5d3713c2f6e82e97079867eb7ed",
+      "bytes": 11516,
+      "title": "Pirmo MVP įgyvendinimo būsena",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/INTAKE-AND-BUDGETS.md",
+      "sha256": "643994ba476a44efc298f28c5ae743d8cc744ebed39b531ed854e25e7400ecb5",
+      "bytes": 13329,
+      "title": "Daug nuorodų, ribotas AI biudžetas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/JEV-APPLICATIONS.md",
+      "sha256": "4116c945f38ee9778a39dc054e6778bb347960da20ddb08458be755dcf31fc9d",
+      "bytes": 11491,
+      "title": "Jev pritaikymas RepositoryZero",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/JEV-LAB.md",
+      "sha256": "1af3131eced9c3a65f5caa39271f9b30e238651725a0aad3c2101c3689fc501a",
+      "bytes": 5395,
+      "title": "Jev ir tikras HTTP bibliotekos pernaudojimas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/LANGUAGES.md",
+      "sha256": "8cfb0637d9252a6dfde8b01240176c33a32a8dcb903701fecac15c649de859bc",
+      "bytes": 4793,
+      "title": "Kalbos nuo pirmo MVP",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/LEAN-CALIBRATION.md",
+      "sha256": "99f0b3de91d0cd909ca8386eb324dd4021aed18c6dc7a594863058ecc533d597",
+      "bytes": 3873,
+      "title": "Lean CLI calibration protocol",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/LOCAL-LAB.md",
+      "sha256": "372b6d112d5595623d74cb0d3bcf2aa8a3d6e1589186af9ca878359ae19b91df",
+      "bytes": 12820,
+      "title": "Vietinis Zero Lab su Claude prenumerata",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/MODELS-AND-TOOLS.md",
+      "sha256": "c847ccd1184b7558cfc4132e6974b1e2e9bac8b9e1c43f6974742dd5065c200c",
+      "bytes": 11703,
+      "title": "Modelių prisijungimai, OpenCode ir treg.to",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/MODULE-SELECTION.md",
+      "sha256": "c6fbe38c3a6be34724772eef6decef853ee7c8955d7127243be4bec57e72c603",
+      "bytes": 14703,
+      "title": "Panašių modulių, dublių ir alternatyvų atranka",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/ORIGIN-AND-ATTRIBUTION.md",
+      "sha256": "c88f7736a23d69472450716406f4b9049f776c49112345edfeb1161b627a7177",
+      "bytes": 5854,
+      "title": "Projekto kilmė ir autorystės įrodymai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/OUTREACH-TEMPLATES.md",
+      "sha256": "27e9adb3e90bcd4780493f9f286d3da4392a1f0a3f9a68387412c426e9861674",
+      "bytes": 6363,
+      "title": "RepositoryZero outreach šablonai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/PAIRED-BENCHMARK.md",
+      "sha256": "e97d4e773ad7e234fe0ce0c926d9f5e3f6025c4d7aef60d5f511c4a6343f63af",
+      "bytes": 5452,
+      "title": "Tas pats promptas: coding CLI ir Zero katalogo kontekstas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/PROJECT-CREATION.md",
+      "sha256": "28c15d4d327e10f3df85519c0921bb1459cc13eeadb7fa37ef0d786e96ed0cc3",
+      "bytes": 11665,
+      "title": "Kaip iš žmogaus prašymo kuriamas naujas projektas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/PROJECT-V1.md",
+      "sha256": "d96d595e6c224f7a96b57720beb06effd40bfee150077f6b26dca86a649edc51",
+      "bytes": 27948,
+      "title": "RepositoryZero — projekto V1 dokumentacija",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/PUBLIC-WEBSITE.md",
+      "sha256": "a2eebc80daf1eb5b1bdb161adf429d74759d54db8ab7f46b23f24188e89cba97",
+      "bytes": 16498,
+      "title": "Oficiali svetainė ir projekto parama nuo pradžios",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/ROUTER-EVALUATION.md",
+      "sha256": "e69c9debd98b1b4c126a77db4a19885bdfc2253e45f008bee97262a69a3e9a0f",
+      "bytes": 14132,
+      "title": "MVP Jev/OpenRouter routeris ir vėlesnis Laya profilis",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/SCENARIOS.md",
+      "sha256": "1a0e15bed9e63dbae8d180c70a05c1d67574e550ec73d859b4f4aa978ca1022e",
+      "bytes": 14997,
+      "title": "Dešimt projektuojamų užduočių",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/SELF-REUSE.md",
+      "sha256": "5568e8be00e2f93901a2ac15779db80c61cc8c76da3694db4ce8ac84174638a5",
+      "bytes": 6535,
+      "title": "RepositoryZero kaip savo reuse principo pavyzdys",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/STOCKDESK-CALIBRATION.md",
+      "sha256": "474f2a21d4ed1e25a480055c9e85eae0de0fe2201b21920808336917cab02d54",
+      "bytes": 8813,
+      "title": "StockDesk: Haiku 5.5 / high calibration",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/TOOL-DIRECTORY.md",
+      "sha256": "64e3edb85f4eeb87008819f26e9462b349d8335edbe5814f6e66e2c42bb43c90",
+      "bytes": 12522,
+      "title": "AI naudojamų įrankių katalogas, kategorijos ir paieška",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/UI-FOUNDATIONS.md",
+      "sha256": "79fdbbce7b499a6fc3dcf8aa18a1e18a5203eff5a36f1c45d63ca336d690ef71",
+      "bytes": 8769,
+      "title": "Atviras UI pagrindas ir Rakazo / OpenCode hibridas",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/UI-WORKSPACE.md",
+      "sha256": "6167c473caefd770fa85c31cd574d088376cf36f1a8e0e799ad7344773d515bd",
+      "bytes": 8712,
+      "title": "RepositoryZero darbo erdvė",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/USAGE-STATISTICS.md",
+      "sha256": "526814c2e8358994eb591af2a78770182418e88e43fad057c6b37f1e50d5eec4",
+      "bytes": 9305,
+      "title": "Vietinė ir bendra įrankių naudojimo statistika",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "sha256": "a91c5514ed567bb3a1e48e5d17235dc9ff555238a5d45f30d791c3fbe4b82a7d",
+      "bytes": 13446,
+      "title": "Vertinimas, licencijos, kaina ir įrodymų kartelė",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/VIDEO-HUB.md",
+      "sha256": "39b94da6802624f48ad7ae2d33d3a9fe95a93073ca5be9fdf999e4c709d9c5a6",
+      "bytes": 18029,
+      "title": "RepositoryZero Video Hub",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/WHY-REPOZERO.md",
+      "sha256": "a5498b9f2abe15bfead122baf3eb782292e75d7c137626b41d79be8d1d642555",
+      "bytes": 9836,
+      "title": "Kodėl verta kurti RepoZero",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/ZERO-LAB.md",
+      "sha256": "9421ed2e2b8034d98efc4a72259b38ba8ab9866293b68f86bfdc60106a31f90e",
+      "bytes": 11413,
+      "title": "Zero Lab: daugkartinis kalibravimo modulis",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/research/CANDIDATE-POOL.md",
+      "sha256": "660c34ca4966bb2e8692268cb5697cc9fac67a70f28f382ddcf9d4627ba648e7",
+      "bytes": 107136,
+      "title": "Atviras kandidatų registras",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/research/MEDIA-CANDIDATES.md",
+      "sha256": "27935754dd391e2a29d53d207cbc846b0f4d4a27393bec57d470ac787e32f33a",
+      "bytes": 28981,
+      "title": "Kalbos, garso, vaizdų ir video kandidatų programa",
+      "review": "targeted_read",
+      "detail": "capability baskets and criteria; candidate table sampled"
+    },
+    {
+      "path": "docs/research/README.md",
+      "sha256": "15353a13b4054286895594c1f6af59574728f416e36c2eaa726c6c4b1de27886",
+      "bytes": 15371,
+      "title": "Tyrimas: ciklai, atranka ir įrodymų ribos",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/research/SPECIAL-CANDIDATES.md",
+      "sha256": "b526dd82d718ca4cecd3085b1294f1e8095e92e67b202687ec341b4bfa41b144",
+      "bytes": 5520,
+      "title": "Papildomi kandidatai ir licencijos blokai",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "docs/research/TOP100.md",
+      "sha256": "820c6fee95dab7bf5e024baed5377103ca304d5f5bef2c7b135de31d9b4eca62",
+      "bytes": 374775,
+      "title": "TOP100: suranguota dokumentinė atranka",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/architecture-independent.md",
+      "sha256": "abeebb9e32008ce8eb0259d1bc4fe691ea9821cbef087b22ca5b0d795b474a91",
+      "bytes": 111571,
+      "title": "Nepriklausomas architektūros pasiūlymas ir kritinė peržiūra",
+      "review": "targeted_read",
+      "detail": "section 19 Rakazo architecture and critical boundaries"
+    },
+    {
+      "path": "docs/reviews/autonomy-updates-review.md",
+      "sha256": "f9f1dc9990fe3c93b53b5de33378038353a2a529721e2e3312d7560a716a7ead",
+      "bytes": 33672,
+      "title": "Autonomijos, modulių priėmimo ir atnaujinimų kritinė specifikacija",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/growth-review.md",
+      "sha256": "93824a5833ae5299a6cc5512c8fd8505a05433cb19aadf26dbefe7ebfe29ae76",
+      "bytes": 10907,
+      "title": "RepositoryZero augimo ir outreach nepriklausoma kritinė peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/jev-use-cases-review.md",
+      "sha256": "1bbafb5ac27dd1b98e21fec8d83a8093b670f5635c6ffafc82a79818ecd3c01a",
+      "bytes": 23236,
+      "title": "Jev pritaikymo programavimui ir atrankai kritinė peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/mvp-feasibility-review.md",
+      "sha256": "bd30b9b6fec9cda8bc9bdf56ba750a5bf05d71b1389c13d2d9faa36b528eabe8",
+      "bytes": 14975,
+      "title": "Rakazo vietinio MVP paleidimo peržiūra",
+      "review": "targeted_read",
+      "detail": "runtime/profile, Jev, bootstrap and PostgreSQL proof sections"
+    },
+    {
+      "path": "docs/reviews/provider-auth-review.md",
+      "sha256": "0cb60a12e85b6921e99a4627e938b8c8f57c120d9b02f6aa9af1a3c0e88ff5f8",
+      "bytes": 28127,
+      "title": "Providerių autentifikacijos ir Treg integracijos kritinė peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/router-review.md",
+      "sha256": "c308e8214befe93d31f26221518aa29e47c2a4ba7a8eb5eda2f1e255ce95dee5",
+      "bytes": 22423,
+      "title": "Jev maršrutizavimo: oficialaus API, Pi, OpenCode ir MCP peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/ui-foundation-review.md",
+      "sha256": "1711574d23be4ad5943acf57f0bc513ce4bdb984985ccbd46a539db1c2e99eac",
+      "bytes": 25098,
+      "title": "OpenCode UI pagrindo nepriklausoma šaltinių peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "docs/reviews/video-hub-review.md",
+      "sha256": "5db2af93e26348cc2937d0f093d0fe3ca4b4dd67db05710043b1d4cae164ab91",
+      "bytes": 13248,
+      "title": "Video Hub, GitHub portalo ir intake biudžeto kritinė peržiūra",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/.agents/skills/composio/SKILL.md",
+      "sha256": "48d1fa49983d2543bacd9ec8bd40566740cf3c98d6dbca14f78cab19c4e583b9",
+      "bytes": 5202,
+      "title": "Composio",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/errors.md",
+      "sha256": "6e760fe92170adee0968d24ead200c62d3450fb56607fb05081ccbc12f9f3669",
+      "bytes": 4071,
+      "title": "Errors and provider gotchas",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/for-you.md",
+      "sha256": "feeae12e4c4ffc22b3896b9758231ae04a63439158c578bfc386a390bd67c0ba",
+      "bytes": 4275,
+      "title": "Composio For You",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/.agents/skills/composio/references/platform.md",
+      "sha256": "baa14dd22535f5944be717335d598ac52b02fa9764d99e76c61db6cf80a7a4b3",
+      "bytes": 9238,
+      "title": "Composio Platform",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/.agents/skills/pr-watch/SKILL.md",
+      "sha256": "61c40ba75376c7e4ced89314abeb9e06199f0d4bb0bf91a7c0c504a1faec612d",
+      "bytes": 7321,
+      "title": "Watch a PR to green",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/AGENTS.md",
+      "sha256": "d927bc183e22d9463ed4a19827025358f944bf67bf2b1bbdfa416e889bd62de2",
+      "bytes": 5899,
+      "title": "AGENTS.md",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/CHANGELOG.md",
+      "sha256": "4aa85448a72b28c253316f4504a6cb4d7cf576f1a6bfabc9a9c6bc3eeae22daa",
+      "bytes": 7464,
+      "title": "Changelog",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/CLAUDE.md",
+      "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+      "bytes": 11,
+      "title": null,
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/CONTRIBUTING.md",
+      "sha256": "6a4335b91d61286027a7fce1d33e4b8772ab16b5d3349c4753ce9be6d28e4434",
+      "bytes": 5156,
+      "title": "Contributing to Rakazo",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/README.md",
+      "sha256": "e0ad8c77bba070a9a7ef6f1ad0ad0f167f021bed80419dd1658dd46f30f6746c",
+      "bytes": 12938,
+      "title": "Rakazo",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "platform/SECURITY.md",
+      "sha256": "5e74454d155daf0be92101016cce9d58836f999ef7d0f038906c974cb20b6c93",
+      "bytes": 873,
+      "title": "Security",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/SETUP_PROMPT.md",
+      "sha256": "e12f3e924d062dab364f484b3f37ab2481afd624dea6f93f7f5a4193dcd1a37a",
+      "bytes": 13191,
+      "title": "Set up Rakazo with a coding agent",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/UPSTREAM.md",
+      "sha256": "f9a168b3e061942fa8f0c5082fa5faa21d0d439007aac48922968ba7915c49a5",
+      "bytes": 905,
+      "title": "Rakazo source baseline",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "platform/VISION.md",
+      "sha256": "6891fffde83c0456327215b9d2ebc17e9563224224b9696e909ec6633a0935f8",
+      "bytes": 6159,
+      "title": "Vision",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "platform/apps/desktop/assets/README.md",
+      "sha256": "190fa08eb61d1da632b30fdfbd108e0e51f058c49c0bfbea9726a7760c45ec1e",
+      "bytes": 523,
+      "title": "Desktop icons",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/apps/mobile/e2e/README.md",
+      "sha256": "d97ab637757c05d9848ce70897e3a995b30d16ad51983f4145810a6598b78262",
+      "bytes": 1860,
+      "title": "Mobile emulator smoke test",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/apps/mobile/e2e/ios-screenshots/README.md",
+      "sha256": "79f78b700b50950f0fb22e6c05f9fe5bf1bba31ee8ac7757472c83ea6b937439",
+      "bytes": 1238,
+      "title": "iOS screenshot catalog",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/apps/www/README.md",
+      "sha256": "5c0525491356bbc65910a8ae51d3d005769fe811b93ededf9c3ffa4d2cd383e7",
+      "bytes": 1722,
+      "title": "RepositoryZero website",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/agent-verification.md",
+      "sha256": "0efa5246e1a63e2ffd5b8e77c61b13d53490702cd16b7555021111e10c50263c",
+      "bytes": 21249,
+      "title": "Agent verification",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/ai-data-sharing-review.md",
+      "sha256": "554411136e1aef18c664e58a8999f048c792b21665abe2bdbbf8fabdbdccd393",
+      "bytes": 4777,
+      "title": "Mobile AI data sharing: release and review",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/bot-secrets.md",
+      "sha256": "ad8f97a6d24f9002b2dbbe77c6f52bf79e0b683487a1b704b1c31a4b0d94f78a",
+      "bytes": 9617,
+      "title": "Reusable credentials",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/computer-runtime.md",
+      "sha256": "56108fc883eed59663eb67ba19a88382646076357a7f42f623937228b7657122",
+      "bytes": 18899,
+      "title": "Computer runtime",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/context-and-evals-tasks.md",
+      "sha256": "3b1c9311a0487394c5d48889142ce0023dbc6114091761e8a7a65e1106636703",
+      "bytes": 59874,
+      "title": "Conversation context and model eval tasks",
+      "review": "targeted_read",
+      "detail": "initial completion and later integration evidence, plus structure"
+    },
+    {
+      "path": "platform/docs/desktop-release.md",
+      "sha256": "e28ae59e59d7b14310b2c612cd37c802e571ff72a65b9f379e870faad5819a9c",
+      "bytes": 2014,
+      "title": "Desktop releases",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/evals/history-findings.md",
+      "sha256": "3f58494e44d04a50bb9725f944522bfdad5d80920a77aa670b9e771a46dd6d13",
+      "bytes": 10834,
+      "title": "Conversation context evaluation findings",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/evals/history-retrieval-offline.md",
+      "sha256": "7db0a679dfbe1daea7e3eaa0e219b332eee9f8be7dbc4de325350701e911e260",
+      "bytes": 10579,
+      "title": "Offline original-history and context evidence",
+      "review": "full_primary_read",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/infisical-secrets.md",
+      "sha256": "ea6b66799e1ed5c5c5b6ab7d90868ddfc5f5e811565d9033797f595a4517d9a1",
+      "bytes": 5629,
+      "title": "Optional Infisical secret storage",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/mobile-release.md",
+      "sha256": "0c906cef7354898d8a11ea7f945693debea181ca3bfadec59f48ee4d9c2f81a7",
+      "bytes": 3654,
+      "title": "Mobile builds and store releases",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/performance.md",
+      "sha256": "4ea46dd7bcb7571545ed305584bf8be3cf932a28b057c0b8a33bf1058cb95094",
+      "bytes": 2650,
+      "title": "Desktop performance benchmarks",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/self-host-restricted-network.md",
+      "sha256": "7dde4fa2ee66fb3e7c9c74fcc4c3897635004aff9fab04798b8bea7317f4e40b",
+      "bytes": 5573,
+      "title": "Self-hosting on restricted networks",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/self-host-sandbox-providers.md",
+      "sha256": "7943ca144508f240f744b9a906ae92caddb5c1e63ed1306f752c58fe92d118b8",
+      "bytes": 3097,
+      "title": "Self-host sandbox / computer providers",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/self-host-secrets.md",
+      "sha256": "a36fdb89fb4bd790cf8a013bf73b390b751844b506798fe2429351618f0fd54b",
+      "bytes": 4929,
+      "title": "Self-host secrets checklist",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/self-host.md",
+      "sha256": "4969a7029b456a5433970b984962fc910bada0e0de83640018061b8cf4fc9f9b",
+      "bytes": 52455,
+      "title": "Self-hosting Rakazo",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/self-host/cloud-agents.md",
+      "sha256": "ca9b1a524f5f6032306113d0f1f5018deedfaf65f33e97a5246d119f45700fdf",
+      "bytes": 3425,
+      "title": "Cloud coding agents",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/docs/tool-activity.md",
+      "sha256": "432965139b4131890c32b81f28aba2ef3448c3c04817e805b221ee977f05589d",
+      "bytes": 2192,
+      "title": "Tool activity",
+      "review": "inventory_and_structure",
+      "detail": null
+    },
+    {
+      "path": "platform/packages/ui-tokens/assets/README.md",
+      "sha256": "3ad2c835ce070a174c4f8c71596598fd52644070e78c3c91c8b803d4f9620003",
+      "bytes": 2138,
+      "title": "App icon source",
+      "review": "inventory_and_structure",
+      "detail": null
+    }
+  ],
+  "limitations": [
+    "Regression groups are not generated-application counts",
+    "Read classifications describe this analysis and inherited session context; structure inventory is not a full content audit",
+    "CLI subscription estimates and upstream historical reports are separate from current provider invoices"
+  ],
+  "developmentFootprintBytes": {
+    "nodeModules": 1448807318,
+    "rootCache": 115168379,
+    "git": 24706486,
+    "method": "du -sb on existing development checkout, not clean install or additive shared/exclusive deployment measurement"
+  }
+}

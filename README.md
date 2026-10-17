@@ -7,7 +7,7 @@ git clone --branch main https://github.com/christianza1989/superintelligence.git
 cd superintelligence
 ```
 
-Continue with the [local Claude calibration instructions](docs/LOCAL-LAB.md) or the [MVP setup and implementation status](docs/IMPLEMENTATION.md).
+Continue with the [local Claude calibration instructions](docs/LOCAL-LAB.md), [MVP setup and implementation status](docs/IMPLEMENTATION.md), or the [whole-project architecture and readiness analysis](docs/PROJECT-ANALYSIS-2026-10-17.md).
 
 A proposed open agent workspace that starts with software people have already built and tested, selects a suitable foundation and components, and builds and verifies what is missing.
 
@@ -21,11 +21,11 @@ The first product will finish a small set of useful tasks, preserve progress aft
 
 The broader plan includes a localhost product, later Windows/macOS/Linux packages, automatic signed updates, upstream module maintenance, and a narrow unattended PR/release process. Model providers use their supported authentication methods; **treg.to is a required planned tool gateway integration**. These are requirements awaiting implementation and tests.
 
-The selected MVP direction includes **Jev source/tool selection through the owner's OpenRouter account**, **the official Claude CLI subscription with Sonnet 5.5/high for the current coding experiments**, and a UI localization structure for **English, Russian, Spanish, Simplified Chinese, Lithuanian, German, French, and Brazilian Portuguese**. Core technical guides start in English/Russian; other locales have a scoped quickstart. Local Laya remains a later option. Public bulk submission screening starts with a zero paid-model budget; it does not inherit the MVP routing budget.
+The selected MVP direction includes **Jev source/tool selection through the owner's OpenRouter account**, **the official Claude CLI subscription, with matched Haiku 5.5/high for the current StockDesk experiments**, and a UI localization structure for **English, Russian, Spanish, Simplified Chinese, Lithuanian, German, French, and Brazilian Portuguese**. Core technical guides start in English/Russian; other locales have a scoped quickstart. Local Laya remains a later option. Public bulk submission screening starts with a zero paid-model budget; it does not inherit the MVP routing budget.
 
 An official website is planned from the start, with automatically maintained roadmap, changelog, research and release facts, contribution pages, and a donation section using an owner-approved payment provider. Its public status will reflect actual evidence. No site or payment account has been deployed yet.
 
-One imported Claude CLI calibration pair passed API, SQLite restart and desktop/mobile keyboard checks on both generated applications; both artifacts were revalidated after integration. The result measures static Zero catalog context, with one task and uncontrolled provider cache. Full RepositoryZero execution, Jev and Auto are separate open gates. [Measured stages and limits](docs/CLAUDE-CALIBRATION.md).
+Claude CLI calibration now includes repeated SprintDesk configurations and two exploratory StockDesk v1 cohorts. The first StockDesk A/C pair passed both generated applications; the later B/C pair includes a preserved filter failure under an ambiguous v1 requirement. StockDesk v2 prompt and grader controls are ready for a new epoch. These CLI experiments do not qualify the full RepositoryZero runtime or Auto. [SprintDesk results](docs/CLAUDE-CALIBRATION.md), [StockDesk results](docs/STOCKDESK-CALIBRATION.md), [architecture and integration gaps](docs/PROJECT-ANALYSIS-2026-10-17.md).
 
 Research currently covers **806 checked GitHub addresses and 757 unique accessible repositories**, including a 197-entry media candidate register. Discovery has no candidate-count ceiling. The original 100-project comparison remains a historical sample; expanded candidates await rigorous selection.
 
