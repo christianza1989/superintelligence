@@ -164,6 +164,7 @@ function runtime(value, stage, signal, supplied) {
         if (row.id !== value.postgresContainerId || row.state !== "running") deny("NATIVE_DATABASE_IDENTITY");
       } else {
         if (!["exited", "created"].includes(row.state)) deny("NATIVE_WRITERS_NOT_QUIESCED");
+        if (row.mounts.some((mount) => typeof mount.Destination !== "string" || mount.Destination.startsWith("/var/lib/repositoryzero/"))) deny("NATIVE_DATA_BINDING");
         const mounts = row.mounts.filter((mount) => mount.Destination === "/var/lib/repositoryzero");
         if (mounts.length !== 1 || mounts[0].Type !== "bind" || mounts[0].Source !== value.dataDirectory || mounts[0].RW !== true) deny("NATIVE_DATA_BINDING");
       }

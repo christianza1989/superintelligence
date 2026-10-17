@@ -76,13 +76,14 @@ test("private artifact-only backup and restore bind metadata and keep writers st
   assert.deepEqual(await readFile(path.join(f.data, "artifacts/space/blob")), content);
   assert.equal(f.calls.some((args) => args.some((arg) => ["up", "start", "stop", "down", "rm"].includes(arg))), false);
 });
-for (const cut of ["running-api", "foreign-project", "foreign-profile", "wrong-compose", "wrong-bind", "wrong-postgres", "extra-service"]) test(`refuses ${cut} before database export`, async () => {
+for (const cut of ["running-api", "foreign-project", "foreign-profile", "wrong-compose", "wrong-bind", "nested-artifact-mount", "wrong-postgres", "extra-service"]) test(`refuses ${cut} before database export`, async () => {
   const f = await fixture();
   if (cut === "running-api") f.containers[0].state = "running";
   if (cut === "foreign-project") f.containers[0].labels["com.docker.compose.project"] = "foreign";
   if (cut === "foreign-profile") f.containers[0].labels["repositoryzero.profile"] = "other";
   if (cut === "wrong-compose") f.containers[0].labels["com.docker.compose.project.config_files"] = "/foreign/compose.yml";
   if (cut === "wrong-bind") f.containers[1].mounts[0].Source = "/foreign/data";
+  if (cut === "nested-artifact-mount") f.containers[1].mounts.push({ Type: "bind", Source: "/foreign/artifacts", Destination: "/var/lib/repositoryzero/artifacts", RW: true });
   if (cut === "wrong-postgres") f.binding.postgresContainerId = "d".repeat(64);
   if (cut === "extra-service") f.containers.push({ ...f.containers[0], id: "d".repeat(64) });
   await assert.rejects(f.backup());

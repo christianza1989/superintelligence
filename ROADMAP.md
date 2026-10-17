@@ -196,7 +196,7 @@ Tikslas: pigiai patikrinti, ar siūlomi sprendimai tinka, prieš kuriant daug UI
 - [ ] P1.8 Biudžeto rezervavimas ir settlement; nežinomo išorinio efekto sąnaudas laikyti potencialiai išleistomis.
 - [ ] P1.9 SSE progresas, reconnect pagal event_seq, užduoties atšaukimas ir tęstinumas po UI restart.
 - [ ] P1.10 Vienas end-to-end vertikalus pjūvis per fake deterministinį įrankį; klaida turi matomą paaiškinimą.
-- [ ] P1.11 Backup/restore bandymas su DB ir artefaktų nuorodomis; neteisingo projekto prieigos testas.
+- [x] P1.11 Backup/restore bandymas su DB ir artefaktų nuorodomis; neteisingo projekto prieigos testas. [Native quiesced helper: 8/8 realių PG/Compose kontrolės, 103 migracijos ir 32 offline testai](docs/experiments/NATIVE-BACKUP-2026-10-17.md). Platesnis live/off-host backup, retention ir visas G1 lieka atviri.
 - [ ] P1.12 Bazinio cold-install ir idle atminties ataskaita švariame host.
 - [ ] P1.13 Localhost launcher, loopback session auth, Origin/Host/CSRF, port/single-instance ir aiškus foreground/background/autostart; duomenų ir app katalogų atskyrimas.
 - [ ] P1.14 Vienas veikiantis Zero own-app ModelAdapter ir credential brokeris; renderer/agent gauna tik binding metadata; budget/expiry/refresh/account switch ir leakage canary testai. Native MCP host primary model/auth lieka host pagal A15/P1X.8; jo ryšys šio own-app vartų neuždaro.

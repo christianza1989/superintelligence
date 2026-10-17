@@ -5,6 +5,8 @@
 - [MCP discovery preview ir native Codex ryšys](MCP-PREVIEW-2026-10-17.md).
 - [Pirmas gyvas Jev worker profilis](JEV-WORKER-2026-10-17.md).
 - [50 scenarijų patvarumo kvalifikacija](DURABILITY-2026-10-17.md).
+- [Quiesced vietinio profilio DB ir artefaktų atkūrimas](NATIVE-BACKUP-2026-10-17.md).
+- [Izoliuotas naršyklės profilis ir išsaugotos nesėkmės](BROWSER-SEALED-2026-10-17.md).
 - [LT/EN poreikių paieškos kūrimo rinkinys](NEED-RETRIEVAL-2026-10-17.md).
 - [Claude / Sonnet / SprintDesk](CLAUDE-CALIBRATION.md).
 - [Lean konfigūracija](LEAN-CALIBRATION.md).

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "status": "PASS",
+  "stage": "restore",
+  "postgresImageId": "sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+  "sourceSha256": {
+    "zero-native-backup.mjs": "058259314bf31b16038e8930c3abe23db40c93d6f120ed062c009abada3c96e8",
+    "qualify-zero-native-backup.mjs": "36bb81c78e308f5c2dd01da3da521077a300ad14ecd642c908ef9c815fc41a51"
+  },
+  "scenarios": [
+    { "name": "running-writer-denied", "status": "PASS" },
+    { "name": "canonical-database-and-artifact-backup", "status": "PASS" },
+    { "name": "foreign-compose-project-denied", "status": "PASS" },
+    { "name": "nonempty-data-denied-before-restore", "status": "PASS" },
+    { "name": "foreign-database-scope-denied-before-database-mutation", "status": "PASS" },
+    { "name": "changed-blob-denied-before-database-mutation", "status": "PASS" },
+    { "name": "untrusted-manifest-denied-before-database-mutation", "status": "PASS" },
+    { "name": "full-schema-artifact-round-trip", "status": "PASS" }
+  ],
+  "modelDispatches": 0,
+  "limitations": [
+    "Owned synthetic service fixtures, not a production native-profile installation",
+    "Requires pre-quiesced writers; no external-writer or mutable-home consistency claim",
+    "Private backup state retained; no automatic retention or hard filesystem-IO preemption claim"
+  ],
+  "migrations": 103,
+  "manifestSha256": "ab72d186f32715a3aea2c9b1c0b309e627053859747340221a6403bd50e1d2ce",
+  "containerCleanup": "removed-owned-project",
+  "finishedAt": "2026-10-17T20:25:52.103Z",
+  "elapsedMs": 23027
+}
