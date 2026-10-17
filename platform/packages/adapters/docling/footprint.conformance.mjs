@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { dockerSizeUpperBound } from "./footprint.mjs";
+import { dockerSizeUpperBound, touchedDockerCacheIds } from "./footprint.mjs";
 
 test("actual Docker rounded JSON sizes produce conservative finite byte bounds", () => {
   for (const [input, bound] of [
@@ -34,4 +34,16 @@ test("unknown/NaN/negative/overflow measurements cannot bypass footprint cap", (
   assert.ok(Number.isSafeInteger(retained));
   assert.ok(retained > 2000000000);
   assert.ok(retained < 6442450944);
+});
+
+test("reused mutable context IDs remain attributed when the selected wheel set changes", () => {
+  const id = "qupj6avk1o4f8pkps33w4u01e";
+  const before = new Map([[id, { ID: id, Size: "318.8MB", UsageCount: 2 }]]);
+  const after = new Map([
+    [id, { ID: id, Size: "22.91MB", UsageCount: 3 }],
+    ["new", { ID: "new", Size: "103.4MB", UsageCount: 1 }],
+  ]);
+  assert.deepEqual(touchedDockerCacheIds(before, after), [id, "new"]);
+  assert.equal(dockerSizeUpperBound(after.get(id).Size), 22920000);
+  assert.deepEqual(touchedDockerCacheIds(after, after), []);
 });

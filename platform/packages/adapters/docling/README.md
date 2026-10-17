@@ -39,3 +39,5 @@ The actual sealed CPU run completed in 29.487 seconds with all ten cases and the
 The installed image is 2,133,152,856 bytes; models add 384,434,788 bytes. Their sum 2,517,587,644 bytes already exceeds the 2,000,000,000-byte whole-profile G0 gate before Zero/browser/coding. Retained preparation data plus the image and conservatively rounded private BuildKit cache have an upper bound of 3,157,465,323 bytes, within only the separate optional 6 GiB cap. This sum is conservative logical accounting; physical filesystem deduplication was not measured. Failed resolution/accounting attempts are retained in the public result summary.
 
 See [redacted measured report](spike-results-2026-10-17.json). No fallback was activated, no PDF worker was registered, and no MVP gate is closed by this experiment.
+
+Preparation remains experimental G1 work: its deadline stops the Docker client, but cancellation of daemon-side BuildKit work and a peak filesystem quota are not proven. Reported final retained bounds must not be described as a hard peak disk limit. Automatic/default preparation remains unavailable.

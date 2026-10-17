@@ -1,0 +1,179 @@
+{
+  "version": 1,
+  "profile": "pdfplumber-0.11.10-born-digital-lines-v1",
+  "epoch": "2026-10-17-explicit-light-candidate-v1",
+  "state": "controlled-runtime-pass",
+  "fixtureManifestSha256": "3be8cd41fda8e39cf24d7f97dbdc77de46ab059f4cb486ea53194ca289738d8f",
+  "runnerObservedFileSha256": "b6239d05527bb341da92c54d5779886b32cde14ee832f43fe2aa395d9efbdc54",
+  "graderSha256": "eaf565a8d25e30ad754c6a2fd0f891865a8e0717b613a58e42370e374ecf8974",
+  "runnerHashNote": "Observed working-file bytes include platform line endings; Git stores normalized source. No fixture truth or grader semantic changes.",
+  "paidModelCalls": 0,
+  "network": "none",
+  "defaultDownloads": 0,
+  "preparationAttempts": [
+    {
+      "stage": "locked-cold-prepare",
+      "state": "failed-accounting-validation",
+      "elapsedMs": 22520,
+      "code": "MUTABLE_BUILD_CACHE_ATTRIBUTION_INCOMPLETE",
+      "note": "BuildKit reused mutable context IDs; initial zero private-cache accounting was invalidated before conversion."
+    },
+    {
+      "stage": "cached-accounting-recheck",
+      "state": "prepared-within-candidate-cap",
+      "elapsedMs": 4109
+    }
+  ],
+  "footprint": {
+    "dependencyArchiveBytes": 22884554,
+    "modelBytes": 0,
+    "baseImageCompressedBytes": 49907229,
+    "baseImageInstalledBytes": 206918255,
+    "installedImageBytes": 310032256,
+    "installedPythonDependencyDeltaBytes": 103114001,
+    "ownedPreparationCacheBytes": 22891280,
+    "buildCachePrivateUpperBoundBytes": 22936387,
+    "accountingReserveBytes": 1048576,
+    "installedCacheUpperBoundBytes": 356908499,
+    "physicalDeduplicatedBytes": null,
+    "accounting": "Conservative logical retained sum; Docker image includes shared base, own cache measured separately, owned nonshared BuildKit display sizes rounded upward. Physical filesystem dedup is not measured.",
+    "candidateCapBytes": 536870912,
+    "candidateCapPass": true,
+    "wholeThreeModuleG0": "NOT_MEASURED",
+    "note": "Component footprint does not prove the <=2,000,000,000-byte active Zero/browser/PDF/coding profile. Rejected Docling artifacts are separate experiments."
+  },
+  "runtime": {
+    "state": "completed",
+    "elapsedMs": 998,
+    "processPeakRssBytes": 41152512,
+    "reportedCgroupPeakMemoryBytes": 24629248,
+    "oomKilled": false,
+    "cleanupConfirmed": true,
+    "fixtureCount": 10,
+    "completed": 10,
+    "matchedNumericCells": 56,
+    "tableCount": 11,
+    "pageCount": 11,
+    "results": [
+      {
+        "id": "01-integer-sales",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 232,
+        "initializationMs": 0,
+        "peakRssBytes": 40628224
+      },
+      {
+        "id": "02-decimal-prices",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 9,
+        "initializationMs": 0,
+        "peakRssBytes": 40759296
+      },
+      {
+        "id": "03-negative-adjustments",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 12,
+        "initializationMs": 0,
+        "peakRssBytes": 40890368
+      },
+      {
+        "id": "04-thousands",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 12,
+        "initializationMs": 0,
+        "peakRssBytes": 40890368
+      },
+      {
+        "id": "05-parenthesized-debits",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 11,
+        "initializationMs": 0,
+        "peakRssBytes": 40890368
+      },
+      {
+        "id": "06-two-tables",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 8,
+        "elapsedMs": 17,
+        "initializationMs": 0,
+        "peakRssBytes": 41021440
+      },
+      {
+        "id": "07-two-pages",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 8,
+        "elapsedMs": 13,
+        "initializationMs": 0,
+        "peakRssBytes": 41021440
+      },
+      {
+        "id": "08-empty-cells",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 4,
+        "elapsedMs": 8,
+        "initializationMs": 0,
+        "peakRssBytes": 41152512
+      },
+      {
+        "id": "09-identifiers-and-totals",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 6,
+        "elapsedMs": 15,
+        "initializationMs": 0,
+        "peakRssBytes": 41152512
+      },
+      {
+        "id": "10-no-table-control",
+        "state": "completed",
+        "pass": true,
+        "errors": [],
+        "numericCells": 0,
+        "elapsedMs": 7,
+        "initializationMs": 0,
+        "peakRssBytes": 41152512
+      }
+    ],
+    "warmRepeat": {
+      "pass": true,
+      "errors": [],
+      "numericCells": 6,
+      "elapsedMs": 8,
+      "peakRssBytes": 41152512
+    },
+    "qualityAssessment": "All ten controlled synthetic development fixtures passed. Not an independent holdout, OCR or general PDF accuracy claim. Docling pipeline-preparation failures are not a model-quality comparator.",
+    "memoryNote": "Process RSS and cgroup peak are different kernel accounting measures; shared mapped pages can be charged elsewhere. They are not summed."
+  },
+  "scope": "Born-digital rectangular ruled tables only; merged/missing grid geometry is unsupported. No OCR, ML or text-strategy fallback.",
+  "remaining": {
+    "durableGraphileWorker": "NOT_IMPLEMENTED",
+    "authenticatedApplication": "NOT_IMPLEMENTED",
+    "independentHoldout": "NOT_RUN",
+    "dependencyRedistributionReview": "NOT_COMPLETED",
+    "preparationDaemonCancellation": "NOT_PROVEN",
+    "peakPreparationDiskHardQuota": "NOT_ENFORCED",
+    "note": "Only explicit experimental preparation is available. Final footprint/download caps and runtime isolation are distinct from preparation peak-disk or daemon-cancellation proofs."
+  }
+}

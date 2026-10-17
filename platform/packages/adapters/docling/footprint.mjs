@@ -29,3 +29,13 @@ export function dockerSizeUpperBound(value) {
   if (!Number.isSafeInteger(bound) || bound < 0) throw new Error("FOOTPRINT_MEASUREMENT_INVALID");
   return bound;
 }
+
+// BuildKit can reuse a mutable local-context ID for a different build input.
+export function touchedDockerCacheIds(before, after) {
+  return [...after.values()]
+    .filter((item) => {
+      const old = before.get(item.ID);
+      return !old || item.Size !== old.Size || item.UsageCount > old.UsageCount;
+    })
+    .map((item) => item.ID);
+}
