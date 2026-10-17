@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {mkdtemp,cp,readFile,writeFile,rm,mkdir} from 'node:fs/promises';
+import {mkdtemp,cp,readFile,writeFile,rm,mkdir,chmod} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -8,7 +8,7 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {summarizeStockDesk} from './zero-stockdesk-run.mjs';
 import {STOCKDESK_SETTINGS,stockSnapshot,stockHash} from './zero-stockdesk-plan.mjs';
-import {claudeArguments,createClaudeEventParser} from './zero-claude-cli.mjs';
+import {claudeArguments,createClaudeEventParser,resolveClaudeExecutable,claudeExecutableDigest} from './zero-claude-cli.mjs';
 import {evaluateSprintDesk} from './zero-lab-evaluate.mjs';
 import {evaluateSprintDeskBrowser,parseBrowserReceipt} from './zero-lab-browser.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),exec=promisify(execFile);
@@ -30,9 +30,11 @@ test('real StockDesk positive and negative grader controls', {skip:process.env.Z
 });
 
 test('summary refuses failed apps, unverified models and fixed-effort changes',()=>{
- const report={stage:'system',pairs:1,status:'completed',executionKind:'claude_cli',liveRequested:true,settings:STOCKDESK_SETTINGS,sourceIntegrity:'passed',timingIntegrity:'passed',preparation:{packs:{C:{elapsedMs:10,apiActualCostUsd:0.001}}},trials:['A','C'].map(lane=>({lane,outcome:'passed',codingMs:100,gradingMs:20,trialMs:120,generation:{actualModel:'claude-haiku-5-5',apiEquivalentCostEstimateUsd:0.1,usage:{inputTokens:10,outputTokens:2,totalTokens:12,cachedInputTokens:5,cacheCreationInputTokens:4,uncachedInputTokens:1}}}))};
+ const report={stage:'system',pairs:1,status:'completed',cliVersion:'2.1.301',cliIntegrity:'passed',executionKind:'claude_cli',liveRequested:true,settings:STOCKDESK_SETTINGS,sourceIntegrity:'passed',timingIntegrity:'passed',preparation:{packs:{C:{elapsedMs:10,apiActualCostUsd:0.001}}},trials:['A','C'].map(lane=>({lane,outcome:'passed',codingMs:100,gradingMs:20,trialMs:120,generation:{actualModel:'claude-haiku-5-5',apiEquivalentCostEstimateUsd:0.1,usage:{inputTokens:10,outputTokens:2,totalTokens:12,cachedInputTokens:5,cacheCreationInputTokens:4,uncachedInputTokens:1}}}))};
  assert.equal(summarizeStockDesk(report).status,'comparable');assert.equal(summarizeStockDesk(report).lanes.C.workflowMs,130);assert.equal(summarizeStockDesk(report).lanes.C.totalTokens,12);
- for(const field of ['outcome','model','effort']){const r=structuredClone(report);if(field==='outcome')r.trials[1].outcome='functional_failed';if(field==='model')r.trials[1].generation.actualModel='claude-sonnet-5-5';if(field==='effort')r.settings.reasoning='low';assert.equal(summarizeStockDesk(r).status,'not_comparable');assert.equal(summarizeStockDesk(r).metrics,null);}
+ for(const field of ['outcome','model','effort','cli']){const r=structuredClone(report);if(field==='outcome')r.trials[1].outcome='functional_failed';if(field==='model')r.trials[1].generation.actualModel='claude-sonnet-5-5';if(field==='effort')r.settings.reasoning='low';if(field==='cli')r.cliVersion='2.1.292';assert.equal(summarizeStockDesk(r).status,'not_comparable');assert.equal(summarizeStockDesk(r).metrics,null);}
  const unknown=structuredClone(report);unknown.trials[1].generation.usage=null;assert.equal(summarizeStockDesk(unknown).lanes.C.totalTokens,null);
 });
 test('dry runner and preparation preserve sources without auth, Docker or models',async()=>{const before=await stockSnapshot();const proposal=JSON.parse(await readFile(path.join(root,'benchmarks/stockdesk-v1/proposal.json'),'utf8'));assert.equal(stockHash(await readFile(path.join(root,proposal.taskPromptPath))),proposal.taskPromptSha256);assert.equal(stockHash(await readFile(path.join(root,proposal.protocolPath))),proposal.protocolSha256);assert.equal(before['benchmarks/stockdesk-v1/PROMPT.md'],proposal.taskPromptSha256);});
+
+test('pin resolves the executable and detects changed bytes independently of a launcher symlink',async()=>{const dir=await mkdtemp(path.join(tmpdir(),'stockdesk-cli-pin-'));try{const file=path.join(dir,'claude');await writeFile(file,'synthetic executable A');await chmod(file,0o755);assert.equal(await resolveClaudeExecutable({PATH:dir}),file);const first=await claudeExecutableDigest(file);await writeFile(file,'synthetic executable B');assert.notEqual(await claudeExecutableDigest(file),first);await assert.rejects(()=>claudeExecutableDigest('relative-cli'));}finally{await rm(dir,{recursive:true,force:true});}});

@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "kind": "stockdesk_harness_regressions_not_generated_app_quality",
+  "clientDate": "2026-10-17",
+  "sourceCommit": "f7ba950b91f73ece2c93178ef8f649a1fb42b71e",
+  "status": "passed",
+  "offlineGroups": [
+    {
+      "script": "test:claude-bridge",
+      "passed": 15
+    },
+    {
+      "script": "test:stockdesk",
+      "passed": 3,
+      "explicitDockerSkip": 1
+    },
+    {
+      "script": "test:lab",
+      "passed": 18
+    },
+    {
+      "script": "test:lab-cohort",
+      "passed": 17
+    },
+    {
+      "script": "test:lab-compare",
+      "passed": 14
+    },
+    {
+      "script": "test:lab-reuse",
+      "passed": 11
+    },
+    {
+      "script": "test:lab-evaluator",
+      "passed": 13,
+      "explicitDockerSkip": 1
+    },
+    {
+      "script": "test:lab-browser",
+      "passed": 12,
+      "explicitDockerSkip": 1
+    },
+    {
+      "script": "test:lab-acceptance",
+      "passed": 6
+    }
+  ],
+  "realDockerGroups": [
+    {
+      "script": "test:stockdesk-docker",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "controls": [
+        "positive API/SQLite restart",
+        "split_csv",
+        "preview_writes",
+        "partial_commit",
+        "duplicate_apply",
+        "nonatomic_transfer",
+        "lost_data",
+        "positive desktop/mobile workflows",
+        "ui_no_api"
+      ]
+    },
+    {
+      "script": "test:lab-docker",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "script": "test:lab-browser-docker",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "diagnosticReceiptControl": {
+    "status": "passed",
+    "syntheticFault": "split_csv",
+    "actualGraderTests": 13,
+    "actualGraderPassed": 10,
+    "actualGraderFailed": 3,
+    "parentTestIncluded": true,
+    "failedCases": [
+      "quoted CSV, BOM, CRLF, escaped quotes and newlines",
+      "malformed CSV and invalid cells rejected without writes"
+    ],
+    "cleanup": "passed"
+  },
+  "prototypeFailure": {
+    "retainedPrivately": true,
+    "reason": "StockDesk restart initially selected legacy task probe; corrected before first app generation",
+    "modelCodingCalls": 0
+  },
+  "paidModelCallsForRegressions": 0,
+  "limitations": [
+    "Counts from overlapping test groups must not be summed as distinct app tests",
+    "Synthetic controls validate the grader, not a model-generated application",
+    "A successful one-turn Haiku connectivity probe is separate from these regressions"
+  ],
+  "supportedCliPinRegression": {
+    "cliVersion": "2.1.301",
+    "status": "passed",
+    "groups": [
+      {
+        "script": "test:claude-bridge",
+        "passed": 15
+      },
+      {
+        "script": "test:stockdesk",
+        "passed": 4,
+        "explicitDockerSkip": 1
+      },
+      {
+        "script": "test:lab",
+        "passed": 18
+      },
+      {
+        "script": "test:lab-cohort",
+        "passed": 17
+      },
+      {
+        "script": "test:lab-reuse",
+        "passed": 11
+      }
+    ],
+    "newGuardChecks": [
+      "reject older CLI version",
+      "resolve versioned executable",
+      "digest changes when executable bytes change",
+      "reject relative executable path"
+    ],
+    "modelCalls": 0
+  }
+}

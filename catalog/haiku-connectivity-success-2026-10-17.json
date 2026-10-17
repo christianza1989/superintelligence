@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "kind": "connectivity_only_not_coding_benchmark",
+  "clientDate": "2026-10-17",
+  "requestedModel": "claude-haiku-5-5",
+  "requestedReasoning": "high",
+  "actualModel": "claude-haiku-5-5",
+  "status": "completed",
+  "reason": null,
+  "elapsedMs": 4815,
+  "usage": {
+    "inputTokens": 15428,
+    "outputTokens": 4,
+    "cachedInputTokens": 0,
+    "cacheCreationInputTokens": 15426,
+    "uncachedInputTokens": 2,
+    "totalTokens": 15432
+  },
+  "cliInvocationAttempts": 1,
+  "modelDispatchAttempts": null,
+  "toolActions": 0,
+  "apiEquivalentCostEstimateUsd": 0.12349600000000001,
+  "priceValidation": "unvalidated_cli_2.1.292_predates_Haiku55_recognition",
+  "actualSubscriptionCostUsd": null,
+  "limitations": [
+    "Model identity is a CLI receipt, not independent provider attestation",
+    "Earlier failed server_error probe remains separately preserved"
+  ]
+}

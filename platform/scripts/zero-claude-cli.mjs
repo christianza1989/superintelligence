@@ -1,5 +1,7 @@
 /** Subscription CLI adapter. The official CLI owns OAuth; credentials are never read here. */
 import { LEAN_SYSTEM_PROMPT, LEAN_SYSTEM_PROMPT_DIGEST } from "./zero-lab-strategies.mjs";
+import { createHash } from "node:crypto";
+import { createReadStream } from "node:fs";
 import { execFile, spawn } from "node:child_process";
 import { realpath, stat } from "node:fs/promises";
 import path from "node:path";
@@ -17,6 +19,19 @@ export const claudeEnvironment = (source = process.env) => {
   delete env.CODEX_HOME;
   return env;
 };
+export async function resolveClaudeExecutable(source = process.env) {
+  for (const directory of (claudeEnvironment(source).PATH ?? "").split(path.delimiter)) {
+    if (!path.isAbsolute(directory)) continue;
+    try { const file = await realpath(path.join(directory,"claude")), info = await stat(file);
+      if (info.isFile() && (info.mode & 0o111)) return file;
+    } catch {}
+  }
+  throw new Error("Official CLI executable unavailable.");
+}
+export async function claudeExecutableDigest(file) {
+  if (typeof file !== "string" || !path.isAbsolute(file)) throw new Error("Absolute pinned CLI path required.");
+  const hash=createHash("sha256"); for await (const chunk of createReadStream(file)) hash.update(chunk); return hash.digest("hex");
+}
 export function claudeArguments({ model = CLAUDE_MODEL, tools = CLAUDE_TOOLS, reasoning = CLAUDE_REASONING, systemPromptMode = "default", maxTurns = 60 } = {}) {
   if (!CLAUDE_MODELS.includes(model) || !Number.isSafeInteger(maxTurns) || maxTurns < 1 || maxTurns > 100) throw new Error("Unsupported bounded Claude model/turn contract.");
   if (!["high", "medium", "low"].includes(reasoning) || !["default", "lean-v1"].includes(systemPromptMode)) throw new Error("Unsupported declared Claude configuration.");
@@ -155,6 +170,7 @@ export async function runClaudeCli(options, deps = {}) {
     typeof options.workspace !== "string" || !path.isAbsolute(options.workspace) || !count(timeoutMs) || timeoutMs < 100 || timeoutMs > 1200000 ||
     !count(toolLimit) || toolLimit < 1 || toolLimit > 100 || !count(maxOutputBytes) || maxOutputBytes < 1024 || maxOutputBytes > 8388608)
     throw new Error("Invalid bounded Claude invocation.");
+  if (options.executable !== undefined && (typeof options.executable !== "string" || !path.isAbsolute(options.executable))) throw new Error("Absolute operator CLI path required.");
   const env = claudeEnvironment(deps.env ?? process.env);
   const args = claudeArguments({ model: options.model, maxTurns: options.maxTurns, tools: options.tools, reasoning: options.reasoning, systemPromptMode: options.systemPromptMode });
   const workspace = await realpath(options.workspace);
@@ -190,7 +206,7 @@ export async function runClaudeCli(options, deps = {}) {
       onToolAction: n => { if (n > toolLimit) stop("observed_tool_limit"); },
       onInvalidEvent: () => stop("invalid_cli_events"),
     });
-    try { child = (deps.spawn ?? spawn)("claude", args, { cwd: workspace, env, shell: false,
+    try { child = (deps.spawn ?? spawn)(options.executable ?? "claude", args, { cwd: workspace, env, shell: false,
       detached: process.platform !== "win32", stdio: ["pipe", "pipe", "pipe"] }); }
     catch { stopReason = "unavailable"; finish(null, null); return; }
     const collect = (chunk, error) => {

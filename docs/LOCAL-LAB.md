@@ -1,6 +1,6 @@
 # Vietinis Zero Lab su Claude prenumerata
 
-2026-10-16. Aktyvus naudotojo pasirinkimas — **oficialus Claude CLI, Sonnet5.5/high ir Claude prenumerata**. Pirmas vietinis A/B jau atliktas; [rezultatai ir jų ribos](CLAUDE-CALIBRATION.md). Codex auth ir OpenRouter lenktynes kol kas praleidžiame.
+2026-10-17. Aktyvus naujos užduoties pasirinkimas — **oficialus Claude CLI 2.1.301, Haiku 5.5/high ir Claude prenumerata**, vienodai abiem pusėms. [StockDesk eiga ir rezultatai](STOCKDESK-CALIBRATION.md). Ankstesni [Sonnet bandymai](CLAUDE-CALIBRATION.md) išsaugoti atskirai. Codex auth ir OpenRouter coding lenktynes praleidžiame; Jev atranka turi atskirą bendrą 1 USD biudžetą.
 
 ## Pradinės sąlygos
 
@@ -98,7 +98,7 @@ Claude necache input, cache creation ir cache read normalizuojami po vieną kart
 
 Atidaryk sesiją su aktualiu WSL projekto katalogu ir pateik:
 
-> Tęsk RepositoryZero iš šio katalogo. Perskaityk platform/AGENTS.md, docs/LOCAL-LAB.md ir docs/CLAUDE-CALIBRATION.md. Naudotojas pasirinko Claude prenumeratą, Sonnet5.5/high. Codex auth ir OpenRouter lenktynes praleisk. Pirmiausia patikrink lab:prepare -- --engine claude ir offline regresijas. Pakartojimams naudok lab:cohort -- --live: trys poros, daugiausia šešios sesijos, promptas v2, fiksuoti šaltiniai ir kaitaliojama eilė. Išsaugok failures, nežinomą kainą ir tikrus cache usage; nekeisk graderio pagal kandidato rezultatą. Kompaktiškas kontekstas yra atskiras vėlesnis --mode compact bandymas, automatiškai jo nejunk. Tikrintuvo pakartojimas nėra nauja kūrimo pora. Pilno RepositoryZero runtime/Jev/Auto šio CLI bandymo PASS nepatvirtina.
+> Tęsk RepositoryZero iš šio katalogo. Perskaityk platform/AGENTS.md, docs/LOCAL-LAB.md ir docs/STOCKDESK-CALIBRATION.md. Naujam StockDesk bandymui naudok oficialų Claude CLI 2.1.301 ir vienodą Haiku 5.5/high abiem pusėms; modelio, pastangų ir įrankių Jev nekeičia. Codex auth ir OpenRouter coding atidėti. Patikrink regresijas bei Docker/Chromium, tada tęsk atskirą lab:stockdesk etapą su aktualiu frozen paruošimu iš bendro 1 USD Jev ledger. Nemaišyk pirmos CLI 2.1.292 poros ar atrankos su nauju patvirtinimu. Išsaugok nesėkmes ir nežinomą prenumeratos kainą. Senieji lab:cohort režimai tebėra SprintDesk/Sonnet eksperimentai; pilnas produkto runtime ir Auto šiuo CLI bandymu nepatvirtinami.
 
 Cloud sesija turi savo vykdymo aplinką; Full access pats nesukuria Windows/WSL komandos vykdymo kanalo. Importuoti vietiniai reportai ir šioje cloud aplinkoje pakartotos artefaktų patikros turi atskirą kilmę. [Zero Lab](ZERO-LAB.md), [palyginimo protokolas](PAIRED-BENCHMARK.md).
 
@@ -108,6 +108,6 @@ Cloud sesija turi savo vykdymo aplinką; Full access pats nesukuria Windows/WSL 
 
 Paskutinį kombinuoto Jev/bibliotekos/low patvirtinimą nutraukė generacijų klaidos; vėlesnė diagnostika patvirtino Claude sesijos kvotą (CLI nurodė 00:40 UTC; pagal diagnostikos laiką kitas atsinaujinimas yra 2026-10-17). Adapterio klaidos klasifikacija ir stop-after-first taisyklė ištaisyta; nauja gyva kohorta po taisymo dar nevykdyta. Prieš vėlesnį Jev bandymą paruošti naują planą aktualiems source hash ir naudoti tą patį bendrą biudžeto ledger.
 
-## Kitas pasiūlytas bandymas: StockDesk su Haiku
+## StockDesk su vienodu Haiku
 
-2026-10-17 naudotojas pasirinko vienodą Haiku 5.5/high abiem pusėms ir kokybės, laiko bei sąnaudų kompromisą be 50 % slenksčio. Paruoštas [StockDesk promptas](../benchmarks/stockdesk-v1/PROMPT.md) ir [trijų konfigūracijų planas](../benchmarks/stockdesk-v1/README.md): paprastas modelis, deterministinis Zero šaltinių paketas ir to paties rinkinio Jev atranka. Sisteminės instrukcijos, pastangos ir įrankiai bus vienodi. Tai pasiūlymas: naujos užduoties tikrintuvas, jo negative controls, šaltinių paketas ir live runner integracija dar neįgyvendinti. Esamos komandos tebėra SprintDesk/Sonnet bandymai. Vieno trumpo Haiku ryšio kvietimo rezultatas — server_error, 0 CLI pateiktų tokenų; modelio prieiga nepatvirtinta, programos nekurtos. [Patikros santrauka](../catalog/haiku-connectivity-2026-10-17.json). Ankstesnės Sonnet kohortos ir jų kriterijai nekeičiami.
+[Užduoties tekstas](../benchmarks/stockdesk-v1/PROMPT.md), [protokolas ir komandos](../benchmarks/stockdesk-v1/README.md), [matavimai](../catalog/stockdesk-results-2026-10-17.json). Įgyvendinti atskiri API/CSV, tikro SQLite restart ir desktop/mobile darbo eigų tikrintuvai bei septyni tyčiniai gedimai. Testai praėjo prieš modelių generavimą. Pirmoje A/C poroje abu programų variantai PASS; tai viena atranka su senesniu CLI 2.1.292, ne pakartojamas Jev pranašumas. Jev neparinko bibliotekų. Šios poros kainos įvertis nevaliduotas, nes oficialus Haiku 5.5 atpažinimas atsirado CLI 2.1.293. Po poros įdiegtas ir naujiems etapams fiksuojamas 2.1.301, tikrinamas versioned executable SHA256. Prieš naują etapą reikia naujo frozen paruošimo, naudojant tą patį 1 USD ledger; senos kohortos neperrašomos ir nesujungiamos su naujos CLI rezultatais. [Detali analizė ir kokybės ribos](STOCKDESK-CALIBRATION.md).

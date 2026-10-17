@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "kind": "stockdesk_post_race_review_not_new_generation",
+  "cohort": "2026-10-17T07-28-05-298Z-eb61d99afd31",
+  "visualReview": {
+    "version": 1,
+    "scope": "four_blinded_static_captures_only_not_full_manual_UI_acceptance",
+    "rubric": [
+      "readability",
+      "information_hierarchy",
+      "mobile_usability",
+      "visible_overflow",
+      "clarity_of_controls"
+    ],
+    "numericQualityScore": null,
+    "observations": {
+      "sample-1": {
+        "desktop": "Clear product/search/form groups and labels; plain utilitarian styling. Operations are below the initial viewport.",
+        "mobile": "SKU wraps across several lines. Total and Minimum columns are outside the captured table view; whether internal scrolling exposes them requires source/interaction inspection."
+      },
+      "sample-2": {
+        "desktop": "Clear headings and consistent forms, with substantial unused vertical space before stock operations.",
+        "mobile": "SKU and Name columns collapse to very narrow columns with character-by-character wrapping, creating very tall rows. Readability is materially poor despite no page-level horizontal overflow."
+      }
+    },
+    "conclusion": "Both screenshots show usable desktop form structure but do not justify an equal or high subjective design-quality claim. The no-page-overflow gate does not measure mobile table readability.",
+    "labelsRevealedAfterFindings": {
+      "sample-1": "C",
+      "sample-2": "A"
+    }
+  },
+  "modelAuthoredSelftests": [
+    {
+      "lane": "A",
+      "status": "passed",
+      "tests": null,
+      "passed": null,
+      "failed": null,
+      "outputSha256": "8de866c0e470cca7e65a8d4c1278060d71fd40faeeb22a16bb1d8c897a4a9c13",
+      "scope": "post_race_model_authored_test_replay_not_independent_grader_or_new_generation"
+    },
+    {
+      "lane": "C",
+      "status": "passed",
+      "tests": null,
+      "passed": null,
+      "failed": null,
+      "outputSha256": "4976d586833b50926e154de2129c4c21202ce65909123ce5d6c5f73467b01a9b",
+      "scope": "post_race_model_authored_test_replay_not_independent_grader_or_new_generation"
+    }
+  ],
+  "staticInspection": {
+    "scope": "targeted_source_review_unblinded_not_full_security_audit",
+    "observedInBoth": [
+      "SQLite BEGIN IMMEDIATE transaction boundaries with commit/rollback",
+      "Loopback 127.0.0.1 server binding",
+      "DOM textContent for product/note data and CSV summary rendering",
+      "Separate CSV, storage, validation and HTTP modules"
+    ],
+    "notEstablished": [
+      "Complete production security",
+      "Comprehensive accessibility",
+      "Mobile table readability from an overflow check alone"
+    ]
+  }
+}

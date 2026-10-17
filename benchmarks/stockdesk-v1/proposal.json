@@ -3,7 +3,7 @@
   "kind": "stockdesk_frozen_experiment_contract",
   "suite": "stockdesk-v1",
   "split": "calibration",
-  "status": "harness_ready_before_first_generation",
+  "status": "harness_ready_for_supported_cli_new_cohorts",
   "codingModel": "claude-haiku-5-5",
   "reasoning": "high",
   "systemPromptMode": "default",
@@ -12,7 +12,7 @@
   "taskPromptSha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
   "taskPromptBytes": 9556,
   "protocolPath": "benchmarks/stockdesk-v1/README.md",
-  "protocolSha256": "fb7d861eed49b0c0901e81c50fb3e59bbfe60bcde9affa0b62fdf4ec6aa2dc1d",
+  "protocolSha256": "dc0b008e819f87cefdb915a5269afaba8a0a684550fb33b67558d420c71586ba",
   "proposedControls": {
     "codingTimeoutMs": 1200000,
     "maxObservedToolActions": 100,
@@ -62,5 +62,7 @@
     "newRequestsThisPreparation": 0
   },
   "asOf": "before_first_stockdesk_coding_run",
-  "selectionRule": "If B/C inputs identical, selection tie and prefer deterministic B without another coding screen. Else choose accepted assisted lane by total estimate then coding-plus-preparation time; no eligible lane means no confirmation."
+  "selectionRule": "If B/C inputs identical, selection tie and prefer deterministic B without another coding screen. Else choose accepted assisted lane by total estimate then coding-plus-preparation time; no eligible lane means no confirmation.",
+  "cliVersion": "2.1.301",
+  "cliExecutablePolicy": "resolve_immutable_version_target_and_verify_sha256_before_each_lane"
 }
