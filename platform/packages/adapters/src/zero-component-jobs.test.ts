@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { ZeroComponentFamily, ZeroComponentHeader } from "./zero-component-jobs.js";
 import {
   assertZeroComponentActive,
+  createZeroComponentReader,
   loadZeroComponentHeader,
   loadZeroComponentRequest,
   publishZeroComponent,
@@ -85,6 +86,84 @@ function fixture(family: ZeroComponentFamily = "csv") {
   };
 }
 describe("fixed component lifecycle boundaries", () => {
+  it.each(families)("rechecks %s authorization after private request reads", async (family) => {
+    const f = fixture(family);
+    f.deps.artifacts.get.mockImplementation(async () => {
+      f.deps.authorize.mockRejectedValue(new IsolationError());
+      return f.bytes;
+    });
+    await expect(
+      loadZeroComponentRequest(
+        f.deps as never,
+        family,
+        f.id,
+        f.principal,
+        (value) => value as ZeroComponentHeader,
+      ),
+    ).rejects.toBeInstanceOf(IsolationError);
+  });
+  it.each(families)("rechecks %s authorization after private receipt reads", async (family) => {
+    const f = fixture(family);
+    const bytes = Buffer.from(JSON.stringify({ privateResult: "fixture" }));
+    const storageKey = randomUUID();
+    f.setReceipt({
+      id: randomUUID(),
+      rootArtifactId: f.id,
+      version: 2,
+      name: `zero-${family}-receipt.json`,
+      mimeType: "application/json",
+      size: bytes.length,
+      hash: zeroComponentHash(bytes),
+      storageKey,
+    });
+    f.deps.artifacts.get.mockImplementation(async (key?: string) => {
+      if (key !== storageKey) return f.bytes;
+      f.deps.authorize.mockRejectedValue(new IsolationError());
+      return bytes;
+    });
+    const reader = createZeroComponentReader(
+      f.deps as never,
+      family,
+      f.principal,
+      (value) => value as ZeroComponentHeader,
+    );
+    await expect(reader.artifact(f.id)).rejects.toBeInstanceOf(IsolationError);
+  });
+  it.each(families)("rechecks %s authorization after receipt metadata reads", async (family) => {
+    const f = fixture(family);
+    f.deps.prisma.artifact.findUnique.mockImplementation(async () => {
+      f.deps.authorize.mockRejectedValue(new IsolationError());
+      return {
+        id: randomUUID(),
+        rootArtifactId: f.id,
+        version: 2,
+        name: `zero-${family}-receipt.json`,
+        mimeType: "application/json",
+        description: JSON.stringify({ state: "succeeded" }),
+      };
+    });
+    const reader = createZeroComponentReader(
+      f.deps as never,
+      family,
+      f.principal,
+      (value) => value as ZeroComponentHeader,
+    );
+    await expect(reader.get(f.id)).rejects.toBeInstanceOf(IsolationError);
+  });
+  it.each(families)("rechecks %s authorization after queue state reads", async (family) => {
+    const f = fixture(family);
+    f.deps.prisma.$queryRaw.mockImplementation(async () => {
+      f.deps.authorize.mockRejectedValue(new IsolationError());
+      return [{ attempts: 0, max_attempts: 3, locked_at: null }];
+    });
+    const reader = createZeroComponentReader(
+      f.deps as never,
+      family,
+      f.principal,
+      (value) => value as ZeroComponentHeader,
+    );
+    await expect(reader.get(f.id)).rejects.toBeInstanceOf(IsolationError);
+  });
   it.each(families)("checks %s metadata ownership before private input I/O", async (family) => {
     const f = fixture(family);
     await expect(

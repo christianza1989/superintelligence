@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { preparedProfiles, ZERO_CSV_SOURCE_PINS } from "@rakazo/core/zero-prepared-profiles";
+import { describe, expect, it } from "vitest";
 import {
   executeZeroCsv,
   prepareZeroCsvComponent,

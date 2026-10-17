@@ -346,6 +346,70 @@ const hash = (bytes: string | Uint8Array) => createHash("sha256").update(bytes).
       expect(receipt.extraction.sourceSha256).toBe(hash(pdfBytes));
       await writeFile(path.join(directory, "project/invoice.pdf"), pdfBytes);
     });
+    it.each(["pdf", "browser"])(
+      "denies %s job metadata if its file grant is revoked during a request read",
+      async (family) => {
+        await stop();
+        const accepted = await submit(family);
+        const row = await app.prisma.artifact.findUniqueOrThrow({
+          where: { id: accepted.jobId },
+        });
+        const saved = family === "pdf" ? pdf : browser;
+        const original = LocalArtifactStore.prototype.get;
+        const reads = vi
+          .spyOn(LocalArtifactStore.prototype, "get")
+          .mockImplementation(async function (this: LocalArtifactStore, id, context) {
+            const bytes = await original.call(this, id, context);
+            if (id === row.storageKey) {
+              if (family === "pdf") pdf = { ...pdf, files: [] };
+              else browser = { ...browser, files: [] };
+            }
+            return bytes;
+          });
+        try {
+          const response = await request(`${prefix(family)}/jobs/${accepted.jobId}`);
+          expect(response.status).toBe(403);
+          expect(await response.json()).toEqual({ error: "project_scope_rejected" });
+        } finally {
+          reads.mockRestore();
+          if (family === "pdf") pdf = saved as ZeroPdfBinding;
+          else browser = saved as ZeroBrowserBinding;
+          await request(`${prefix(family)}/jobs/${accepted.jobId}/cancel`, {});
+          await start();
+        }
+      },
+    );
+    it.each(["pdf", "browser"])(
+      "denies %s receipt bytes if its file grant is revoked during storage I/O",
+      async (family) => {
+        const accepted = await submit(family);
+        await terminal(family, accepted.jobId);
+        const row = await app.prisma.artifact.findFirstOrThrow({
+          where: { rootArtifactId: accepted.jobId },
+        });
+        const saved = family === "pdf" ? pdf : browser;
+        const original = LocalArtifactStore.prototype.get;
+        const reads = vi
+          .spyOn(LocalArtifactStore.prototype, "get")
+          .mockImplementation(async function (this: LocalArtifactStore, id, context) {
+            const bytes = await original.call(this, id, context);
+            if (id === row.storageKey) {
+              if (family === "pdf") pdf = { ...pdf, files: [] };
+              else browser = { ...browser, files: [] };
+            }
+            return bytes;
+          });
+        try {
+          const response = await request(`${prefix(family)}/jobs/${accepted.jobId}/artifact`);
+          expect(response.status).toBe(403);
+          expect(await response.json()).toEqual({ error: "project_scope_rejected" });
+        } finally {
+          reads.mockRestore();
+          if (family === "pdf") pdf = saved as ZeroPdfBinding;
+          else browser = saved as ZeroBrowserBinding;
+        }
+      },
+    );
     it("rechecks grant revocation after successful output storage", async () => {
       const original = artifacts.put.bind(artifacts);
       const staged = vi.spyOn(artifacts, "put").mockImplementation(async (artifact, context) => {

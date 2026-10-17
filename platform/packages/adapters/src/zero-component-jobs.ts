@@ -243,6 +243,7 @@ export async function loadZeroComponentRequest<T extends ZeroComponentHeader>(
     throw new IsolationError();
   await authorizeZeroComponent(deps, principal);
   const bytes = await deps.artifacts.get(row.storageKey, zeroComponentContext(owner, id, family));
+  await authorizeZeroComponent(deps, principal);
   if (bytes.byteLength !== row.size || zeroComponentHash(bytes) !== row.hash)
     throw new Error("request_artifact_integrity_failed");
   const request = decode(
@@ -534,6 +535,7 @@ export function createZeroComponentReader<T extends ZeroComponentHeader>(
     async get(jobId: string) {
       const { request } = await load(jobId);
       const receipt = await findZeroComponentReceipt(deps.prisma, family, request, jobId);
+      await authorizeZeroComponent(deps, principal);
       if (receipt)
         return {
           jobId,
@@ -548,6 +550,7 @@ export function createZeroComponentReader<T extends ZeroComponentHeader>(
         Prisma.sql`SELECT attempts, max_attempts, locked_at FROM graphile_worker._private_jobs WHERE key = ${zeroComponentJobKey(family, jobId, request)}`,
       );
       const job = jobs[0];
+      await authorizeZeroComponent(deps, principal);
       return {
         jobId,
         state:
@@ -589,6 +592,7 @@ export function createZeroComponentReader<T extends ZeroComponentHeader>(
         row.storageKey,
         zeroComponentContext(principal, jobId, family),
       );
+      await authorizeZeroComponent(deps, principal);
       if (bytes.byteLength !== row.size || zeroComponentHash(bytes) !== row.hash)
         throw new Error("receipt_artifact_integrity_failed");
       return {

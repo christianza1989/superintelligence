@@ -1,16 +1,12 @@
 import { describe, expect, it } from "vitest";
-import {
-  repositorySnapshot,
-  retrieveRepositoryNeed,
-  searchRepositories,
-} from "./zero-catalog.js";
+import { repositorySnapshot, retrieveRepositoryNeed, searchRepositories } from "./zero-catalog.js";
+import type { RepositoryRequirements } from "./zero-need-normalization.js";
 import {
   preparedProfiles,
   searchPreparedProfiles,
   ZERO_CSV_PROFILE,
   ZERO_CSV_SOURCE_PINS,
 } from "./zero-prepared-profiles.js";
-import type { RepositoryRequirements } from "./zero-need-normalization.js";
 
 describe("bounded prepared-profile overlay", () => {
   it.each([
@@ -28,22 +24,40 @@ describe("bounded prepared-profile overlay", () => {
   });
 
   it.each([
-    "CSV TSV", "CSV streaming", "CSV write", "CSV Excel", "CSV OCR",
-    "CSV offline", "CSV unknown", "CSV semicolon", "CSV general transformations",
-    "parser", "table", "image editor CSV", "tool please", "---",
-    "CSV windows", "runtime tested CSV", "approved license CSV",
+    "CSV TSV",
+    "CSV streaming",
+    "CSV write",
+    "CSV Excel",
+    "CSV OCR",
+    "CSV offline",
+    "CSV unknown",
+    "CSV semicolon",
+    "CSV general transformations",
+    "parser",
+    "table",
+    "image editor CSV",
+    "tool please",
+    "---",
+    "CSV windows",
+    "runtime tested CSV",
+    "approved license CSV",
   ])("keeps an unsupported or ambiguous need as no-fit: %s", (query) => {
     expect(searchPreparedProfiles({ query })).toEqual([]);
   });
 
   it("keeps independent repository requirements distinct from scoped conformance", () => {
     for (const requirements of [
-      { sourcePinPresent: true }, { runtimeTested: true }, { licenseApproved: true },
-      { primaryLanguage: "JavaScript" }, { operatingSystem: "linux" },
+      { sourcePinPresent: true },
+      { runtimeTested: true },
+      { licenseApproved: true },
+      { primaryLanguage: "JavaScript" },
+      { operatingSystem: "linux" },
     ] satisfies RepositoryRequirements[])
       expect(searchPreparedProfiles({ query: "d3/d3-dsv", requirements })).toEqual([]);
     expect(searchPreparedProfiles({ query: "CSV", category: "documents" })).toEqual([]);
-    expect(searchPreparedProfiles({ query: "CSV", requirements: { invented: true } as never })).toEqual([]);
+    expect(
+      searchPreparedProfiles({ query: "CSV", requirements: { invented: true } as never }),
+    ).toEqual([]);
   });
 
   it("rejects overflow and never truncates away an unsupported constraint", () => {
@@ -57,7 +71,8 @@ describe("bounded prepared-profile overlay", () => {
     expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
     const image = searchRepositories({ query: "image editor" });
     expect(retrieveRepositoryNeed({ query: "image editor" })).toEqual({
-      preparedProfiles: [], sourceCandidates: image,
+      preparedProfiles: [],
+      sourceCandidates: image,
     });
     expect(repositorySnapshot.records).toHaveLength(796);
     expect(JSON.stringify(repositorySnapshot)).toBe(before);

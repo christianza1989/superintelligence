@@ -2,13 +2,14 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { csvParseRows } from "d3-dsv";
 import {
-  ZERO_CSV_PROFILE,
   ZERO_CSV_LIMITS,
+  ZERO_CSV_PROFILE,
   ZERO_CSV_SOURCE_PINS,
 } from "@rakazo/core/zero-prepared-profiles";
-export { ZERO_CSV_PROFILE, ZERO_CSV_LIMITS } from "@rakazo/core/zero-prepared-profiles";
+import { csvParseRows } from "d3-dsv";
+
+export { ZERO_CSV_LIMITS, ZERO_CSV_PROFILE } from "@rakazo/core/zero-prepared-profiles";
 
 // Application runtime layout is fixed by its own packager, separate from plugins.
 declare const ZERO_RUNTIME_BUNDLED: boolean;

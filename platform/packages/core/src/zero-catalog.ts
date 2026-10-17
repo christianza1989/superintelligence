@@ -1,13 +1,14 @@
 import snapshot from "./zero-catalog-data.json" with { type: "json" };
 import { getRepositoryMetadata } from "./zero-library-metadata.js";
+import type { RepositoryRequirements } from "./zero-need-normalization.js";
 import {
   normalizeRepositoryNeed,
   normalizeRepositoryText,
   repositoryConcepts,
   repositoryWords,
 } from "./zero-need-normalization.js";
-import type { RepositoryRequirements } from "./zero-need-normalization.js";
 import { searchPreparedProfiles } from "./zero-prepared-profiles.js";
+
 export type { RepositoryRequirements } from "./zero-need-normalization.js";
 
 export type RepositoryCandidate = (typeof snapshot.records)[number];
@@ -22,9 +23,7 @@ export type SearchOptions = {
 
 /** Bundled source-catalog retrieval, not prepared-profile discovery.
  * Relevance is source text overlap, never verified fit. */
-export function searchRepositories(
-  options: SearchOptions = {},
-): RepositoryCandidate[] {
+export function searchRepositories(options: SearchOptions = {}): RepositoryCandidate[] {
   const limit = Number.isFinite(options.limit)
     ? Math.max(1, Math.min(100, Math.trunc(options.limit!)))
     : 30;
@@ -44,10 +43,7 @@ export function retrieveRepositoryNeed(options: SearchOptions = {}) {
 export function listRepositories(
   options: Omit<SearchOptions, "limit"> = {},
 ): RepositoryCandidate[] {
-  const need = normalizeRepositoryNeed(
-    options.query ?? "",
-    options.requirements,
-  );
+  const need = normalizeRepositoryNeed(options.query ?? "", options.requirements);
   if (!need || (!need.empty && need.terms.length === 0)) return [];
   const { terms, literalTerms, identity, requirements } = need;
   return snapshot.records
@@ -67,10 +63,7 @@ export function listRepositories(
             normalizeRepositoryText(requirements.primaryLanguage.trim()))
       )
         return false;
-      return (
-        !requirements.sourcePinPresent ||
-        metadata?.sourcePin.status === "present"
-      );
+      return !requirements.sourcePinPresent || metadata?.sourcePin.status === "present";
     })
     .map((entry) => {
       const name = repositoryConcepts(entry.repository);
@@ -80,13 +73,7 @@ export function listRepositories(
       // category with an empty capability must not imply an image editor.
       const category = new Set(repositoryWords(entry.category));
       const weights = terms.map((term) =>
-        name.has(term)
-          ? 6
-          : capability.has(term)
-            ? 3
-            : category.has(term)
-              ? 1
-              : 0,
+        name.has(term) ? 6 : capability.has(term) ? 3 : category.has(term) ? 1 : 0,
       );
       // A name fragment plus a broad category does not establish a capability.
       // Keep direct name/category lookup, but require capability evidence for a
@@ -106,9 +93,7 @@ export function listRepositories(
     })
     .filter((result) => result.matches)
     .sort(
-      (a, b) =>
-        b.relevance - a.relevance ||
-        a.entry.repository.localeCompare(b.entry.repository),
+      (a, b) => b.relevance - a.relevance || a.entry.repository.localeCompare(b.entry.repository),
     )
     .map(({ entry }) => entry);
 }
@@ -121,6 +106,11 @@ export const repositoryCategories = [
   ...new Set(snapshot.records.map((entry) => entry.category)),
 ].sort();
 
+export type {
+  RepositoryMetadata,
+  RepositoryMetadataInput,
+  RepositoryPinStatus,
+} from "./zero-library-metadata.js";
 export {
   getRepositoryMetadata,
   projectRepositoryMetadata,
@@ -128,24 +118,18 @@ export {
   repositoryMetadataSnapshot,
 } from "./zero-library-metadata.js";
 export type {
-  RepositoryMetadata,
-  RepositoryMetadataInput,
-  RepositoryPinStatus,
-} from "./zero-library-metadata.js";
-
-export {
-  createRepositoryReusePlan,
-  InvalidRepositoryReusePlan,
-} from "./zero-reuse-plan.js";
+  PreparedProfile,
+  PreparedProfileSearchOptions,
+} from "./zero-prepared-profiles.js";
 
 export {
   preparedProfiles,
   searchPreparedProfiles,
-  ZERO_CSV_PROFILE,
   ZERO_CSV_LIMITS,
+  ZERO_CSV_PROFILE,
   ZERO_CSV_SOURCE_PINS,
 } from "./zero-prepared-profiles.js";
-export type {
-  PreparedProfile,
-  PreparedProfileSearchOptions,
-} from "./zero-prepared-profiles.js";
+export {
+  createRepositoryReusePlan,
+  InvalidRepositoryReusePlan,
+} from "./zero-reuse-plan.js";

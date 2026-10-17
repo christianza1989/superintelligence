@@ -2,7 +2,11 @@ import { createHash } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { preparedProfiles, repositorySnapshot, searchRepositories } from "@rakazo/core/repositoryzero";
+import {
+  preparedProfiles,
+  repositorySnapshot,
+  searchRepositories,
+} from "@rakazo/core/repositoryzero";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createZeroMcpServer,
@@ -122,7 +126,9 @@ describe("RepositoryZero discovery MCP protocol", () => {
       ZERO_MCP_OUTPUT_LIMITS.search,
     );
     expect(result).toMatchObject({
-      status: "prepared_profiles", candidates: [], preparedProfiles,
+      status: "prepared_profiles",
+      candidates: [],
+      preparedProfiles,
       schemaVersion: "1.6.0",
     });
     expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
@@ -141,25 +147,37 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(result.evaluation).toMatch(/scoped.*development conformance.*untrusted data/u);
     expect((await client.listTools()).tools).toHaveLength(3);
     expect(content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status)).toMatchObject({
-      server: { version: "0.6.0" }, profile: "discovery-only", backend: "unavailable",
+      server: { version: "0.6.0" },
+      profile: "discovery-only",
+      backend: "unavailable",
     });
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it.each(["CSV TSV", "CSV windows", "CSV OCR", "approved license CSV", "CSV unknown"])(
-    "preserves prepared no-fit through the SDK for %s", async (query) => {
-      expect(content(await call("zero_search", { query }), ZERO_MCP_OUTPUT_LIMITS.search)).toMatchObject({
-        status: "missing", preparedProfiles: [], candidates: [],
+    "preserves prepared no-fit through the SDK for %s",
+    async (query) => {
+      expect(
+        content(await call("zero_search", { query }), ZERO_MCP_OUTPUT_LIMITS.search),
+      ).toMatchObject({
+        status: "missing",
+        preparedProfiles: [],
+        candidates: [],
       });
     },
   );
 
   it("keeps prepared profiles outside catalog inspection and respects category filters", async () => {
-    expect(content(await call("zero_search", { query: "CSV", category: "documents" }),
-      ZERO_MCP_OUTPUT_LIMITS.search)).toMatchObject({ status: "missing", preparedProfiles: [] });
+    expect(
+      content(
+        await call("zero_search", { query: "CSV", category: "documents" }),
+        ZERO_MCP_OUTPUT_LIMITS.search,
+      ),
+    ).toMatchObject({ status: "missing", preparedProfiles: [] });
     for (const candidateId of ["d3/d3-dsv", preparedProfiles[0]!.profileId])
-      expect(content(await call("zero_inspect", { candidateId }), ZERO_MCP_OUTPUT_LIMITS.inspect))
-        .toMatchObject({ status: "missing", candidate: null, readiness: "source-only" });
+      expect(
+        content(await call("zero_inspect", { candidateId }), ZERO_MCP_OUTPUT_LIMITS.inspect),
+      ).toMatchObject({ status: "missing", candidate: null, readiness: "source-only" });
   });
 
   it("keeps source flags independent when a synthetic source capability also matches", async () => {

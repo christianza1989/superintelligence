@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { preparedProfiles, searchRepositories } from "@rakazo/core/repositoryzero";
+import { describe, expect, it } from "vitest";
 import { repositorySearchFromTool, repositorySearchTool } from "./zero-repository-tools.js";
 
 describe("agent reuse discovery", () => {
@@ -37,15 +37,20 @@ describe("agent reuse discovery", () => {
     expect(result.evaluation).toMatch(/No installation or execution grant/u);
   });
   it.each(["CSV TSV", "CSV windows", "CSV OCR", "approved license CSV", "CSV unknown"])(
-    "does not drop unsupported constraints to suggest the only preparer: %s", (query) => {
+    "does not drop unsupported constraints to suggest the only preparer: %s",
+    (query) => {
       expect(repositorySearchFromTool({ query })).toMatchObject({
-        status: "missing", preparedProfiles: [], candidates: [],
+        status: "missing",
+        preparedProfiles: [],
+        candidates: [],
       });
     },
   );
   it("keeps category filters binding for prepared matches", () => {
     expect(repositorySearchFromTool({ query: "CSV parser", category: "documents" })).toMatchObject({
-      status: "missing", preparedProfiles: [], candidates: [],
+      status: "missing",
+      preparedProfiles: [],
+      candidates: [],
     });
   });
 });

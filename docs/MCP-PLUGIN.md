@@ -1,6 +1,6 @@
 # Vietinis MCP papildinio paketas
 
-2026-10-17. Numatytasis profilis — trys discovery įrankiai ir vienas reuse skill. Source 0.5 paketas turi pasirenkamą Linux operator-bound CSV paruošimo / patikros bei PDF / statinio HTML extraction transportą per esamą Zero API/Graphile. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas. Tikro native 0.4 bandymo ribos išlaikomos atskirai nuo vėlesnės versijos source ir fixture kontrolės.
+2026-10-18. Numatytasis profilis — trys discovery įrankiai ir vienas reuse skill. Source 0.6 paketas turi pasirenkamą Linux operator-bound CSV paruošimo / patikros bei PDF / statinio HTML extraction transportą per esamą Zero API/Graphile. `zero_search` atskirai grąžina vieno paruošto CSV profilio ribotus faktus; jie nesuteikia vykdymo leidimo ar host integracijos patvirtinimo. Source-only rezultatas nėra patikrinta integracija ar naudos įrodymas. Tikro native 0.4 bandymo ribos išlaikomos atskirai nuo vėlesnės versijos source ir fixture kontrolės.
 
 ## Sukurti ir patikrinti
 

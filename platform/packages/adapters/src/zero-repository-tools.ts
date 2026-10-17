@@ -44,7 +44,9 @@ export function repositorySearchFromTool(input: Record<string, unknown>) {
   return {
     status: results.preparedProfiles.length
       ? "prepared_profiles"
-      : results.sourceCandidates.length ? "source_candidates" : "missing",
+      : results.sourceCandidates.length
+        ? "source_candidates"
+        : "missing",
     researchDate: repositorySnapshot.researchDate,
     evaluation: REPOSITORY_SEARCH_EVALUATION,
     preparedProfiles: results.preparedProfiles,

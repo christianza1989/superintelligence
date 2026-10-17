@@ -61,7 +61,7 @@ export function registerZeroComponentMcpTools(
       description:
         family === "pdf"
           ? "Extract born-digital ruled tables from one operator-allowlisted PDF into a durable worker receipt with page/bbox provenance. Accepts only a file ID; no path, URL or arbitrary parser. Does not edit the host project or claim general PDF/OCR coverage."
-          : "Read one operator-allowlisted static HTML file in a sealed, network-isolated browser worker. Returns fixed title, headings, links, visible text and PNG evidence for the immutable input. JavaScript and external requests are disabled; no navigation, selectors or host-project edits.",
+          : "Read one operator-allowlisted static HTML file in a sealed, network-isolated browser worker. Returns fixed title, headings, original lexical links, visible text and PNG evidence of a declared inert rendering. Raw input and rendered hashes are distinct; screenshots do not assert original-page fidelity. JavaScript, active elements and external requests are disabled; no navigation, selectors or host-project edits.",
       inputSchema: zeroExtractionInputSchema,
       outputSchema: zeroExtractionSubmittedSchema,
       annotations: { ...annotations, readOnlyHint: false },

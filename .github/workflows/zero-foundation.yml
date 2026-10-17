@@ -78,6 +78,7 @@ jobs:
           npm run test:observer -- --maxWorkers=2
           npm run test:scope -- --maxWorkers=2
           npm run test:worker -- --maxWorkers=2
+          npm run test:components -- --maxWorkers=1
           npm run test:jev -- --maxWorkers=2
           npm run test:jev:pricing
           npm run test:browser:foundation -- --maxWorkers=1
@@ -100,6 +101,7 @@ jobs:
           node --check platform/scripts/zero-native-bundle-probe.mjs
           node --check platform/scripts/zero-native-runtime-package.mjs
           node --check platform/scripts/qualify-zero-native-backup.mjs
+          node --check platform/scripts/qualify-zero-native-runtime.mjs
 
   csv-postgres:
     runs-on: ubuntu-latest

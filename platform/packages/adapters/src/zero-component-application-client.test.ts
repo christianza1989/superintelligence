@@ -187,13 +187,17 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
     );
     await expect(client.get(jobId)).rejects.toMatchObject({ code: "invalid_response" });
   });
-  it("preserves missing-profile status and redacts untrusted backend failures", async () => {
+  it("preserves profile and cleanup holds and redacts untrusted backend failures", async () => {
     const fetch = vi
       .fn<typeof globalThis.fetch>()
       .mockResolvedValueOnce(json({ error: "component_profile_unavailable" }, 503))
+      .mockResolvedValueOnce(json({ error: "component_input_cleanup_required" }, 503))
       .mockResolvedValueOnce(json({ error: `private-${token}` }, 500));
     const client = createZeroComponentApplicationClient(family, binding(), { fetch });
     await expect(client.status()).rejects.toMatchObject({ code: "component_profile_unavailable" });
+    await expect(client.extract(input())).rejects.toMatchObject({
+      code: "component_input_cleanup_required",
+    });
     const error = await client.status().catch((error) => error);
     expect(error).toBeInstanceOf(ZeroApplicationTransportError);
     expect(error.code).toBe("application_unavailable");

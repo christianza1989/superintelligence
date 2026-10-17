@@ -42,6 +42,7 @@ const errorCodes = [
   "routing_budget_unavailable",
   "routing_backend_unavailable",
   "component_profile_unavailable",
+  "component_input_cleanup_required",
   "component_backend_unavailable",
   "component_input_rejected",
   "invalid_job_bounds",

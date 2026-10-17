@@ -1,5 +1,5 @@
-import { normalizeRepositoryNeed } from "./zero-need-normalization.js";
 import type { RepositoryRequirements } from "./zero-need-normalization.js";
+import { normalizeRepositoryNeed } from "./zero-need-normalization.js";
 
 // Shared preparation facts, not repository-wide approval or an execution grant.
 export const ZERO_CSV_PROFILE = "d3-dsv-3.0.1/strict-table-v1";
@@ -34,7 +34,8 @@ export const preparedProfiles = Object.freeze([
     limits: ZERO_CSV_LIMITS,
     conformance: Object.freeze({
       status: "development-conformance" as const,
-      scope: "Strict rectangular CSV parsing checked by an independent decoder; bounded native CSV preparation and project verification",
+      scope:
+        "Strict rectangular CSV parsing checked by an independent decoder; bounded native CSV preparation and project verification",
       evidence: Object.freeze([
         "platform/packages/adapters/src/zero-csv-profile.test.ts",
         "docs/experiments/MCP-PREVIEW-2026-10-17.md",
@@ -55,12 +56,26 @@ export type PreparedProfileSearchOptions = {
 // constraints; TSV, streaming, writing, Excel and arbitrary transformations do
 // not become supported because there is only one prepared profile.
 const parserTerms = new Set([
-  "parse", "parser", "parsing", "nuskaitymas", "nuskaitymo", "nuskaityti", "skaitymas",
+  "parse",
+  "parser",
+  "parsing",
+  "nuskaitymas",
+  "nuskaitymo",
+  "nuskaityti",
+  "skaitymas",
 ]);
-const concept = (term: string) => parserTerms.has(term) ? "parse" : term;
+const concept = (term: string) => (parserTerms.has(term) ? "parse" : term);
 const supported = new Set([
-  "csv", "parse", "strict", "table", "comma", "separated", "string", "rows",
-  "d3", "dsv",
+  "csv",
+  "parse",
+  "strict",
+  "table",
+  "comma",
+  "separated",
+  "string",
+  "rows",
+  "d3",
+  "dsv",
 ]);
 
 /** Deterministic discovery facts only. The backend still authorizes every job. */

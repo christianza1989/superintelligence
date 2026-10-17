@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "repositoryzero",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "RepositoryZero source discovery by default; optional operator-bound Linux CSV, PDF and static HTML jobs through the existing Zero backend.",
   "extensions": {
     "com.openai": {
