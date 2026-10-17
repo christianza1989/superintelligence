@@ -629,6 +629,8 @@ export interface VoiceTranscribeRequest {
 }
 
 export interface BackgroundJobPayloads {
+  /** Bounded deterministic preparation; immutable request owns its principal and scope. */
+  "zero.csv.prepare": { requestArtifactId: string };
   "run.continue": { runId: string };
   "routine.wakeup": { routineId: string; scheduledFor: string };
   "computer.sleep": { computerId: string };

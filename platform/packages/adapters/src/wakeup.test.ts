@@ -4,6 +4,7 @@ import { InMemoryJobQueue } from "./wakeup.js";
 
 function handlers(): BackgroundJobHandlers {
   return {
+    "zero.csv.prepare": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),
     "computer.update": vi.fn(async () => undefined),

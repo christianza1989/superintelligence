@@ -1,6 +1,7 @@
 import type {
   AgentHomeStore,
   AgentRuntime,
+  ArtifactStore,
   BackgroundJobHandlers,
   JobPublisher,
   MessagingSurface,
@@ -20,8 +21,12 @@ import { compactHistory } from "./history-compaction.js";
 import type { MemoryProviderResolver } from "./memory-provider-factory.js";
 import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-delivery.js";
 import { expireTaughtSkillTeaching } from "./teaching-session.js";
+import type { ZeroCsvAuthorize } from "./zero-csv-preparation.js";
+import { runZeroCsvPreparation } from "./zero-csv-preparation.js";
 
 export function createBackgroundJobHandlers(deps: {
+  artifacts?: ArtifactStore;
+  authorizeZeroCsv?: ZeroCsvAuthorize;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
   sandbox: SandboxProvider;
@@ -53,6 +58,13 @@ export function createBackgroundJobHandlers(deps: {
   };
 
   return {
+    "zero.csv.prepare": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("CSV artifact store unavailable");
+      await runZeroCsvPreparation(
+        { prisma: deps.prisma, artifacts: deps.artifacts, authorize: deps.authorizeZeroCsv },
+        requestArtifactId,
+      );
+    },
     "run.continue": async (payload) => {
       await deps.executor.continueRun(payload.runId, deps.workerId);
       // Automatic messaging mirror: once the run's bot messages are durable,

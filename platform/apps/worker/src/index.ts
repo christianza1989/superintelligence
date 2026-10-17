@@ -229,6 +229,7 @@ async function main() {
   });
 
   const jobHandlers = createBackgroundJobHandlers({
+    artifacts,
     executor,
     prisma,
     sandbox,

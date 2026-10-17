@@ -137,3 +137,5 @@ export * from "./web-limits.js";
 export * from "./web-provider-factory.js";
 export * from "./web-ssrf.js";
 export * from "./web-tools.js";
+export type { ZeroCsvAuthorize, ZeroCsvPrincipal } from "./zero-csv-preparation.js";
+export { createZeroCsvPreparationService, runZeroCsvPreparation } from "./zero-csv-preparation.js";
