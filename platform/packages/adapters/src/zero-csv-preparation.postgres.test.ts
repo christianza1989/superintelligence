@@ -403,4 +403,63 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
     await service.cancel(jobId);
     await start();
   });
+
+  it("allows a renewed same-scope grant to recover stranded quota without gaining execution rights", async () => {
+    await stop();
+    let current = { ...principal };
+    const exactGrant: ZeroCsvAuthorize = async (owner) => {
+      if (
+        (["spaceId", "userId", "scopeId", "policyRevision", "expiresAt"] as const).some(
+          (key) => owner[key] !== current[key],
+        )
+      )
+        throw new IsolationError();
+    };
+    const scopedService = () =>
+      createZeroCsvPreparationService(
+        { prisma: db.prisma, artifacts, jobs, authorize: exactGrant },
+        current,
+      );
+    const original = scopedService();
+    const stranded: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const accepted = await original.submit(input());
+      stranded.push(accepted.jobId);
+      // Simulate queue loss while retaining the immutable request artifacts.
+      await jobs.cancel(`zero.csv.prepare:${accepted.jobId}`);
+    }
+    current = {
+      ...current,
+      policyRevision: "fixture-policy-v2",
+      expiresAt: new Date(Date.parse(current.expiresAt) + 60_000).toISOString(),
+    };
+    const renewed = scopedService();
+    await expect(renewed.submit(input())).rejects.toThrow("scope_job_limit_exceeded");
+    for (const id of stranded) {
+      expect(await renewed.get(id)).toMatchObject({ state: "unknown" });
+      expect(await renewed.cancel(id)).toMatchObject({ state: "cancelled" });
+      const receipt = JSON.parse((await renewed.artifact(id)).content);
+      expect(receipt.state).toBe("cancelled");
+      expect(receipt.result).toBeUndefined();
+    }
+    const fresh = await renewed.submit(input());
+    expect(await renewed.get(fresh.jobId)).toMatchObject({ state: "queued" });
+    await renewed.cancel(fresh.jobId);
+    // Historical access does not upgrade an old request to the replacement grant.
+    current = { ...principal };
+    const oldRequest = await scopedService().submit(input());
+    current = {
+      ...current,
+      policyRevision: "fixture-policy-v2",
+      expiresAt: new Date(Date.parse(current.expiresAt) + 60_000).toISOString(),
+    };
+    await start(artifacts, exactGrant);
+    const latest = scopedService();
+    await expect.poll(async () => (await latest.get(oldRequest.jobId)).state).toBe("blocked");
+    const blocked = JSON.parse((await latest.artifact(oldRequest.jobId)).content);
+    expect(blocked.reason).toBe("project_scope_rejected");
+    expect(blocked.result).toBeUndefined();
+    await stop();
+    await start();
+  });
 });

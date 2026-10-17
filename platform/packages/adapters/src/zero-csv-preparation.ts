@@ -109,7 +109,15 @@ async function loadRequest(
   // Scope metadata is checked before loading any private input content.
   const metadata = JSON.parse(row.description ?? "null");
   const owner = principalSchema.parse(metadata?.principal);
-  if (principal && JSON.stringify(owner) !== JSON.stringify(principal)) throw new IsolationError();
+  // Current authorized grants may access historical jobs in the same binding.
+  // Execution still uses the immutable original revision/expiry checked below.
+  if (
+    principal &&
+    (owner.spaceId !== principal.spaceId ||
+      owner.userId !== principal.userId ||
+      owner.scopeId !== principal.scopeId)
+  )
+    throw new IsolationError();
   if (row.spaceId !== owner.spaceId || row.userId !== owner.userId) throw new IsolationError();
   const bytes = await deps.artifacts.get(row.storageKey, contextFor(owner, id));
   if (bytes.byteLength !== row.size || zeroCsvHash(bytes) !== row.hash)
@@ -225,6 +233,11 @@ async function publish(
   }
 }
 
+/**
+ * Current grants control historical access within the same user/space/scope.
+ * Renewal preserves each job's execution principal and its outstanding quota.
+ * Recovery requires known job IDs; lost IDs still need operator recovery.
+ */
 export function createZeroCsvPreparationService(
   deps: Dependencies,
   trustedPrincipal: ZeroCsvPrincipal,
