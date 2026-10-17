@@ -33,6 +33,7 @@ import {
   createRunSandbox,
   createRunSecretWriter,
   createSecretStore,
+  createStoredZeroJevResolver,
   createTicketChangeNotifier,
   createWebProvider,
   deletePushToken,
@@ -126,6 +127,8 @@ import { mountVoiceHttpRoutes } from "./voice.js";
 import { mountWebhookHttpRoutes } from "./webhook.js";
 import type { ZeroCsvScopePolicy } from "./zero-csv.js";
 import { mountZeroCsvRoutes } from "./zero-csv.js";
+import type { ZeroJevScopePolicy } from "./zero-jev.js";
+import { mountZeroJevRoutes } from "./zero-jev.js";
 
 /**
  * Native clients always send the app scheme, including in Expo Go, so no
@@ -172,6 +175,8 @@ export async function createApp(
     runtime?: AgentRuntime;
     contextStrategy?: AgentContextStrategy;
     zeroCsvScopes?: ZeroCsvScopePolicy;
+    zeroJevScopes?: ZeroJevScopePolicy;
+    zeroJevFetch?: typeof fetch;
   } = {},
 ): Promise<AppHandles> {
   const {
@@ -188,10 +193,14 @@ export async function createApp(
     runtime: runtimeOverride,
     contextStrategy,
     zeroCsvScopes: zeroCsvScopesOverride,
+    zeroJevScopes: zeroJevScopesOverride,
+    zeroJevFetch,
     ...envOverrides
   } = overrides;
   const env = { ...loadEnv(process.env), ...envOverrides };
-  const zeroCsvScopes = zeroCsvScopesOverride ?? zeroProjectPolicyFromEnv();
+  const zeroScopes = zeroProjectPolicyFromEnv();
+  const zeroCsvScopes = zeroCsvScopesOverride ?? zeroScopes;
+  const zeroJevScopes = zeroJevScopesOverride ?? zeroScopes;
   const logger = loggerOverride ?? createServiceLogger({ service: SERVICE_NAMES.api });
   installLogger(logger);
   const created = prismaOverride
@@ -504,7 +513,18 @@ export async function createApp(
     shutdownSignal: shutdown.signal,
   });
 
+  const zeroJevResolve = zeroJevScopes
+    ? createStoredZeroJevResolver({
+        prisma,
+        secretStore: secrets,
+        policy: async (principal) => {
+          await zeroJevScopes.authorize(principal);
+          return zeroJevScopes.resolveJev(principal);
+        },
+      })
+    : undefined;
   const jobHandlers = createBackgroundJobHandlers({
+    zeroJev: { pool: jobPool, resolve: zeroJevResolve, fetch: zeroJevFetch },
     artifacts,
     authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
     resolveZeroCsvVerifier: zeroCsvScopes?.resolveVerifier
@@ -656,6 +676,16 @@ export async function createApp(
     artifacts,
     jobs,
     policy: zeroCsvScopes,
+    authenticate: sessionActor,
+    trustedOrigin: (origin) => isTrustedOrigin(origin, env),
+  });
+  mountZeroJevRoutes(app, {
+    prisma,
+    pool: jobPool,
+    artifacts,
+    jobs,
+    policy: zeroJevScopes,
+    resolve: zeroJevResolve,
     authenticate: sessionActor,
     trustedOrigin: (origin) => isTrustedOrigin(origin, env),
   });

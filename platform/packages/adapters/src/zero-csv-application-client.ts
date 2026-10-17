@@ -1,4 +1,12 @@
 import { z } from "zod";
+import type {
+  ZeroApplicationTransportErrorCode,
+  ZeroApplicationTransportOptions,
+} from "./zero-application-transport.js";
+import {
+  createZeroApplicationTransport,
+  ZeroApplicationTransportError,
+} from "./zero-application-transport.js";
 import { ZERO_CSV_LIMITS, ZERO_CSV_PROFILE } from "./zero-csv-profile.js";
 import { readZeroOperatorFile } from "./zero-project-policy.js";
 
@@ -108,185 +116,40 @@ export interface ZeroCsvApplicationClient {
     page?: { offset?: number; limit?: number },
   ): Promise<ZeroCsvArtifactPage>;
 }
-const bindingSchema = z
-  .object({
-    apiUrl: z
-      .string()
-      .max(128)
-      .refine((value) => {
-        const match = /^http:\/\/(127\.0\.0\.1|\[::1\]):([1-9]\d{0,4})\/?$/.exec(value);
-        return Boolean(match && Number(match[2]) <= 65535);
-      }),
-    spaceId: id,
-    scopeId: id,
-    sessionToken: z
-      .string()
-      .min(16)
-      .max(4096)
-      .regex(/^[\x21-\x7e]+$/),
-    expiresAt: z
-      .string()
-      .datetime({ offset: true })
-      .refine((value) => Number.isFinite(Date.parse(value))),
-  })
-  .strict();
-const errorCodes = [
-  "authentication_required",
-  "project_scope_rejected",
-  "origin_rejected",
-  "project_policy_unavailable",
-  "invalid_scope",
-  "invalid_request",
-  "idempotency_key_conflict",
-  "idempotency_key_expired",
-  "scope_job_limit_exceeded",
-  "csv_limit_exceeded",
-  "invalid_job_deadline",
-  "verification_unavailable",
-  "verification_preparation_required",
-  "preparation_backend_unavailable",
-  "json_required",
-  "request_too_large",
-  "invalid_json",
-  "invalid_page",
-  "invalid_binding",
-  "binding_expired",
-  "application_unavailable",
-  "request_timeout",
-  "response_too_large",
-  "invalid_response",
-  "redirect_rejected",
-] as const;
-export type ZeroCsvApplicationErrorCode = (typeof errorCodes)[number];
+export type ZeroCsvApplicationErrorCode = ZeroApplicationTransportErrorCode;
 export class ZeroCsvApplicationError extends Error {
   constructor(readonly code: ZeroCsvApplicationErrorCode) {
     super(code);
     this.name = "ZeroCsvApplicationError";
   }
 }
-interface Options {
-  fetch?: typeof globalThis.fetch;
-  timeoutMs?: number;
-}
-const responseLimit = 32767;
+type Options = ZeroApplicationTransportOptions;
 function fail(code: ZeroCsvApplicationErrorCode): never {
   throw new ZeroCsvApplicationError(code);
-}
-
-async function readJson(response: Response, signal: AbortSignal): Promise<unknown> {
-  if (
-    response.headers.get("content-type")?.split(";")[0]?.trim().toLowerCase() !==
-      "application/json" ||
-    !response.body
-  ) {
-    void response.body?.cancel().catch(() => undefined);
-    fail("invalid_response");
-  }
-  const declared = response.headers.get("content-length");
-  if (declared !== null && (!/^\d+$/.test(declared) || Number(declared) > responseLimit)) {
-    void response.body.cancel().catch(() => undefined);
-    fail("response_too_large");
-  }
-  const reader = response.body.getReader();
-  const abort = () => {
-    void reader.cancel().catch(() => undefined);
-  };
-  signal.addEventListener("abort", abort, { once: true });
-  const decoder = new TextDecoder("utf-8", { fatal: true });
-  let bytes = 0;
-  let text = "";
-  try {
-    for (;;) {
-      const chunk = await reader.read();
-      if (signal.aborted) fail("request_timeout");
-      if (chunk.done) break;
-      bytes += chunk.value.byteLength;
-      if (bytes > responseLimit) {
-        abort();
-        fail("response_too_large");
-      }
-      text += decoder.decode(chunk.value, { stream: true });
-    }
-    return JSON.parse(text + decoder.decode());
-  } catch (error) {
-    abort();
-    if (error instanceof ZeroCsvApplicationError) throw error;
-    fail("invalid_response");
-  } finally {
-    signal.removeEventListener("abort", abort);
-    reader.releaseLock();
-  }
 }
 
 export function createZeroCsvApplicationClient(
   trustedBinding: ZeroCsvApplicationBinding,
   options: Options = {},
 ): ZeroCsvApplicationClient {
-  const parsed = bindingSchema.safeParse(trustedBinding);
-  if (!parsed.success) fail("invalid_binding");
-  const binding = parsed.data;
-  const timeoutMs = options.timeoutMs ?? 5000;
-  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 30000)
+  let transport: ReturnType<typeof createZeroApplicationTransport>;
+  try {
+    transport = createZeroApplicationTransport(trustedBinding, "csv", options);
+  } catch (error) {
+    if (error instanceof ZeroApplicationTransportError) fail(error.code);
     fail("invalid_binding");
-  const fetcher = options.fetch ?? globalThis.fetch;
-  const prefix = `/api/zero/csv/scopes/${encodeURIComponent(binding.scopeId)}`;
-  const active = () => {
-    if (Date.parse(binding.expiresAt) <= Date.now()) fail("binding_expired");
-  };
+  }
   async function request<T>(suffix: string, schema: z.ZodType<T>, body?: unknown): Promise<T> {
-    active();
-    const controller = new AbortController();
-    let timer: ReturnType<typeof setTimeout>;
-    const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => {
-        controller.abort();
-        reject(new ZeroCsvApplicationError("request_timeout"));
-      }, timeoutMs);
-    });
     try {
-      return await Promise.race([
-        timeout,
-        (async () => {
-          const target = new URL(prefix + suffix, binding.apiUrl);
-          const response = await fetcher(target, {
-            method: body === undefined ? "GET" : "POST",
-            headers: {
-              authorization: `Bearer ${binding.sessionToken}`,
-              "x-rakazo-space-id": binding.spaceId,
-              ...(body !== undefined ? { "content-type": "application/json" } : {}),
-            },
-            redirect: "error",
-            cache: "no-store",
-            signal: controller.signal,
-            ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
-          });
-          if (
-            response.redirected ||
-            (response.status >= 300 && response.status < 400) ||
-            (response.url && new URL(response.url).origin !== target.origin)
-          ) {
-            void response.body?.cancel().catch(() => undefined);
-            fail("redirect_rejected");
-          }
-          const json = await readJson(response, controller.signal);
-          active();
-          if (response.status !== (suffix === "/prepare" || suffix === "/verify" ? 202 : 200)) {
-            const error = z
-              .object({ error: z.enum(errorCodes) })
-              .strict()
-              .safeParse(json);
-            fail(error.success ? error.data.error : "application_unavailable");
-          }
-          const output = schema.safeParse(json);
-          if (!output.success) fail("invalid_response");
-          return output.data;
-        })(),
-      ]);
+      return await transport(
+        suffix,
+        schema,
+        body,
+        suffix === "/prepare" || suffix === "/verify" ? 202 : 200,
+      );
     } catch (error) {
-      if (error instanceof ZeroCsvApplicationError) throw error;
-      fail(controller.signal.aborted ? "request_timeout" : "application_unavailable");
-    } finally {
-      clearTimeout(timer!);
+      if (error instanceof ZeroApplicationTransportError) fail(error.code);
+      fail("application_unavailable");
     }
   }
   const checkedJob = (value: string) => {

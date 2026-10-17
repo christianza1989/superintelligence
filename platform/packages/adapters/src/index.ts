@@ -150,10 +150,16 @@ export {
   ZERO_CSV_VERIFICATION_PROFILE,
 } from "./zero-csv-preparation.js";
 export { ZERO_CSV_LIMITS, ZERO_CSV_PROFILE } from "./zero-csv-profile.js";
+export * from "./zero-jev-application-client.js";
 export type { ZeroJevProfile, ZeroJevResolver } from "./zero-jev-profile.js";
 export { createStoredZeroJevResolver } from "./zero-jev-profile.js";
 export type { ZeroJevWorkerDependencies } from "./zero-jev-worker.js";
-export { createZeroJevToolService, runZeroJevTool, ZERO_JEV_LIMITS } from "./zero-jev-worker.js";
+export {
+  createZeroJevToolService,
+  getZeroJevAvailability,
+  runZeroJevTool,
+  ZERO_JEV_LIMITS,
+} from "./zero-jev-worker.js";
 export {
   createZeroProjectPolicy,
   readZeroOperatorFile as readOperatorFile,

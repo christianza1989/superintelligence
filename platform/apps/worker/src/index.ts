@@ -17,6 +17,7 @@ import {
   createRunExecutor,
   createRunSandbox,
   createRunSecretWriter,
+  createStoredZeroJevResolver,
   createTicketChangeNotifier,
   createWebProvider,
   databaseCapacityBackoffMs,
@@ -231,6 +232,19 @@ async function main() {
 
   const zeroCsvScopes = zeroProjectPolicyFromEnv();
   const jobHandlers = createBackgroundJobHandlers({
+    zeroJev: {
+      pool,
+      resolve: zeroCsvScopes
+        ? createStoredZeroJevResolver({
+            prisma,
+            secretStore: secrets,
+            policy: async (principal) => {
+              await zeroCsvScopes.authorize(principal);
+              return zeroCsvScopes.resolveJev(principal);
+            },
+          })
+        : undefined,
+    },
     artifacts,
     authorizeZeroCsv: zeroCsvScopes ? (principal) => zeroCsvScopes.authorize(principal) : undefined,
     resolveZeroCsvVerifier: zeroCsvScopes?.resolveVerifier

@@ -9,6 +9,7 @@ import { fileHandlePath } from "./file-handle-path.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
 import { ZERO_CSV_PROJECT_FILES, ZERO_CSV_PROJECT_LIMITS } from "./zero-csv-project-verifier.js";
+import { zeroJevProfileSchema } from "./zero-jev-profile.js";
 
 export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({ bytes: 65_536, grants: 64 });
 const checkout = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -55,7 +56,7 @@ const verificationSchema = z
   })
   .strict();
 const grantSchema = principalSchema
-  .extend({ verification: verificationSchema.optional() })
+  .extend({ verification: verificationSchema.optional(), jev: zeroJevProfileSchema.optional() })
   .strict();
 const policySchema = z
   .object({
@@ -243,6 +244,12 @@ export function createZeroProjectPolicy(file: string) {
           limits: { ...verification.limits },
         },
       };
+    },
+    async resolveJev(principal: ZeroCsvPrincipal) {
+      const grant = await checkedGrant(principal);
+      if (!grant.jev || Date.parse(grant.jev.expiresAt) <= Date.now())
+        throw new ZeroProjectPolicyError();
+      return grant.jev;
     },
   };
 }
