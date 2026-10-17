@@ -537,6 +537,241 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
         staging,
         `zero-csv-scope-${zeroCsvHash(JSON.stringify([spaceId, userId, principal.scopeId]))}`,
       );
+    const passedVerification = async () => {
+      const accepted = await service.submitVerify(verifying(await preparation()));
+      expect(await terminal(accepted.jobId, "succeeded")).toMatchObject({
+        verification: { outcome: "pass" },
+      });
+      await stop();
+      return accepted.jobId;
+    };
+
+    it("observes unchanged then edited host bytes without mutating the successful receipt", async () => {
+      const id = await passedVerification();
+      const original = await service.artifact(id);
+      const dispatch = vi.spyOn(projectVerifier, "verifyZeroCsvProject");
+      const fresh = await service.freshness(id);
+      expect(fresh).toMatchObject({
+        jobId: id,
+        artifactId: original.artifactId,
+        revision: 2,
+        receiptSha256: original.sha256,
+        state: "unchanged",
+      });
+      expect(fresh.verifiedSnapshotSha256).toBe(fresh.currentSnapshotSha256);
+      await writeFile(
+        path.join(project, "app.mjs"),
+        `${app}\n// host edited after immutable PASS\n`,
+      );
+      const changed = await service.freshness(id);
+      expect(changed).toMatchObject({
+        state: "changed",
+        verifiedSnapshotSha256: fresh.verifiedSnapshotSha256,
+        receiptSha256: original.sha256,
+      });
+      expect(changed.currentSnapshotSha256).not.toBe(changed.verifiedSnapshotSha256);
+      expect(await service.artifact(id)).toEqual(original);
+      expect(await db.prisma.artifact.count({ where: { rootArtifactId: id } })).toBe(1);
+      expect(await readdir(scopeDirectory())).toEqual([]);
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(modelRun).not.toHaveBeenCalled();
+    });
+
+    it("rejects a changed verifier binding before reading host source", async () => {
+      const id = await passedVerification();
+      const source = vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness");
+      verifierConfig = { ...verifierConfig!, imageId: `sha256:${"a".repeat(64)}` };
+      await expect(service.freshness(id)).rejects.toThrow("verification_policy_changed");
+      expect(source).not.toHaveBeenCalled();
+      expect(await readdir(scopeDirectory())).toEqual([]);
+    });
+
+    it.each(["foreign scope", "revoked grant", "membership revoked"])(
+      "denies freshness for %s before private bytes or source",
+      async (mode) => {
+        const id = await passedVerification();
+        const source = vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness");
+        const get = vi.spyOn(artifacts, "get");
+        const membership = await db.prisma.spaceMember.findUniqueOrThrow({
+          where: { spaceId_userId: { spaceId, userId } },
+        });
+        const caller = createZeroCsvPreparationService(
+          {
+            prisma: db.prisma,
+            artifacts,
+            jobs,
+            resolveVerifier,
+            authorize:
+              mode === "revoked grant"
+                ? async () => {
+                    throw new IsolationError();
+                  }
+                : async () => undefined,
+          },
+          mode === "foreign scope"
+            ? { ...principal, scopeId: "another-authorized-scope" }
+            : principal,
+        );
+        if (mode === "membership revoked")
+          await db.prisma.spaceMember.delete({ where: { id: membership.id } });
+        try {
+          await expect(caller.freshness(id)).rejects.toBeInstanceOf(IsolationError);
+        } finally {
+          if (mode === "membership revoked")
+            await db.prisma.spaceMember.create({ data: membership });
+        }
+        expect(get).not.toHaveBeenCalled();
+        expect(source).not.toHaveBeenCalled();
+        expect(await readdir(scopeDirectory())).toEqual([]);
+      },
+    );
+
+    it("limits concurrent freshness snapshots to four and releases only its own reservations", async () => {
+      const id = await passedVerification();
+      let release!: () => void;
+      const gate = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const original = projectVerifier.checkZeroCsvProjectFreshness;
+      let entered = 0;
+      vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness").mockImplementation(
+        async (...args) => {
+          entered++;
+          await gate;
+          return original(...args);
+        },
+      );
+      const checks = Array.from({ length: 4 }, () => service.freshness(id));
+      try {
+        await expect.poll(() => entered).toBe(4);
+        await expect(service.freshness(id)).rejects.toThrow(
+          "verification_staging_operator_cleanup_required",
+        );
+        expect(entered).toBe(4);
+      } finally {
+        release();
+      }
+      expect((await Promise.all(checks)).every((result) => result.state === "unchanged")).toBe(
+        true,
+      );
+      expect(await readdir(scopeDirectory())).toEqual([]);
+    });
+
+    it("rechecks a grant after capture and publishes no freshness when it is revoked", async () => {
+      const id = await passedVerification();
+      const immutable = await service.artifact(id);
+      let revoked = false;
+      const original = projectVerifier.checkZeroCsvProjectFreshness;
+      vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness").mockImplementation(
+        async (...args) => {
+          const result = await original(...args);
+          revoked = true;
+          return result;
+        },
+      );
+      const caller = createZeroCsvPreparationService(
+        {
+          prisma: db.prisma,
+          artifacts,
+          jobs,
+          resolveVerifier,
+          authorize: async () => {
+            if (revoked) throw new IsolationError();
+          },
+        },
+        principal,
+      );
+      await expect(caller.freshness(id)).rejects.toBeInstanceOf(IsolationError);
+      expect(await readdir(scopeDirectory())).toEqual([]);
+      expect(await service.artifact(id)).toEqual(immutable);
+    });
+
+    it("honors an aborted freshness request before private reads or staging", async () => {
+      const id = await passedVerification();
+      const source = vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness");
+      const get = vi.spyOn(artifacts, "get");
+      const controller = new AbortController();
+      controller.abort();
+      await expect(service.freshness(id, controller.signal)).rejects.toThrow(
+        "verification_freshness_unavailable",
+      );
+      expect(get).not.toHaveBeenCalled();
+      expect(source).not.toHaveBeenCalled();
+      expect(await readdir(scopeDirectory())).toEqual([]);
+    });
+
+    it("rejects preparation, queued and cancelled jobs before private request bytes", async () => {
+      const prepared = await preparation();
+      await stop();
+      const pending = await service.submitVerify(verifying(prepared));
+      const get = vi.spyOn(artifacts, "get");
+      await expect(service.freshness(prepared)).rejects.toThrow("verification_result_required");
+      await expect(service.freshness(pending.jobId)).rejects.toThrow(
+        "verification_result_required",
+      );
+      expect(get).not.toHaveBeenCalled();
+      await service.cancel(pending.jobId);
+      get.mockClear();
+      await expect(service.freshness(pending.jobId)).rejects.toThrow(
+        "verification_result_required",
+      );
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it.each(["foreign manifest scope", "incorrect snapshot hash", "duplicate manifest file"])(
+      "rejects a %s receipt before host source is captured",
+      async (mode) => {
+        const id = await passedVerification();
+        const row = await db.prisma.artifact.findFirstOrThrow({ where: { rootArtifactId: id } });
+        const receipt = JSON.parse((await service.artifact(id)).content);
+        if (mode === "foreign manifest scope")
+          receipt.verification.snapshot.manifest.scopeId = "foreign";
+        if (mode === "incorrect snapshot hash")
+          receipt.verification.snapshot.sha256 = "0".repeat(64);
+        if (mode === "duplicate manifest file") {
+          receipt.verification.snapshot.manifest.files[0].path =
+            receipt.verification.snapshot.manifest.files[1].path;
+          receipt.verification.snapshot.sha256 = zeroCsvHash(
+            JSON.stringify(receipt.verification.snapshot.manifest),
+          );
+        }
+        // Simulate corrupt stored metadata too, so the semantic receipt guard is exercised.
+        const bytes = Buffer.from(JSON.stringify(receipt));
+        const stored = await artifacts.put(
+          { name: "corrupt-fixture.json", mimeType: "application/json", bytes },
+          {
+            ...principal,
+            operationId: "synthetic-corruption",
+            traceId: "synthetic-corruption",
+            signal: new AbortController().signal,
+          },
+        );
+        await db.prisma.artifact.update({
+          where: { id: row.id },
+          data: { storageKey: stored.id, size: bytes.length, hash: zeroCsvHash(bytes) },
+        });
+        const source = vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness");
+        await expect(service.freshness(id)).rejects.toThrow("verification_result_required");
+        expect(source).not.toHaveBeenCalled();
+        expect(await readdir(scopeDirectory())).toEqual([]);
+      },
+    );
+
+    it("cleans its reservation when request cancellation arrives before source capture", async () => {
+      const id = await passedVerification();
+      const controller = new AbortController();
+      const original = projectVerifier.checkZeroCsvProjectFreshness;
+      vi.spyOn(projectVerifier, "checkZeroCsvProjectFreshness").mockImplementation(
+        async (...args) => {
+          controller.abort();
+          return original(...args);
+        },
+      );
+      await expect(service.freshness(id, controller.signal)).rejects.toThrow(
+        "verification_freshness_unavailable",
+      );
+      expect(await readdir(scopeDirectory())).toEqual([]);
+    });
 
     it("binds a real prepared component, host snapshot and invocation receipt idempotently without private paths", async () => {
       const prepared = await preparation();
@@ -587,6 +822,9 @@ postgres("CSV preparation through the existing Graphile worker (PostgreSQL)", ()
             reason: mode === "unused" ? "component_not_used" : "component_source_mismatch",
           },
         });
+        await expect(service.freshness(accepted.jobId)).rejects.toThrow(
+          "verification_result_required",
+        );
       },
     );
 

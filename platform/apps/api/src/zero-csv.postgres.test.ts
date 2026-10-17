@@ -224,6 +224,24 @@ postgres("authenticated CSV preparation application API (PostgreSQL)", () => {
     ).toBe(413);
   });
 
+  it("exposes freshness only through the authenticated project route and rejects preparation results", async () => {
+    const accepted = await request(`${prefix}/prepare`, { method: "POST", body: input() });
+    expect(accepted.status).toBe(202);
+    const { jobId } = (await accepted.json()) as { jobId: string };
+    try {
+      const unsupported = await request(`${prefix}/jobs/${jobId}/freshness`);
+      expect(unsupported.status).toBe(409);
+      expect(await unsupported.json()).toEqual({ error: "verification_result_required" });
+      expect((await request(`${prefix}/jobs/${jobId}/freshness?root=/`)).status).toBe(400);
+      expect((await request(`${prefix}/jobs/${jobId}/freshness`, { cookie: "" })).status).toBe(401);
+      expect(
+        (await request(`${prefix}/jobs/${jobId}/freshness`, { cookie: otherCookie })).status,
+      ).toBe(403);
+    } finally {
+      await request(`${prefix}/jobs/${jobId}/cancel`, { method: "POST", body: {} });
+    }
+  });
+
   it("executes through the existing application worker and returns bounded hash-checked artifact pages", async () => {
     const params = input();
     const submitted = await request(`${prefix}/prepare`, { method: "POST", body: params });

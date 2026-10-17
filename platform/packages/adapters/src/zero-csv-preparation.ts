@@ -16,6 +16,7 @@ import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.j
 import {
   checkZeroCsvProjectFreshness,
   verifyZeroCsvProject,
+  ZERO_CSV_PROJECT_FILES,
   ZERO_CSV_PROJECT_LIMITS,
 } from "./zero-csv-project-verifier.js";
 
@@ -578,6 +579,135 @@ export function createZeroCsvPreparationService(
         sha256: row.hash,
         content: new TextDecoder("utf-8", { fatal: true }).decode(bytes),
       };
+    },
+    /** An observation of current bytes; the original receipt remains immutable. */
+    async freshness(jobId: string, requestSignal?: AbortSignal) {
+      z.string().uuid().parse(jobId);
+      const signal = AbortSignal.any([
+        AbortSignal.timeout(
+          Math.max(1, Math.min(5000, Date.parse(principal.expiresAt) - Date.now())),
+        ),
+        ...(requestSignal ? [requestSignal] : []),
+      ]);
+      const active = () => signal.throwIfAborted();
+      let reservation: Awaited<ReturnType<typeof reserveVerificationStaging>> | undefined;
+      try {
+        active();
+        await authorize(deps, principal);
+        active();
+        const cached = await loadHeader(deps, jobId, principal);
+        if (cached.header.kind !== "zero.csv.verify.request.v1")
+          throw new Error("verification_result_required");
+        const row = await findReceipt(deps.prisma, cached.header, jobId);
+        if (!row || row.size > ZERO_CSV_LIMITS.artifactBytes || row.version !== 2)
+          throw new Error("verification_result_required");
+        const metadata = z
+          .object({
+            state: z.literal("succeeded"),
+            profile: z.literal(ZERO_CSV_VERIFICATION_PROFILE),
+            requestDigest: z.literal(cached.header.requestDigest),
+          })
+          .safeParse(JSON.parse(row.description ?? "null"));
+        if (!metadata.success) throw new Error("verification_result_required");
+        const { request } = await loadRequest(deps, jobId, principal, cached);
+        if (request.kind !== "zero.csv.verify.request.v1")
+          throw new Error("verification_result_required");
+        const recheck = async () => {
+          active();
+          await authorize(deps, principal);
+          const config = await deps.resolveVerifier?.(principal);
+          if (!config || zeroCsvHash(JSON.stringify(config)) !== request.verifierBindingSha256)
+            throw new Error("verification_policy_changed");
+          active();
+          return config;
+        };
+        const config = await recheck();
+        await recheck();
+        const bytes = await deps.artifacts.get(row.storageKey, {
+          ...contextFor(principal, jobId),
+          signal,
+        });
+        if (bytes.byteLength !== row.size || zeroCsvHash(bytes) !== row.hash)
+          throw new Error("verification_result_required");
+        const hash = z.string().regex(/^[a-f0-9]{64}$/u);
+        const decoded = z
+          .object({
+            kind: z.literal("zero.csv.receipt.v1"),
+            jobId: z.literal(jobId),
+            requestDigest: z.literal(request.requestDigest),
+            state: z.literal("succeeded"),
+            profile: z.literal(ZERO_CSV_VERIFICATION_PROFILE),
+            verification: z.object({
+              profile: z.literal(ZERO_CSV_VERIFICATION_PROFILE),
+              outcome: z.literal("pass"),
+              snapshot: z.object({
+                sha256: hash,
+                manifest: z
+                  .object({
+                    schemaVersion: z.literal(1),
+                    scopeId: z.literal(principal.scopeId),
+                    files: z
+                      .array(
+                        z
+                          .object({
+                            path: z.enum([...ZERO_CSV_PROJECT_FILES]),
+                            bytes: z.number().int().min(0).max(131_072),
+                            sha256: hash,
+                          })
+                          .strict(),
+                      )
+                      .length(5),
+                    totalBytes: z.number().int().min(0).max(ZERO_CSV_PROJECT_LIMITS.sourceBytes),
+                  })
+                  .strict(),
+              }),
+            }),
+          })
+          .safeParse(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)));
+        if (!decoded.success) throw new Error("verification_result_required");
+        const snapshot = decoded.data.verification.snapshot;
+        if (
+          new Set(snapshot.manifest.files.map((file) => file.path)).size !== 5 ||
+          snapshot.manifest.files.reduce((sum, file) => sum + file.bytes, 0) !==
+            snapshot.manifest.totalBytes ||
+          zeroCsvHash(JSON.stringify(snapshot.manifest)) !== snapshot.sha256
+        )
+          throw new Error("verification_result_required");
+        await recheck();
+        reservation = await reserveVerificationStaging(config, principal, jobId);
+        await recheck();
+        const current = await checkZeroCsvProjectFreshness(
+          reservation.config,
+          snapshot.sha256,
+          signal,
+        );
+        const checkedAt = new Date().toISOString();
+        await recheck();
+        return {
+          jobId,
+          artifactId: row.id,
+          revision: 2 as const,
+          receiptSha256: row.hash,
+          verifiedSnapshotSha256: snapshot.sha256,
+          currentSnapshotSha256: current.sha256,
+          state: current.state,
+          checkedAt,
+        };
+      } catch (error) {
+        if (error instanceof IsolationError) throw error;
+        if (
+          error instanceof Error &&
+          [
+            "verification_result_required",
+            "verification_policy_changed",
+            "verification_staging_operator_cleanup_required",
+          ].includes(error.message)
+        )
+          throw error;
+        throw new Error("verification_freshness_unavailable");
+      } finally {
+        await reservation?.release();
+      }
     },
   };
 }

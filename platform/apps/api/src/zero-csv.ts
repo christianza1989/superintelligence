@@ -79,7 +79,12 @@ export function mountZeroCsvRoutes(
         return c.json({ error: "invalid_request" }, 400);
       if (
         error instanceof Error &&
-        ["idempotency_key_conflict", "idempotency_key_expired"].includes(error.message)
+        [
+          "idempotency_key_conflict",
+          "idempotency_key_expired",
+          "verification_result_required",
+          "verification_policy_changed",
+        ].includes(error.message)
       )
         return c.json({ error: error.message }, 409);
       if (error instanceof Error && error.message === "scope_job_limit_exceeded")
@@ -93,7 +98,14 @@ export function mountZeroCsvRoutes(
         ].includes(error.message)
       )
         return c.json({ error: error.message }, 400);
-      if (error instanceof Error && error.message === "verification_unavailable")
+      if (
+        error instanceof Error &&
+        [
+          "verification_unavailable",
+          "verification_freshness_unavailable",
+          "verification_staging_operator_cleanup_required",
+        ].includes(error.message)
+      )
         return c.json({ error: error.message }, 503);
       // Never expose SQL, input contents, filesystem paths or credential details.
       return c.json({ error: "preparation_backend_unavailable" }, 503);
@@ -139,6 +151,12 @@ export function mountZeroCsvRoutes(
   );
   app.get(`${ZERO_CSV_API_PREFIX}/:scopeId/jobs/:jobId`, (c) =>
     scoped(c, async (service) => c.json(await service.get(c.req.param("jobId")))),
+  );
+  app.get(`${ZERO_CSV_API_PREFIX}/:scopeId/jobs/:jobId/freshness`, (c) =>
+    scoped(c, async (service) => {
+      if (Object.keys(c.req.query()).length) return c.json({ error: "invalid_request" }, 400);
+      return c.json(await service.freshness(c.req.param("jobId"), c.req.raw.signal));
+    }),
   );
   app.post(`${ZERO_CSV_API_PREFIX}/:scopeId/jobs/:jobId/cancel`, (c) =>
     scoped(c, async (service) => {
