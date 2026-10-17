@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "repositoryzero",
+  "version": "0.1.1",
+  "description": "Search and inspect RepositoryZero source candidates from your coding assistant. Discovery preview; preparation and verification are separate gates.",
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "RepositoryZero",
+        "shortDescription": "Find reusable source components",
+        "developerName": "RepositoryZero contributors",
+        "capabilities": ["Read"]
+      }
+    }
+  }
+}

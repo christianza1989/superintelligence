@@ -8,6 +8,8 @@
   },
   "scripts": {
     "setup:mcp": "node scripts/platform.mjs install --frozen-lockfile --ignore-scripts --filter @rakazo/adapters... --filter @rakazo/testkit...",
+    "package:mcp": "node scripts/package-mcp-plugin.mjs",
+    "test:mcp-package": "node scripts/test-mcp-plugin.mjs",
     "mcp:serve": "node scripts/zero-mcp.mjs",
     "test:mcp": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-mcp-server.test.ts packages/adapters/src/zero-mcp-stdio.test.ts",
     "test:observer": "node scripts/platform.mjs exec vitest run packages/adapters/src/pi-runtime-fallback.test.ts packages/adapters/src/pi-usage.test.ts packages/adapters/src/pi-runtime-provider-prefix.test.ts packages/adapters/src/pi-cache-protocol.test.ts",

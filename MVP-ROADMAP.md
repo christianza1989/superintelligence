@@ -9,7 +9,7 @@ MCP discovery preview = P1X.2/P1X.3; pilna viena deterministic MCP vertikalė le
 Pirmas read-only discovery ir tikras Codex desktop ryšys. Prieš prepare/verify būtini scope ir resursų limitai; host primary model/auth lieka host, Zero turi tik savo jobs. Platinamam MVP reikia plugin ir svetainės verification. Claude ir kiekviena OS kvalifikuojami atskirai.
 
 - [x] P1X.1 Priimti A13–A16: trečias MCP įėjimas, native host / Zero job autoritetas, vienas service/worker, profilių vartai ir native allowance matomumas. Kritiškai peržiūrėtas Astra pasiūlymas; faktinė įgyvendinimo būsena pateikta IMPLEMENTATION.
-- [ ] P1X.2 Plonas STDIO discovery serveris: zero_search/zero_inspect/zero_status, strict bounded schemas, pinned SDK, tik protokolas stdout. Offline initialize/list/call/invalid-input/output-limit/shutdown patikros ir TP0 merge kontrolė; be DB/modelio kvietimo.
+- [x] P1X.2 Plonas STDIO discovery serveris: zero_search/zero_inspect/zero_status, strict bounded schemas, pinned SDK, tik protokolas stdout. Offline initialize/list/call/invalid-input/output-limit/shutdown patikros ir TP0 merge kontrolė; be DB/modelio kvietimo.
 - [x] P1X.3 Pirmas tikras Codex desktop discovery ryšys naujame pokalbyje: Windows–WSL STDIO kvietė status/search/inspect. Host paketas, server/schema/catalog versijos ir nonce įrodymai [ataskaitoje](docs/experiments/MCP-PREVIEW-2026-10-17.md); naujame procese serveris 0.1.1 / schema 1.1.0 užfiksavo tikrą negotiated protocol 2025-06-18. Po WSL persikrovimo seno transporto FAIL išsaugotas atskirai. Discovery projekto roots nenaudoja; execution roots lieka P1X.4. Claude ir useful-result atskirai P1X.10.
 - [ ] P1X.4 Operator-approved project scope ir immutable snapshot; roots sankirta arba aiškus root, private-file exclusion, traversal/symlink/Windows–WSL mapping ir cross-project/job ACL. Grant recheck prieš vykdymą; nuo P1X.1, prieš prepare/verify.
 - [ ] P1X.5 Prepare/job/artifact/cancel per esamą patvarų worker: idempotency ir key conflict/expiry, lease/fence, timeout/unknown, reconnect bei wrapper/backend restart. Jokio antro scheduler; nuo P1X.4, P1X.8 limitų ir TP1/TP2 būsenos darbų.
@@ -25,7 +25,7 @@ Pirmas read-only discovery ir tikras Codex desktop ryšys. Prieš prepare/verify
 
 TP0 yra pristatymo kontrolė; offline vertikalė gali būti kuriama lygiagrečiai observer ir Library. Emuliuotas modelis aiškiai pažymimas. Šis etapas neuždaro MVP.
 
-- [ ] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Dokumentų CI vienas to neuždaro.
+- [x] TP0 Root CI vykdo pasirinktus Zero offline/type/regression check be upstream publish/deploy ir be credentials. Offline ir tikro PostgreSQL/Graphile/auth API jobs PASS [run 39040117652](https://github.com/christianza1989/superintelligence/actions/runs/39040117652), commit 3aeec19. Dokumentų CI vienas to neuždaro.
 - [ ] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Emuliuotas modelis aiškiai pažymėtas; galima vykdyti lygiagrečiai OBS darbams.
 - [ ] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti; nuo TP1. Tai siaura aprėptis, ne visas G1.
 

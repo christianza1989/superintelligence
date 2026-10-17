@@ -15,7 +15,7 @@ Prieštaravimo tvarka: naujesnis aiškus priimtas DECISIONS sprendimas → ROADM
 
 ## MCP ir papildiniai nuo MVP
 
-[Vietinio discovery serverio paruošimas](MCP-SETUP.md) aprašo tiesioginį STDIO paleidimą ir tikro host ryšio patikrą. Serveris nevykdo prepare/verify ir neskaito projekto failų.
+[Vietinio discovery serverio paruošimas](MCP-SETUP.md) aprašo tiesioginį STDIO paleidimą ir tikro host ryšio patikrą. Serveris nevykdo prepare/verify ir neskaito projekto failų. [Savarankiškas vietinis plugin paketas](MCP-PLUGIN.md) turi atskiras packaging ir host install patikras.
 
 [Priimtas MCP planas](MCP-INTEGRATION.md) apibrėžia bendrą backend, native host ribas, svetainės diegimo eigą ir profilių vartus. [Native Codex palyginimas](NATIVE-CODEX-BENCHMARK.md) — būsimo gyvo piloto metodas, dar NOT_RUN. Darbai P1X/P1E yra bendrame roadmape. Discovery serveris ir tikras Codex ryšys įgyvendinti; vykdymo integracija ir papildiniai dar nepriimti.
 

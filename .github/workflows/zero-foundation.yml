@@ -38,6 +38,10 @@ jobs:
           npm run test:observer -- --maxWorkers=2
           npm run test:scope -- --maxWorkers=2
           npm run test:worker -- --maxWorkers=2
+      - name: Build and exercise a self-contained discovery plugin
+        run: |
+          task_plugin_dir="$(node scripts/package-mcp-plugin.mjs)"
+          node scripts/test-mcp-plugin.mjs "$task_plugin_dir"
       - name: Check the MCP launcher syntax
         run: node --check scripts/zero-mcp.mjs
 
