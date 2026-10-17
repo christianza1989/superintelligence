@@ -1,0 +1,195 @@
+---
+import SiteFrame from "../components/SiteFrame.astro";
+import { GITHUB_URL } from "../site";
+
+const windowsCodex = `[mcp_servers.repositoryzero]
+command = "wsl.exe"
+args = ["-d", "<distro>", "-u", "<user>", "--exec", "/absolute/path/to/node", "/absolute/path/to/repositoryzero/scripts/zero-mcp.mjs"]
+startup_timeout_sec = 30
+tool_timeout_sec = 15
+enabled_tools = ["zero_search", "zero_inspect", "zero_status"]`;
+const prepare = `cd /absolute/path/to/repositoryzero
+npm run setup:mcp
+npm run test:mcp`;
+const recipes = {
+  codex: {
+    windows: windowsCodex,
+    linux: "codex mcp add repositoryzero -- node /absolute/path/to/repositoryzero/scripts/zero-mcp.mjs",
+  },
+  claude: {
+    windows: 'claude mcp add --scope local --transport stdio repositoryzero -- wsl.exe -d "<distro>" -u "<user>" --exec "/absolute/path/to/node" "/absolute/path/to/repositoryzero/scripts/zero-mcp.mjs"',
+    linux: "claude mcp add --scope local --transport stdio repositoryzero -- node /absolute/path/to/repositoryzero/scripts/zero-mcp.mjs",
+  },
+};
+const verification = 'Call zero_status with a fresh clientNonce. Report the returned nonce, checkedAt, serverVersion, schemaVersion, protocolVersion, mode and executionBackend. Then call zero_search for "playwright" and zero_inspect with a returned candidateId. Report source facts and any unavailable capabilities.';
+---
+<SiteFrame title="Connect RepositoryZero" description="Set up local source discovery in Codex or Claude Code. Choose your environment, copy a setup recipe, and check the tools in your host.">
+  <section class="page-intro connect-intro">
+    <h1>Your source library,<br />inside your AI workspace.</h1>
+    <p>Connect RepositoryZero to Codex or Claude Code. Search the catalog, inspect source facts, and check availability without leaving your host.</p>
+    <p class="scope-note">Local discovery preview. Project execution is configured separately.</p>
+  </section>
+
+  <div class="connect-layout">
+    <aside class="configuration" aria-labelledby="setup-heading">
+      <h2 id="setup-heading">Choose your setup</h2>
+      <label for="connect-client">AI client</label>
+      <select id="connect-client"><option value="codex">Codex</option><option value="claude">Claude Code</option></select>
+      <label for="connect-os">Host operating system</label>
+      <select id="connect-os"><option value="windows">Windows → WSL 2</option><option value="linux">Linux</option><option value="macos">macOS</option></select>
+      <label for="connect-execution">MCP process</label>
+      <select id="connect-execution"><option value="local">Local</option><option disabled>Remote / cloud — unavailable</option></select>
+      <p class="field-help">The host starts a local STDIO process. Windows uses your Linux checkout in WSL.</p>
+      <div class="host-status" role="status"><span class="status-dot" aria-hidden="true"></span><div><strong>Check in host</strong><p>Connection status is unknown here. Copying a recipe does not connect your client.</p></div></div>
+      <a href={`${GITHUB_URL}/blob/main/docs/MCP-SETUP.md`}>Read the complete setup guide <span aria-hidden="true">↗</span></a>
+    </aside>
+
+    <div class="instructions">
+      <p class="qualification" id="qualification" aria-live="polite">Verified on one Windows Codex → WSL development profile. Your host still needs its own check.</p>
+      <section class="setup-step" aria-labelledby="prepare-heading">
+        <div class="step-heading"><span aria-hidden="true">1</span><h2 id="prepare-heading">Prepare the source checkout</h2></div>
+        <p>Use a trusted RepositoryZero checkout on Linux x86_64 or WSL 2. In that checkout, run the build and offline protocol checks. Replace the example path first.</p>
+        <div class="code-block"><div class="code-toolbar"><span>Linux / WSL terminal</span><button type="button" data-copy="prepare-code">Copy</button></div><pre tabindex="0"><code id="prepare-code">{prepare}</code></pre></div>
+        <p class="small-note">Use a Node version supported by the checkout’s package.json and its pinned package manager. The separate standalone plugin package requires Node 24+.</p>
+      </section>
+
+      <section class="setup-step" aria-labelledby="register-heading">
+        <div class="step-heading"><span aria-hidden="true">2</span><h2 id="register-heading">Add it to your client</h2></div>
+        <div id="supported-recipe">
+          <p id="recipe-instruction">Add this server table to your Codex config.toml. Replace the distro, user, Node and checkout paths with your own WSL values. Keep your other configuration.</p>
+          <div class="code-block"><div class="code-toolbar"><span id="recipe-label">Codex config.toml</span><button type="button" data-copy="recipe-code">Copy</button></div><pre tabindex="0"><code id="recipe-code">{windowsCodex}</code></pre></div>
+          <p class="small-note" id="scope-help">Use your user configuration, or a trusted project’s .codex/config.toml. These paths belong to Linux inside WSL.</p>
+        </div>
+        <div id="unsupported-recipe" hidden><p>macOS has not been qualified for this preview. There is no copyable macOS recipe yet. Use the documented Linux / WSL environment, or follow the setup guide for qualification work.</p></div>
+        <p class="small-note">After saving, reconnect the server in your host or open a new chat if the tools do not appear. A configured server entry alone is not a successful connection.</p>
+        <a id="client-docs" href="https://learn.chatgpt.com/docs/extend/mcp?surface=cli">Official Codex MCP instructions <span aria-hidden="true">↗</span></a>
+      </section>
+
+      <section class="setup-step" aria-labelledby="check-heading">
+        <div class="step-heading"><span aria-hidden="true">3</span><h2 id="check-heading">Check the tools in a fresh host session</h2></div>
+        <p>Ask your host to make real tool calls. A fresh nonce and timestamp distinguish a live reply from an old example.</p>
+        <div class="code-block"><div class="code-toolbar"><span>Prompt for your host</span><button type="button" data-copy="verification-code">Copy</button></div><pre class="prompt" tabindex="0"><code id="verification-code">{verification}</code></pre></div>
+        <p>For the default discovery package, expect <code>discovery-only</code> and an unavailable execution backend. Source discovery does not establish that a repository is safe, licensed for your use, installed, or runtime tested.</p>
+      </section>
+
+      <details class="preview-details"><summary>What is qualified, and what is still a preview?</summary><div>
+        <p>Native discovery passed on one Windows Codex → WSL development profile on 17 October 2026, using app build 26.1007.9446.0 and Node 24.19.0. That historical check used server 0.1.1 / schema 1.1.0; it is not a minimum host version or a promise for every profile.</p>
+        <p>Linux CLI setup is documented. Claude Code recipes use its documented STDIO syntax; this project has not qualified a native Claude Code connection. macOS and native plugin installation remain unqualified.</p>
+        <p>The local plugin bundle can be built and protocol checked. Install, trust, fresh-session discovery and uninstall still require a native host qualification. There is no browser install button or remote OAuth endpoint for this preview.</p>
+        <a href={`${GITHUB_URL}/blob/main/docs/MCP-PLUGIN.md`}>Local plugin package guide <span aria-hidden="true">↗</span></a>
+        <p>To disconnect, disable or remove only the RepositoryZero server binding in your host. Keep the rest of your client configuration.</p>
+      </div></details>
+      <noscript><p class="qualification">Enable JavaScript to switch recipes and copy commands. The Windows Codex → WSL recipe above remains selectable as text. Other recipes are in the setup guide.</p></noscript>
+      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+  <script is:inline id="connect-recipes" type="application/json" set:html={JSON.stringify(recipes).replace(/</g, "\\u003c")} />
+</SiteFrame>
+
+<script>
+  type Client = "codex" | "claude";
+  type Os = "windows" | "linux" | "macos";
+  const get = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const client = get<HTMLSelectElement>("connect-client");
+  const os = get<HTMLSelectElement>("connect-os");
+  const recipes = JSON.parse(get("connect-recipes").textContent ?? "{}") as Record<Client, Record<"windows" | "linux", string>>;
+  const update = () => {
+    const selectedClient = client.value as Client;
+    const selectedOs = os.value as Os;
+    const unsupported = selectedOs === "macos";
+    get("supported-recipe").hidden = unsupported;
+    get("unsupported-recipe").hidden = !unsupported;
+    get("qualification").textContent = unsupported
+      ? "macOS is not qualified for this preview. A Linux / WSL environment is required by the documented source build."
+      : selectedClient === "claude"
+        ? "Documented Claude Code CLI syntax. Native host connection has not been qualified by this project."
+        : selectedOs === "windows"
+          ? "Verified on one Windows Codex → WSL development profile. Your host still needs its own check."
+          : "Documented Linux CLI recipe. Native host qualification is separate from configuration.";
+    if (selectedOs !== "macos") get("recipe-code").textContent = recipes[selectedClient][selectedOs];
+    const windowsConfig = selectedClient === "codex" && selectedOs === "windows";
+    get("recipe-label").textContent = windowsConfig ? "Codex config.toml" : selectedOs === "windows" ? "Windows PowerShell" : "Linux terminal";
+    get("recipe-instruction").textContent = windowsConfig
+      ? "Add this server table to your Codex config.toml. Replace the distro, user, Node and checkout paths with your own WSL values. Keep your other configuration."
+      : "Run this command in the host environment shown below. Replace every example path and any WSL placeholders before running it.";
+    get("scope-help").textContent = windowsConfig
+      ? "Use your user configuration, or a trusted project’s .codex/config.toml. These paths belong to Linux inside WSL."
+      : selectedClient === "claude"
+        ? "The local scope applies to your current project. Run from that project directory. The command registers discovery only."
+        : "The CLI registers the server in your Codex configuration. Its Node process must be able to read the built checkout.";
+    const docs = get<HTMLAnchorElement>("client-docs");
+    docs.href = selectedClient === "codex" ? "https://learn.chatgpt.com/docs/extend/mcp?surface=cli" : "https://code.claude.com/docs/en/mcp";
+    docs.textContent = selectedClient === "codex" ? "Official Codex MCP instructions ↗" : "Official Claude Code MCP instructions ↗";
+    get("copy-status").textContent = "";
+  };
+  client.addEventListener("change", update);
+  os.addEventListener("change", update);
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const target = document.getElementById(button.dataset.copy ?? "");
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(target.textContent ?? "");
+        button.textContent = "Copied";
+        window.setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        get("copy-status").textContent = "Copied. Replace placeholders before running commands. Check connection in your host.";
+      } catch {
+        get("copy-status").textContent = "Clipboard access is unavailable. Select the text in the code block and copy it manually.";
+        target.parentElement?.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .connect-intro { max-width: 830px; padding-bottom: 54px; }
+  .connect-intro h1 { margin-top: 0; letter-spacing: -.035em; }
+  .connect-intro .scope-note { font-size: 14px; margin-top: 18px; color: var(--foreground); }
+  .connect-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 72px; padding-bottom: 80px; align-items: start; }
+  h2 { font-size: 20px; line-height: 1.35; letter-spacing: -.025em; margin: 0; }
+  .configuration { border-top: 1px solid var(--line); padding-top: 25px; }
+  .configuration h2 { margin-bottom: 28px; }
+  label { display: block; margin: 21px 0 9px; color: var(--foreground); font-size: 13px; font-weight: 600; }
+  select { width: 100%; min-height: 46px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--foreground); font: inherit; padding: 10px 12px; }
+  .field-help, .small-note { font-size: 12px; line-height: 1.7; color: var(--body); }
+  .field-help { margin: 13px 0 26px; }
+  .host-status { display: flex; gap: 12px; padding: 23px 0; border-block: 1px solid var(--line); margin-bottom: 22px; }
+  .host-status strong { font-size: 14px; font-weight: 600; }
+  .host-status p { font-size: 12px; color: var(--body); line-height: 1.65; margin: 7px 0 0; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted-foreground); margin-top: 7px; flex: none; }
+  a { font-size: 13px; text-underline-offset: 4px; }
+  .qualification { border-bottom: 1px solid var(--line); padding: 0 0 18px; margin: 0 0 35px; font-size: 13px; line-height: 1.7; color: var(--body); }
+  .setup-step { padding-bottom: 35px; margin-bottom: 33px; border-bottom: 1px solid var(--line); }
+  .step-heading { display: flex; align-items: baseline; gap: 14px; margin-bottom: 17px; }
+  .step-heading > span { color: var(--primary); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .setup-step p, .preview-details p { color: var(--body); font-size: 14px; line-height: 1.8; margin: 14px 0; }
+  .setup-step .small-note { font-size: 12px; line-height: 1.7; }
+  .code-block { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 18px 0; background: var(--card); }
+  .code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 12px 8px 18px; border-bottom: 1px solid var(--line); }
+  .code-toolbar span { font-size: 11px; color: var(--body); }
+  .code-toolbar button { border: 1px solid var(--line); border-radius: 5px; color: var(--foreground); background: transparent; font: inherit; font-size: 12px; padding: 7px 11px; min-height: 34px; cursor: pointer; }
+  .code-toolbar button:hover { background: var(--accent); }
+  pre { padding: 18px; margin: 0; overflow-x: auto; font-size: 12px; line-height: 1.9; color: var(--foreground); tab-size: 2; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  pre.prompt { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .preview-details summary { cursor: pointer; font-size: 14px; color: var(--foreground); line-height: 1.6; padding: 10px 0; }
+  .preview-details > div { padding-top: 3px; }
+  .copy-status { color: var(--body); font-size: 12px; line-height: 1.7; min-height: 2em; }
+  :is(select, button, summary, pre):focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 900px) { .connect-layout { grid-template-columns: 235px minmax(0, 1fr); gap: 36px; } }
+  @media (max-width: 680px) {
+    .connect-intro { padding-top: 46px; padding-bottom: 35px; }
+    .connect-intro h1 { font-size: 36px; }
+    .connect-intro p { font-size: 14px; }
+    .connect-layout { grid-template-columns: minmax(0, 1fr); gap: 35px; padding-bottom: 40px; }
+    .configuration h2 { margin-bottom: 20px; }
+    .configuration label { margin-top: 16px; }
+    .host-status { padding: 18px 0; }
+    .qualification { margin-bottom: 28px; }
+    .setup-step { margin-bottom: 27px; padding-bottom: 27px; }
+    pre { font-size: 11px; padding: 14px; }
+    .step-heading { gap: 10px; }
+    h2 { font-size: 19px; }
+  }
+</style>
