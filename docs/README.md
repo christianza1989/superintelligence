@@ -17,7 +17,7 @@ Prieštaravimo tvarka: naujesnis aiškus priimtas DECISIONS sprendimas → ROADM
 
 [Vietinio MCP serverio paruošimas](MCP-SETUP.md) aprašo tiesioginį STDIO paleidimą, tikro host ryšio patikrą ir pasirenkamą autentifikuotą CSV paruošimo / projekto tikrinimo profilį. Numatytasis serveris ir savarankiškas plugin paketas teikia discovery. 0.4 Linux vykdymo opt-in turi atskirą operatoriaus binding ir esamą API/worker; tikras native Codex CSV integravimo, Docker verify ir post-edit freshness bandymas PASS savo ribotai development apimčiai. [Vietinis plugin paketas](MCP-PLUGIN.md) turi atskiras packaging ir host install patikras.
 
-[Priimtas MCP planas](MCP-INTEGRATION.md) apibrėžia bendrą backend, native host ribas, svetainės diegimo eigą ir profilių vartus. [Native Codex palyginimas](NATIVE-CODEX-BENCHMARK.md) — būsimo gyvo piloto metodas, dar NOT_RUN. Darbai P1X/P1E yra bendrame roadmape. 0.2 native discovery plugin install/new-session PASS; 0.4 update/uninstall, platesnis execution lifecycle ir pakartojama nauda dar nepriimti.
+[Priimtas MCP planas](MCP-INTEGRATION.md) apibrėžia bendrą backend, native host ribas, svetainės diegimo eigą ir profilių vartus. [Native Codex palyginimas](NATIVE-CODEX-BENCHMARK.md) — būsimo gyvo piloto metodas, dar NOT_RUN. Darbai P1X/P1E yra bendrame roadmape. Codex Windows 0.4 discovery plugin update/uninstall/reinstall ir naujų sesijų patikros PASS; platesnis execution lifecycle ir pakartojama nauda dar nepriimti.
 
 ## MCP ir papildinių tyrimas
 

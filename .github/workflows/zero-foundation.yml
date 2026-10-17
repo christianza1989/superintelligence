@@ -77,6 +77,7 @@ jobs:
           npm run test:browser:foundation -- --maxWorkers=1
           npm run test:pdf:fixtures -- --maxWorkers=1
           npm run test:pdf:profile
+          npm run test:pdf:runtime -- --maxWorkers=1
           npm run test:runtime:closure
           npm run test:docker:transport -- --maxWorkers=1
       - name: Build and exercise a self-contained discovery plugin
@@ -84,7 +85,10 @@ jobs:
           task_plugin_dir="$(node scripts/package-mcp-plugin.mjs)"
           node scripts/test-mcp-plugin.mjs "$task_plugin_dir"
       - name: Check the MCP launcher syntax
-        run: node --check scripts/zero-mcp.mjs
+        run: |
+          node --check scripts/zero-mcp.mjs
+          node --check platform/scripts/zero-native-runtime-inventory.mjs
+          node --check platform/scripts/zero-native-bundle-probe.mjs
 
   csv-postgres:
     runs-on: ubuntu-latest

@@ -16,6 +16,7 @@
     "test:scope": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-project-snapshot.test.ts packages/adapters/src/file-handle-path.test.ts packages/adapters/src/zero-operator-file.test.ts packages/adapters/src/zero-project-policy.test.ts",
     "test:browser:foundation": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-browser-research.test.ts",
     "test:pdf:fixtures": "node scripts/platform.mjs exec vitest run packages/testkit/src/zero-pdf-fixtures.test.ts",
+    "test:pdf:runtime": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-pdf-runtime.test.ts",
     "test:pdf:profile": "node --test platform/packages/adapters/docling/grade.conformance.mjs platform/packages/adapters/docling/profile.conformance.mjs platform/packages/adapters/docling/footprint.conformance.mjs platform/packages/adapters/pdfplumber/profile.conformance.mjs platform/packages/adapters/pdfplumber/activation.conformance.mjs",
     "test:runtime:closure": "node --test platform/scripts/lib/runtime-package-closure.test.mjs",
     "test:docker:transport": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-docker-process.test.ts",
