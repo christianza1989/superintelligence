@@ -203,3 +203,96 @@ test("appearance persists and a missing capability has an honest empty state", a
     ),
   ).toBeVisible();
 });
+
+test("primary language and indexed sorting retain dated source facts across reload", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/discover?q=image+editor&language=C%2B%2B&sort=indexed");
+  await expect(
+    page.getByRole("combobox", { name: "Primary language", exact: true }),
+  ).toHaveValue("C++");
+  await expect(
+    page.getByRole("combobox", { name: "Sort", exact: true }),
+  ).toHaveValue("indexed");
+  await expect(page.getByText("1 / 1 repositories")).toBeVisible();
+  await page
+    .getByRole("list")
+    .getByRole("button", { name: /^KDE\/krita/ })
+    .click();
+  const details = page.getByRole("complementary", {
+    name: "Repository details",
+  });
+  await expect(details.getByText(/^C\+\+/u)).toBeVisible();
+  await expect(
+    details.getByText(/^Found in repository/u),
+  ).toBeVisible();
+  await expect(
+    details.getByText(
+      "First Git index presence; earlier addition date unknown.",
+    ),
+  ).toBeVisible();
+  await expect(
+    details.getByRole("link", { name: "Index source" }),
+  ).toHaveAttribute(
+    "href",
+    /blob\/7542de48b07766e5ec0c18abf014a162c7b48548\//u,
+  );
+  await expect(
+    details.getByRole("link", { name: "GitHub metadata" }),
+  ).toHaveAttribute("href", "https://github.com/KDE/krita");
+  await page.reload();
+  await expect(
+    details.getByRole("heading", { name: "KDE/krita" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("combobox", { name: "Primary language", exact: true }),
+  ).toHaveValue("C++");
+  await page.screenshot({
+    path: testInfo.outputPath("library-metadata-desktop.png"),
+    fullPage: true,
+  });
+});
+
+test("unknown language retains a repository identity conflict on mobile", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(
+    "/discover?q=get-convex%2Fagent&language=unknown&sort=indexed",
+  );
+  await expect(
+    page.getByRole("combobox", { name: "Primary language", exact: true }),
+  ).toHaveValue("unknown");
+  await expect(page.getByText("1 / 1 repositories")).toBeVisible();
+  await page
+    .getByRole("list")
+    .getByRole("button", { name: /^get-convex\/agent/ })
+    .click();
+  const details = page.getByRole("complementary", {
+    name: "Repository details",
+  });
+  await expect(
+    details.getByText(/^Identity conflict/u),
+  ).toBeVisible();
+  await expect(
+    details.getByText("convex/agent", { exact: true }),
+  ).toBeVisible();
+  await expect(details.getByText("Not checked", { exact: true })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("library-metadata-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Back to results" }).click();
+  await expect(
+    page.getByRole("combobox", { name: "Primary language", exact: true }),
+  ).toHaveValue("unknown");
+  await expect(
+    page.getByRole("combobox", { name: "Sort", exact: true }),
+  ).toHaveValue("indexed");
+});

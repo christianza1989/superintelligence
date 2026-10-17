@@ -178,3 +178,14 @@ export function repositorySourceUrl(entry: RepositoryCandidate): string {
 export const repositoryCategories = [
   ...new Set(snapshot.records.map((entry) => entry.category)),
 ].sort();
+
+export {
+  getRepositoryMetadata,
+  projectRepositoryMetadata,
+  repositoryLanguages,
+} from "./zero-library-metadata.js";
+export type {
+  RepositoryMetadata,
+  RepositoryMetadataInput,
+  RepositoryPinStatus,
+} from "./zero-library-metadata.js";

@@ -5056,3 +5056,67 @@ msgstr "예"
 #: src/pages/RepositoryDirectory.tsx
 msgid "repositories"
 msgstr "저장소"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Primary language"
+msgstr "주요 언어"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All languages"
+msgstr "모든 언어"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recently indexed"
+msgstr "최근 색인됨"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Indexed"
+msgstr "색인됨"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Index source"
+msgstr "색인 출처"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "First Git index presence; earlier addition date unknown."
+msgstr "Git 색인에 처음 기록된 시점입니다. 그 이전의 추가 날짜는 알 수 없습니다."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "GitHub metadata"
+msgstr "GitHub 메타데이터"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository identity"
+msgstr "저장소 식별 정보"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Identity conflict"
+msgstr "식별 정보 충돌"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found or inaccessible"
+msgstr "찾을 수 없거나 접근 불가"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pin lookup"
+msgstr "리비전 조회"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Found in repository"
+msgstr "저장소에서 확인됨"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found in repository"
+msgstr "저장소에서 찾을 수 없음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not checked"
+msgstr "확인하지 않음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not recorded"
+msgstr "기록되지 않음"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Current repository metadata; source revision may differ."
+msgstr "현재 저장소의 메타데이터입니다. 소스 리비전과 다를 수 있습니다."

@@ -5056,3 +5056,67 @@ msgstr "हाँ"
 #: src/pages/RepositoryDirectory.tsx
 msgid "repositories"
 msgstr "रिपॉज़िटरी"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Primary language"
+msgstr "मुख्य भाषा"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All languages"
+msgstr "सभी भाषाएँ"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recently indexed"
+msgstr "हाल में अनुक्रमित"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Indexed"
+msgstr "अनुक्रमित"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Index source"
+msgstr "सूचकांक का स्रोत"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "First Git index presence; earlier addition date unknown."
+msgstr "Git सूचकांक में पहली उपस्थिति; इससे पहले जोड़े जाने की तारीख अज्ञात है।"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "GitHub metadata"
+msgstr "GitHub मेटाडेटा"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository identity"
+msgstr "रिपॉज़िटरी की पहचान"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Identity conflict"
+msgstr "पहचान में विरोध"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found or inaccessible"
+msgstr "नहीं मिला या पहुँच उपलब्ध नहीं"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pin lookup"
+msgstr "रिविज़न की जाँच"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Found in repository"
+msgstr "रिपॉज़िटरी में मिला"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found in repository"
+msgstr "रिपॉज़िटरी में नहीं मिला"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not checked"
+msgstr "जाँच नहीं हुई"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not recorded"
+msgstr "दर्ज नहीं है"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Current repository metadata; source revision may differ."
+msgstr "वर्तमान रिपॉज़िटरी का मेटाडेटा; स्रोत रिविज़न अलग हो सकता है।"

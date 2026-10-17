@@ -1,5 +1,7 @@
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
+  getRepositoryMetadata,
+  repositoryLanguages,
   repositoryCategories,
   repositorySnapshot,
   repositorySourceUrl,
@@ -85,6 +87,19 @@ export function RepositoryDirectoryPage() {
     (entry) => entry.repository === filters.repository,
   );
   const stars = selected ? repositoryStars.get(selected.repository) : undefined;
+  const metadata = selected
+    ? getRepositoryMetadata(selected.repository)
+    : undefined;
+  const pinLabel = (status: string | undefined) =>
+    status === "present"
+      ? t`Found in repository`
+      : status === "absent"
+        ? t`Not found in repository`
+        : status === "not-recorded"
+          ? t`Not recorded`
+          : status === "not-checked"
+            ? t`Not checked`
+            : t`Unavailable`;
   const date = (value: string) =>
     new Intl.DateTimeFormat(i18n.locale, {
       dateStyle: "medium",
@@ -103,6 +118,7 @@ export function RepositoryDirectoryPage() {
     filters.license,
     filters.runtime,
     filters.archived,
+    filters.language,
     filters.sort,
     filters.view,
   ]);
@@ -274,7 +290,7 @@ export function RepositoryDirectoryPage() {
               onChange={(event) => change("query", event.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <Filter
               label={t`Category`}
               value={filters.category}
@@ -297,6 +313,19 @@ export function RepositoryDirectoryPage() {
               <option value="unavailable">{t`Unavailable`}</option>
             </Filter>
             <Filter
+              label={t`Primary language`}
+              value={filters.language}
+              onChange={(value) => change("language", value)}
+            >
+              <option value="">{t`All languages`}</option>
+              <option value="unknown">{t`Unknown`}</option>
+              {repositoryLanguages.map((language) => (
+                <option key={language} value={language}>
+                  {language}
+                </option>
+              ))}
+            </Filter>
+            <Filter
               label={t`Sort`}
               value={filters.sort}
               onChange={(value) => change("sort", value)}
@@ -304,6 +333,7 @@ export function RepositoryDirectoryPage() {
               <option value="relevance">{t`Relevance`}</option>
               <option value="stars">{t`Most stars`}</option>
               <option value="name">{t`Name`}</option>
+              <option value="indexed">{t`Recently indexed`}</option>
             </Filter>
           </div>
           <details
@@ -343,9 +373,6 @@ export function RepositoryDirectoryPage() {
                 <option value="archived">{t`Archived only`}</option>
               </Filter>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              <Trans>Language metadata is not recorded.</Trans>
-            </p>
           </details>
           <div className="my-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
             <p aria-live="polite">
@@ -399,6 +426,10 @@ export function RepositoryDirectoryPage() {
                     </span>
                     <span className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                       <span>{entry.category}</span>
+                      <span>
+                        {getRepositoryMetadata(entry.repository)?.language ??
+                          t`Unknown`}
+                      </span>
                       {!entry.sourceAvailable && (
                         <span>{t`Source unavailable`}</span>
                       )}
@@ -536,6 +567,19 @@ export function RepositoryDirectoryPage() {
                 <dd className="break-all font-mono text-xs">
                   {selected.sourceRevision || t`Unknown`}
                 </dd>
+                <dt className="text-muted-foreground">{t`Pin lookup`}</dt>
+                <dd>
+                  {pinLabel(metadata?.sourcePin.status)}
+                  {metadata?.sourcePin.observedAt && (
+                    <time
+                      dateTime={metadata.sourcePin.observedAt}
+                      title={metadata.sourcePin.observedAt}
+                      className="mt-1 block text-xs text-muted-foreground"
+                    >
+                      {t`Observed`} {date(metadata.sourcePin.observedAt)}
+                    </time>
+                  )}
+                </dd>
                 <dt className="text-muted-foreground">
                   <Trans>License source</Trans>
                 </dt>
@@ -560,10 +604,45 @@ export function RepositoryDirectoryPage() {
                   <Trans>Runtime ready</Trans>
                 </dt>
                 <dd>{t`Unknown`}</dd>
-                <dt className="text-muted-foreground">
-                  <Trans>Language</Trans>
-                </dt>
-                <dd>{t`Unknown`}</dd>
+                <dt className="text-muted-foreground">{t`Primary language`}</dt>
+                <dd>
+                  {metadata?.language ?? t`Unknown`}
+                  {metadata?.observedAt && (
+                    <time
+                      dateTime={metadata.observedAt}
+                      title={metadata.observedAt}
+                      className="mt-1 block text-xs text-muted-foreground"
+                    >
+                      {t`Observed`} {date(metadata.observedAt)}
+                    </time>
+                  )}
+                  {metadata?.githubSource && (
+                    <a
+                      href={metadata.githubSource}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-block text-xs underline underline-offset-4"
+                    >{t`GitHub metadata`}</a>
+                  )}
+                  <span className="mt-1 block text-xs text-muted-foreground">{t`Current repository metadata; source revision may differ.`}</span>
+                </dd>
+                {metadata?.githubStatus !== "observed" && (
+                  <>
+                    <dt className="text-muted-foreground">{t`Repository identity`}</dt>
+                    <dd>
+                      {metadata?.githubStatus === "identity-conflict"
+                        ? t`Identity conflict`
+                        : metadata?.githubStatus === "not-found-or-inaccessible"
+                          ? t`Not found or inaccessible`
+                          : t`Unknown`}
+                      {metadata?.resolvedRepository && (
+                        <span className="mt-1 block break-all text-xs">
+                          {metadata.resolvedRepository}
+                        </span>
+                      )}
+                    </dd>
+                  </>
+                )}
                 <dt className="text-muted-foreground">
                   <Trans>Archived</Trans>
                 </dt>
@@ -575,6 +654,28 @@ export function RepositoryDirectoryPage() {
                   <time dateTime={repositorySnapshot.researchDate}>
                     {date(repositorySnapshot.researchDate)}
                   </time>
+                </dd>
+                <dt className="text-muted-foreground">{t`Indexed`}</dt>
+                <dd>
+                  {metadata?.firstIndexed ? (
+                    <>
+                      <time
+                        dateTime={metadata.firstIndexed.at}
+                        title={metadata.firstIndexed.at}
+                      >
+                        {date(metadata.firstIndexed.at)}
+                      </time>
+                      <a
+                        href={metadata.firstIndexed.source}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-1 block text-xs underline underline-offset-4"
+                      >{t`Index source`}</a>
+                      <span className="mt-1 block text-xs text-muted-foreground">{t`First Git index presence; earlier addition date unknown.`}</span>
+                    </>
+                  ) : (
+                    t`Unknown`
+                  )}
                 </dd>
                 <dt className="text-muted-foreground">
                   <Trans>Stars</Trans>

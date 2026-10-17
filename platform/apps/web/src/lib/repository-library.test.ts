@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { UI_LOCALES } from "./ui-locale";
 import {
+  getRepositoryMetadata,
   repositorySnapshot,
   searchRepositories,
 } from "@rakazo/core/repositoryzero";
@@ -55,7 +56,8 @@ describe("independent human Library", () => {
       license: "known",
       runtime: "untested",
       archived: "active",
-      sort: "stars",
+      language: "C++",
+      sort: "indexed",
       view: "saved",
       repository: "KDE/krita",
     } as const;
@@ -67,7 +69,7 @@ describe("independent human Library", () => {
   });
   it("bounds and validates URL inputs without inventing IDs or filter facts", () => {
     const filters = parseLibraryFilters(
-      `q=${"x".repeat(300)}&category=admin&source=install&license=approved&runtime=ready&archived=nope&sort=trending&view=cloud&repo=../../secret`,
+      `q=${"x".repeat(300)}&category=admin&source=install&license=approved&runtime=ready&archived=nope&language=InventedLanguage&sort=trending&view=cloud&repo=../../secret`,
     );
     expect(filters).toEqual({
       ...DEFAULT_LIBRARY_FILTERS,
@@ -245,6 +247,61 @@ describe("independent human Library", () => {
         { stars: 11, source, observedAt: "2026-10-15T23:30:00+03:00" },
       ],
     ]);
+  });
+  it("filters only known primary languages and keeps unknown metadata visible", () => {
+    const known = libraryRepositories(
+      { ...DEFAULT_LIBRARY_FILTERS, language: "C++" },
+      [],
+    );
+    expect(known.length).toBeGreaterThan(0);
+    expect(known.some((entry) => entry.repository === "KDE/krita")).toBe(true);
+    expect(
+      known.every(
+        (entry) => getRepositoryMetadata(entry.repository)?.language === "C++",
+      ),
+    ).toBe(true);
+    const unknown = libraryRepositories(
+      { ...DEFAULT_LIBRARY_FILTERS, language: "unknown" },
+      [],
+    );
+    expect(unknown).toHaveLength(71);
+    expect(
+      unknown.some((entry) => entry.repository === "get-convex/agent"),
+    ).toBe(true);
+    expect(
+      unknown.every(
+        (entry) => !getRepositoryMetadata(entry.repository)?.language,
+      ),
+    ).toBe(true);
+    expect(
+      libraryRepositories(
+        {
+          ...DEFAULT_LIBRARY_FILTERS,
+          query: "image editor",
+          language: "Python",
+        },
+        [],
+      ),
+    ).toEqual([]);
+    const params = parseLibraryFilters(
+      "language=C%2B%2B&sort=indexed&repo=KDE%2Fkrita",
+    );
+    expect(params.language).toBe("C++");
+    expect(parseLibraryFilters(librarySearchParams(params))).toEqual(params);
+  });
+  it("sorts actual first Git index events with a stable tie break", () => {
+    const rows = libraryRepositories(
+      { ...DEFAULT_LIBRARY_FILTERS, sort: "indexed" },
+      [],
+    );
+    expect(rows).toHaveLength(796);
+    expect(rows.map((entry) => entry.repository)).toEqual(
+      rows.map((entry) => entry.repository).sort((a, b) => a.localeCompare(b)),
+    );
+    for (const entry of rows)
+      expect(
+        getRepositoryMetadata(entry.repository)?.firstIndexed?.status,
+      ).toBe("first-git-presence");
   });
   it("requires no API or model to browse, filter or save", () => {
     const fetch = vi

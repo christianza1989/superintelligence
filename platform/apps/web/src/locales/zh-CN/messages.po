@@ -5056,3 +5056,67 @@ msgstr "是"
 #: src/pages/RepositoryDirectory.tsx
 msgid "repositories"
 msgstr "个仓库"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Primary language"
+msgstr "主要语言"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All languages"
+msgstr "所有语言"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recently indexed"
+msgstr "最近收录"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Indexed"
+msgstr "收录时间"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Index source"
+msgstr "索引来源"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "First Git index presence; earlier addition date unknown."
+msgstr "首次出现在 Git 索引中的时间；更早的添加日期未知。"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "GitHub metadata"
+msgstr "GitHub 元数据"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository identity"
+msgstr "仓库身份"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Identity conflict"
+msgstr "身份冲突"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found or inaccessible"
+msgstr "未找到或无法访问"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pin lookup"
+msgstr "版本查询"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Found in repository"
+msgstr "已在仓库中找到"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found in repository"
+msgstr "未在仓库中找到"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not checked"
+msgstr "未检查"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not recorded"
+msgstr "未记录"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Current repository metadata; source revision may differ."
+msgstr "当前仓库的元数据；源代码版本可能不同。"

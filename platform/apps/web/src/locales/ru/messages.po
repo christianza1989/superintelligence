@@ -5056,3 +5056,67 @@ msgstr "Да"
 #: src/pages/RepositoryDirectory.tsx
 msgid "repositories"
 msgstr "репозиториев"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Primary language"
+msgstr "Основной язык"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All languages"
+msgstr "Все языки"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recently indexed"
+msgstr "Недавно проиндексированные"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Indexed"
+msgstr "Проиндексировано"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Index source"
+msgstr "Источник индекса"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "First Git index presence; earlier addition date unknown."
+msgstr "Первое присутствие в индексе Git; более ранняя дата добавления неизвестна."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "GitHub metadata"
+msgstr "Метаданные GitHub"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository identity"
+msgstr "Идентификатор репозитория"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Identity conflict"
+msgstr "Конфликт идентификаторов"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found or inaccessible"
+msgstr "Не найден или недоступен"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pin lookup"
+msgstr "Проверка ревизии"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Found in repository"
+msgstr "Найдена в репозитории"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found in repository"
+msgstr "Не найдена в репозитории"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not checked"
+msgstr "Не проверена"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not recorded"
+msgstr "Не записана"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Current repository metadata; source revision may differ."
+msgstr "Метаданные текущего репозитория; исходная ревизия может отличаться."

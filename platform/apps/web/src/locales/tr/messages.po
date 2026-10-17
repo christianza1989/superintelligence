@@ -5056,3 +5056,67 @@ msgstr "Evet"
 #: src/pages/RepositoryDirectory.tsx
 msgid "repositories"
 msgstr "depo"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Primary language"
+msgstr "Birincil dil"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "All languages"
+msgstr "Tüm diller"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Recently indexed"
+msgstr "Son indekslenenler"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Indexed"
+msgstr "İndekslendi"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Index source"
+msgstr "İndeks kaynağı"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "First Git index presence; earlier addition date unknown."
+msgstr "Git indeksindeki ilk varlık; önceki eklenme tarihi bilinmiyor."
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "GitHub metadata"
+msgstr "GitHub meta verileri"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Repository identity"
+msgstr "Depo kimliği"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Identity conflict"
+msgstr "Kimlik çakışması"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found or inaccessible"
+msgstr "Bulunamadı veya erişilemiyor"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Pin lookup"
+msgstr "Revizyon sorgusu"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Found in repository"
+msgstr "Depoda bulundu"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not found in repository"
+msgstr "Depoda bulunamadı"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not checked"
+msgstr "Kontrol edilmedi"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Not recorded"
+msgstr "Kaydedilmedi"
+
+#: src/pages/RepositoryDirectory.tsx
+msgid "Current repository metadata; source revision may differ."
+msgstr "Mevcut deponun meta verileri; kaynak revizyonu farklı olabilir."

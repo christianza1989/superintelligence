@@ -1,5 +1,7 @@
 import type { RepositoryCandidate } from "@rakazo/core/repositoryzero";
 import {
+  getRepositoryMetadata,
+  repositoryLanguages,
   listRepositories,
   repositoryCategories,
   repositorySnapshot,
@@ -18,7 +20,8 @@ export type LibraryFilters = {
   license: "" | "known" | "unknown";
   runtime: "" | "tested" | "untested";
   archived: "" | "active" | "archived";
-  sort: "relevance" | "stars" | "name";
+  language: string;
+  sort: "relevance" | "stars" | "name" | "indexed";
   view: "all" | "saved";
   repository: string;
 };
@@ -29,6 +32,7 @@ export const DEFAULT_LIBRARY_FILTERS: LibraryFilters = {
   license: "",
   runtime: "",
   archived: "",
+  language: "",
   sort: "relevance",
   view: "all",
   repository: "",
@@ -59,7 +63,12 @@ export function parseLibraryFilters(
     license: choice("license", ["", "known", "unknown"], ""),
     runtime: choice("runtime", ["", "tested", "untested"], ""),
     archived: choice("archived", ["", "active", "archived"], ""),
-    sort: choice("sort", ["relevance", "stars", "name"], "relevance"),
+    language: choice("language", ["", "unknown", ...repositoryLanguages], ""),
+    sort: choice(
+      "sort",
+      ["relevance", "stars", "name", "indexed"],
+      "relevance",
+    ),
     view: choice("view", ["all", "saved"], "all"),
     repository:
       canonicalIds.get((params.get("repo") ?? "").toLowerCase()) ?? "",
@@ -75,6 +84,7 @@ export function librarySearchParams(filters: LibraryFilters): URLSearchParams {
     "license",
     "runtime",
     "archived",
+    "language",
     "sort",
     "view",
   ] as const)
@@ -273,14 +283,35 @@ export function libraryRepositories(
         !filters.archived ||
         entry.archived === (filters.archived === "archived"),
     );
+  const languageFiltered = results.filter(
+    (entry) =>
+      !filters.language ||
+      (filters.language === "unknown"
+        ? !getRepositoryMetadata(entry.repository)?.language
+        : getRepositoryMetadata(entry.repository)?.language ===
+          filters.language),
+  );
   if (filters.sort === "stars")
-    results.sort(
+    languageFiltered.sort(
       (a, b) =>
         (repositoryStars.get(b.repository)?.stars ?? -1) -
           (repositoryStars.get(a.repository)?.stars ?? -1) ||
         a.repository.localeCompare(b.repository),
     );
   if (filters.sort === "name")
-    results.sort((a, b) => a.repository.localeCompare(b.repository));
-  return results;
+    languageFiltered.sort((a, b) => a.repository.localeCompare(b.repository));
+  if (filters.sort === "indexed")
+    languageFiltered.sort((a, b) =>
+      compareFirstIndexed(a.repository, b.repository),
+    );
+  return languageFiltered;
+}
+
+function compareFirstIndexed(a: string, b: string): number {
+  const aDate = getRepositoryMetadata(a)?.firstIndexed?.at;
+  const bDate = getRepositoryMetadata(b)?.firstIndexed?.at;
+  return (
+    (bDate ? Date.parse(bDate) : -Infinity) -
+      (aDate ? Date.parse(aDate) : -Infinity) || a.localeCompare(b)
+  );
 }
