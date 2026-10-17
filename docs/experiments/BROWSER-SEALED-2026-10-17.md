@@ -1,6 +1,6 @@
 # Sealed browser shell preparation and interrupted qualification
 
-2026-10-17. This is a prepared runtime candidate, not a qualified browser profile or MVP acceptance.
+2026-10-17. The revised sealed synthetic-fixture driver passed its complete second qualification epoch. This is not a user-facing browser module, G2 result or MVP acceptance.
 
 ## Frozen candidate
 
@@ -27,8 +27,18 @@ Separate finite diagnostics retained the same image and resource caps:
 
 The diagnostics isolate stdin EOF, module bootstrap, browser startup and task exit. They do not replace the incomplete frozen ten-task qualification. Intermittent host launch failures, memory pressure and WSL latency were observed nearby; a causal attribution is **not established**.
 
+## Complete sealed epoch 2
+
+Candidate revision `b012d5c` was frozen before dispatch. Its only runner change was explicit named-container absence verification after bounded removal, preserving normal container-exited state. Three offline controls cover remove-success with a surviving listed container, daemon-query failure and affirmative absence. Resource probe mechanics respect the existing 4 MiB per-file limit and avoid file-descriptor exhaustion preempting the PID check; expected resource quotas and outcomes were unchanged. Image, input lock, ten tasks, DOM grader and 15-second runtime boundary were unchanged. No code or grader changed inside this epoch.
+
+**35/35 checks passed in 96.13 seconds**, including ten frozen tasks with actual component invocation, matching DOM assertions, separate screenshot and trace hashes, five negative controls, image/input binding, cancellation, authorization revocation and cleanup. The early two good task checks took 12.3 and 12.6 seconds including post-run cleanup; the later checks took about 2.5 seconds. No performance cause or broad latency claim is inferred.
+
+Actual resource controls observed nonroot UID 1000, read-only-root EROFS, no-network ENETUNREACH/EHOSTUNREACH, cgroup memory 536,870,912 bytes, PID ceiling 128 and CPU quota 2; 128 MiB tmpfs exhaustion returned ENOSPC, over-limit allocation exited 137, PID exhaustion returned EAGAIN, and a deliberately persistent child was killed at its finite wall deadline. The resource probes confirmed named-container absence after cleanup. Revoked or cancelled runs published no research artifacts.
+
+The [public bounded proof summary](BROWSER-SEALED-2026-10-17.json) records source/input hashes, per-task component/assertion evidence, artifact hashes and resource observations. Full original epoch logs, PNGs, traces, frozen inputs and failures are retained privately. The earlier four unknown outcomes remain unchanged and visible above.
+
 ## Current checks and boundaries
 
-Eight deterministic offline runner boundary checks and the adapters TypeScript check passed. The sealed qualification harness contains ten frozen task checks, five negative controls, image/input binding, cgroup/isolation, actual memory/PID/tmpfs/wall enforcement, cancellation and grant-revocation cases. Its real suite remains incomplete.
+Eleven deterministic offline runner boundary checks and the adapters TypeScript check passed. The sealed qualification harness contains ten frozen task checks, five negative controls, image/input binding, cgroup/isolation, actual memory/PID/tmpfs/wall enforcement, cancellation and grant-revocation cases. Its complete second real suite passed for this exact synthetic fixture profile.
 
 No paid model API was called. No independent holdout, general research quality, lifetime artifact admission, complete application/worker composition or hostile-code security acceptance is claimed.

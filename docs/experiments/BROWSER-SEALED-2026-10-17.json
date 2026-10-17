@@ -1,0 +1,345 @@
+{
+  "candidateRevision": "b012d5c",
+  "qualification": "sealed fixed synthetic fixture driver only",
+  "totalTests": 35,
+  "passedTests": 35,
+  "failedTests": 0,
+  "imageId": "sha256:24b0beed3d8a4f70d3daeae8c27c4bb4efe32526abada6ebb210b7bd6996eb63",
+  "buildInputLockSha256": "f322503f060b6c1539863cdd759e9f8f89853055699e1052483113daa46a636d",
+  "sources": [
+    {
+      "path": "packages/adapters/src/zero-browser-docker.test.ts",
+      "sha256": "78e278b276c84962e6cfb9422ce0088cb77965395455c21ef4ac1740d2d6916b"
+    },
+    {
+      "path": "packages/adapters/src/zero-browser-docker.ts",
+      "sha256": "982670871fa46ae44d4e2f5bb19a9ba4071ba95a1bfca13c781bae56e1fdfad7"
+    },
+    {
+      "path": "packages/adapters/src/zero-browser-container-entry.ts",
+      "sha256": "410ddb6f5187d545240d8303fa8338cfb33a08d75d6b4ccce87628ec7619ea21"
+    },
+    {
+      "path": "packages/adapters/src/zero-browser-research.ts",
+      "sha256": "f5bcc5d63b44b93e3c4840ff819606db8439595ced19075f5366ee8a2128f478"
+    },
+    {
+      "path": "packages/adapters/src/zero-browser-research-profile.ts",
+      "sha256": "faebf5efdde517ee40e6d19ea244bf838d1a442ce82e4146de6659202e0dd55c"
+    }
+  ],
+  "limits": {
+    "cpus": 2,
+    "memoryBytes": 536870912,
+    "pids": 128,
+    "tmpfsBytes": 134217728,
+    "wallMs": 15000,
+    "outputBytes": 4194304
+  },
+  "taskResults": [
+    {
+      "taskId": "article-fact",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "The Aurora observatory opened in 1974.",
+        "actual": "The Aurora observatory opened in 1974.",
+        "passed": true
+      },
+      "taskSha256": "91427439718f4cf6ebef4004f8e53cb95403c2c76e48885d07d3280f4a0e3202",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "d784f7fd829bf7e5f5b5d2f3e7bec618d5c8da626ef1655c5164a86e97e2b249",
+        "bytes": 11645
+      },
+      "trace": {
+        "sha256": "49d72fb74fc925750f86a1027d8257ffed608eb8a2c62a5d9779dd94b940860d",
+        "bytes": 4282
+      }
+    },
+    {
+      "taskId": "table-total",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "26",
+        "actual": "26",
+        "passed": true
+      },
+      "taskSha256": "637d237a1091d3abe1e5a1d195f20989849e4275923ceec1ce40ed19ea170bb8",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "451f3010259ba7cba2ce00a059b3ea55155304a9817bf010b70604614f3061aa",
+        "bytes": 13305
+      },
+      "trace": {
+        "sha256": "bcf8045cb0a073f3d02ade27b3a725ad8e702756b720432e19b5fee5a015f720",
+        "bytes": 4238
+      }
+    },
+    {
+      "taskId": "offer-comparison",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "Pine:7",
+        "actual": "Pine:7",
+        "passed": true
+      },
+      "taskSha256": "d3f1ed1e025529ffb59c8db7d9122e9325894af1299c5935e8dfa3cdedc9428f",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "798c72c6011ebcff781e34e30e93babece587ec7d98fa3386f61b1dbc57bf577",
+        "bytes": 8566
+      },
+      "trace": {
+        "sha256": "b67a6fb6918d328fdf379a4114fb6358d9851c57469826a47f6e849a216636b9",
+        "bytes": 4300
+      }
+    },
+    {
+      "taskId": "primary-citation",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 1,
+        "act": 1
+      },
+      "assertion": {
+        "expected": "Quarterly rainfall: 42 mm.",
+        "actual": "Quarterly rainfall: 42 mm.",
+        "passed": true
+      },
+      "taskSha256": "83f6a2b8832617ccad299ca15291e0a0159884a38d6a732939268a3d673830e1",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "0af77ce5314f31b48cb4534ebe39a794d81f970c430883c3d9e6d24084d487ac",
+        "bytes": 9392
+      },
+      "trace": {
+        "sha256": "33dcc3493de91f6a633c286e8a73aae6902776f93e894517beadcbf652df74a7",
+        "bytes": 6500
+      }
+    },
+    {
+      "taskId": "dynamic-reveal",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 1,
+        "act": 1
+      },
+      "assertion": {
+        "expected": "Ready at 09:30",
+        "actual": "Ready at 09:30",
+        "passed": true
+      },
+      "taskSha256": "fcf02af15e25a4767ac40a691bc5018d88df334be5f3bd85aa14e144e8be473b",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "c7628d5ff5ccdd234c53940604cc5af2106b9d5f683946b909522b70698d0a0d",
+        "bytes": 10022
+      },
+      "trace": {
+        "sha256": "42c169b82bd867dad0b50e2d82a852ee214ece2dd32faa338c480fdfe352bb18",
+        "bytes": 6072
+      }
+    },
+    {
+      "taskId": "form-filter",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 2,
+        "act": 2
+      },
+      "assertion": {
+        "expected": "2 northern stations",
+        "actual": "2 northern stations",
+        "passed": true
+      },
+      "taskSha256": "5b276efc98f7fd914dbb8f19b64a769fb560386df8e2b6e0d314b508d4c1c6d1",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "7d4b51b61dab436a9f79bbaa4c22689dda44b7e01ca337836b7c7a3f3860fa70",
+        "bytes": 10670
+      },
+      "trace": {
+        "sha256": "bdd6e6dff0b57c8d8210b2f0ffdea3dd9dab0797029b99700240d5405779072f",
+        "bytes": 7315
+      }
+    },
+    {
+      "taskId": "unicode-fact",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "Ąžuolas · Київ · 東京 · مرحبا",
+        "actual": "Ąžuolas · Київ · 東京 · مرحبا",
+        "passed": true
+      },
+      "taskSha256": "5507f11ac826ababf83f3ea0facaac657016ae58ccbf4e60230ef13351353a57",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "20710af3186d27a7664ca2f140f609ef4cfb7ab9829aedc604a60a3f1c6236f7",
+        "bytes": 8379
+      },
+      "trace": {
+        "sha256": "02b1b42d6ba282ab60943fd2dcfe626d15f1858b04f2fb7fb154a09eb64b797e",
+        "bytes": 4349
+      }
+    },
+    {
+      "taskId": "pagination",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 1,
+        "act": 1
+      },
+      "assertion": {
+        "expected": "Page 2: Lumen, Neris",
+        "actual": "Page 2: Lumen, Neris",
+        "passed": true
+      },
+      "taskSha256": "303c37b3d432cd50a2bdd1481e88d8c64b72cc94c631149997d576931f467035",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "494a8bf14abb94c4dad753b8be76b2ee183c5b11cbaae12d9f65670e205b065e",
+        "bytes": 9900
+      },
+      "trace": {
+        "sha256": "7a60f3521d49ef4978c541978d7c27f4d0dc250eda9a7b0ec75620c1c18e4062",
+        "bytes": 6462
+      }
+    },
+    {
+      "taskId": "structured-data",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "Synthetic Stars:17",
+        "actual": "Synthetic Stars:17",
+        "passed": true
+      },
+      "taskSha256": "8e33b4e213fc0fde3e95feb3abdc731408ed8f5c8f721b0084593d21271630c7",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "eb134f71d09e37415244f03c298447cee1e4f1c009a8ed33fb514d92d4a30449",
+        "bytes": 8082
+      },
+      "trace": {
+        "sha256": "020bdcdcbad67a4f591a85ad07358ba56101098cad7ebc74ea0f6e0dd3636750",
+        "bytes": 4197
+      }
+    },
+    {
+      "taskId": "injection-as-data",
+      "outcome": "pass",
+      "reason": "fixed_dom_assertion_passed",
+      "cleanup": "container_exited",
+      "actualUse": {
+        "provider": "computer",
+        "navigate": 1,
+        "snapshot": 0,
+        "act": 0
+      },
+      "assertion": {
+        "expected": "Trusted result: 17",
+        "actual": "Trusted result: 17",
+        "passed": true
+      },
+      "taskSha256": "d107038ae0a61383714ba8b35e957409f96ce2d23bf3875b82a246b3fc1ef4b2",
+      "sourceSetSha256": "063b8d230615a8c483bb68cf00904bd180420632282fe6beb0ff50b254c31692",
+      "screenshot": {
+        "sha256": "6a0b87cba68dc08d3c1c19487fd00b0ae50e77d582c7f85ed052b280df8715cf",
+        "bytes": 16251
+      },
+      "trace": {
+        "sha256": "30dd0aff104a7f1adabae6519efbea90761f9f294d13148587264d4e46e4d19a",
+        "bytes": 4458
+      }
+    }
+  ],
+  "resources": {
+    "policy": {
+      "uid": 1000,
+      "memory": "536870912",
+      "pids": "128",
+      "cpu": "200000 100000",
+      "readonly": "EROFS",
+      "network": "ENETUNREACH"
+    },
+    "tmpfs": {
+      "code": 0,
+      "stdout": "{\"reason\":\"ENOSPC\",\"bytes\":134217728}\n"
+    },
+    "memory": {
+      "code": 137,
+      "stdout": ""
+    },
+    "pids": {
+      "code": 0,
+      "stdout": "{\"failure\":\"EAGAIN\",\"children\":150}\n"
+    },
+    "wall": {
+      "code": null,
+      "stdout": "",
+      "reason": "execution_timeout"
+    }
+  },
+  "earlierEpoch": {
+    "attemptedTasks": 4,
+    "unknown": 4,
+    "batchStopped": true,
+    "discarded": false
+  },
+  "paidModelCalls": 0
+}
