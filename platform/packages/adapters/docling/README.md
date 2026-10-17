@@ -31,3 +31,11 @@ Docling source is MIT; the Heron model card declares Apache-2.0; the TableFormer
 - [Heron model](https://huggingface.co/docling-project/docling-layout-heron/tree/8f39ad3c0b4c58e9c2d2c84a38465abf757272d8)
 - [TableFormer model](https://huggingface.co/docling-project/docling-models/tree/fc0f2d45e2218ea24bce5045f58a389aed16dc23)
 - [Official CPU Torch pairing](https://pytorch.org/get-started/previous-versions/#v280)
+
+## Measured result, 2026-10-17
+
+The actual sealed CPU run completed in 29.487 seconds with all ten cases and the separate warm repeat failed during pipeline preparation with ModuleNotFoundError. This is a preparation failure, not an extraction quality score. Process peak RSS was 511,762,432 bytes; cgroup peak memory was 651,685,888 bytes; no OOM occurred and the owned container was removed. The first runner captured the exception class only, so the exact missing module and traceback are unknown. Static pinned-wheel inspection shows TableFormer imports cv2 while the chosen slim wheel closure omits its optional OpenCV extra. That is an inference about the failure cause. Future runner diagnostics now capture bounded module names and basename-only frames; that diagnostic change has not been rerun.
+
+The installed image is 2,133,152,856 bytes; models add 384,434,788 bytes. Their sum 2,517,587,644 bytes already exceeds the 2,000,000,000-byte whole-profile G0 gate before Zero/browser/coding. Retained preparation data plus the image and conservatively rounded private BuildKit cache have an upper bound of 3,157,465,323 bytes, within only the separate optional 6 GiB cap. This sum is conservative logical accounting; physical filesystem deduplication was not measured. Failed resolution/accounting attempts are retained in the public result summary.
+
+See [redacted measured report](spike-results-2026-10-17.json). No fallback was activated, no PDF worker was registered, and no MVP gate is closed by this experiment.

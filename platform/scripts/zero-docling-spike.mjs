@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -67,7 +67,7 @@ for (const fixture of manifest.fixtures) {
     throw new Error("FROZEN_FIXTURE_CHANGED");
 }
 await mkdir(cache, { recursive: true, mode: 0o700 });
-const name = "zero-docling-spike-observer";
+const name = `zero-docling-spike-${randomUUID()}`;
 let interrupted = null,
   current = 0,
   timer,
@@ -80,7 +80,9 @@ function terminate(code) {
   if (interrupted) return;
   interrupted = code;
   // Kill only this owned container; killing the docker client alone is insufficient.
-  spawnSync("docker", ["kill", name], { stdio: "ignore", timeout: 10000 });
+  const killed = spawnSync("docker", ["kill", name], { stdio: "ignore", timeout: 10000 });
+  if (killed.status !== 0) report.cancellationUnknown = true;
+  child.kill("SIGKILL");
 }
 function arm() {
   clearTimeout(timer);
@@ -189,7 +191,8 @@ if (inspect.status === 0) {
   report.oomKilled = state.OOMKilled;
   if (state.OOMKilled) interrupted = "PDF_MEMORY_LIMIT";
 }
-spawnSync("docker", ["rm", "--force", name], { stdio: "ignore", timeout: 10000 });
+const cleaned = spawnSync("docker", ["rm", "--force", name], { stdio: "ignore", timeout: 10000 });
+report.cleanupConfirmed = cleaned.status === 0;
 for (let index = 0; index < 10; index++) {
   const fixture = manifest.fixtures[index],
     actual = output.get(index);
@@ -220,7 +223,10 @@ report.processPeakRssBytes = rss.length ? Math.max(...rss) : null;
 const memory = [...output.values()].map((v) => v.containerPeakMemoryBytes).filter(Number.isFinite);
 report.containerPeakMemoryBytes = memory.length ? Math.max(...memory) : null;
 report.state =
-  report.results.every((r) => r.pass) && report.warmRepeat?.pass && exit === 0
+  report.results.every((r) => r.pass) &&
+  report.warmRepeat?.pass &&
+  exit === 0 &&
+  report.cleanupConfirmed
     ? "completed"
     : "failed";
 report.code = interrupted;

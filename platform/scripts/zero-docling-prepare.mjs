@@ -6,6 +6,7 @@ import { mkdir, readdir, readFile, rename, stat, writeFile } from "node:fs/promi
 import { dirname, resolve } from "node:path";
 import { finished } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
+import { dockerSizeUpperBound } from "../packages/adapters/docling/footprint.mjs";
 
 // Explicit preparation only. Normal package imports never execute this script.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -130,6 +131,12 @@ function buildRecords(output) {
       .filter(Boolean)
       .map((line) => {
         const item = JSON.parse(line);
+        if (
+          typeof item.ID !== "string" ||
+          !/^[a-z0-9]{10,64}$/.test(item.ID) ||
+          typeof item.Shared !== "boolean"
+        )
+          throw new Error("BUILD_CACHE_MEASUREMENT_INVALID");
         return [item.ID, item];
       }),
   );
@@ -237,18 +244,44 @@ try {
   report.installedImageBytes = image.Size;
   // Image includes base+installed packages. Cache includes wheel archives and models, without double-counting build bind mounts.
   report.installedDependencyBytes = image.Size - report.baseImageInstalledBytes;
-  report.ownedCacheBytes = await cacheBytes(cache);
+
   const builderAfter = buildRecords(await command(["buildx", "du", "--format=json"]));
-  report.buildCachePrivateDeltaBytes = [...builderAfter.values()]
-    .filter((item) => !item.Shared)
-    .reduce(
-      (sum, item) =>
-        sum + Math.max(0, Number(item.Size) - Number(builderBefore.get(item.ID)?.Size ?? 0)),
-      0,
-    );
-  report.installedCacheBytes =
-    image.Size + report.ownedCacheBytes + report.buildCachePrivateDeltaBytes;
-  if (report.installedCacheBytes > profile.limits.installedCacheBytes)
+  let ownedRecords = [];
+  try {
+    ownedRecords = JSON.parse(await readFile(resolve(cache, "build-records.json")));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  if (
+    !Array.isArray(ownedRecords) ||
+    ownedRecords.length > 1000 ||
+    ownedRecords.some((id) => typeof id !== "string" || !/^[a-z0-9]{10,64}$/.test(id))
+  )
+    throw new Error("BUILD_CACHE_IDENTITY_INVALID");
+  const owned = new Set([
+    ...ownedRecords,
+    ...[...builderAfter.keys()].filter((id) => !builderBefore.has(id)),
+  ]);
+  await atomic(resolve(cache, "build-records.json"), `${JSON.stringify([...owned])}\n`);
+  report.buildCachePrivateUpperBoundBytes = [...builderAfter.values()]
+    .filter((item) => owned.has(item.ID) && !item.Shared)
+    .reduce((sum, item) => sum + dockerSizeUpperBound(item.Size), 0);
+  report.ownedCacheBytes = await cacheBytes(cache);
+  report.accountingReserveBytes = 1048576;
+  report.physicalDeduplicatedBytes = null;
+  report.accounting =
+    "Conservative logical retained sum; Docker image includes shared base, own cache measured separately, owned nonshared BuildKit display sizes rounded upward. Physical filesystem dedup is not measured.";
+  report.installedCacheUpperBoundBytes =
+    image.Size +
+    report.ownedCacheBytes +
+    report.buildCachePrivateUpperBoundBytes +
+    report.accountingReserveBytes;
+  if (
+    !Number.isSafeInteger(report.installedCacheUpperBoundBytes) ||
+    report.installedCacheUpperBoundBytes < 0
+  )
+    throw new Error("FOOTPRINT_MEASUREMENT_INVALID");
+  if (report.installedCacheUpperBoundBytes > profile.limits.installedCacheBytes)
     throw new Error("INSTALLED_CACHE_LIMIT");
   report.state = "prepared";
 } catch (error) {

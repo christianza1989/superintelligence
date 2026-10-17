@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "profile": "docling-2.140.0-pdf-cpu-v1",
+  "state": "rejected-for-default-mvp",
+  "fixtureManifestSha256": "3be8cd41fda8e39cf24d7f97dbdc77de46ab059f4cb486ea53194ca289738d8f",
+  "runnerSha256": "cdd943bff95650db279de29cffe118114773d1259e3bc3affd0f631ec20078b6",
+  "graderSha256": "eaf565a8d25e30ad754c6a2fd0f891865a8e0717b613a58e42370e374ecf8974",
+  "paidModelCalls": 0,
+  "network": "none",
+  "defaultDownloads": 0,
+  "scope": "Synthetic born-digital development corpus only; no OCR or user PDFs",
+  "preparationAttempts": [
+    {
+      "stage": "development-resolution",
+      "state": "failed",
+      "elapsedMs": 168728,
+      "code": "RESOLVER_REPORT_PERMISSION",
+      "networkReceivedBytes": null
+    },
+    {
+      "stage": "development-resolution",
+      "state": "failed",
+      "elapsedMs": 158459,
+      "code": "RESOLUTION_REPORT_LIMIT",
+      "reportBytes": 1174228,
+      "reportLimitBytes": 1048576,
+      "networkReceivedBytes": 398983357
+    },
+    {
+      "stage": "locked-cold-prepare",
+      "state": "failed-accounting-validation",
+      "elapsedMs": 338995,
+      "code": "FOOTPRINT_MEASUREMENT_INVALID",
+      "note": "Rounded Docker JSON sizes were misread as numbers; nonfinite accounting was invalidated before any conversion."
+    },
+    {
+      "stage": "cached-recheck",
+      "state": "prepared-within-optional-cap",
+      "elapsedMs": 13453
+    }
+  ],
+  "footprint": {
+    "dependencyArchiveBytes": 318675929,
+    "modelBytes": 384434788,
+    "baseImageCompressedBytes": 49907229,
+    "baseImageInstalledBytes": 206918255,
+    "installedImageBytes": 2133152856,
+    "installedPythonDependencyDeltaBytes": 1926234601,
+    "ownedPreparationCacheBytes": 704347504,
+    "buildCachePrivateUpperBoundBytes": 318916387,
+    "accountingReserveBytes": 1048576,
+    "installedCacheUpperBoundBytes": 3157465323,
+    "physicalDeduplicatedBytes": null,
+    "accounting": "Conservative logical retained sum; Docker image includes shared base, own cache measured separately, owned nonshared BuildKit display sizes rounded upward. Physical filesystem dedup is not measured.",
+    "optionalCapBytes": 6442450944,
+    "optionalCapPass": true,
+    "g0GateBytes": 2000000000,
+    "pdfImageAndWeightsOnlyBytes": 2517587644,
+    "g0Pass": false,
+    "note": "PDF image+weights alone exceed G0 before Zero/browser/coding. Optional preparation is not whole-profile G0 acceptance."
+  },
+  "runtime": {
+    "state": "failed",
+    "elapsedMs": 29487,
+    "processExit": 0,
+    "processPeakRssBytes": 511762432,
+    "containerPeakMemoryBytes": 651685888,
+    "oomKilled": false,
+    "cleanupConfirmed": true,
+    "results": [
+      {
+        "id": "01-integer-sales",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 5368,
+        "initializationMs": 7220,
+        "peakRssBytes": 508035072,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "02-decimal-prices",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 713,
+        "initializationMs": 0,
+        "peakRssBytes": 509300736,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "03-negative-adjustments",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1086,
+        "initializationMs": 0,
+        "peakRssBytes": 509841408,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "04-thousands",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1279,
+        "initializationMs": 0,
+        "peakRssBytes": 510078976,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "05-parenthesized-debits",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 2350,
+        "initializationMs": 0,
+        "peakRssBytes": 510574592,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "06-two-tables",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1971,
+        "initializationMs": 0,
+        "peakRssBytes": 510722048,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "07-two-pages",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1465,
+        "initializationMs": 0,
+        "peakRssBytes": 511037440,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "08-empty-cells",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1760,
+        "initializationMs": 0,
+        "peakRssBytes": 511135744,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "09-identifiers-and-totals",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 1647,
+        "initializationMs": 0,
+        "peakRssBytes": 511135744,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      },
+      {
+        "id": "10-no-table-control",
+        "state": "failed",
+        "pass": false,
+        "errors": ["conversion_not_completed"],
+        "numericCells": 0,
+        "elapsedMs": 898,
+        "initializationMs": 0,
+        "peakRssBytes": 511135744,
+        "errorType": "ModuleNotFoundError",
+        "missingModule": null
+      }
+    ],
+    "warmRepeat": {
+      "pass": false,
+      "errors": ["conversion_not_completed"],
+      "numericCells": 0,
+      "elapsedMs": 834,
+      "peakRssBytes": 511762432,
+      "errorType": "ModuleNotFoundError",
+      "missingModule": null
+    },
+    "qualityAssessment": "Not measured: every conversion failed during pipeline preparation; 0/10 completed is not a table extraction quality score.",
+    "diagnosticLimit": "Runner retained exception class only. Missing module name and traceback were not captured; stderr contained no traceback.",
+    "staticPreparationGap": {
+      "inference": "cv2 is a likely missing module, not an observed exact exception name.",
+      "sourceWheel": "docling_ibm_models-4.0.3-py3-none-any.whl",
+      "sourceWheelSha256": "82c6c6ad6622aa9e58c4d745c26fba12eef54927f32d44f21f24bcb5be5464ff",
+      "imports": [
+        "docling_ibm_models/tableformer/data_management/tf_predictor.py:10 imports cv2",
+        "docling_ibm_models/tableformer/data_management/functional.py:4 imports cv2"
+      ],
+      "metadata": "OpenCV is an optional extra of docling-ibm-models, absent this frozen models-local wheel closure."
+    }
+  },
+  "remaining": {
+    "durableWorker": "NOT_RUN",
+    "authenticatedApplication": "NOT_IMPLEMENTED",
+    "independentHoldout": "NOT_RUN",
+    "dependencyRedistributionReview": "NOT_COMPLETED"
+  }
+}

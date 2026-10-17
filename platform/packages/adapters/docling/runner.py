@@ -1,9 +1,10 @@
 """Fixed born-digital PDF profile. No network, OCR, plugin, shell or scheduler."""
 import hashlib
 import json
-import os
 from pathlib import Path
 import resource
+import re
+import traceback
 import signal
 import sys
 import time
@@ -102,6 +103,9 @@ def convert(converter, filename):
     except Exception as error:
         result["code"] = str(error) if isinstance(error, ValueError) and str(error) in {"PDF_INPUT_DENIED", "PDF_INPUT_LIMIT", "PDF_INPUT_FORMAT", "PDF_PAGE_LIMIT"} else "PDF_CONVERSION_FAILED"
         result["errorType"] = type(error).__name__
+        module = getattr(error, "name", None)
+        result["missingModule"] = module if isinstance(module, str) and re.fullmatch(r"[A-Za-z0-9_.]{1,128}", module) else None
+        result["redactedFrames"] = [{"file": Path(frame.filename).name[:80], "line": frame.lineno, "function": frame.name[:80]} for frame in traceback.extract_tb(error.__traceback__, limit=6)]
     finally:
         signal.alarm(0)
         result["elapsedMs"] = round((time.monotonic() - started) * 1000)
