@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "kind": "benchmark_proposal_not_implemented",
+  "suite": "stockdesk-v1",
+  "split": "calibration",
+  "status": "task_and_design_prepared_not_run",
+  "codingModel": "claude-haiku-5-5",
+  "reasoning": "high",
+  "systemPromptMode": "default",
+  "tools": "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch",
+  "taskPromptPath": "benchmarks/stockdesk-v1/PROMPT.md",
+  "taskPromptSha256": "054aa26901fac6c8f38e7206473745e41dae68714f155411a3bb5b2b268af926",
+  "taskPromptBytes": 9556,
+  "protocolPath": "benchmarks/stockdesk-v1/README.md",
+  "protocolSha256": "b06f3379d198ebc3c64ddfa1e18865eae859d6740cef5167b3552698440dcc88",
+  "proposedControls": {
+    "codingTimeoutMs": 1200000,
+    "maxObservedToolActions": 100,
+    "screeningPairs": 1,
+    "confirmationPairs": 3,
+    "order": "AB/BA/AB",
+    "automaticRetries": 0
+  },
+  "objective": "quality_time_cost_tradeoff_no_fixed_percentage_target",
+  "gatePriority": "complete_quality_acceptance_before_speed_or_price_comparison",
+  "lanes": [
+    {
+      "id": "A",
+      "sourceAssistance": "none"
+    },
+    {
+      "id": "B",
+      "sourceAssistance": "deterministic_operator_selected_zero_pack"
+    },
+    {
+      "id": "C",
+      "sourceAssistance": "jev_selection_from_same_eligible_pool"
+    }
+  ],
+  "plannedComparisons": [
+    "A/C whole assisted system screening",
+    "B/C Jev selection marginal effect screening",
+    "three fresh alternating A/selected-assisted confirmation pairs"
+  ],
+  "readiness": {
+    "commonTask": true,
+    "experimentalDesign": true,
+    "sourcePack": false,
+    "stockdeskIndependentApiGrader": false,
+    "stockdeskIndependentBrowserGrader": false,
+    "negativeControls": false,
+    "liveRunnerIntegration": false,
+    "confirmedModelAccess": false
+  },
+  "stockdeskCodingAttempts": 0,
+  "modelFallback": false,
+  "actualSubscriptionCostUsd": null,
+  "jevBudget": {
+    "sharedOriginalLedgerRequired": true,
+    "authorizedTotalUsd": 1,
+    "newRequestsThisPreparation": 0
+  }
+}

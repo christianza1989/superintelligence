@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "kind": "claude_connectivity_probe_not_coding_benchmark",
+  "clientDate": "2026-10-17",
+  "requestedModel": "claude-haiku-5-5",
+  "requestedReasoning": "high",
+  "auth": "claude-cli-subscription",
+  "cliInvocationAttempts": 1,
+  "modelDispatchAttempts": null,
+  "status": "failed",
+  "reason": "cli_failure",
+  "assistantErrorCategory": "server_error",
+  "confirmedModelAccess": false,
+  "elapsedMs": 8661,
+  "exitCode": 1,
+  "terminalSubtype": "success",
+  "isError": true,
+  "actualModel": null,
+  "errorPlaceholderModel": "<synthetic>",
+  "usage": {
+    "uncachedInputTokens": 0,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "outputTokens": 0,
+    "totalTokens": 0
+  },
+  "apiEquivalentCostEstimateUsd": 0,
+  "actualSubscriptionCostUsd": null,
+  "stockdeskCodingAttempts": 0,
+  "jevRequests": 0,
+  "automaticRetries": 0,
+  "limitations": [
+    "Connectivity probe only; no app generation or independent acceptance",
+    "Zero reported tokens do not establish a free or successful request",
+    "Synthetic assistant model is not the requested model identity",
+    "No raw diagnostic content or account/session identifiers are public"
+  ]
+}
