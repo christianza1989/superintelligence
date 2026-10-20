@@ -48,7 +48,7 @@ Rakazo jau pasirinktas. Lieka kvalifikuoti švarų Linux x86_64 profilį, tikrą
 - [ ] P0.5 Užfiksuoti ModuleManifest, ToolCall, ToolResult, TaskEvent, ArtifactRef, EffectIntent ir ImprovementProposal schemas.
 - [ ] P0.6 Pasirinkti leidimų modelį: failų šaknys, tinklo tikslai, paskyros, side effects, pinigų rezervas ir atšaukimas.
 - [ ] P0.7 Švariame host pamatuoti pasirinkto Rakazo web/API/worker/PostgreSQL profilio pilną įdiegimo delta: runtime, DB, images, browser, cache, steady ir peak diską bei RAM. Alternatyvų matavimai tik naujam ADR, jei profilis netinka.
-- [ ] P0.8 Atskira maža Docling spike: 10 sintetinių PDF, lentelių skaičiai, pirmas modelių download, diskas ir peak RSS.
+- [ ] P0.8 Pasirinkto PDF parserio spike pagal [A17](docs/DECISIONS.md): 10 sintetinių PDF, lentelių skaičiai, pirmas priklausomybių/modelių download (be ML profilyje modelių 0 B), diskas ir peak RSS. Ankstesnė Docling epocha ir jos nesėkmės išsaugomos.
 - [ ] P0.9 Atskira Playwright spike: vienas browser, 10 savo bandomųjų puslapių, offline fixtures, trace, download limitai.
 - [ ] P0.10 Kodo workerio spike: disposable VM prieinamumas, rootless trusted lane ir aiškus hostile lane atsisakymas jei VM nėra.
 - [ ] P0.12 Esamos PostgreSQL/Graphile DB kvalifikacija: vienas autoritetingas scheduler, 2 workeriai, lease lenktynės, crash tarp event/outbox, disk-full ir koordinavimo semantika.
@@ -114,10 +114,10 @@ MVP reikalauja L1–L5. Paieška veikia be AI užduoties ir mokamų LLM; Compare
 Browser/research, PDF lentelės ir coding su mažu naujo projekto reuse keliu. Išlieka G2: 24/30 ir ≥7/10 kiekvienoje srityje, visos nesėkmės bei privalomi permissions/budget/cancel/restart atvejai. Tai dev acceptance, ne nepriklausomas pranašumo benchmark. 8 locale foundation kode savaime neuždaro visų srautų vertimo.
 
 - [ ] P2.1 Playwright: browser/research adapteris, URL allowlist, šaltinių registras, screenshot, deterministic assertions.
-- [ ] P2.2 Docling: PDF ArtifactRef į struktūrinį JSON/CSV, puslapių provenance, numerinių duomenų validatorius.
+- [ ] P2.2 PDF adapteris pagal [A17](docs/DECISIONS.md): pirmam MVP fiksuotas pdfplumber born-digital ruled-table profilis; PDF ArtifactRef į struktūrinį JSON/CSV, puslapių provenance, numerinių duomenų validatorius. Be OCR ar bendro PDF palaikymo teiginio.
 - [ ] P2.3 Kodo modulis: ribotas Git/diff/testų ciklas, test report, aplikacijos smoke ir išsaugotas workspace artefaktas.
 - [ ] P2.4 Kiekvienam moduliui izoliuotas lock ir pin, healthcheck, conformance, resursų apskaita, cancel ir uninstall.
-- [ ] P2.5 MCP Python SDK conformance pagal tikrintą v2 API; nesiremti pasenusiu FastMCP pavyzdžiu be versijos.
+- [ ] P2.5 MCP protokolo conformance su [A18](docs/DECISIONS.md) pasirinktu oficialiu pinned Node SDK: tikra palaikomo transporto/host pora, negotiated protocol/schema, roots/operatoriaus scope, auth/leidimų ir lifecycle patikros pagal [MCP kontraktą](docs/MCP-INTEGRATION.md). SDK semver nėra protocol version; nesiremti pasenusiu FastMCP pavyzdžiu be versijos.
 - [ ] P2.6 Artefaktų peržiūros: PDF+CSV, kodo diff+preview, šaltinių ataskaita; redagavimas su nauja versija.
 - [ ] P2.7 Įgyvendinti `unknown_after_timeout` read-only reconciliation ir sustojimą, kai efekto negalima patikimai nustatyti.
 - [ ] P2.8 Modulio diegimo UI rodo faktinį papildomą dydį, leidimus, modelių/duomenų poreikį ir kainos nežinomus.
