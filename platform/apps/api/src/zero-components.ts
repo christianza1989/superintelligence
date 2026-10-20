@@ -4,10 +4,16 @@ import type {
   ZeroComponentAuthorize,
   ZeroComponentPrincipal,
   ZeroPdfResolve,
+  ZeroUrlResearchResolve,
+  ZeroUrlResearchTestTransport,
 } from "@rakazo/adapters";
 import {
   createZeroBrowserService,
   createZeroPdfService,
+  createZeroUrlResearchService,
+  ZERO_URL_RESEARCH_PROFILE,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_LIMITS,
   ZERO_BROWSER_STATIC_JOB_LIMITS,
   ZERO_BROWSER_STATIC_PROFILE,
   ZERO_PDF_JOB_LIMITS,
@@ -24,6 +30,7 @@ export interface ZeroComponentScopePolicy {
   authorize: ZeroComponentAuthorize;
   resolvePdf?: ZeroPdfResolve;
   resolveBrowser?: ZeroBrowserResolve;
+  resolveUrlResearch?: ZeroUrlResearchResolve;
 }
 type Service = ReturnType<typeof createZeroPdfService>;
 const PAGE_BYTES = 16_384;
@@ -34,12 +41,13 @@ export function mountZeroComponentRoutes(
     artifacts: ArtifactStore;
     jobs: JobPublisher;
     policy?: ZeroComponentScopePolicy;
+    urlResearchTestTransport?: ZeroUrlResearchTestTransport;
     authenticate(request: Request): Promise<Actor | null>;
     trustedOrigin(origin: string): boolean;
   },
 ) {
   // Family is selected only here at composition, never from a body or tool argument.
-  for (const family of ["pdf", "browser"] as const) {
+  for (const family of ["pdf", "browser", "research"] as const) {
     const prefix = `/api/zero/${family}/scopes/:scopeId`;
     const scoped = async (c: Context, action: (service: Service) => Promise<Response>) => {
       c.header("cache-control", "no-store");
@@ -65,12 +73,22 @@ export function mountZeroComponentRoutes(
         )
           throw new IsolationError();
         await deps.policy.authorize(principal);
-        const service = (family === "pdf" ? createZeroPdfService : createZeroBrowserService)(
+        const service = (
+          family === "pdf"
+            ? createZeroPdfService
+            : family === "browser"
+              ? createZeroBrowserService
+              : createZeroUrlResearchService
+        )(
           {
             prisma: deps.prisma,
             artifacts: deps.artifacts,
             jobs: deps.jobs,
             authorize: (owner) => deps.policy!.authorize(owner),
+            resolveUrlResearch: deps.policy.resolveUrlResearch
+              ? (owner) => deps.policy!.resolveUrlResearch!(owner)
+              : undefined,
+            testOnlyTransport: deps.urlResearchTestTransport,
             resolvePdf: deps.policy.resolvePdf
               ? (owner) => deps.policy!.resolvePdf!(owner)
               : undefined,
@@ -125,11 +143,26 @@ export function mountZeroComponentRoutes(
         if (!(await service.available()))
           return c.json({ error: "component_profile_unavailable" }, 503);
         return c.json({
-          profile: family === "pdf" ? ZERO_PDF_PROFILE : ZERO_BROWSER_STATIC_PROFILE,
+          profile:
+            family === "pdf"
+              ? ZERO_PDF_PROFILE
+              : family === "browser"
+                ? ZERO_BROWSER_STATIC_PROFILE
+                : ZERO_URL_RESEARCH_PROFILE,
           backend: "available",
           paidModelCalls: 0,
-          execution: family === "pdf" ? "pdf-extraction" : "browser-static-extraction",
-          limits: family === "pdf" ? ZERO_PDF_JOB_LIMITS : ZERO_BROWSER_STATIC_JOB_LIMITS,
+          execution:
+            family === "pdf"
+              ? "pdf-extraction"
+              : family === "browser"
+                ? "browser-static-extraction"
+                : ZERO_URL_RESEARCH_MODE,
+          limits:
+            family === "pdf"
+              ? ZERO_PDF_JOB_LIMITS
+              : family === "browser"
+                ? ZERO_BROWSER_STATIC_JOB_LIMITS
+                : ZERO_URL_RESEARCH_LIMITS,
         });
       }),
     );

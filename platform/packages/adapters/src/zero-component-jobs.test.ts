@@ -17,6 +17,7 @@ import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 
 const families = [
   ["csv", "zero.csv.request.v1", ZERO_CSV_PROFILE, "zero-csv-request.json"],
+  ["research", "zero.research.request.v1", "zero-url-research-v1", "zero-research-request.json"],
   ["browser", "zero.browser.request.v1", "zero-browser-static-v1", "zero-browser-request.json"],
   ["pdf", "zero.pdf.request.v1", ZERO_PDF_PROFILE, "zero-pdf-request.json"],
 ] as const;
@@ -306,7 +307,7 @@ describe("fixed component lifecycle boundaries", () => {
     expect(f.deps.artifacts.remove).toHaveBeenCalledTimes(1);
   });
   it.each(families)(
-    "counts all three families against the shared four-job quota for %s",
+    "counts all four families against the shared four-job quota for %s",
     async (family) => {
       const f = fixture(family);
       f.deps.prisma.artifact.findMany.mockResolvedValue([{}, {}, {}, {}]);

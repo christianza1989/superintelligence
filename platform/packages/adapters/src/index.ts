@@ -185,3 +185,12 @@ export {
   ZeroProjectPolicyError,
   zeroProjectPolicyFromEnv,
 } from "./zero-project-policy.js";
+
+export {
+  ZERO_URL_RESEARCH_PROFILE,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_LIMITS,
+} from "./zero-url-research-contract.js";
+export type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
+export { createZeroUrlResearchService, runZeroUrlResearch } from "./zero-url-research.js";
+export type { ZeroUrlResearchResolve, ZeroUrlResearchTestTransport } from "./zero-url-research.js";
