@@ -113,8 +113,11 @@ try {
   const { build: buildWeb, version: viteVersion } = await import(webRequire.resolve("vite"));
   const webInputs = new Set();
   const oldNodeEnv = process.env.NODE_ENV;
+  const oldCwd = process.cwd();
   process.env.NODE_ENV = "production";
   try {
+    // Lingui resolves configuration from cwd, as in the existing web build script.
+    process.chdir(webSource);
     await buildWeb({
       root: webSource, configFile: path.join(webSource, "vite.config.ts"),
       mode: "production", logLevel: "error",
@@ -127,6 +130,7 @@ try {
       } }],
     });
   } finally {
+    process.chdir(oldCwd);
     if (oldNodeEnv === undefined) delete process.env.NODE_ENV;
     else process.env.NODE_ENV = oldNodeEnv;
   }
