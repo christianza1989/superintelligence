@@ -5,9 +5,10 @@ import { spawn } from "node:child_process";
 import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import net from "node:net";
+import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, qualifyNativeSharedWeb, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
 
 const hash = value => createHash("sha256").update(value).digest("hex");
 const revision = "a".repeat(40), image = "sha256:" + "b".repeat(64);
@@ -16,7 +17,7 @@ async function fixture(t) {
   t.after(() => rm(scratch, { recursive: true, force: true }));
   const source = path.join(scratch, "package"); await mkdir(source);
   const files = [];
-  for (const name of ["app/api.mjs", "app/worker.mjs", "migrate.mjs", "pnpm-lock.yaml", "db/prisma/schema.prisma"]) {
+  for (const name of ["app/api.mjs", "app/worker.mjs", "migrate.mjs", "pnpm-lock.yaml", "db/prisma/schema.prisma", "web/index.html"]) {
     const content = Buffer.from("// fixture " + name + "\n");
     await mkdir(path.dirname(path.join(source, name)), { recursive: true }); await writeFile(path.join(source, name), content);
     files.push({ path: name, bytes: content.length, sha256: hash(content) });
@@ -222,4 +223,79 @@ test("canonical root checks preserve symlink traversal before parent segments", 
   await assert.rejects(verifyNativeQualificationPackage(traversed, pins.expectedSource, pins.buildSha256), /ROOT/);
   await assert.rejects(relocateNativeQualificationPackage(source, alias + "/../target", pins), /TARGET_ROOT/);
   assert.deepEqual((await readdir(other)).sort(), ["nested", "package"]);
+});
+
+test("API-only sealed packages cannot qualify without the shared web index", async t => {
+  const { source, build, pins } = await fixture(t);
+  const entry = build.files.find(file => file.path === "web/index.html");
+  await rm(path.join(source, entry.path));
+  build.files = build.files.filter(file => file !== entry);
+  build.payloadFileBytesExcludingBuildManifest -= entry.bytes;
+  const content = JSON.stringify(build); await writeFile(path.join(source, "BUILD.json"), content);
+  await assert.rejects(verifyNativeQualificationPackage(source, pins.expectedSource, hash(content)), /REQUIRED_ENTRY/);
+});
+
+async function sharedWebFixture(t, { index = '<!doctype html><script type="module" crossorigin src="/assets/index-Abcd1234.js"></script><div id="root"></div>', change = () => undefined } = {}) {
+  const asset = "console.log('ready');", requests = [];
+  const entries = new Map([["/discover", { body: index, type: "text/html; charset=utf-8" }], ["/assets/index-Abcd1234.js", { body: asset, type: "text/javascript; charset=utf-8" }]]);
+  const build = { files: [{ path: "web/index.html", bytes: Buffer.byteLength(index), sha256: hash(index) }, { path: "web/assets/index-Abcd1234.js", bytes: Buffer.byteLength(asset), sha256: hash(asset) }] };
+  const server = createServer((request, response) => {
+    requests.push([request.method, request.url, request.headers.accept]);
+    const entry = entries.get(request.url);
+    const result = { status: entry ? 200 : 404, body: entry?.body ?? "Not found", type: entry?.type ?? "text/plain; charset=utf-8", headers: {} };
+    change(result, request, { index, asset });
+    response.writeHead(result.status, { "content-type": result.type, "content-length": Buffer.byteLength(result.body), ...result.headers });
+    response.end(request.method === "HEAD" ? undefined : result.body);
+  });
+  await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
+  t.after(() => new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }));
+  let aliveChecks = 0;
+  return { apiUrl: "http://127.0.0.1:" + server.address().port, build, signal: AbortSignal.timeout(5_000), assertAlive: () => { aliveChecks++; }, requests, aliveChecks: () => aliveChecks };
+}
+
+test("actual HTTP web smoke binds GET/HEAD shell and built asset to the sealed inventory", async t => {
+  const fixture = await sharedWebFixture(t);
+  const result = await qualifyNativeSharedWeb(fixture);
+  assert.equal(result.asset.path, "web/assets/index-Abcd1234.js"); assert.equal(result.checkedRequests, 8); assert.equal(result.uiQualified, false);
+  assert.equal(fixture.requests.length, 8); assert.equal(fixture.aliveChecks(), 16);
+  assert.deepEqual(fixture.requests.slice(0, 4), [["GET", "/discover", "text/html"], ["HEAD", "/discover", "text/html"], ["GET", "/assets/index-Abcd1234.js", "text/html"], ["HEAD", "/assets/index-Abcd1234.js", "text/html"]]);
+});
+
+test("shared web smoke rejects hash drift, wrong MIME, wrong HEAD length and oversized bodies", async t => {
+  const changes = [
+    (result, request) => { if (request.url.startsWith("/assets/")) result.body = "console.log('wrong');"; },
+    (result, request) => { if (request.url === "/discover") result.type = "application/json"; },
+    (result, request) => { if (request.method === "HEAD") result.headers["content-length"] = "999"; },
+    (result, request) => { if (request.url.startsWith("/assets/")) result.body += "extra"; },
+  ];
+  for (const change of changes) await assert.rejects(qualifyNativeSharedWeb(await sharedWebFixture(t, { change })), /NATIVE_WEB_RESPONSE/);
+});
+
+test("shared web smoke never follows remote, encoded, comment-only or fake attribute references", async t => {
+  for (const index of [
+    '<script type="module" src="https://example.invalid/a.js"></script>',
+    '<script type="module" src="//example.invalid/a.js"></script>',
+    '<script type="module" src="/assets/%2e%2e/private.js"></script>',
+    '<!-- <script type="module" src="/assets/index-Abcd1234.js"></script> -->',
+    '<script type="module" data-ref=\' src="/assets/index-Abcd1234.js"\'></script>',
+    '<script type="module" src="/assets/index-Abcd1234.js" src="/assets/other.js"></script>',
+    '<script type="module" src="/assets/not-in-build.js"></script>',
+  ]) {
+    const fixture = await sharedWebFixture(t, { index });
+    await assert.rejects(qualifyNativeSharedWeb(fixture), /NATIVE_WEB_(?:LOCAL_ASSET_MISSING|AMBIGUOUS_ASSET|BUILD_ENTRY)/);
+    assert.equal(fixture.requests.length, 2);
+  }
+});
+
+test("shared web smoke rejects SPA fallbacks on missing assets and reserved API paths", async t => {
+  for (const route of ["/assets/zero-native-qualification-missing-00000000.js", "/api/zero/native-package-qualification-missing"]) {
+    const fixture = await sharedWebFixture(t, { change: (result, request, { index }) => { if (request.url === route) { result.status = 200; result.body = index; result.type = "text/html; charset=utf-8"; } } });
+    await assert.rejects(qualifyNativeSharedWeb(fixture), /NATIVE_WEB_RESERVED_OR_MISSING_FALLBACK/);
+  }
+});
+
+test("shared web smoke refuses redirects before requesting another location", async t => {
+  const fixture = await sharedWebFixture(t, { change: result => { result.status = 302; result.headers.location = "https://example.invalid/"; } });
+  await assert.rejects(qualifyNativeSharedWeb(fixture));
+  assert.equal(fixture.requests.length, 1);
 });

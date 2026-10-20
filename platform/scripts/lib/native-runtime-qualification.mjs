@@ -60,7 +60,7 @@ export async function verifyNativeQualificationPackage(directory, expectedSource
   }
   await walk(root);
   if (actual.size !== expected.size || bytes !== build.payloadFileBytesExcludingBuildManifest) throw new Error("NATIVE_BUILD_INCOMPLETE_INVENTORY");
-  for (const file of ["app/api.mjs", "app/worker.mjs", "migrate.mjs", "pnpm-lock.yaml", "db/prisma/schema.prisma"]) if (!expected.has(file)) throw new Error("NATIVE_BUILD_REQUIRED_ENTRY_MISSING");
+  for (const file of ["app/api.mjs", "app/worker.mjs", "migrate.mjs", "pnpm-lock.yaml", "db/prisma/schema.prisma", "web/index.html"]) if (!expected.has(file)) throw new Error("NATIVE_BUILD_REQUIRED_ENTRY_MISSING");
   return { build, bytes, manifestBytes: (await lstat(buildFile)).size };
 }
 
@@ -113,4 +113,67 @@ export async function stopNativeQualificationProcess(record, options) {
   record.stopRequested = true;
   await cleanupNativeQualificationProcess(record, options);
   if (!record.exited || record.code !== 0 || record.signal !== null || record.error || record.overflow || record.forced) throw new Error("NATIVE_QUALIFICATION_PROCESS_STOP_FAILED");
+}
+
+export async function qualifyNativeSharedWeb({ apiUrl, build, signal, assertAlive }) {
+  const origin = new URL(apiUrl);
+  if (origin.protocol !== "http:" || origin.hostname !== "127.0.0.1" || origin.username || origin.password || origin.pathname !== "/" || origin.search || origin.hash) throw new Error("NATIVE_WEB_FIXTURE_ORIGIN");
+  const entryFor = (file, bound) => {
+    const item = build.files.find(item => item.path === file);
+    if (!item || item.symlink || !Number.isSafeInteger(item.bytes) || item.bytes <= 0 || item.bytes > bound || !/^[a-f0-9]{64}$/.test(item.sha256)) throw new Error("NATIVE_WEB_BUILD_ENTRY");
+    return item;
+  };
+  const index = entryFor("web/index.html", 1_000_000);
+  const request = async (suffix, method, bound) => {
+    assertAlive();
+    const response = await fetch(origin.origin + suffix, { method, headers: { accept: "text/html", "accept-encoding": "identity" }, redirect: "error", signal: AbortSignal.any([signal, AbortSignal.timeout(5_000)]) });
+    const chunks = []; let length = 0;
+    if (response.body) {
+      const reader = response.body.getReader();
+      try {
+        while (true) {
+          const { done, value } = await reader.read(); if (done) break;
+          length += value.byteLength;
+          if (length > bound) throw new Error("NATIVE_WEB_RESPONSE_BOUND");
+          chunks.push(Buffer.from(value));
+        }
+      } finally { await reader.cancel(); }
+    }
+    assertAlive();
+    return { response, bytes: Buffer.concat(chunks) };
+  };
+  const check = (result, item, type, method) => {
+    if (result.response.status !== 200 || result.response.headers.get("content-type") !== type || result.response.headers.get("content-length") !== String(item.bytes)) throw new Error("NATIVE_WEB_RESPONSE_METADATA");
+    if (method === "HEAD") {
+      if (result.bytes.length !== 0) throw new Error("NATIVE_WEB_HEAD_BODY");
+    } else if (result.bytes.length !== item.bytes || createHash("sha256").update(result.bytes).digest("hex") !== item.sha256) throw new Error("NATIVE_WEB_RESPONSE_INTEGRITY");
+  };
+  const shell = await request("/discover", "GET", index.bytes);
+  check(shell, index, "text/html; charset=utf-8", "GET");
+  check(await request("/discover", "HEAD", 0), index, "text/html; charset=utf-8", "HEAD");
+  // A literal root-relative, inventoried script only; never resolve arbitrary HTML URLs.
+  let assetUrl;
+  for (const tag of shell.bytes.toString("utf8").replace(/<!--[\s\S]*?(?:-->|$)/g, "").matchAll(/<script\b([^<>]{0,4096})>[\s\S]*?<\/script\s*>/gi)) {
+    const attributes = new Map(), pattern = /\s+([A-Za-z_:][A-Za-z0-9_:.-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/gy;
+    let attribute, consumed = 0;
+    while ((attribute = pattern.exec(tag[1]))) {
+      consumed = pattern.lastIndex;
+      const name = attribute[1].toLowerCase();
+      if (attributes.has(name)) throw new Error("NATIVE_WEB_AMBIGUOUS_ASSET");
+      attributes.set(name, attribute[2] ?? attribute[3] ?? attribute[4] ?? "");
+    }
+    if (tag[1].slice(consumed).trim()) throw new Error("NATIVE_WEB_AMBIGUOUS_ASSET");
+    if (attributes.get("type") !== "module") continue;
+    const value = attributes.get("src");
+    if (value && /^\/assets\/[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*\.(?:js|mjs)$/.test(value)) { assetUrl = value; break; }
+  }
+  if (!assetUrl) throw new Error("NATIVE_WEB_LOCAL_ASSET_MISSING");
+  const asset = entryFor("web" + assetUrl, 32_000_000);
+  for (const method of ["GET", "HEAD"]) check(await request(assetUrl, method, method === "HEAD" ? 0 : asset.bytes), asset, "text/javascript; charset=utf-8", method);
+  const missing = "/assets/zero-native-qualification-missing-00000000.js";
+  if (build.files.some(item => item.path === "web" + missing)) throw new Error("NATIVE_WEB_MISSING_CONTROL_COLLISION");
+  for (const route of [missing, "/api/zero/native-package-qualification-missing"]) for (const method of ["GET", "HEAD"]) {
+    if ((await request(route, method, method === "HEAD" ? 0 : 65_536)).response.status !== 404) throw new Error("NATIVE_WEB_RESERVED_OR_MISSING_FALLBACK");
+  }
+  return { index: { path: index.path, bytes: index.bytes, sha256: index.sha256 }, asset: { path: asset.path, bytes: asset.bytes, sha256: asset.sha256 }, checkedRequests: 8, uiQualified: false };
 }

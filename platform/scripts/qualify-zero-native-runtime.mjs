@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
 
 const options = nativeQualificationArguments(process.argv.slice(2));
 if (options.plan) {
@@ -31,7 +31,7 @@ if (options.plan) {
     sourceRevision: options.expectedSource, buildSha256: options.buildSha256, postgresImageId: options.postgresImage,
     localOnly: true, doNotPublish: true, distributionReady: false, runtimeQualified: false, g0Qualified: false,
     cleanContainerQualified: false, scenarios: [], packageBytes: null, installedProductionBytes: null, physicalDedupBytes: null,
-    limitations: ["Host Node and a reusable Docker daemon; not a clean-host installation measurement", "Preload guards constrain normal Node module/file/network paths; they are qualification instrumentation, not an OS sandbox", "No web UI, verifier image, native-host/plugin or three-family qualification", "Direct process RSS excludes unmeasured native descendants; complete peak RAM remains unknown", "Filesystem operations have finite file/byte cardinality but no claim of hard kernel-IO preemption"],
+    limitations: ["Host Node and a reusable Docker daemon; not a clean-host installation measurement", "Preload guards constrain normal Node module/file/network paths; they are qualification instrumentation, not an OS sandbox", "No full UI, verifier image, native-host/plugin or three-family qualification", "Direct process RSS excludes unmeasured native descendants; complete peak RAM remains unknown", "Filesystem operations have finite file/byte cardinality but no claim of hard kernel-IO preemption"],
   };
   let postgres, databaseUrl, verified, postgresAttempted = false;
   await writeFile(path.join(evidence, "qualification.json"), JSON.stringify({ ...report, interruptionIfNoFinalRecord: "unknown; inspect private owned-state record" }, null, 2) + "\n", { mode: 0o600 });
@@ -145,6 +145,9 @@ if (options.plan) {
       try { await fetchJson("/ready"); ready = true; break; } catch { active.throwIfAborted(); await new Promise(resolve => setTimeout(resolve, 200)); }
     }
     assertRuntimeAlive(); assert.ok(ready); scenario("real-package-api-worker-readiness");
+    report.stage = "shared-built-web-smoke";
+    report.sharedWeb = await qualifyNativeSharedWeb({ apiUrl, build: verified.build, signal: active, assertAlive: assertRuntimeAlive });
+    scenario("actual-package-shared-web-index-asset-and-reserved-route-smoke");
     report.stage = "real-api-session-and-private-scope";
     const signup = await fetchJson("/api/auth/sign-up/email", { body: { name: "Package fixture", email: `fixture-${nonce}@fixture.invalid`, password: randomBytes(24).toString("hex") }, headers: { origin: apiUrl } });
     const cookie = signup.response.headers.getSetCookie().map(value => value.split(";")[0]).find(value => /(?:^|-)better-auth\.session_token=/.test(value)); assert.ok(cookie);
