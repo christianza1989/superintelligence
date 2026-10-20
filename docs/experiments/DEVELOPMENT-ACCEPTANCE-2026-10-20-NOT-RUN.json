@@ -1,0 +1,253 @@
+{
+  "profile": "zero-development-30-v1",
+  "classification": "visible_development_not_independent_holdout",
+  "accepted": false,
+  "gate": "NOT_RUN",
+  "passed": 0,
+  "denominator": 30,
+  "domains": {
+    "browser": {
+      "passed": 0,
+      "denominator": 10
+    },
+    "pdf": {
+      "passed": 0,
+      "denominator": 10
+    },
+    "coding": {
+      "passed": 0,
+      "denominator": 10
+    }
+  },
+  "mandatoryControls": {
+    "permissions": {
+      "status": "not_run",
+      "inherited": false
+    },
+    "cancel": {
+      "status": "not_run",
+      "inherited": false
+    },
+    "restart": {
+      "status": "not_run",
+      "inherited": false
+    },
+    "budget": {
+      "status": "not_run",
+      "inherited": false
+    }
+  },
+  "rows": [
+    {
+      "id": "browser-01",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-02",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-03",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-04",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-05",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-06",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-07",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-08",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-09",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "browser-10",
+      "domain": "browser",
+      "status": "blocked",
+      "reason": "Current durable browser service accepts immutable HTML file IDs only; no URL-allowlisted research operation or URL source registry is composed into it. Inert-file extraction cannot satisfy this task.",
+      "attempts": []
+    },
+    {
+      "id": "pdf-01",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-02",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-03",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-04",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-05",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-06",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-07",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-08",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-09",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "pdf-10",
+      "domain": "pdf",
+      "status": "not_run",
+      "reason": "No frozen-corpus backend execution has occurred",
+      "attempts": []
+    },
+    {
+      "id": "coding-01",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-02",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-03",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-04",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-05",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-06",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-07",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-08",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-09",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    },
+    {
+      "id": "coding-10",
+      "domain": "coding",
+      "status": "blocked",
+      "reason": "No general coding/application-creation operation is composed into the current scoped backend. Native host source edits and a prepared CSV fixture do not establish this task's actual reuse, build, application preview and independently verified outcome. Model dispatch is forbidden in this frozen profile.",
+      "attempts": []
+    }
+  ],
+  "paidModelCalls": 0
+}
