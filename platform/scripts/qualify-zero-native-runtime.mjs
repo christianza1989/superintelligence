@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage } from "./lib/native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
 
 const options = nativeQualificationArguments(process.argv.slice(2));
 if (options.plan) {
@@ -78,17 +78,6 @@ if (options.plan) {
     assert.equal(item.HostConfig.PortBindings["5432/tcp"][0].HostIp, "127.0.0.1");
     return item;
   }
-  async function stop(record) {
-    if (record.exited) return;
-    try { process.kill(-record.child.pid, "SIGTERM"); } catch (error) { if (error.code !== "ESRCH") throw error; }
-    await Promise.race([record.closed, new Promise(resolve => setTimeout(resolve, 5_000))]);
-    if (!record.exited) {
-      try { process.kill(-record.child.pid, "SIGKILL"); } catch (error) { if (error.code !== "ESRCH") throw error; }
-      record.forced = true;
-      await Promise.race([record.closed, new Promise(resolve => setTimeout(resolve, 2_000))]);
-    }
-    if (!record.exited) throw new Error("NATIVE_OWNED_PROCESS_CLEANUP_UNKNOWN");
-  }
   try {
     verified = await relocateNativeQualificationPackage(options.packageDirectory, relocated, options);
     report.packageBytes = verified.bytes + verified.manifestBytes;
@@ -134,8 +123,10 @@ if (options.plan) {
     report.canonicalMigrations = actualMigrations.length; scenario("relocated-canonical-prisma-migrate-deploy");
     report.stage = "actual-api-worker-startup";
     const api = await guarded("app/api.mjs", "api"), worker = await guarded("app/worker.mjs", "worker");
+    const assertRuntimeAlive = () => { assertNativeQualificationProcessAlive(api); assertNativeQualificationProcessAlive(worker); };
     const apiUrl = `http://127.0.0.1:${apiPort}`;
     const fetchJson = async (suffix, { body, headers = {}, expected = 200 } = {}) => {
+      assertRuntimeAlive();
       const response = await fetch(apiUrl + suffix, { method: body === undefined ? "GET" : "POST", headers: { ...(body === undefined ? {} : { "content-type": "application/json" }), ...headers }, ...(body === undefined ? {} : { body: JSON.stringify(body) }), redirect: "error", signal: AbortSignal.any([active, AbortSignal.timeout(5_000)]) });
       const reader = response.body.getReader(), chunks = []; let length = 0;
       try {
@@ -144,15 +135,16 @@ if (options.plan) {
           length += value.byteLength; assert.ok(length <= 65_536); chunks.push(Buffer.from(value));
         }
       } finally { await reader.cancel(); }
+      assertRuntimeAlive();
       const bytes = Buffer.concat(chunks); assert.equal(response.status, expected);
       return { response, json: JSON.parse(bytes) };
     };
     ready = false;
     for (let attempt = 0; attempt < 100; attempt++) {
-      assert.ok(!api.exited && !worker.exited);
+      assertRuntimeAlive();
       try { await fetchJson("/ready"); ready = true; break; } catch { active.throwIfAborted(); await new Promise(resolve => setTimeout(resolve, 200)); }
     }
-    assert.ok(ready); scenario("real-package-api-worker-readiness");
+    assertRuntimeAlive(); assert.ok(ready); scenario("real-package-api-worker-readiness");
     report.stage = "real-api-session-and-private-scope";
     const signup = await fetchJson("/api/auth/sign-up/email", { body: { name: "Package fixture", email: `fixture-${nonce}@fixture.invalid`, password: randomBytes(24).toString("hex") }, headers: { origin: apiUrl } });
     const cookie = signup.response.headers.getSetCookie().map(value => value.split(";")[0]).find(value => /(?:^|-)better-auth\.session_token=/.test(value)); assert.ok(cookie);
@@ -170,7 +162,7 @@ if (options.plan) {
     assert.equal((await fetchJson(prefix + "/prepare", { body, headers, expected: 202 })).json.jobId, submitted.jobId);
     let job;
     for (let attempt = 0; attempt < 200; attempt++) {
-      assert.ok(!api.exited && !worker.exited); job = (await fetchJson(prefix + "/jobs/" + submitted.jobId, { headers })).json;
+      assertRuntimeAlive(); job = (await fetchJson(prefix + "/jobs/" + submitted.jobId, { headers })).json;
       if (["succeeded", "failed", "blocked", "cancelled"].includes(job.state)) break;
       active.throwIfAborted(); await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -187,11 +179,13 @@ if (options.plan) {
     const receipt = JSON.parse(receiptBytes); assert.equal(receipt.paidModelCalls, 0);
     assert.equal(receipt.result.verification.outcome, "pass"); assert.deepEqual(receipt.result.rows, [["name", "value"], ["one,two", "3"]]);
     assert.equal(Number((await sql(`SELECT count(*) FROM usage_records WHERE "spaceId"='${actor.spaceId}'`)).trim()), 0);
+    assertRuntimeAlive();
     report.receiptSha256 = job.sha256; report.observedUsageRows = 0; scenario("actual-package-api-graphile-worker-csv-receipt-and-idempotency");
     report.stage = "measurement-and-graceful-stop";
     report.postgresDataApparentBytes = Number((await docker(["exec", postgres, "du", "-sb", "/var/lib/postgresql"])).trim().split(/\s+/)[0]);
     report.postgresWalBytes = Number((await sql("SELECT COALESCE(sum(size),0)::bigint FROM pg_ls_waldir()")).trim());
-    await stop(api); await stop(worker); assert.ok(!api.forced && !worker.forced); scenario("actual-package-process-graceful-stop");
+    assertRuntimeAlive();
+    await stopNativeQualificationProcess(api); await stopNativeQualificationProcess(worker); scenario("actual-package-process-graceful-stop");
     for (const name of ["migration", "api", "worker"]) {
       const auditFiles = (await readdir(evidence)).filter(file => file.startsWith(name + "-guard-audit.") && file.endsWith(".json"));
       assert.ok(auditFiles.length >= (name === "migration" ? 2 : 1));
@@ -206,7 +200,7 @@ if (options.plan) {
     await writeFile(path.join(evidence, "private-failure.txt"), String(error.stack ?? error), { mode: 0o600 }); process.exitCode = 1;
   } finally {
     report.stageAtCompletion = report.stage;
-    const stopped = await Promise.allSettled(children.filter(record => !record.exited).map(stop));
+    const stopped = await Promise.allSettled(children.map(record => cleanupNativeQualificationProcess(record)));
     if (stopped.some(result => result.status === "rejected")) { report.processCleanup = "unknown"; report.status = "FAIL"; process.exitCode = 1; } else report.processCleanup = "owned-children-stopped";
     const cleanup = AbortSignal.timeout(15_000);
     try {

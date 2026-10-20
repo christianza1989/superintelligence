@@ -7,7 +7,7 @@ import os from "node:os";
 import net from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
 
 const hash = value => createHash("sha256").update(value).digest("hex");
 const revision = "a".repeat(40), image = "sha256:" + "b".repeat(64);
@@ -106,4 +106,120 @@ test("minimal-env nested Node migration-style child retains actual preload instr
   const result = await guardFixture(t, "import {spawn} from 'node:child_process'; const p=spawn(process.execPath,[new URL('./child.mjs',import.meta.url).pathname,process.argv[2]],{env:{PATH:'/usr/bin:/bin'},stdio:'inherit'});p.once('exit',code=>{process.exitCode=code});");
   assert.notEqual(result.code, 0); assert.match(result.stderr, /NATIVE_AMBIENT_FILE_FORBIDDEN/);
   assert.equal(result.audits.length, 2); assert.equal(result.audits.reduce((sum, item) => sum + item.guardedNodeChildren, 0), 1); assert.equal(result.audits.reduce((sum, item) => sum + item.deniedFilesystem, 0), 1);
+});
+
+test("qualification refuses a symlink package root before copy or verification", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const alias = path.join(scratch, "package-alias"), target = path.join(scratch, "relocated");
+  await symlink(source, alias);
+  await assert.rejects(verifyNativeQualificationPackage(alias, pins.expectedSource, pins.buildSha256), /ROOT/);
+  await assert.rejects(relocateNativeQualificationPackage(alias, target, pins), /ROOT/);
+  await assert.rejects(readFile(path.join(target, "BUILD.json")), { code: "ENOENT" });
+});
+
+test("qualification refuses a package reached through a symlink parent", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const parentAlias = path.join(scratch, "parent-alias");
+  await symlink(scratch, parentAlias);
+  await assert.rejects(verifyNativeQualificationPackage(path.join(parentAlias, path.basename(source)), pins.expectedSource, pins.buildSha256), /ROOT/);
+});
+
+test("relocation requires an absent target rather than merging an existing directory", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const target = path.join(scratch, "existing");
+  await mkdir(target);
+  await assert.rejects(relocateNativeQualificationPackage(source, target, pins), /EEXIST|TARGET/);
+  assert.deepEqual(await readdir(target), []);
+});
+
+async function processFixture(t, termination) {
+  const script = termination + '; process.stdout.write("receipt-ready\\n"); process.stdin.resume(); process.stdin.on("data",()=>process.exit(7)); setInterval(()=>{},1000);';
+  const child = spawn(process.execPath, ["-e", script], { detached: true, stdio: ["pipe", "pipe", "pipe"] });
+  const record = { child, exited: false, error: undefined, overflow: false };
+  child.on("error", error => { record.error = error.code; });
+  record.closed = new Promise(resolve => child.once("close", (code, signal) => { record.exited = true; record.code = code; record.signal = signal; resolve(record); }));
+  t.after(() => cleanupNativeQualificationProcess(record, { gracefulTimeoutMs: 100, killTimeoutMs: 500 }));
+  await new Promise((resolve, reject) => { child.stdout.once("data", resolve); child.once("error", reject); child.once("exit", code => reject(new Error("fixture exited early: " + code))); });
+  return record;
+}
+const stopBounds = { gracefulTimeoutMs: 100, killTimeoutMs: 500 };
+
+test("successful receipt cannot qualify a process that already exited cleanly or crashed", async t => {
+  for (const code of [0, 7]) {
+    const record = await processFixture(t, 'process.on("SIGTERM",()=>process.exit(0))');
+    if (code === 0) record.child.kill("SIGTERM"); else record.child.stdin.write("crash");
+    await record.closed;
+    await assert.rejects(stopNativeQualificationProcess(record, stopBounds), /PROCESS/);
+    await cleanupNativeQualificationProcess(record, stopBounds);
+  }
+});
+
+test("receipt followed by a nonzero exit during requested stop cannot qualify", async t => {
+  const record = await processFixture(t, 'process.on("SIGTERM",()=>process.exit(7))');
+  await assert.rejects(stopNativeQualificationProcess(record, stopBounds), /PROCESS/);
+  assert.equal(record.code, 7);
+});
+
+test("unexpected termination signal cannot qualify as a clean package stop", async t => {
+  const record = await processFixture(t, "");
+  await assert.rejects(stopNativeQualificationProcess(record, stopBounds), /PROCESS/);
+  assert.equal(record.signal, "SIGTERM");
+});
+
+test("a live process with a clean requested stop qualifies", async t => {
+  const record = await processFixture(t, 'process.on("SIGTERM",()=>process.exit(0))');
+  await stopNativeQualificationProcess(record, stopBounds);
+  assert.equal(record.code, 0); assert.equal(record.signal, null); assert.ok(!record.forced);
+});
+
+test("bounded forced cleanup cannot qualify an unresponsive package process", async t => {
+  const record = await processFixture(t, 'process.on("SIGTERM",()=>{})');
+  await assert.rejects(stopNativeQualificationProcess(record, stopBounds), /PROCESS/);
+  assert.equal(record.forced, true); assert.equal(record.signal, "SIGKILL"); assert.equal(record.exited, true);
+});
+
+test("process output overflow and errors cannot qualify despite a clean exit", async t => {
+  for (const failure of ["overflow", "error"]) {
+    const record = await processFixture(t, 'process.on("SIGTERM",()=>process.exit(0))');
+    record[failure] = failure === "overflow" ? true : "LOG_WRITE_FAILED";
+    await assert.rejects(stopNativeQualificationProcess(record, stopBounds), /PROCESS/);
+  }
+});
+
+test("stage liveness rejects a crashed child even before close bookkeeping finishes", async t => {
+  const record = await processFixture(t, 'process.on("SIGTERM",()=>process.exit(0))');
+  assert.doesNotThrow(() => assertNativeQualificationProcessAlive(record));
+  const exited = new Promise(resolve => record.child.once("exit", resolve));
+  record.child.stdin.write("crash");
+  await exited;
+  assert.throws(() => assertNativeQualificationProcessAlive({ ...record, exited: false }), /PROCESS_NOT_ALIVE/);
+  await record.closed;
+  assert.throws(() => assertNativeQualificationProcessAlive(record), /PROCESS_NOT_ALIVE/);
+});
+
+test("relocation refuses an alias parent before writing package files", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const alias = path.join(scratch, "parent-alias");
+  await symlink(scratch, alias);
+  await assert.rejects(relocateNativeQualificationPackage(source, path.join(alias, "relocated"), pins), /TARGET_ROOT/);
+  await assert.rejects(readFile(path.join(scratch, "relocated/BUILD.json")), { code: "ENOENT" });
+});
+
+test("relocation refuses an existing target symlink without changing its real package", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const alias = path.join(scratch, "target-alias");
+  await symlink(source, alias);
+  await assert.rejects(relocateNativeQualificationPackage(source, alias, pins));
+  assert.equal((await verifyNativeQualificationPackage(source, pins.expectedSource, pins.buildSha256)).build.sourceRevision, revision);
+});
+
+test("canonical root checks preserve symlink traversal before parent segments", async t => {
+  const { scratch, source, pins } = await fixture(t);
+  const other = path.join(scratch, "other"), nested = path.join(other, "nested"), alias = path.join(scratch, "alias");
+  await mkdir(nested, { recursive: true }); await symlink(nested, alias);
+  await relocateNativeQualificationPackage(source, path.join(other, "package"), pins);
+  const traversed = alias + "/../package";
+  await assert.rejects(verifyNativeQualificationPackage(traversed, pins.expectedSource, pins.buildSha256), /ROOT/);
+  await assert.rejects(relocateNativeQualificationPackage(source, alias + "/../target", pins), /TARGET_ROOT/);
+  assert.deepEqual((await readdir(other)).sort(), ["nested", "package"]);
 });

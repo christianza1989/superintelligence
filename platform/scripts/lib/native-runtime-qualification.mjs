@@ -24,7 +24,9 @@ export function nativeQualificationArguments(args) {
 }
 
 export async function verifyNativeQualificationPackage(directory, expectedSource, expectedBuildHash) {
-  const root = await realpath(directory), buildFile = path.join(root, "BUILD.json");
+  const root = path.resolve(directory), rootInfo = await lstat(directory);
+  if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink() || await realpath(directory) !== root) throw new Error("NATIVE_BUILD_PACKAGE_ROOT");
+  const buildFile = path.join(root, "BUILD.json");
   const buildInfo = await lstat(buildFile);
   if (!buildInfo.isFile() || buildInfo.size > 64_000_000 || await hashFile(buildFile) !== expectedBuildHash) throw new Error("NATIVE_BUILD_MANIFEST_INTEGRITY");
   const build = JSON.parse(await readFile(buildFile, "utf8"));
@@ -64,6 +66,8 @@ export async function verifyNativeQualificationPackage(directory, expectedSource
 
 export async function relocateNativeQualificationPackage(source, target, pins) {
   await verifyNativeQualificationPackage(source, pins.expectedSource, pins.buildSha256);
+  const targetParent = path.dirname(target);
+  if (await realpath(targetParent) !== path.dirname(path.resolve(target))) throw new Error("NATIVE_BUILD_TARGET_ROOT");
   await cp(source, target, { recursive: true, errorOnExist: true, force: false, verbatimSymlinks: true });
   return verifyNativeQualificationPackage(target, pins.expectedSource, pins.buildSha256);
 }
@@ -77,4 +81,36 @@ export function nativeQualificationEnvironment({ scratch, databaseUrl, apiPort, 
     API_HOST: "127.0.0.1", API_PORT: String(apiPort), API_URL: `http://127.0.0.1:${apiPort}`, BETTER_AUTH_URL: `http://127.0.0.1:${apiPort}`, WEB_ORIGIN: `http://127.0.0.1:${apiPort}`,
     SIGNUPS_ENABLED: "true", DATA_DIR: path.join(scratch, "data"), ZERO_PROJECT_POLICY_FILE: policyFile, RAKAZO_AUTO_REVIEW: "false",
   };
+}
+
+export function assertNativeQualificationProcessAlive(record) {
+  if (record.exited || record.child.exitCode !== null || record.child.signalCode !== null || record.error || record.overflow || record.forced || record.stopRequested) throw new Error("NATIVE_QUALIFICATION_PROCESS_NOT_ALIVE");
+}
+
+async function waitForProcessClose(record, timeoutMs) {
+  let timer;
+  try {
+    return await Promise.race([record.closed.then(() => true), new Promise(resolve => { timer = setTimeout(() => resolve(false), timeoutMs); })]);
+  } finally { clearTimeout(timer); }
+}
+
+// Cleanup is bounded and owns only process groups created by this run; it makes no acceptance claim.
+export async function cleanupNativeQualificationProcess(record, { gracefulTimeoutMs = 5_000, killTimeoutMs = 2_000 } = {}) {
+  const signalOwnedGroup = signal => {
+    if (!Number.isSafeInteger(record.child.pid) || record.child.pid <= 0) return;
+    try { process.kill(-record.child.pid, signal); } catch (error) { if (error.code !== "ESRCH") throw error; }
+  };
+  if (!record.exited) signalOwnedGroup("SIGTERM");
+  if (!await waitForProcessClose(record, gracefulTimeoutMs)) {
+    record.forced = true;
+    signalOwnedGroup("SIGKILL");
+    if (!await waitForProcessClose(record, killTimeoutMs)) throw new Error("NATIVE_OWNED_PROCESS_CLEANUP_UNKNOWN");
+  }
+}
+
+export async function stopNativeQualificationProcess(record, options) {
+  assertNativeQualificationProcessAlive(record);
+  record.stopRequested = true;
+  await cleanupNativeQualificationProcess(record, options);
+  if (!record.exited || record.code !== 0 || record.signal !== null || record.error || record.overflow || record.forced) throw new Error("NATIVE_QUALIFICATION_PROCESS_STOP_FAILED");
 }
