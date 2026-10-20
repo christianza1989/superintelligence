@@ -54,3 +54,43 @@ test("native guard uses positive shipped bytes and fails a surviving messaging v
   assert.throws(() => assertNativeMessagingNotShipped({ outputs: { "app.mjs": { inputs: { [name]: { bytesInOutput: 1 } } } } }), /Unsupported messaging dependency/);
   assert.throws(() => assertNativeMessagingNotShipped({ outputs: {} }, [{ name: "sendblue" }]), /copied/);
 });
+
+test("native barrel-like messaging graph cannot retain vendors or create a surface or emulator", async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "zero-native-messaging-graph-"));
+  try {
+    const profile = await nativeRuntimeBuildProfile(workspace);
+    const outfile = path.join(directory, "profile.mjs");
+    const result = await build({
+      absWorkingDir: workspace,
+      stdin: {
+        contents: [
+          'export * from "./packages/adapters/src/messaging-platforms.ts";',
+          'export * from "./packages/adapters/src/chat-sdk-surface.ts";',
+          'export * from "./packages/adapters/src/sendblue-emulator.ts";',
+        ].join("\n"), resolveDir: workspace,
+      },
+      outfile, format: "esm", platform: "node", bundle: true, metafile: true,
+      plugins: [profile.plugin], logLevel: "silent",
+    });
+    assertNativeMessagingNotShipped(result.metafile);
+    assert.ok(Object.keys(result.metafile.inputs).every(input => !input.includes("node_modules/")));
+    const native = await import(pathToFileURL(outfile).href);
+    const expected = [];
+    for (const source of ["messaging-platforms", "chat-sdk-surface", "sendblue-emulator"]) {
+      const text = await readFile(path.join(workspace, "packages/adapters/src", source + ".ts"), "utf8");
+      expected.push(...[...text.matchAll(/^export (?:function|class|const) (\w+)/gm)].map(match => match[1]));
+    }
+    assert.deepEqual(Object.keys(native).sort(), expected.sort());
+    const source = await readFile(path.join(workspace, "packages/adapters/src/chat-sdk-surface.ts"), "utf8");
+    const bound = source.match(/export const MESSAGING_WEBHOOK_MAX_BODY_BYTES = (\d+) \* (\d+);/);
+    assert.ok(bound, "Shared webhook bound changed; review native profile boundary");
+    assert.equal(native.MESSAGING_WEBHOOK_MAX_BODY_BYTES, Number(bound[1]) * Number(bound[2]));
+    for (const attempt of [
+      () => new native.ChatSdkMessagingSurface([]),
+      () => new native.SendBlueEmulator(),
+      () => native.createEmulatedSendbluePlatform({}),
+      () => native.providerOfThreadId("sendblue:fixture"),
+    ]) assert.throws(attempt, { message: "Messaging is unsupported by native-mcp-local-v1" });
+    assert.equal(profile.manifest.moduleOverrides.length, 3);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
