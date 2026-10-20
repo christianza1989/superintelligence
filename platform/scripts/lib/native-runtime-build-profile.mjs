@@ -2,6 +2,9 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+// Packages whose own lazy loaders and filesystem-relative assets must stay intact.
+export const nativeRuntimeExternalPackages = Object.freeze(["graphile-worker", "jsdom", "sharp", "koffi", "d3-dsv", "playwright-core"]);
+
 export async function nativeRuntimeBuildProfile(workspace) {
   const source = path.resolve(workspace, "packages/adapters/src/messaging-platforms.ts");
   const replacement = path.resolve(workspace, "scripts/runtime/native-messaging-platforms.ts");
@@ -9,7 +12,11 @@ export async function nativeRuntimeBuildProfile(workspace) {
   return {
     manifest: {
       name: "native-mcp-local-v1",
-      capabilities: { messaging: "unsupported; configured messaging credentials fail startup" },
+      capabilities: {
+        messaging: "unsupported; configured messaging credentials fail startup",
+        browserLibrary: "exact copied Playwright import; Chromium and BiDi capabilities require separate qualification",
+      },
+      externalPackages: nativeRuntimeExternalPackages,
       moduleOverrides: [{
         source: path.relative(workspace, source), sourceSha256: sha256(await readFile(source)),
         replacement: path.relative(workspace, replacement), replacementSha256: sha256(await readFile(replacement)),

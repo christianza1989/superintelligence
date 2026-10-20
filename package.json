@@ -19,7 +19,7 @@
     "test:pdf:runtime": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-pdf-runtime.test.ts",
     "test:pdf:profile": "node --test platform/packages/adapters/docling/grade.conformance.mjs platform/packages/adapters/docling/profile.conformance.mjs platform/packages/adapters/docling/footprint.conformance.mjs platform/packages/adapters/pdfplumber/profile.conformance.mjs platform/packages/adapters/pdfplumber/activation.conformance.mjs",
     "test:runtime:closure": "node --test platform/scripts/lib/runtime-package-closure.test.mjs",
-    "test:runtime:profile": "node --test platform/scripts/lib/native-runtime-profile.test.mjs platform/scripts/lib/native-runtime-build-profile.test.mjs platform/scripts/lib/native-runtime-notices.test.mjs platform/scripts/lib/native-runtime-stage-policy.test.mjs platform/scripts/lib/native-runtime-migration.test.mjs platform/scripts/lib/native-runtime-qualification.test.mjs",
+    "test:runtime:profile": "node --test platform/scripts/lib/native-runtime-profile.test.mjs platform/scripts/lib/native-runtime-build-profile.test.mjs platform/scripts/lib/native-runtime-playwright.test.mjs platform/scripts/lib/native-runtime-notices.test.mjs platform/scripts/lib/native-runtime-stage-policy.test.mjs platform/scripts/lib/native-runtime-migration.test.mjs platform/scripts/lib/native-runtime-qualification.test.mjs",
     "qualify:native:runtime": "node platform/scripts/qualify-zero-native-runtime.mjs",
     "test:components": "node scripts/platform.mjs exec vitest run packages/adapters/src/zero-component-input.test.ts packages/adapters/src/zero-browser-static-runtime.test.ts apps/api/src/built-web.test.ts",
     "test:acceptance:plan": "node --test platform/scripts/zero-development-acceptance.test.mjs",

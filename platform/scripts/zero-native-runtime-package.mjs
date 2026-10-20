@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { copyRuntimePackageClosure } from "./lib/runtime-package-closure.mjs";
-import { nativeRuntimeBuildProfile, assertNativeMessagingNotShipped } from "./lib/native-runtime-build-profile.mjs";
+import { nativeRuntimeBuildProfile, assertNativeMessagingNotShipped, nativeRuntimeExternalPackages } from "./lib/native-runtime-build-profile.mjs";
 import { bundledRuntimePackages, copyBundledRuntimeNotices, validateCopiedRuntimePackageMetadata } from "./lib/native-runtime-notices.mjs";
 import { nativeRuntimeStageArguments, nativeRuntimeLicenseEvidence, requireNativeRuntimeLicenseEvidence } from "./lib/native-runtime-stage-policy.mjs";
 import { nativeMigrationEngine, nativeMigrationSources } from "./lib/native-runtime-migration.mjs";
@@ -52,7 +52,7 @@ const report = {
 try {
   // Filesystem-relative/native modules stay as their actual installed package
   // closures. This first stage retains the full canonical Prisma CLI closure.
-  const external = ["graphile-worker", "jsdom", "sharp", "koffi", "d3-dsv"];
+  const external = nativeRuntimeExternalPackages;
   report.closure = await copyRuntimePackageClosure({
     workspaceRoot: workspace, outputDirectory: output, maxBytes: 1_000_000_000,
     importers: [
