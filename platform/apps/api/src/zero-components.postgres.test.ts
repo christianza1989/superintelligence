@@ -288,6 +288,90 @@ const hash = (bytes: string | Uint8Array) => createHash("sha256").update(bytes).
         expect(model).not.toHaveBeenCalled();
       },
     );
+
+    it("exports actual PDF cells as hash-bound CSV without changing the immutable JSON receipt", async () => {
+      const accepted = await submit("pdf"), receipt = await terminal("pdf", accepted.jobId);
+      const row = await app.prisma.artifact.findFirstOrThrow({ where: { rootArtifactId: accepted.jobId } });
+      const expected = "Item,Quantity,Amount USD\nAlpha,2,20\nBeta,3,60\nGamma,4,120";
+      const route = `${prefix("pdf")}/jobs/${accepted.jobId}/tables/0.csv`;
+      const response = await request(route);
+      expect(response.status, await response.clone().text()).toBe(200);
+      expect(await response.text()).toBe(expected);
+      expect(response.headers.get("content-type")).toBe("text/csv; charset=utf-8");
+      expect(response.headers.get("content-disposition")).toBe('attachment; filename="pdf-table.csv"');
+      expect(response.headers.get("cache-control")).toBe("no-store");
+      expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+      expect(response.headers.get("x-zero-source-sha256")).toBe(hash(pdfBytes));
+      expect(response.headers.get("x-zero-receipt-sha256")).toBe(row.hash);
+      expect(response.headers.get("x-zero-csv-sha256")).toBe(hash(expected));
+      expect(response.headers.get("x-zero-pdf-table-index")).toBe("0");
+      expect(JSON.parse(response.headers.get("x-zero-pdf-provenance")!)).toEqual(receipt.extraction.tables[0].provenance);
+      expect((await app.prisma.artifact.findUniqueOrThrow({ where: { id: row.id } })).hash).toBe(row.hash);
+      expect(await terminal("pdf", accepted.jobId)).toEqual(receipt);
+      expect((await request(route, undefined, "")).status).toBe(401);
+      expect((await request(route, undefined, otherCookie)).status).toBe(403);
+      expect((await request(route + "?table=1")).status).toBe(400);
+      expect((await request(route.replace("0.csv", "32.csv"))).status).toBe(400);
+      expect((await request(route.replace("0.csv", "1.csv"))).status).toBe(404);
+      const saved = grant;
+      try {
+        grant = undefined;
+        expect((await request(route)).status).toBe(403);
+      } finally { grant = saved; }
+      expect(model).not.toHaveBeenCalled();
+    });
+
+    it("does not export queued or cancelled PDF jobs", async () => {
+      await stop();
+      try {
+        const accepted = await submit("pdf"), route = `${prefix("pdf")}/jobs/${accepted.jobId}/tables/0.csv`;
+        expect((await request(route)).status).toBe(409);
+        expect((await request(`${prefix("pdf")}/jobs/${accepted.jobId}/cancel`, {})).status).toBe(200);
+        expect((await request(route)).status).toBe(409);
+      } finally { await start(); }
+    });
+
+    it("rechecks the PDF file grant after receipt I/O before exposing derived CSV", async () => {
+      const accepted = await submit("pdf");
+      await terminal("pdf", accepted.jobId);
+      const row = await app.prisma.artifact.findFirstOrThrow({ where: { rootArtifactId: accepted.jobId } });
+      const saved = pdf, original = LocalArtifactStore.prototype.get;
+      const reads = vi.spyOn(LocalArtifactStore.prototype, "get").mockImplementation(async function (this: LocalArtifactStore, id, context) {
+        const bytes = await original.call(this, id, context);
+        if (id === row.storageKey) pdf = { ...pdf, files: [] };
+        return bytes;
+      });
+      try {
+        const response = await request(`${prefix("pdf")}/jobs/${accepted.jobId}/tables/0.csv`);
+        expect(response.status).toBe(403);
+        expect(await response.json()).toEqual({ error: "project_scope_rejected" });
+      } finally {
+        reads.mockRestore(); pdf = saved;
+      }
+    });
+
+    it("keeps scoped PDF source and receipt artifacts outside generic artifact RPC reads and writes", async () => {
+      const accepted = await submit("pdf"), receipt = await terminal("pdf", accepted.jobId);
+      const sourceId = receipt.source.artifactId as string;
+      const sourceRow = await app.prisma.artifact.findUniqueOrThrow({ where: { id: sourceId } });
+      const saved = grant;
+      try {
+        grant = undefined;
+        for (const [name, value] of [
+          ["getById", { artifactId: sourceId }],
+          ["listVersions", { familyId: sourceId }],
+          ["remove", { artifactId: sourceId }],
+        ] as const) expect((await request("/rpc/artifacts/" + name, { json: value })).status).toBe(403);
+        const list = await request("/rpc/artifacts/listSpace", { json: { limit: 60 } });
+        expect(list.status).toBe(200);
+        const content = await list.text();
+        expect(content).not.toContain(sourceId);
+        expect(content).not.toContain(accepted.jobId);
+        expect(content).not.toContain(sourceRow.description);
+        expect((await app.prisma.artifact.findUniqueOrThrow({ where: { id: sourceId } })).hash).toBe(sourceRow.hash);
+      } finally { grant = saved; }
+    });
+
     it("rejects paths, URLs, base64, source IDs and selectors as submit arguments", async () => {
       for (const family of ["pdf", "browser"])
         for (const extra of [
