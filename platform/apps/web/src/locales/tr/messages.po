@@ -5228,3 +5228,31 @@ msgstr "Görev başlatmadan önce çalışma alanında bir model bağlayın."
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "Proje başlat"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "Hazırlanmış bileşenler"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "CSV ayrıştırıcı"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "Bu profil geliştirme kontrollerini geçti. Projeniz doğrulanmadı."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "Profil"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "Sınırlar"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "En fazla {inputBytes} bayt, {rows} satır ve {columns} sütun."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "Proje yürütmesi ayrı bir izin gerektirir. Bağımsız saklı veri değerlendirmesi yapılmadı."

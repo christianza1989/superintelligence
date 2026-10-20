@@ -1,17 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { UI_LOCALES } from "./ui-locale";
 import {
   getRepositoryMetadata,
   repositorySnapshot,
   searchRepositories,
 } from "@rakazo/core/repositoryzero";
+import { describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_LIBRARY_FILTERS,
+  hasKnownLicenseSource,
   LIBRARY_FILTERS_KEY,
   LIBRARY_SAVED_KEY,
-  hasKnownLicenseSource,
+  libraryPreparedProfiles,
   libraryRepositories,
   librarySearchParams,
   parseLibraryFilters,
@@ -22,6 +22,7 @@ import {
   repositoryStars,
   saveRepositories,
 } from "./repository-library";
+import { UI_LOCALES } from "./ui-locale";
 
 function storage() {
   const values = new Map<string, string>();
@@ -35,16 +36,40 @@ function storage() {
 }
 
 describe("independent human Library", () => {
+  it("shows scoped prepared profiles separately from the unchanged source catalog", () => {
+    expect(
+      libraryPreparedProfiles(DEFAULT_LIBRARY_FILTERS).map((profile) => profile.profileId),
+    ).toEqual(["d3-dsv-3.0.1/strict-table-v1"]);
+    expect(
+      libraryPreparedProfiles({ ...DEFAULT_LIBRARY_FILTERS, query: "CSV parser" }),
+    ).toHaveLength(1);
+    expect(libraryPreparedProfiles({ ...DEFAULT_LIBRARY_FILTERS, query: "CSV streaming" })).toEqual(
+      [],
+    );
+    expect(libraryPreparedProfiles({ ...DEFAULT_LIBRARY_FILTERS, category: "images" })).toEqual([]);
+    expect(libraryRepositories(DEFAULT_LIBRARY_FILTERS, [])).toHaveLength(796);
+  });
+  it.each([
+    { view: "saved" },
+    { source: "available" },
+    { license: "known" },
+    { runtime: "tested" },
+    { runtime: "untested" },
+    { archived: "active" },
+    { language: "JavaScript" },
+    { repository: "KDE/krita" },
+  ] as const)("never projects prepared facts into repository filters %j", (filter) => {
+    expect(libraryPreparedProfiles({ ...DEFAULT_LIBRARY_FILTERS, ...filter })).toEqual([]);
+  });
   it("shows every catalog record without changing the bounded model search", () => {
     expect(libraryRepositories(DEFAULT_LIBRARY_FILTERS, [])).toHaveLength(
       repositorySnapshot.records.length,
     );
     expect(searchRepositories({ limit: 1000 })).toHaveLength(100);
     expect(
-      libraryRepositories(
-        { ...DEFAULT_LIBRARY_FILTERS, query: "image editor" },
-        [],
-      ).map((entry) => entry.repository),
+      libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, query: "image editor" }, []).map(
+        (entry) => entry.repository,
+      ),
     ).toEqual(["KDE/krita"]);
   });
   it("round trips query, facts filters, view, sort and selected canonical ID", () => {
@@ -75,9 +100,7 @@ describe("independent human Library", () => {
       ...DEFAULT_LIBRARY_FILTERS,
       query: "x".repeat(257),
     });
-    expect(parseLibraryFilters("repo=kde%2FKRITA").repository).toBe(
-      "KDE/krita",
-    );
+    expect(parseLibraryFilters("repo=kde%2FKRITA").repository).toBe("KDE/krita");
   });
   it("never drops an overlong URL constraint before shared retrieval", () => {
     const query = "image editor" + " ".repeat(245) + "Windows";
@@ -88,12 +111,9 @@ describe("independent human Library", () => {
   });
   it("persists only canonical Saved IDs between independent reads", () => {
     const local = storage();
-    expect(
-      saveRepositories(
-        ["KDE/krita", "kde/KRITA", "missing/repo", "morluto/rea"],
-        local,
-      ),
-    ).toBe(true);
+    expect(saveRepositories(["KDE/krita", "kde/KRITA", "missing/repo", "morluto/rea"], local)).toBe(
+      true,
+    );
     expect(readSavedRepositories(local)).toEqual({
       ids: ["KDE/krita", "morluto/rea"],
       persistent: true,
@@ -134,9 +154,7 @@ describe("independent human Library", () => {
     expect(saveRepositories(["KDE/krita"], blocked)).toBe(false);
     expect(saveRepositories([], null)).toBe(false);
     expect(readLibraryFilters(blocked)).toEqual(DEFAULT_LIBRARY_FILTERS);
-    expect(() =>
-      rememberLibraryFilters(DEFAULT_LIBRARY_FILTERS, blocked),
-    ).not.toThrow();
+    expect(() => rememberLibraryFilters(DEFAULT_LIBRARY_FILTERS, blocked)).not.toThrow();
   });
   it("applies source, license, runtime and archived facts before pagination", () => {
     const results = libraryRepositories(
@@ -169,12 +187,7 @@ describe("independent human Library", () => {
         [],
       ),
     ).toEqual([]);
-    expect(
-      libraryRepositories(
-        { ...DEFAULT_LIBRARY_FILTERS, runtime: "tested" },
-        [],
-      ),
-    ).toEqual([]);
+    expect(libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, runtime: "tested" }, [])).toEqual([]);
   });
   it("joins only actual canonical dated cumulative-star observations", () => {
     expect(repositoryStars.size).toBe(89);
@@ -183,18 +196,9 @@ describe("independent human Library", () => {
       observedAt: "2026-10-15T21:15:51.732703+00:00",
     });
     expect(repositoryStars.get("KDE/krita")).toBeUndefined();
-    const sorted = libraryRepositories(
-      { ...DEFAULT_LIBRARY_FILTERS, sort: "stars" },
-      [],
-    );
-    expect(
-      sorted
-        .slice(0, 89)
-        .every((entry) => repositoryStars.has(entry.repository)),
-    ).toBe(true);
-    expect(
-      sorted.slice(89).every((entry) => !repositoryStars.has(entry.repository)),
-    ).toBe(true);
+    const sorted = libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, sort: "stars" }, []);
+    expect(sorted.slice(0, 89).every((entry) => repositoryStars.has(entry.repository))).toBe(true);
+    expect(sorted.slice(89).every((entry) => !repositoryStars.has(entry.repository))).toBe(true);
   });
   it("uses latest successful evidence with timezone offsets and rejects failed or non-star facts", () => {
     const source = "https://github.com/search?q=fixture";
@@ -249,37 +253,20 @@ describe("independent human Library", () => {
       retrieved_at_utc: row.retrieved_at_utc,
     }));
     expect([...projectRepositoryStars({ observations, sources })]).toEqual([
-      [
-        "react/react",
-        { stars: 11, source, observedAt: "2026-10-15T23:30:00+03:00" },
-      ],
+      ["react/react", { stars: 11, source, observedAt: "2026-10-15T23:30:00+03:00" }],
     ]);
   });
   it("filters only known primary languages and keeps unknown metadata visible", () => {
-    const known = libraryRepositories(
-      { ...DEFAULT_LIBRARY_FILTERS, language: "C++" },
-      [],
-    );
+    const known = libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, language: "C++" }, []);
     expect(known.length).toBeGreaterThan(0);
     expect(known.some((entry) => entry.repository === "KDE/krita")).toBe(true);
     expect(
-      known.every(
-        (entry) => getRepositoryMetadata(entry.repository)?.language === "C++",
-      ),
+      known.every((entry) => getRepositoryMetadata(entry.repository)?.language === "C++"),
     ).toBe(true);
-    const unknown = libraryRepositories(
-      { ...DEFAULT_LIBRARY_FILTERS, language: "unknown" },
-      [],
-    );
+    const unknown = libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, language: "unknown" }, []);
     expect(unknown).toHaveLength(71);
-    expect(
-      unknown.some((entry) => entry.repository === "get-convex/agent"),
-    ).toBe(true);
-    expect(
-      unknown.every(
-        (entry) => !getRepositoryMetadata(entry.repository)?.language,
-      ),
-    ).toBe(true);
+    expect(unknown.some((entry) => entry.repository === "get-convex/agent")).toBe(true);
+    expect(unknown.every((entry) => !getRepositoryMetadata(entry.repository)?.language)).toBe(true);
     expect(
       libraryRepositories(
         {
@@ -290,30 +277,23 @@ describe("independent human Library", () => {
         [],
       ),
     ).toEqual([]);
-    const params = parseLibraryFilters(
-      "language=C%2B%2B&sort=indexed&repo=KDE%2Fkrita",
-    );
+    const params = parseLibraryFilters("language=C%2B%2B&sort=indexed&repo=KDE%2Fkrita");
     expect(params.language).toBe("C++");
     expect(parseLibraryFilters(librarySearchParams(params))).toEqual(params);
   });
   it("sorts actual first Git index events with a stable tie break", () => {
-    const rows = libraryRepositories(
-      { ...DEFAULT_LIBRARY_FILTERS, sort: "indexed" },
-      [],
-    );
+    const rows = libraryRepositories({ ...DEFAULT_LIBRARY_FILTERS, sort: "indexed" }, []);
     expect(rows).toHaveLength(796);
     expect(rows.map((entry) => entry.repository)).toEqual(
       rows.map((entry) => entry.repository).sort((a, b) => a.localeCompare(b)),
     );
     for (const entry of rows)
-      expect(
-        getRepositoryMetadata(entry.repository)?.firstIndexed?.status,
-      ).toBe("first-git-presence");
+      expect(getRepositoryMetadata(entry.repository)?.firstIndexed?.status).toBe(
+        "first-git-presence",
+      );
   });
   it("requires no API or model to browse, filter or save", () => {
-    const fetch = vi
-      .spyOn(globalThis, "fetch")
-      .mockRejectedValue(new Error("offline"));
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
     try {
       const local = storage();
       saveRepositories(["KDE/krita"], local);
@@ -329,35 +309,28 @@ describe("independent human Library", () => {
     }
   });
   it("provides every Library message in all existing UI locale catalogs", () => {
-    const page = ["RepositoryDirectory", "LibraryProjectHandoff"]
-      .map((name) =>
-        readFileSync(
-          fileURLToPath(new URL("../pages/" + name + ".tsx", import.meta.url)),
-          "utf8",
-        ),
+    const page = [
+      "../pages/RepositoryDirectory.tsx",
+      "../pages/LibraryProjectHandoff.tsx",
+      "../components/PreparedProfiles.tsx",
+    ]
+      .map((relative) =>
+        readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8"),
       )
       .join("\n");
     const messages = new Set(
-      [
-        ...page.matchAll(/t`([^`]+)`/gu),
-        ...page.matchAll(/<Trans>([^<]+)<\/Trans>/gu),
-      ].map((match) => match[1]!.replace(/\s+/gu, " ").trim()),
+      [...page.matchAll(/t`([^`]+)`/gu), ...page.matchAll(/<Trans>([^<]+)<\/Trans>/gu)].map(
+        (match) => match[1]!.replace(/\s+/gu, " ").trim(),
+      ),
     );
     for (const locale of UI_LOCALES) {
       const catalog = readFileSync(
-        fileURLToPath(
-          new URL(`../locales/${locale}/messages.po`, import.meta.url),
-        ),
+        fileURLToPath(new URL(`../locales/${locale}/messages.po`, import.meta.url)),
         "utf8",
       );
       for (const message of messages) {
-        const encoded = JSON.stringify(message).replace(
-          /[.*+?^${}()|[\]\\]/gu,
-          "\\$&",
-        );
-        const entry = catalog.match(
-          new RegExp(`^msgid ${encoded}\\nmsgstr (".*")$`, "m"),
-        );
+        const encoded = JSON.stringify(message).replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+        const entry = catalog.match(new RegExp(`^msgid ${encoded}\\nmsgstr (".*")$`, "m"));
         expect(entry, `${locale}: ${message}`).not.toBeNull();
         expect(JSON.parse(entry![1]!), `${locale}: ${message}`).not.toBe("");
       }

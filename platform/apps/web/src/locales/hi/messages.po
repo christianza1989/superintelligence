@@ -5228,3 +5228,31 @@ msgstr "कार्य शुरू करने से पहले कार�
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "परियोजना शुरू करें"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "तैयार घटक"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "CSV पार्सर"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "इस प्रोफ़ाइल की विकास जाँच सफल हुई। आपका प्रोजेक्ट सत्यापित नहीं किया गया है।"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "प्रोफ़ाइल"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "सीमाएँ"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "अधिकतम {inputBytes} बाइट, {rows} पंक्तियाँ और {columns} स्तंभ।"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "प्रोजेक्ट चलाने के लिए अलग अनुमति चाहिए। स्वतंत्र होल्डआउट मूल्यांकन नहीं चलाया गया।"

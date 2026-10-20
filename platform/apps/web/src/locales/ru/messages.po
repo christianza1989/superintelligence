@@ -5228,3 +5228,31 @@ msgstr "Перед запуском задачи подключите модел
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "Начать проект"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "Подготовленные компоненты"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "Парсер CSV"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "Профиль прошёл проверки при разработке. Ваш проект не проверен."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "Профиль"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "Ограничения"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "До {inputBytes} байт, {rows} строк и {columns} столбцов."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "Для выполнения проекта нужно отдельное разрешение. Независимая проверка на отложенных данных не проводилась."

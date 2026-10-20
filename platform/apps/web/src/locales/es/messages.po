@@ -5228,3 +5228,31 @@ msgstr "Conecta un modelo en el espacio de trabajo antes de iniciar una tarea."
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "Iniciar proyecto"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "Componentes preparados"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "Analizador CSV"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "Este perfil superó las comprobaciones de desarrollo. Tu proyecto no se ha verificado."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "Perfil"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "Límites"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "Hasta {inputBytes} bytes, {rows} filas y {columns} columnas."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "La ejecución del proyecto requiere un permiso independiente. No se realizó la evaluación con datos reservados independientes."

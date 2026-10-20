@@ -1,13 +1,15 @@
 import type { RepositoryCandidate } from "@rakazo/core/repositoryzero";
 import {
   getRepositoryMetadata,
-  repositoryLanguages,
   listRepositories,
   repositoryCategories,
+  repositoryLanguages,
   repositorySnapshot,
+  searchPreparedProfiles,
 } from "@rakazo/core/repositoryzero";
 import popularity from "../../../../../catalog/popularity.json" with { type: "json" };
 import { LIBRARY_FILTERS_KEY } from "./repository-library-navigation";
+
 export { LIBRARY_FILTERS_KEY };
 
 export const LIBRARY_SAVED_KEY = "repositoryzero.library.saved.v1";
@@ -37,22 +39,28 @@ export const DEFAULT_LIBRARY_FILTERS: LibraryFilters = {
   view: "all",
   repository: "",
 };
+
+/** Scoped profile facts cannot satisfy repository-wide filters or Saved state. */
+export function libraryPreparedProfiles(filters: LibraryFilters) {
+  if (
+    filters.view !== "all" ||
+    filters.repository ||
+    filters.source ||
+    filters.license ||
+    filters.runtime ||
+    filters.archived ||
+    filters.language
+  )
+    return [];
+  return searchPreparedProfiles({ query: filters.query, category: filters.category });
+}
 const canonicalIds = new Map(
-  repositorySnapshot.records.map((entry) => [
-    entry.repository.toLowerCase(),
-    entry.repository,
-  ]),
+  repositorySnapshot.records.map((entry) => [entry.repository.toLowerCase(), entry.repository]),
 );
 
-export function parseLibraryFilters(
-  input: URLSearchParams | string,
-): LibraryFilters {
+export function parseLibraryFilters(input: URLSearchParams | string): LibraryFilters {
   const params = typeof input === "string" ? new URLSearchParams(input) : input;
-  const choice = <T extends string>(
-    key: string,
-    choices: readonly T[],
-    fallback: T,
-  ): T => {
+  const choice = <T extends string>(key: string, choices: readonly T[], fallback: T): T => {
     const value = params.get(key);
     return choices.includes(value as T) ? (value as T) : fallback;
   };
@@ -66,14 +74,9 @@ export function parseLibraryFilters(
     runtime: choice("runtime", ["", "tested", "untested"], ""),
     archived: choice("archived", ["", "active", "archived"], ""),
     language: choice("language", ["", "unknown", ...repositoryLanguages], ""),
-    sort: choice(
-      "sort",
-      ["relevance", "stars", "name", "indexed"],
-      "relevance",
-    ),
+    sort: choice("sort", ["relevance", "stars", "name", "indexed"], "relevance"),
     view: choice("view", ["all", "saved"], "all"),
-    repository:
-      canonicalIds.get((params.get("repo") ?? "").toLowerCase()) ?? "",
+    repository: canonicalIds.get((params.get("repo") ?? "").toLowerCase()) ?? "",
   };
 }
 
@@ -90,15 +93,12 @@ export function librarySearchParams(filters: LibraryFilters): URLSearchParams {
     "sort",
     "view",
   ] as const)
-    if (filters[key] !== DEFAULT_LIBRARY_FILTERS[key])
-      params.set(key, filters[key]);
+    if (filters[key] !== DEFAULT_LIBRARY_FILTERS[key]) params.set(key, filters[key]);
   if (filters.repository) params.set("repo", filters.repository);
   return params;
 }
 
-export function browserLibraryStorage(
-  kind: "local" | "session",
-): LocalStore | null {
+export function browserLibraryStorage(kind: "local" | "session"): LocalStore | null {
   try {
     return kind === "local" ? window.localStorage : window.sessionStorage;
   } catch {
@@ -114,15 +114,9 @@ export function readLibraryFilters(storage: LocalStore | null): LibraryFilters {
   }
 }
 
-export function rememberLibraryFilters(
-  filters: LibraryFilters,
-  storage: LocalStore | null,
-): void {
+export function rememberLibraryFilters(filters: LibraryFilters, storage: LocalStore | null): void {
   try {
-    storage?.setItem(
-      LIBRARY_FILTERS_KEY,
-      librarySearchParams(filters).toString(),
-    );
+    storage?.setItem(LIBRARY_FILTERS_KEY, librarySearchParams(filters).toString());
   } catch {
     /* URL state remains usable when browser storage is blocked. */
   }
@@ -159,10 +153,7 @@ export function readSavedRepositories(storage: LocalStore | null): {
   }
 }
 
-export function saveRepositories(
-  ids: readonly string[],
-  storage: LocalStore | null,
-): boolean {
+export function saveRepositories(ids: readonly string[], storage: LocalStore | null): boolean {
   if (!storage) return false;
   try {
     const repositories = [
@@ -172,10 +163,7 @@ export function saveRepositories(
           .filter((id): id is string => id !== undefined),
       ),
     ].sort();
-    storage.setItem(
-      LIBRARY_SAVED_KEY,
-      JSON.stringify({ version: 1, repositories }),
-    );
+    storage.setItem(LIBRARY_SAVED_KEY, JSON.stringify({ version: 1, repositories }));
     return true;
   } catch {
     return false;
@@ -227,14 +215,12 @@ export function projectRepositoryStars(
         entry.url === observation.source &&
         Date.parse(entry.retrieved_at_utc) === observed,
     );
-    if (!source || !observation.source.startsWith("https://github.com/search?"))
-      continue;
+    if (!source || !observation.source.startsWith("https://github.com/search?")) continue;
     const previous = result.get(id);
     if (
       !previous ||
       observed > Date.parse(previous.observedAt) ||
-      (observed === Date.parse(previous.observedAt) &&
-        observation.source < previous.source)
+      (observed === Date.parse(previous.observedAt) && observation.source < previous.source)
     )
       result.set(id, {
         stars: observation.stars!,
@@ -247,10 +233,7 @@ export function projectRepositoryStars(
 export const repositoryStars = projectRepositoryStars();
 
 export function hasKnownLicenseSource(entry: RepositoryCandidate): boolean {
-  return (
-    Boolean(entry.license.trim()) &&
-    !/unknown|licenseref|manual.review/iu.test(entry.license)
-  );
+  return Boolean(entry.license.trim()) && !/unknown|licenseref|manual.review/iu.test(entry.license);
 }
 
 export function libraryRepositories(
@@ -262,36 +245,21 @@ export function libraryRepositories(
     query: filters.query,
     category: filters.category,
   })
+    .filter((entry) => filters.view !== "saved" || savedIds.has(entry.repository))
     .filter(
-      (entry) => filters.view !== "saved" || savedIds.has(entry.repository),
+      (entry) => !filters.source || entry.sourceAvailable === (filters.source === "available"),
     )
     .filter(
-      (entry) =>
-        !filters.source ||
-        entry.sourceAvailable === (filters.source === "available"),
+      (entry) => !filters.license || hasKnownLicenseSource(entry) === (filters.license === "known"),
     )
-    .filter(
-      (entry) =>
-        !filters.license ||
-        hasKnownLicenseSource(entry) === (filters.license === "known"),
-    )
-    .filter(
-      (entry) =>
-        !filters.runtime ||
-        entry.runtimeTested === (filters.runtime === "tested"),
-    )
-    .filter(
-      (entry) =>
-        !filters.archived ||
-        entry.archived === (filters.archived === "archived"),
-    );
+    .filter((entry) => !filters.runtime || entry.runtimeTested === (filters.runtime === "tested"))
+    .filter((entry) => !filters.archived || entry.archived === (filters.archived === "archived"));
   const languageFiltered = results.filter(
     (entry) =>
       !filters.language ||
       (filters.language === "unknown"
         ? !getRepositoryMetadata(entry.repository)?.language
-        : getRepositoryMetadata(entry.repository)?.language ===
-          filters.language),
+        : getRepositoryMetadata(entry.repository)?.language === filters.language),
   );
   if (filters.sort === "stars")
     languageFiltered.sort(
@@ -303,9 +271,7 @@ export function libraryRepositories(
   if (filters.sort === "name")
     languageFiltered.sort((a, b) => a.repository.localeCompare(b.repository));
   if (filters.sort === "indexed")
-    languageFiltered.sort((a, b) =>
-      compareFirstIndexed(a.repository, b.repository),
-    );
+    languageFiltered.sort((a, b) => compareFirstIndexed(a.repository, b.repository));
   return languageFiltered;
 }
 
@@ -313,7 +279,7 @@ function compareFirstIndexed(a: string, b: string): number {
   const aDate = getRepositoryMetadata(a)?.firstIndexed?.at;
   const bDate = getRepositoryMetadata(b)?.firstIndexed?.at;
   return (
-    (bDate ? Date.parse(bDate) : -Infinity) -
-      (aDate ? Date.parse(aDate) : -Infinity) || a.localeCompare(b)
+    (bDate ? Date.parse(bDate) : -Infinity) - (aDate ? Date.parse(aDate) : -Infinity) ||
+    a.localeCompare(b)
   );
 }

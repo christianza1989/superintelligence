@@ -13,6 +13,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  web-library:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+      - name: Install the frozen workspace and browser test runtime
+        run: |
+          npm run setup
+          npm run db:generate
+          node scripts/platform.mjs --filter @rakazo/web exec playwright install --with-deps chromium
+      - name: Build the shared web UI
+        run: npm run build:web
+      - name: Verify independent Library profiles on desktop and mobile
+        run: node scripts/platform.mjs --filter @rakazo/web exec playwright test library-prepared-profiles.spec.ts --workers=1
+      - name: Preserve Library UI screenshots and failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: library-ui
+          path: |
+            platform/apps/web/test-results
+            platform/playwright-report
+          if-no-files-found: warn
+          retention-days: 30
+
   durability:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -88,6 +118,7 @@ jobs:
           npm run test:pdf:runtime -- --maxWorkers=1
           npm run test:runtime:closure
           npm run test:runtime:profile
+          npm run test:acceptance:plan
           npm run test:native:backup
           npm run test:docker:transport -- --maxWorkers=1
       - name: Build and exercise a self-contained discovery plugin

@@ -1,30 +1,26 @@
-import { libraryHandoffPath } from "../lib/library-project-handoff";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   getRepositoryMetadata,
-  repositoryLanguages,
   repositoryCategories,
+  repositoryLanguages,
   repositorySnapshot,
   repositorySourceUrl,
 } from "@rakazo/core/repositoryzero";
 import { Button, Input, NativeSelect } from "@rakazo/ui-web";
-import {
-  ArrowLeft,
-  Bookmark,
-  BookOpen,
-  ExternalLink,
-  Search,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, Bookmark, BookOpen, ExternalLink, Search, Star } from "lucide-react";
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { PreparedProfiles } from "../components/PreparedProfiles";
 import { setUiLocale } from "../lib/i18n";
+import { libraryHandoffPath } from "../lib/library-project-handoff";
+import type { LibraryFilters } from "../lib/repository-library";
 import {
   browserLibraryStorage,
   DEFAULT_LIBRARY_FILTERS,
   LIBRARY_PAGE_SIZE,
   LIBRARY_SAVED_KEY,
+  libraryPreparedProfiles,
   libraryRepositories,
   librarySearchParams,
   parseLibraryFilters,
@@ -33,11 +29,7 @@ import {
   repositoryStars,
   saveRepositories,
 } from "../lib/repository-library";
-import type { LibraryFilters } from "../lib/repository-library";
-import {
-  getUiAppearancePreference,
-  setUiAppearance,
-} from "../lib/ui-appearance";
+import { getUiAppearancePreference, setUiAppearance } from "../lib/ui-appearance";
 import { isUiLocale, UI_LOCALE_LABELS, UI_LOCALES } from "../lib/ui-locale";
 
 function Filter({
@@ -51,10 +43,12 @@ function Filter({
   onChange: (value: string) => void;
   children: ReactNode;
 }) {
+  const controlId = useId();
   return (
-    <label className="grid min-w-0 gap-1.5 text-sm text-muted-foreground">
+    <label htmlFor={controlId} className="grid min-w-0 gap-1.5 text-sm text-muted-foreground">
       {label}
       <NativeSelect
+        id={controlId}
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
@@ -70,9 +64,7 @@ export function RepositoryDirectoryPage() {
   const { t, i18n } = useLingui();
   const [params, setParams] = useSearchParams();
   const filters = useMemo(() => parseLibraryFilters(params), [params]);
-  const [saved, setSaved] = useState(() =>
-    readSavedRepositories(browserLibraryStorage("local")),
-  );
+  const [saved, setSaved] = useState(() => readSavedRepositories(browserLibraryStorage("local")));
   const [storageError, setStorageError] = useState(false);
   const [appearance, setAppearance] = useState(getUiAppearancePreference);
   const [visible, setVisible] = useState(LIBRARY_PAGE_SIZE);
@@ -80,17 +72,13 @@ export function RepositoryDirectoryPage() {
     Boolean(filters.license || filters.runtime || filters.archived),
   );
   const detailHeading = useRef<HTMLHeadingElement>(null);
-  const results = useMemo(
-    () => libraryRepositories(filters, saved.ids),
-    [filters, saved.ids],
-  );
+  const results = useMemo(() => libraryRepositories(filters, saved.ids), [filters, saved.ids]);
+  const profiles = useMemo(() => libraryPreparedProfiles(filters), [filters]);
   const selected = repositorySnapshot.records.find(
     (entry) => entry.repository === filters.repository,
   );
   const stars = selected ? repositoryStars.get(selected.repository) : undefined;
-  const metadata = selected
-    ? getRepositoryMetadata(selected.repository)
-    : undefined;
+  const metadata = selected ? getRepositoryMetadata(selected.repository) : undefined;
   const pinLabel = (status: string | undefined) =>
     status === "present"
       ? t`Found in repository`
@@ -141,10 +129,7 @@ export function RepositoryDirectoryPage() {
     return () => window.removeEventListener("storage", sync);
   }, []);
 
-  function change(
-    key: Exclude<keyof LibraryFilters, "repository">,
-    value: string,
-  ) {
+  function change(key: Exclude<keyof LibraryFilters, "repository">, value: string) {
     const next = parseLibraryFilters(
       librarySearchParams({ ...filters, [key]: value, repository: "" }),
     );
@@ -167,10 +152,9 @@ export function RepositoryDirectoryPage() {
   const saveLabel = (id: string) =>
     `${saved.ids.includes(id) ? t`Remove from Saved` : t`Save`} ${id}`;
   const clearFilters = () =>
-    setParams(
-      librarySearchParams({ ...DEFAULT_LIBRARY_FILTERS, view: filters.view }),
-      { replace: true },
-    );
+    setParams(librarySearchParams({ ...DEFAULT_LIBRARY_FILTERS, view: filters.view }), {
+      replace: true,
+    });
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -180,28 +164,18 @@ export function RepositoryDirectoryPage() {
             to="/"
             className="flex items-center gap-3 font-semibold focus-visible:outline-2 focus-visible:outline-ring"
           >
-            <span
-              className="size-6 rounded-full border-4 border-primary"
-              aria-hidden="true"
-            />
+            <span className="size-6 rounded-full border-4 border-primary" aria-hidden="true" />
             RepositoryZero
           </Link>
-          <nav
-            aria-label={t`Library settings`}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <Link
-              to="/app"
-              className="text-sm underline-offset-4 hover:underline"
-            >
+          <nav aria-label={t`Library settings`} className="flex flex-wrap items-center gap-4">
+            <Link to="/app" className="text-sm underline-offset-4 hover:underline">
               <Trans>Open workspace</Trans>
             </Link>
             <NativeSelect
               aria-label={t`Language`}
               value={i18n.locale}
               onChange={(event) => {
-                if (isUiLocale(event.target.value))
-                  void setUiLocale(event.target.value);
+                if (isUiLocale(event.target.value)) void setUiLocale(event.target.value);
               }}
             >
               {UI_LOCALES.map((locale) => (
@@ -228,10 +202,7 @@ export function RepositoryDirectoryPage() {
       </header>
       <main className="mx-auto grid max-w-[1600px] gap-8 p-5 sm:p-8 lg:grid-cols-[160px_minmax(0,1fr)] xl:grid-cols-[160px_minmax(0,1fr)_320px]">
         <aside>
-          <nav
-            aria-label={t`Library navigation`}
-            className="flex gap-2 lg:flex-col"
-          >
+          <nav aria-label={t`Library navigation`} className="flex gap-2 lg:flex-col">
             <Button
               variant={filters.view === "all" ? "secondary" : "ghost"}
               className="justify-start"
@@ -250,9 +221,7 @@ export function RepositoryDirectoryPage() {
             >
               <Bookmark aria-hidden="true" />
               <Trans>Saved</Trans>
-              <span className="ms-auto tabular-nums text-muted-foreground">
-                {saved.ids.length}
-              </span>
+              <span className="ms-auto tabular-nums text-muted-foreground">{saved.ids.length}</span>
             </Button>
           </nav>
           <p className="mt-7 hidden text-xs leading-relaxed text-muted-foreground lg:block">
@@ -267,10 +236,7 @@ export function RepositoryDirectoryPage() {
           aria-labelledby="directory-title"
           className={`min-w-0 ${selected ? "hidden xl:block" : ""}`}
         >
-          <h1
-            id="directory-title"
-            className="text-3xl font-semibold tracking-tight"
-          >
+          <h1 id="directory-title" className="text-3xl font-semibold tracking-tight">
             {filters.view === "saved" ? t`Saved` : t`Library`}
           </h1>
           <p className="mt-2 text-muted-foreground">
@@ -375,24 +341,19 @@ export function RepositoryDirectoryPage() {
               </Filter>
             </div>
           </details>
+          <PreparedProfiles profiles={profiles} />
           <div className="my-5 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
             <p aria-live="polite">
-              {Math.min(visible, results.length)} / {results.length}{" "}
-              <Trans>repositories</Trans>
+              {Math.min(visible, results.length)} / {results.length} <Trans>repositories</Trans>
             </p>
             <Button variant="ghost" size="sm" onClick={clearFilters}>
               <Trans>Clear filters</Trans>
             </Button>
           </div>
-          {(storageError ||
-            (!saved.persistent && filters.view === "saved")) && (
-            <p
-              role="alert"
-              className="mb-4 rounded-lg border border-border p-3 text-sm"
-            >
+          {(storageError || (!saved.persistent && filters.view === "saved")) && (
+            <p role="alert" className="mb-4 rounded-lg border border-border p-3 text-sm">
               <Trans>
-                Browser storage is unavailable. Saved changes last until this
-                page closes.
+                Browser storage is unavailable. Saved changes last until this page closes.
               </Trans>
             </p>
           )}
@@ -419,21 +380,14 @@ export function RepositoryDirectoryPage() {
                     }
                     aria-pressed={selected?.repository === entry.repository}
                   >
-                    <span className="block break-words font-medium">
-                      {entry.repository}
-                    </span>
+                    <span className="block break-words font-medium">{entry.repository}</span>
                     <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
                       {entry.capability || t`Capability not recorded`}
                     </span>
                     <span className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                       <span>{entry.category}</span>
-                      <span>
-                        {getRepositoryMetadata(entry.repository)?.language ??
-                          t`Unknown`}
-                      </span>
-                      {!entry.sourceAvailable && (
-                        <span>{t`Source unavailable`}</span>
-                      )}
+                      <span>{getRepositoryMetadata(entry.repository)?.language ?? t`Unknown`}</span>
+                      {!entry.sourceAvailable && <span>{t`Source unavailable`}</span>}
                       {entry.archived && <span>{t`Archived`}</span>}
                     </span>
                   </button>
@@ -444,7 +398,10 @@ export function RepositoryDirectoryPage() {
                       {observed ? (
                         observed.stars.toLocaleString(i18n.locale)
                       ) : (
-                        <span aria-label={t`Unknown`}>—</span>
+                        <span>
+                          <span aria-hidden="true">—</span>
+                          <span className="sr-only">{t`Unknown`}</span>
+                        </span>
                       )}
                     </span>
                     {observed && (
@@ -475,11 +432,8 @@ export function RepositoryDirectoryPage() {
               );
             })}
           </ul>
-          {results.length === 0 && (
-            <div
-              role="status"
-              className="py-12 text-center text-sm text-muted-foreground"
-            >
+          {results.length === 0 && profiles.length === 0 && (
+            <div role="status" className="py-12 text-center text-sm text-muted-foreground">
               {filters.view === "saved" && saved.ids.length === 0 ? (
                 <>
                   <p className="font-medium text-foreground">
@@ -490,9 +444,7 @@ export function RepositoryDirectoryPage() {
                   </p>
                 </>
               ) : (
-                <Trans>
-                  No matching candidate. Try another capability or category.
-                </Trans>
+                <Trans>No matching candidate. Try another capability or category.</Trans>
               )}
             </div>
           )}
@@ -505,9 +457,11 @@ export function RepositoryDirectoryPage() {
               <Trans>Load more</Trans>
             </Button>
           )}
-          <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-            <Trans>Dated stars; missing counts are unknown.</Trans>
-          </p>
+          {results.length > 0 && (
+            <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
+              <Trans>Dated stars; missing counts are unknown.</Trans>
+            </p>
+          )}
         </section>
         <aside
           aria-label={t`Repository details`}
@@ -515,12 +469,7 @@ export function RepositoryDirectoryPage() {
         >
           {selected ? (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="mb-5 xl:hidden"
-                onClick={closeDetails}
-              >
+              <Button variant="ghost" size="sm" className="mb-5 xl:hidden" onClick={closeDetails}>
                 <ArrowLeft aria-hidden="true" />
                 <Trans>Back to results</Trans>
               </Button>
@@ -543,15 +492,9 @@ export function RepositoryDirectoryPage() {
               >
                 <Bookmark
                   aria-hidden="true"
-                  fill={
-                    saved.ids.includes(selected.repository)
-                      ? "currentColor"
-                      : "none"
-                  }
+                  fill={saved.ids.includes(selected.repository) ? "currentColor" : "none"}
                 />
-                {saved.ids.includes(selected.repository)
-                  ? t`Remove from Saved`
-                  : t`Save`}
+                {saved.ids.includes(selected.repository) ? t`Remove from Saved` : t`Save`}
               </Button>
               <Button
                 variant="outline"
@@ -562,11 +505,7 @@ export function RepositoryDirectoryPage() {
                 <dt className="text-muted-foreground">
                   <Trans>Source</Trans>
                 </dt>
-                <dd>
-                  {selected.sourceAvailable
-                    ? t`Source only`
-                    : t`Source unavailable`}
-                </dd>
+                <dd>{selected.sourceAvailable ? t`Source only` : t`Source unavailable`}</dd>
                 <dt className="text-muted-foreground">
                   <Trans>Source revision</Trans>
                 </dt>
@@ -593,19 +532,11 @@ export function RepositoryDirectoryPage() {
                 <dt className="text-muted-foreground">
                   <Trans>License review</Trans>
                 </dt>
-                <dd>
-                  {selected.licenseApproved
-                    ? t`Approved`
-                    : t`Pending evaluation`}
-                </dd>
+                <dd>{selected.licenseApproved ? t`Approved` : t`Pending evaluation`}</dd>
                 <dt className="text-muted-foreground">
                   <Trans>Runtime</Trans>
                 </dt>
-                <dd>
-                  {selected.runtimeTested
-                    ? t`Runtime tested`
-                    : t`Not evaluated in runtime`}
-                </dd>
+                <dd>{selected.runtimeTested ? t`Runtime tested` : t`Not evaluated in runtime`}</dd>
                 <dt className="text-muted-foreground">
                   <Trans>Runtime ready</Trans>
                 </dt>
@@ -665,10 +596,7 @@ export function RepositoryDirectoryPage() {
                 <dd>
                   {metadata?.firstIndexed ? (
                     <>
-                      <time
-                        dateTime={metadata.firstIndexed.at}
-                        title={metadata.firstIndexed.at}
-                      >
+                      <time dateTime={metadata.firstIndexed.at} title={metadata.firstIndexed.at}>
                         {date(metadata.firstIndexed.at)}
                       </time>
                       <a
@@ -714,19 +642,10 @@ export function RepositoryDirectoryPage() {
                 </dd>
               </dl>
               <p className="my-5 text-xs leading-relaxed text-muted-foreground">
-                <Trans>
-                  A tested module profile is required before installation or
-                  execution.
-                </Trans>
+                <Trans>A tested module profile is required before installation or execution.</Trans>
               </p>
               <Button
-                render={
-                  <a
-                    href={repositorySourceUrl(selected)}
-                    target="_blank"
-                    rel="noreferrer"
-                  />
-                }
+                render={<a href={repositorySourceUrl(selected)} target="_blank" rel="noreferrer" />}
                 className="w-full"
               >
                 <Trans>Open source</Trans>
@@ -735,10 +654,7 @@ export function RepositoryDirectoryPage() {
             </>
           ) : (
             <div className="border-s border-border ps-6">
-              <BookOpen
-                className="mb-4 text-muted-foreground"
-                aria-hidden="true"
-              />
+              <BookOpen className="mb-4 text-muted-foreground" aria-hidden="true" />
               <h2 className="font-medium">
                 <Trans>Select a repository</Trans>
               </h2>

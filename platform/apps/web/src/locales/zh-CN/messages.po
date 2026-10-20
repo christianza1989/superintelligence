@@ -5228,3 +5228,31 @@ msgstr "启动任务前，请先在工作区连接模型。"
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "开始项目"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "已准备的组件"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "CSV 解析器"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "此配置已通过开发检查。你的项目尚未验证。"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "配置"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "限制"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "最多 {inputBytes} 字节、{rows} 行和 {columns} 列。"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "运行项目需要单独授权。尚未进行独立保留集评估。"

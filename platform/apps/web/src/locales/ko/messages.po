@@ -5228,3 +5228,31 @@ msgstr "작업을 시작하기 전에 작업 공간에서 모델을 연결하세
 #: src/pages/LibraryProjectHandoff.tsx
 msgid "Start project"
 msgstr "프로젝트 시작"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Prepared components"
+msgstr "준비된 구성 요소"
+
+#: src/components/PreparedProfiles.tsx
+msgid "CSV parser"
+msgstr "CSV 파서"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Development checks passed for this profile. Your project has not been verified."
+msgstr "이 프로필의 개발 검사를 통과했습니다. 프로젝트는 검증되지 않았습니다."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Profile"
+msgstr "프로필"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Limits"
+msgstr "제한"
+
+#: src/components/PreparedProfiles.tsx
+msgid "Up to {inputBytes} bytes, {rows} rows and {columns} columns."
+msgstr "최대 {inputBytes}바이트, {rows}행, {columns}열."
+
+#: src/components/PreparedProfiles.tsx
+msgid "Project execution requires a separate grant. Independent holdout not run."
+msgstr "프로젝트 실행에는 별도 권한이 필요합니다. 독립 홀드아웃 평가는 실행되지 않았습니다."
