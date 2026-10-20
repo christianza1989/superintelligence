@@ -59,6 +59,7 @@ export async function mountBuiltWeb(app: Hono, webRoot: string): Promise<void> {
     if (c.req.method !== "GET" && c.req.method !== "HEAD") return next();
     // WHATWG URL parsing erases dot segments; validate the raw path first.
     const raw = c.req.url.replace(/^[a-z][a-z0-9+.-]*:\/\/[^/]+/i, "").split(/[?#]/, 1)[0] ?? "";
+    if (raw.length > 4096) return next();
     let pathname: string;
     try {
       pathname = decodeURIComponent(raw);
@@ -66,6 +67,7 @@ export async function mountBuiltWeb(app: Hono, webRoot: string): Promise<void> {
       return next();
     }
     if (
+      pathname.length > 2048 ||
       !pathname.startsWith("/") ||
       /[%\\]/.test(pathname) ||
       [...pathname].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127) ||

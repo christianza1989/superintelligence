@@ -84,6 +84,8 @@ describe("opt-in shared built web", () => {
       "/missing.png",
       "/discover/missing",
       "/source.ts",
+      `/app/${"a".repeat(2048)}`,
+      `/app/${"%61".repeat(1400)}`,
       "/.env",
     ]) {
       expect((await app.request(route, html)).status, route).toBe(404);
