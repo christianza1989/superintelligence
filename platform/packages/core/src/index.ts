@@ -60,3 +60,5 @@ export * from "./time-separators.js";
 export * from "./tool-activity.js";
 export * from "./user-error.js";
 export * from "./voice-chat-groups.js";
+
+export * from "./zero-private-artifacts.js";

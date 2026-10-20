@@ -15,11 +15,12 @@ import {
 import {
   attachmentExtensionForMimeType,
   inferAttachmentMimeType,
+  isZeroPrivateArtifact,
   messageBlockForArtifact,
   validateAttachmentMimeType,
 } from "@rakazo/core";
 import type { PrismaClient } from "@rakazo/db";
-import { withResolvedArtifactVersion } from "@rakazo/db";
+import { IsolationError, withResolvedArtifactVersion } from "@rakazo/db";
 import { resolveBotWorkspacePath } from "./computer-support.js";
 
 export type MaterializedThreadFile = {
@@ -53,6 +54,7 @@ export async function attachWorkspaceFileToThread(
     throw new Error(`Unsupported attachment type for ${fileName}`);
   }
   const name = (input.name?.trim() || fileName).slice(0, ARTIFACT_NAME_MAX_LENGTH);
+  if (isZeroPrivateArtifact({ name })) throw new IsolationError();
   validateAttachmentMimeType(mimeType);
   if (input.bytes.byteLength > ATTACHMENT_MAX_BYTES) {
     throw new Error("file exceeds the 10 MiB attachment limit");
@@ -77,8 +79,15 @@ export async function attachWorkspaceFileToThread(
       groupId: input.groupId,
       name,
     },
-    (tx, { rootArtifactId, version }) =>
-      tx.artifact.create({
+    async (tx, { rootArtifactId, version }) => {
+      if (rootArtifactId) {
+        const root = await tx.artifact.findFirst({
+          where: { id: rootArtifactId, spaceId: input.spaceId, userId: input.userId },
+          select: { name: true, clientNonce: true },
+        });
+        if (!root || isZeroPrivateArtifact(root)) throw new IsolationError();
+      }
+      return tx.artifact.create({
         data: {
           spaceId: input.spaceId,
           userId: input.userId,
@@ -94,7 +103,8 @@ export async function attachWorkspaceFileToThread(
           rootArtifactId,
           version,
         },
-      }),
+      });
+    },
   ).catch(async (error) => {
     await deps.artifacts.remove(stored.id, context).catch(() => undefined);
     throw error;
@@ -147,7 +157,8 @@ export async function materializeCurrentTurnFiles(
 
   for (const block of fileBlocks) {
     const row = byId.get(block.artifactId);
-    if (!row) throw new Error(`Attached file is unavailable: ${block.name}`);
+    if (!row || isZeroPrivateArtifact(row))
+      throw new Error(`Attached file is unavailable: ${block.name}`);
     const bytes = await deps.artifacts.get(row.storageKey, input.context);
     if (bytes.byteLength > ATTACHMENT_MAX_BYTES) {
       throw new Error(`Attached file exceeds the 10 MiB limit: ${row.name}`);

@@ -159,6 +159,7 @@ import {
   expandSkillReferencesInPrompt,
   hasMixedOneShotSchedule,
   isOneShotRoutineCrons,
+  isZeroPrivateArtifact,
   nextCronDateAcrossStrict,
 } from "@rakazo/core";
 import type { BoardEvents, Board as BoardRow, PrismaClient, ThreadEvents } from "@rakazo/db";
@@ -5827,7 +5828,7 @@ export function createRouter(deps: RouterDeps) {
             userId: context.actor.userId,
           },
         });
-        return rows.map((row) => ({
+        return rows.filter(row=>!isZeroPrivateArtifact(row)).map((row) => ({
           id: row.id,
           botId: row.botId,
           groupId: row.groupId,

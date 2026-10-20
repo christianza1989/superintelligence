@@ -1,5 +1,5 @@
 import type { Actor, MessageBlock, SearchHit } from "@rakazo/contracts";
-import { extractLinksFromText, matchesSearchQuery, snippetAroundMatch } from "@rakazo/core";
+import { extractLinksFromText, isZeroPrivateArtifact, matchesSearchQuery, snippetAroundMatch } from "@rakazo/core";
 import { Prisma, type PrismaClient } from "@rakazo/db";
 
 const SEARCH_LIMIT = 25;
@@ -136,6 +136,7 @@ export async function querySpaceSearch(
     "bot",
   );
   for (const artifact of artifacts) {
+    if (isZeroPrivateArtifact(artifact)) continue;
     if (!artifact.botId || !artifact.bot) continue;
     const message = botArtifactMessages.get(artifact.id);
     if (!message) continue;
@@ -174,6 +175,7 @@ export async function querySpaceSearch(
     "group",
   );
   for (const artifact of groupArtifacts) {
+    if (isZeroPrivateArtifact(artifact)) continue;
     if (!artifact.groupId || !artifact.group) continue;
     const message = groupArtifactMessages.get(artifact.id);
     if (!message) continue;
