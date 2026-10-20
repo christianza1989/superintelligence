@@ -1,4 +1,5 @@
 import type { Socket } from "node:net";
+import { fileURLToPath } from "node:url";
 import { loadRootEnv } from "@rakazo/core/node/load-root-env";
 
 loadRootEnv();
@@ -9,11 +10,18 @@ import { createRootLogger } from "@rakazo/logging/axiom";
 import { createApp } from "./app.js";
 import { loadEnv } from "./env.js";
 
+// The native packager sets this constant; the installed location is fixed.
+declare const ZERO_RUNTIME_BUNDLED: boolean;
+const webRoot =
+  typeof ZERO_RUNTIME_BUNDLED !== "undefined" && ZERO_RUNTIME_BUNDLED
+    ? fileURLToPath(new URL("../web/", import.meta.url))
+    : undefined;
+
 const logger = createRootLogger(SERVICE_NAMES.api);
 
 try {
   const env = loadEnv();
-  const { app, stop } = await createApp({ ...env, logger });
+  const { app, stop } = await createApp({ ...env, logger, webRoot });
   const server = serve({ fetch: app.fetch, port: env.port, hostname: env.apiHost }, () => {
     logger.info("api listening", { "http.host": env.apiHost, "http.port": env.port });
   });

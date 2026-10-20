@@ -102,6 +102,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { createBillingService } from "./billing.js";
 import { mountBillingRoutes } from "./billing-webhook.js";
+import { mountBuiltWeb } from "./built-web.js";
 import type { AppEnv } from "./env.js";
 import { loadEnv } from "./env.js";
 import { healthRoutes } from "./health.js";
@@ -164,6 +165,8 @@ export interface AppHandles {
 
 export async function createApp(
   overrides: Partial<AppEnv> & {
+    /** Trusted compiled shared web directory; omitted for API-only processes. */
+    webRoot?: string;
     prisma?: PrismaClient;
     realtime?: RealtimeFanout;
     sandbox?: SandboxProvider;
@@ -183,6 +186,7 @@ export async function createApp(
   } = {},
 ): Promise<AppHandles> {
   const {
+    webRoot,
     prisma: prismaOverride,
     realtime: realtimeOverride,
     sandbox: sandboxOverride,
@@ -1035,6 +1039,8 @@ export async function createApp(
       revision: env.gitSha ?? null,
     })),
   );
+
+  if (webRoot) await mountBuiltWeb(app, webRoot);
 
   return {
     app,

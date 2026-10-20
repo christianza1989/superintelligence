@@ -43,7 +43,7 @@ const report = {
   requirementsNotQualifiedByPackaging: [
     "actual package-only API/worker startup and model/auth isolation",
     "existing PostgreSQL/Graphile authority, jobs, restart and recovery",
-    "shared compiled web UI plus serving; no web output included yet",
+    "actual shared compiled web UI navigation, auth and Library behavior",
     "pinned verifier image and actual CSV/browser/PDF qualifications",
     "explicit native Compose profile and external private operator configuration",
     "whole install including images, Docker, initialized PG/WAL and bounded data",
@@ -106,6 +106,34 @@ try {
   // Retain the completed resolver inventory even if later asset/license work
   // fails; inspection must not require another memory-intensive bundle.
   await writeFile(path.join(attempt, "bundle-metafile.json"), JSON.stringify(result.metafile, null, 2) + "\n", { flag: "wx" });
+  // Build the existing shared Vite UI into the fixed same-origin package root.
+  // Vite is an installed build dependency, never an additional runtime server.
+  const webSource = path.join(workspace, "apps/web");
+  const webRequire = createRequire(path.join(webSource, "package.json"));
+  const { build: buildWeb, version: viteVersion } = await import(webRequire.resolve("vite"));
+  const webInputs = new Set();
+  const oldNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  try {
+    await buildWeb({
+      root: webSource, configFile: path.join(webSource, "vite.config.ts"),
+      mode: "production", logLevel: "error",
+      build: { outDir: path.join(output, "web"), emptyOutDir: false, sourcemap: false },
+      plugins: [{ name: "native-web-notice-input-inventory", generateBundle() {
+        for (const id of this.getModuleIds()) {
+          const file = id.split("?", 1)[0];
+          if (path.isAbsolute(file) && file.includes("/node_modules/")) webInputs.add(file);
+        }
+      } }],
+    });
+  } finally {
+    if (oldNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = oldNodeEnv;
+  }
+  report.web = {
+    directory: "web", source: "apps/web", viteVersion,
+    serving: "same-origin-existing-api-get-head", noticeInputFiles: webInputs.size,
+  };
   report.bundleFiles = result.outputFiles.map(file => ({
     path: path.relative(output, file.path), bytes: file.contents.byteLength,
     sha256: hash(file.contents),
@@ -129,6 +157,7 @@ try {
     }
   }
   for (const pkg of report.closure.packages) shippedInputs.add("node_modules/.pnpm/" + pkg.instance + "/package.json");
+  for (const input of webInputs) shippedInputs.add(input);
   const packages = await bundledRuntimePackages(workspace, [...shippedInputs]);
   await validateCopiedRuntimePackageMetadata({ output, closure: report.closure, packages });
   const evidenceRoot = path.join(workspace, "runtime/native-license-evidence");
@@ -136,7 +165,7 @@ try {
   const evidence = JSON.parse(evidenceBytes);
   report.licenseEvidenceManifestSha256 = hash(evidenceBytes);
   const notices = await copyBundledRuntimeNotices({ packages, output, evidenceRoot, evidence: evidence.entries });
-  report.noticeScope = "positive-bundled-byte-contributions-and-all-copied-external-packages";
+  report.noticeScope = "positive-runtime-bundle-contributions-all-copied-external-packages-and-web-build-module-inputs";
   await writeFile(path.join(output, "THIRD-PARTY-NOTICES.json"), JSON.stringify(notices, null, 2) + "\n", { flag: "wx" });
   report.missingBundledLicenseFiles = notices.filter(notice => !notice.files.length).map(notice => ({
     package: notice.package, version: notice.version, declaredLicense: notice.license,
