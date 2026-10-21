@@ -1,7 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
-import type { ZeroComponentApplicationClient } from "./zero-component-application-client.js";
+import type {
+  ZeroComponentApplicationClient,
+  ZeroExtractionInput,
+} from "./zero-component-application-client.js";
 import {
   zeroExtractionInputSchema,
   zeroExtractionSchemas,
@@ -75,7 +78,7 @@ export function registerZeroComponentMcpTools(
       outputSchema: zeroExtractionSubmittedSchema,
       annotations: { ...annotations, readOnlyHint: false },
     },
-    (input) => result(() => client.extract(input)),
+    (input: ZeroExtractionInput) => result(() => client.extract(input)),
   );
   server.registerTool(
     `${name}_job`,
