@@ -296,7 +296,7 @@ export async function executeZeroUrlDocument(
           cleanup: "unknown",
           paidModelCalls: 0,
         };
-      else if (result.state !== "unknown") result.cleanup = "confirmed_absent";
+      else result.cleanup = "confirmed_absent";
     }
   }
   if (result.state === "succeeded") {

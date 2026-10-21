@@ -297,7 +297,7 @@ describe("release-pinned document runtime transport (mocked, no Docker qualifica
       vi.mocked(open).mockClear();
       const result = await executeZeroUrlDocument(config, input(), new AbortController().signal);
       expect(result).toMatchObject({ state: "failed", cleanup: "not_started" });
-      expect(Number(vi.mocked(open).mock.calls[0][1]) & constants.O_NONBLOCK).not.toBe(0);
+      expect(Number(vi.mocked(open).mock.calls[0]![1]) & constants.O_NONBLOCK).not.toBe(0);
       expect(capture).not.toHaveBeenCalled();
     } finally {
       await peer.close();
@@ -324,7 +324,7 @@ describe("release-pinned document runtime transport (mocked, no Docker qualifica
     expect(result).toMatchObject({ state: "failed", cleanup: "not_started" });
     expect(unboundedRead).not.toHaveBeenCalled();
     expect(reads).toHaveBeenCalled();
-    expect(reads.mock.calls[0][0]).toHaveProperty("byteLength", originalSize + 1);
+    expect(reads.mock.calls[0]![0]).toHaveProperty("byteLength", originalSize + 1);
     expect(capture).not.toHaveBeenCalled();
   });
   it("snapshots config before a current-authority callback changes the caller object", async () => {
