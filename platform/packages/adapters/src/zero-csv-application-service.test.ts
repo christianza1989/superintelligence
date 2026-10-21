@@ -113,10 +113,16 @@ async function fixture() {
     $transaction: async (action: any) => action(prisma),
   };
   const artifacts = {
+    describe: () => ({
+      id: "application-test-memory",
+      contractVersion: "1",
+      adapterVersion: "1",
+      capabilities: { stream: false },
+    }),
     put: vi.fn(async ({ bytes }: any) => {
       const id = randomUUID();
       storage.set(id, Buffer.from(bytes));
-      return { id };
+      return { id, hash: zeroComponentHash(bytes) };
     }),
     get: vi.fn(async (id: string) => {
       const bytes = storage.get(id);
@@ -130,6 +136,7 @@ async function fixture() {
   const jobs = {
     enqueue: vi.fn(async (_job: unknown) => undefined),
     cancel: vi.fn(async (_key: string) => undefined),
+    close: vi.fn(async () => undefined),
   };
   const deps = {
     prisma,
@@ -321,6 +328,143 @@ describe("application service uses existing scoped durable lifecycle", () => {
     expect(f.deps.artifacts.remove).toHaveBeenCalled();
     expect(verify).not.toHaveBeenCalled();
   });
+  it("removes an uncommitted workspace blob when commit rejects after the callback", async () => {
+    const f = await fixture(),
+      submitted = await f.service.submit(f.input);
+    let rejectedStorageKey: string | undefined;
+    f.deps.prisma.$transaction = async (action: any) => {
+      const before = new Map(f.rows);
+      const result = await action(f.deps.prisma);
+      const created = [...f.rows.values()].find(
+        (row) => row.name === "zero-application-workspace.json" && !before.has(row.id),
+      );
+      if (created) {
+        rejectedStorageKey = created.storageKey;
+        f.rows.clear();
+        for (const [key, value] of before) f.rows.set(key, value);
+        throw new Error("application_commit_failed");
+      }
+      return result;
+    };
+    await runZeroCsvApplication(f.deps, submitted.jobId);
+    expect(rejectedStorageKey).toBeTypeOf("string");
+    expect(f.storage.has(rejectedStorageKey!)).toBe(false);
+    expect([...f.rows.values()].some((row) => row.name === "zero-application-workspace.json")).toBe(
+      false,
+    );
+    expect((await f.service.get(submitted.jobId)).state).toBe("failed");
+    expect(verify).not.toHaveBeenCalled();
+  });
+  it("retains a committed private workspace when the post-commit grant check rejects", async () => {
+    const f = await fixture(),
+      submitted = await f.service.submit(f.input);
+    f.deps.prisma.$transaction = async (action: any) => {
+      const result = await action(f.deps.prisma);
+      if ([...f.rows.values()].some((row) => row.name === "zero-application-workspace.json"))
+        f.revoke();
+      return result;
+    };
+    await runZeroCsvApplication(f.deps, submitted.jobId);
+    const row = [...f.rows.values()].find(
+      (entry) => entry.name === "zero-application-workspace.json",
+    )!;
+    expect(row).toBeDefined();
+    expect(f.storage.has(row.storageKey)).toBe(true);
+    expect(f.deps.artifacts.remove.mock.calls.some(([key]) => key === row.storageKey)).toBe(false);
+    expect(verify).not.toHaveBeenCalled();
+    const receipt = [...f.rows.values()].find(
+      (entry) => entry.name === "zero-application-receipt.json",
+    )!;
+    expect(JSON.parse(receipt.description).state).toBe("blocked");
+    await expect(f.service.workspace(submitted.jobId)).rejects.toBeInstanceOf(IsolationError);
+  });
+  it.each(["same", "different", "same-commit-reject"])(
+    "preserves the referenced %s storage key when reusing an exact workspace row",
+    async (kind) => {
+      const f = await fixture(),
+        submitted = await f.service.submit(f.input);
+      const put = f.deps.artifacts.put.getMockImplementation()!;
+      let unusedKey: string | undefined;
+      f.deps.artifacts.put.mockImplementation(async (value) => {
+        const stored = await put(value);
+        if (value.name === "zero-application-workspace.json") {
+          const key = kind !== "different" ? stored.id : "existing-workspace";
+          f.storage.set(key, Buffer.from(value.bytes));
+          if (kind === "different") unusedKey = stored.id;
+          f.rows.set("existing-workspace", {
+            id: "existing-workspace",
+            spaceId: f.principal.spaceId,
+            userId: f.principal.userId,
+            name: value.name,
+            mimeType: value.mimeType,
+            size: value.bytes.length,
+            hash: zeroComponentHash(value.bytes),
+            storageKey: key,
+            rootArtifactId: submitted.jobId,
+            version: 3,
+            clientNonce: "zero.application.workspace:" + submitted.jobId,
+          });
+        }
+        return stored;
+      });
+      if (kind === "same-commit-reject") {
+        const transaction = f.deps.prisma.$transaction;
+        f.deps.prisma.$transaction = async (action: any) => {
+          const result = await transaction(action);
+          if (result?.id === "existing-workspace") throw new Error("application_commit_failed");
+          return result;
+        };
+      }
+      await runZeroCsvApplication(f.deps, submitted.jobId);
+      const row = f.rows.get("existing-workspace")!;
+      expect(f.storage.has(row.storageKey)).toBe(true);
+      if (unusedKey) expect(f.storage.has(unusedKey)).toBe(false);
+      expect((await f.service.workspace(submitted.jobId)).artifactId).toBe(row.id);
+      expect(verify).toHaveBeenCalledTimes(kind === "same-commit-reject" ? 0 : 1);
+    },
+  );
+  it.each(["mimeType", "size", "spaceId", "userId", "rootArtifactId", "version", "hash"])(
+    "rejects a reused workspace row with changed %s",
+    async (field) => {
+      const f = await fixture(),
+        submitted = await f.service.submit(f.input);
+      f.deps.prisma.artifact.findUnique.mockImplementation(async ({ where }: any) => {
+        if (
+          where.spaceId_userId_clientNonce?.clientNonce ===
+          "zero.application.workspace:" + submitted.jobId
+        ) {
+          const put = f.deps.artifacts.put.mock.calls.findLast(
+            ([value]) => value.name === "zero-application-workspace.json",
+          )![0];
+          const existing = {
+            spaceId: f.principal.spaceId,
+            userId: f.principal.userId,
+            name: put.name,
+            mimeType: put.mimeType,
+            size: put.bytes.length,
+            hash: zeroComponentHash(put.bytes),
+            rootArtifactId: submitted.jobId,
+            version: 3,
+            [field]: field === "size" || field === "version" ? 999 : "invalid",
+          };
+          return existing;
+        }
+        return (
+          [...f.rows.values()].find((row) =>
+            Object.entries(where.spaceId_userId_clientNonce ?? where).every(
+              ([key, value]) => row[key] === value,
+            ),
+          ) ?? null
+        );
+      });
+      await runZeroCsvApplication(f.deps, submitted.jobId);
+      expect(verify).not.toHaveBeenCalled();
+      expect(f.deps.artifacts.remove).toHaveBeenCalled();
+      expect(
+        [...f.rows.values()].some((row) => row.name === "zero-application-workspace.json"),
+      ).toBe(false);
+    },
+  );
   it("rejects stale workspace bytes and rechecks grants after workspace storage I/O", async () => {
     const f = await fixture(),
       submitted = await f.service.submit(f.input);

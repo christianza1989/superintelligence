@@ -300,6 +300,70 @@ describe("fixed component lifecycle boundaries", () => {
     expect(f.deps.prisma.artifact.create).not.toHaveBeenCalled();
     expect(f.deps.artifacts.remove).toHaveBeenCalledTimes(2);
   });
+  it.each(families)(
+    "removes the staged %s receipt if commit rejects after the callback",
+    async (family) => {
+      const f = fixture(family),
+        storageKey = randomUUID(),
+        storage = new Set<string>();
+      f.deps.artifacts.put.mockImplementation(async () => {
+        storage.add(storageKey);
+        return { id: storageKey };
+      });
+      f.deps.artifacts.remove.mockImplementation(async () => {
+        storage.delete(storageKey);
+      });
+      f.deps.prisma.artifact.create.mockImplementation(async ({ data }) => {
+        const row = { ...data, id: randomUUID() };
+        f.setReceipt(row);
+        return row;
+      });
+      f.deps.prisma.$transaction = async (action) => {
+        await action(f.deps.prisma);
+        f.setReceipt(null);
+        throw new Error("commit_rejected");
+      };
+      await expect(
+        publishZeroComponent(f.deps as never, family, f.id, f.request, "failed", {}),
+      ).rejects.toThrow("commit_rejected");
+      expect(f.deps.prisma.artifact.create).toHaveBeenCalledTimes(1);
+      expect(await f.deps.prisma.artifact.findUnique()).toBe(null);
+      expect(storage.has(storageKey)).toBe(false);
+      expect(f.deps.artifacts.remove).toHaveBeenCalledWith(storageKey, expect.anything());
+    },
+  );
+  it.each(families)(
+    "preserves an existing %s terminal winner with a deduplicated key even on commit rejection",
+    async (family) => {
+      const f = fixture(family),
+        storageKey = randomUUID();
+      const receipt = {
+        id: randomUUID(),
+        rootArtifactId: f.id,
+        version: 2,
+        name: "zero-" + family + "-receipt.json",
+        mimeType: "application/json",
+        storageKey,
+        description: JSON.stringify({ state: "cancelled" }),
+      };
+      f.setReceipt(receipt);
+      f.deps.artifacts.put.mockResolvedValue({ id: storageKey });
+      expect(
+        await publishZeroComponent(f.deps as never, family, f.id, f.request, "failed", {}),
+      ).toEqual(receipt);
+      expect(f.deps.artifacts.remove).not.toHaveBeenCalled();
+      f.deps.prisma.$transaction = async (action) => {
+        await action(f.deps.prisma);
+        throw new Error("commit_rejected");
+      };
+      await expect(
+        publishZeroComponent(f.deps as never, family, f.id, f.request, "failed", {}),
+      ).rejects.toThrow("commit_rejected");
+      expect(await f.deps.prisma.artifact.findUnique()).toEqual(receipt);
+      expect(f.deps.prisma.artifact.create).not.toHaveBeenCalled();
+      expect(f.deps.artifacts.remove).not.toHaveBeenCalled();
+    },
+  );
   it("rechecks the grant after request storage before insertion or dispatch", async () => {
     const f = fixture();
     f.deps.artifacts.put.mockImplementation(async () => {
@@ -314,7 +378,7 @@ describe("fixed component lifecycle boundaries", () => {
     expect(f.deps.artifacts.remove).toHaveBeenCalledTimes(1);
   });
   it.each(families)(
-    "counts all four families against the shared four-job quota for %s",
+    "counts all five families against the shared four-job quota for %s",
     async (family) => {
       const f = fixture(family);
       f.deps.prisma.artifact.findMany.mockResolvedValue([{}, {}, {}, {}]);
@@ -324,7 +388,9 @@ describe("fixed component lifecycle boundaries", () => {
       const query = f.deps.prisma.artifact.findMany.mock.calls[0]?.[0] as unknown as {
         where: { OR: Array<{ name: string }> };
       };
-      expect(query.where.OR.map(({ name }) => name)).toEqual(families.map((entry) => entry[3]));
+      expect(query.where.OR.map(({ name }) => name).sort()).toEqual(
+        families.map((entry) => entry[3]).sort(),
+      );
       expect(f.deps.prisma.artifact.create).not.toHaveBeenCalled();
       expect(f.deps.jobs.enqueue).not.toHaveBeenCalled();
     },

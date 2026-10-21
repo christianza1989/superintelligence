@@ -290,7 +290,8 @@ async function retainWorkspace(
     { name: workspaceName, mimeType: "application/json", bytes },
     zeroComponentContext(request.principal, id, family),
   );
-  let committed = false;
+  let referenced = false;
+  let existingReference = false;
   try {
     await recheck();
     const row = await deps.prisma.$transaction(async (tx) => {
@@ -310,9 +311,14 @@ async function retainWorkspace(
           existing.hash !== zeroComponentHash(bytes) ||
           existing.name !== workspaceName ||
           existing.rootArtifactId !== id ||
-          existing.version !== 3
+          existing.version !== 3 ||
+          existing.mimeType !== "application/json" ||
+          existing.size !== bytes.length ||
+          existing.spaceId !== request.principal.spaceId ||
+          existing.userId !== request.principal.userId
         )
           throw new IsolationError();
+        existingReference = existing.storageKey === stored.id;
         return existing;
       }
       const created = await tx.artifact.create({
@@ -333,9 +339,9 @@ async function retainWorkspace(
           }),
         },
       });
-      committed = true;
       return created;
     });
+    referenced = row.storageKey === stored.id;
     await recheck();
     return {
       artifactId: row.id,
@@ -344,7 +350,7 @@ async function retainWorkspace(
       manifestSha256: workspace.manifestSha256,
     };
   } finally {
-    if (!committed)
+    if (!referenced && !existingReference)
       await deps.artifacts
         .remove(stored.id, zeroComponentContext(request.principal, id, family))
         .catch(() => undefined);

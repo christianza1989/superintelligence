@@ -307,6 +307,7 @@ export function mountZeroComponentRoutes(
           if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(limit) || limit > PAGE_BYTES)
             return c.json({ error: "invalid_page" }, 400);
           const jobId = c.req.param("jobId");
+          if (!jobId) return c.json({ error: "invalid_job" }, 400);
           const artifact =
             artifactKind === "workspace"
               ? await service.workspace!(jobId)

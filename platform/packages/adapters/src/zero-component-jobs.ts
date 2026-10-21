@@ -381,7 +381,8 @@ export async function publishZeroComponent(
     { name: policy.receiptName, mimeType: "application/json", bytes },
     context,
   );
-  let committed = false;
+  let referenced = false;
+  let existingReference = false;
   const cancellationGuard = async (prisma: Database) => {
     if (state !== "cancelled") return;
     if (
@@ -399,10 +400,13 @@ export async function publishZeroComponent(
     await cancellationGuard(deps.prisma);
     if (state === "succeeded")
       await assertZeroComponentActive(deps, family, id, request, String(details.startedAt));
-    return await deps.prisma.$transaction(async (tx) => {
+    const row = await deps.prisma.$transaction(async (tx) => {
       await tx.$queryRaw(Prisma.sql`SELECT id FROM artifacts WHERE id = ${id} FOR UPDATE`);
       const existing = await findZeroComponentReceipt(tx, family, request, id);
-      if (existing) return existing;
+      if (existing) {
+        existingReference = existing.storageKey === stored.id;
+        return existing;
+      }
       await cancellationGuard(tx);
       if (state === "succeeded")
         await assertZeroComponentActive(
@@ -431,11 +435,13 @@ export async function publishZeroComponent(
           clientNonce: receiptNonce(family, id),
         },
       });
-      committed = true;
       return result;
     });
+    referenced = row.storageKey === stored.id;
+    return row;
   } finally {
-    if (!committed) await deps.artifacts.remove(stored.id, context).catch(() => undefined);
+    if (!referenced && !existingReference)
+      await deps.artifacts.remove(stored.id, context).catch(() => undefined);
   }
 }
 export async function submitZeroComponent(
