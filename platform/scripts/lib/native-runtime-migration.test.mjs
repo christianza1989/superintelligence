@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { chmod, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -18,7 +18,7 @@ async function fixture(run) {
     const sources = nativeMigrationSources(engine);
     await mkdir(path.join(root, "db"));
     await mkdir(path.join(root, "node_modules/prisma/build"), { recursive: true });
-    await writeFile(path.join(root, "node_modules/prisma/build/index.js"), 'console.log(JSON.stringify({env:process.env,args:process.argv.slice(2),cwd:process.cwd()}));\n');
+    await writeFile(path.join(root, "node_modules/prisma/build/index.js"), 'const os=require("node:os"), fs=require("node:fs"), path=require("node:path"); console.log(JSON.stringify({env:process.env,args:process.argv.slice(2),cwd:process.cwd(),home:os.homedir(),ambientNpmrc:fs.existsSync(path.join(os.homedir(),".npmrc"))}));\n');
     await writeFile(path.join(root, "migrate.mjs"), sources.launcher);
     await writeFile(path.join(root, "db/prisma.config.mjs"), sources.config);
     await run({ root, enginePath, engine });
@@ -26,12 +26,22 @@ async function fixture(run) {
 }
 test("actual generated migration launcher fixes the copied engine and isolates child credentials", async () => fixture(async ({ root, enginePath }) => {
   await writeFile(path.join(root, ".env"), "SOURCE_AUTH_CANARY=dotenv\n");
+  const ambientHome = path.join(root, "ambient-home"); await mkdir(ambientHome);
+  await writeFile(path.join(ambientHome, ".npmrc"), "//fixture.invalid/:_authToken=SOURCE_AUTH_CANARY\n");
   const databaseUrl = "postgresql://fixture:fixture@127.0.0.1:1/fixture";
-  const output = execFileSync(process.execPath, [path.join(root, "migrate.mjs")], { cwd: os.tmpdir(), env: { DATABASE_URL: databaseUrl, SOURCE_AUTH_CANARY: "ambient", PRISMA_SCHEMA_ENGINE_BINARY: "/ignored/operator-override" }, encoding: "utf8", timeout: 10_000 });
+  const output = execFileSync(process.execPath, [path.join(root, "migrate.mjs")], { cwd: os.tmpdir(), env: { DATABASE_URL: databaseUrl, HOME: ambientHome, SOURCE_AUTH_CANARY: "ambient", PRISMA_SCHEMA_ENGINE_BINARY: "/ignored/operator-override", TMPDIR: root }, encoding: "utf8", timeout: 10_000 });
   const result = JSON.parse(output);
   assert.equal(result.env.DATABASE_URL, databaseUrl);
   assert.equal(result.env.PRISMA_SCHEMA_ENGINE_BINARY, enginePath);
   assert.equal(result.env.SOURCE_AUTH_CANARY, undefined);
+  assert.notEqual(result.home, ambientHome);
+  assert.ok(result.home.startsWith(root + path.sep + "zero-native-migration-"));
+  assert.equal(result.env.HOME, result.home);
+  assert.equal(result.env.TMPDIR, result.home);
+  assert.equal(result.env.XDG_CONFIG_HOME, path.join(result.home, "config"));
+  assert.equal(result.env.XDG_CACHE_HOME, path.join(result.home, "cache"));
+  assert.equal((await stat(result.home)).mode & 0o777, 0o700);
+  assert.equal(result.ambientNpmrc, false);
   assert.deepEqual(result.args, ["migrate", "deploy", "--config", path.join(root, "db/prisma.config.mjs")]);
   assert.equal(result.cwd, path.join(root, "db"));
 }));

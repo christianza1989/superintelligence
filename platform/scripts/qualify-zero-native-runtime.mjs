@@ -110,7 +110,7 @@ if (options.plan) {
     const guard = fileURLToPath(new URL("./runtime/native-package-qualification-guard.mjs", import.meta.url));
     const guardConfig = name => path.join(scratch, "operator", name + "-guard.json");
     async function guarded(entry, name) {
-      const auditFile = path.join(evidence, name + "-guard-audit");
+      const auditFile = path.join(scratch, "operator", name + "-guard-audit");
       await writeFile(guardConfig(name), JSON.stringify({ packageRoot: relocated, auditFile, allowedPorts: [port, apiPort], deniedRoots: [root, ...(process.env.HOME ? [process.env.HOME] : [])], deniedFiles: [path.join(cwd, ".env"), path.join(scratch, "cwd/.env")] }), { mode: 0o600 });
       return start(process.execPath, ["--max-old-space-size=512", "--import", guard, path.join(relocated, entry)], { name, env: { ...environment, ZERO_NATIVE_QUALIFICATION_GUARD: guardConfig(name) } });
     }
@@ -190,9 +190,14 @@ if (options.plan) {
     assertRuntimeAlive();
     await stopNativeQualificationProcess(api); await stopNativeQualificationProcess(worker); scenario("actual-package-process-graceful-stop");
     for (const name of ["migration", "api", "worker"]) {
-      const auditFiles = (await readdir(evidence)).filter(file => file.startsWith(name + "-guard-audit.") && file.endsWith(".json"));
+      const auditRoot = path.join(scratch, "operator");
+      const auditFiles = (await readdir(auditRoot)).filter(file => file.startsWith(name + "-guard-audit.") && file.endsWith(".json"));
       assert.ok(auditFiles.length >= (name === "migration" ? 2 : 1));
-      const audits = await Promise.all(auditFiles.map(async file => JSON.parse(await readFile(path.join(evidence, file), "utf8"))));
+      const audits = await Promise.all(auditFiles.map(async file => {
+        const bytes = await readFile(path.join(auditRoot, file));
+        await writeFile(path.join(evidence, file), bytes, { mode: 0o600 });
+        return JSON.parse(bytes);
+      }));
       for (const audit of audits) { assert.equal(audit.deniedModules, 0); assert.equal(audit.deniedFilesystem, 0); assert.equal(audit.deniedNetwork, 0); assert.ok(audit.moduleResolutions > 0); }
       report.processAudits ??= {}; report.processAudits[name] = audits;
     }
