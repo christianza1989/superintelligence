@@ -1,6 +1,6 @@
 # MCP, papildiniai ir prijungimas iš įprasto coding kliento
 
-**Priimta įgyvendinimo kryptis · 2026-10-18 · discovery ir ribotas native CSV execution patikrinti; platesnis MVP nepriimtas.** [Sprendimai A13–A16](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [faktinė būsena](IMPLEMENTATION.md). Priimtas ir kritiškai patikslintas Astra pasiūlymas; pradinės peržiūros source pagrindas 01645b085ed6f592cd450ee06537dfb958cc9c94. Žemiau esantys kontraktai yra visos integracijos reikalavimai. Source serveris 0.6 / schema 1.6 numatytai teikia tris discovery tools, operator-bound Linux profilis 17; paieška atskirai pateikia ribotus prepared-profile faktus. PDF/HTML transporto ir MCP kontrolės bei tikras 9/9 API/worker development bandymas neperima ankstesnio native priėmimo. [Tikro Codex ryšio ataskaita](experiments/MCP-PREVIEW-2026-10-17.md) atskiria versijas, 0.3 FAIL ir 0.4 ribotą PASS.
+**Priimta įgyvendinimo kryptis · atnaujinta 2026-10-21.** [A13–A18](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [būsena](IMPLEMENTATION.md). Source serveris 0.7 / schema 1.7: trys default discovery ir 22 operator-bound Linux operacijos. [Komponentų ir transporto patikros](experiments/SCOPED-RESEARCH-AND-PDF-CSV-2026-10-21.md) atskirtos nuo tikro native 0.4 priėmimo; visas MVP nepriimtas.
 
 Tikslas — žmogui likti savo Codex ar Claude Code, o RepositoryZero naudoti komponentų paieškai, paruošimui ir patikrai. Pirmas klientas — Codex desktop su dabartine naudotojo paskyra. Claude Code kvalifikuojamas atskirai. [Native palyginimo protokolas](NATIVE-CODEX-BENCHMARK.md) atskirtas nuo [istorinio Claude CLI Lab](LOCAL-LAB.md).
 
@@ -70,7 +70,9 @@ Toliau pateikiami pagrindiniai vardai ir apimtys. Griežtos runtime schemos įgy
 | `zero_cancel` | Ne | Taip | Patvarus konkretaus job stop prašymas, idempotent, galutinė būsena atskirai; ne „stop visus worker“ |
 | `zero_freshness` | Ne | CSV profilis | Autorizuotas dabartinio penkių failų snapshot palyginimas su konkrečiu sėkmingo verify receipt; grąžina unchanged/changed ir abu hash, nekeičia istorinio rezultato ir nevykdo projekto |
 | `zero_pdf_extract/job/artifact/cancel` | Ne | PDF profilis | Operator allowlist fileId + SHA, born-digital ruled-table extraction, patvarus job ir hash-checked paged receipt; be arbitrary path, URL ar parser |
-| `zero_browser_extract/job/artifact/cancel` | Ne | Static HTML profilis | Operator allowlist fileId + SHA, deklaruotas inertinis DOM / PNG vaizdas su atskirais raw/rendered SHA; originalios leksinės nuorodos kaip duomenys, be JS, išorinių užklausų ar navigation/actions/selectors; PNG netvirtina originalo vizualaus tikslumo |
+| `zero_browser_extract/job/artifact/cancel` | Ne | Static HTML profilis | Operator fileId + SHA; inertinis DOM/PNG, atskiri raw/rendered hash; be JS, išorinių užklausų ar originalo vizualaus tikslumo teiginio |
+| `zero_research_extract/job/artifact/cancel` | Ne | Patvirtinto URL tyrimas | Operator taskId ir fiksuotas public HTTPS šaltinių registras; bounded fetch be redirect, nekintamas source snapshot ir inertinis renderis; ne arbitrary URL/browser navigation |
+| `zero_pdf_csv` | Ne | PDF CSV projekcija | Autorizuotas succeeded PDF receipt, vienos lentelės bounded byte pages, source/receipt/CSV hash ir page/bbox provenance; jokių naujų jobs |
 
 Atskiras `zero_apply` ar bendras shell tool pirmajam keliui nereikalingas. Host savo native įrankiais pritaiko komponentą ir kodą. Tai sumažina concurrent-writer problemą: Zero dirba izoliuotoje staging vietoje, o host valdo originalų darbo medį.
 
