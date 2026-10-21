@@ -38,8 +38,8 @@ export async function nativeRuntimeBuildProfile(workspace) {
 }
 
 export function assertNativeMessagingNotShipped(metafile, copiedPackages = []) {
-  const names = /^(?:chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)$/;
-  const forbidden = /(?:^|\/)node_modules\/(chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)\//;
+  const names = /^(?:chat|chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)$/;
+  const forbidden = /(?:^|\/)node_modules\/(chat|chat-adapter-sendblue|sendblue|@chat-adapter\/[^/]+|chat-adapter-lark|@slack\/[^/]+|@larksuiteoapi\/[^/]+|grammy|@grammyjs\/[^/]+)\//;
   for (const output of Object.values(metafile.outputs)) {
     for (const [input, contribution] of Object.entries(output.inputs)) {
       if (contribution.bytesInOutput > 0 && forbidden.test(input)) throw new Error("Unsupported messaging dependency contributes to native runtime");

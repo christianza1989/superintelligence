@@ -49,47 +49,80 @@ test("actual explicit native boundary bundle preserves exports and rejects every
 });
 
 test("native guard uses positive shipped bytes and fails a surviving messaging vendor", () => {
-  const name = "node_modules/.pnpm/chat-adapter-sendblue@0.2.0/node_modules/chat-adapter-sendblue/dist/index.js";
-  assert.doesNotThrow(() => assertNativeMessagingNotShipped({ outputs: { "app.mjs": { inputs: { [name]: { bytesInOutput: 0 } } } } }));
-  assert.throws(() => assertNativeMessagingNotShipped({ outputs: { "app.mjs": { inputs: { [name]: { bytesInOutput: 1 } } } } }), /Unsupported messaging dependency/);
-  assert.throws(() => assertNativeMessagingNotShipped({ outputs: {} }, [{ name: "sendblue" }]), /copied/);
+  for (const name of [
+    "chat", "chat-adapter-sendblue", "sendblue", "@chat-adapter/state-memory",
+    "@chat-adapter/slack", "chat-adapter-lark", "@slack/web-api",
+    "@larksuiteoapi/node-sdk", "grammy", "@grammyjs/types",
+  ]) {
+    for (const prefix of ["node_modules/", "node_modules/.pnpm/fixture/node_modules/"]) {
+      const input = prefix + name + "/dist/index.js";
+      const bundle = bytesInOutput => ({ outputs: {
+        "api.mjs": { inputs: { [input]: { bytesInOutput: 0 } } },
+        "worker.mjs": { inputs: { [input]: { bytesInOutput } } },
+      } });
+      assert.deepEqual(assertNativeMessagingNotShipped(bundle(0)), {
+        positiveForbiddenBundleContributions: 0, copiedForbiddenPackages: 0,
+      });
+      assert.throws(() => assertNativeMessagingNotShipped(bundle(1)), /Unsupported messaging dependency/);
+    }
+    assert.throws(() => assertNativeMessagingNotShipped({ outputs: {} }, [{ name }]), /copied/);
+  }
+  const allowed = "node_modules/chatty/index.js";
+  assert.doesNotThrow(() => assertNativeMessagingNotShipped({ outputs: {
+    "api.mjs": { inputs: { [allowed]: { bytesInOutput: 1 } } },
+  } }, [{ name: "chatty" }]));
 });
 
-test("native barrel-like messaging graph cannot retain vendors or create a surface or emulator", async () => {
+test("actual adapter barrel preserves native messaging exports without vendors or usable surfaces", async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), "zero-native-messaging-graph-"));
   try {
     const profile = await nativeRuntimeBuildProfile(workspace);
+    const sources = ["messaging-platforms", "chat-sdk-surface", "sendblue-emulator"];
+    const expected = [];
+    for (const source of sources) {
+      const text = await readFile(path.join(workspace, "packages/adapters/src", source + ".ts"), "utf8");
+      expected.push(...[...text.matchAll(/^export (?:function|class|const) (\w+)/gm)].map(match => match[1]));
+    }
+    const barrel = path.join(workspace, "packages/adapters/src/index.ts");
+    // Resolve the actual shared barrel and its .js re-exports. Unrelated
+    // adapters are empty fixture modules; full API/worker staging separately
+    // checks positive bytes across the complete production graph.
+    const scopedBarrel = { name: "scoped-adapter-barrel-fixture", setup(build) {
+      build.onResolve({ filter: /^\.\// }, args => {
+        if (args.importer !== barrel || sources.some(source => args.path === "./" + source + ".js")) return;
+        return { path: args.path, namespace: "unrelated-adapter-fixture" };
+      });
+      build.onLoad({ filter: /.*/, namespace: "unrelated-adapter-fixture" }, () => ({ contents: "", loader: "js" }));
+    } };
     const outfile = path.join(directory, "profile.mjs");
     const result = await build({
       absWorkingDir: workspace,
       stdin: {
-        contents: [
-          'export * from "./packages/adapters/src/messaging-platforms.ts";',
-          'export * from "./packages/adapters/src/chat-sdk-surface.ts";',
-          'export * from "./packages/adapters/src/sendblue-emulator.ts";',
-        ].join("\n"), resolveDir: workspace,
+        contents: "export { " + expected.join(", ") + ' } from "./packages/adapters/src/index.ts";', resolveDir: workspace,
       },
       outfile, format: "esm", platform: "node", bundle: true, metafile: true,
-      plugins: [profile.plugin], logLevel: "silent",
+      plugins: [profile.plugin, scopedBarrel], logLevel: "silent",
     });
     assertNativeMessagingNotShipped(result.metafile);
     assert.ok(Object.keys(result.metafile.inputs).every(input => !input.includes("node_modules/")));
     const native = await import(pathToFileURL(outfile).href);
-    const expected = [];
-    for (const source of ["messaging-platforms", "chat-sdk-surface", "sendblue-emulator"]) {
-      const text = await readFile(path.join(workspace, "packages/adapters/src", source + ".ts"), "utf8");
-      expected.push(...[...text.matchAll(/^export (?:function|class|const) (\w+)/gm)].map(match => match[1]));
-    }
     assert.deepEqual(Object.keys(native).sort(), expected.sort());
+    assert.ok(Object.keys(result.metafile.inputs).includes("packages/adapters/src/index.ts"));
+    for (const { replacement } of profile.manifest.moduleOverrides) {
+      assert.ok(Object.keys(result.metafile.inputs).includes(replacement));
+    }
     const source = await readFile(path.join(workspace, "packages/adapters/src/chat-sdk-surface.ts"), "utf8");
     const bound = source.match(/export const MESSAGING_WEBHOOK_MAX_BODY_BYTES = (\d+) \* (\d+);/);
     assert.ok(bound, "Shared webhook bound changed; review native profile boundary");
     assert.equal(native.MESSAGING_WEBHOOK_MAX_BODY_BYTES, Number(bound[1]) * Number(bound[2]));
     for (const attempt of [
       () => new native.ChatSdkMessagingSurface([]),
+      () => new native.ChatSdkMessagingSurface([{ provider: "fixture" }]),
       () => new native.SendBlueEmulator(),
       () => native.createEmulatedSendbluePlatform({}),
       () => native.providerOfThreadId("sendblue:fixture"),
+      () => native.isMessagingEnabled([{ provider: "fixture" }]),
+      () => native.isMessagingSurfaceEnabled([{ provider: "fixture" }], { deploymentModelConfigured: true, openSignup: true }),
     ]) assert.throws(attempt, { message: "Messaging is unsupported by native-mcp-local-v1" });
     assert.equal(profile.manifest.moduleOverrides.length, 3);
   } finally { await rm(directory, { recursive: true, force: true }); }
