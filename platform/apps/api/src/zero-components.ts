@@ -11,13 +11,17 @@ import {
   createZeroBrowserService,
   createZeroPdfService,
   createZeroUrlResearchService,
-  ZERO_URL_RESEARCH_PROFILE,
-  ZERO_URL_RESEARCH_MODE,
-  ZERO_URL_RESEARCH_LIMITS,
+  projectZeroPdfCsv,
+  projectZeroPdfCsvPage,
   ZERO_BROWSER_STATIC_JOB_LIMITS,
   ZERO_BROWSER_STATIC_PROFILE,
+  ZERO_PDF_CSV_LIMITS,
   ZERO_PDF_JOB_LIMITS,
   ZERO_PDF_PROFILE,
+  ZERO_URL_RESEARCH_LIMITS,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_PROFILE,
+  ZeroPdfCsvError,
 } from "@rakazo/adapters";
 import type { Actor } from "@rakazo/contracts";
 import type { PrismaClient } from "@rakazo/db";
@@ -100,6 +104,19 @@ export function mountZeroComponentRoutes(
         );
         return await action(service);
       } catch (error) {
+        if (error instanceof ZeroPdfCsvError) {
+          const status =
+            error.code === "pdf_csv_table_missing"
+              ? 404
+              : error.code === "pdf_csv_unavailable"
+                ? 409
+                : error.code === "pdf_csv_limit_exceeded"
+                  ? 413
+                  : error.code === "pdf_csv_invalid_receipt"
+                    ? 503
+                    : 400;
+          return c.json({ error: error.code }, status);
+        }
         if (error instanceof IsolationError)
           return c.json({ error: "project_scope_rejected" }, 403);
         if (error instanceof Error && error.name === "ZodError")
@@ -190,6 +207,68 @@ export function mountZeroComponentRoutes(
         return c.json(await service.cancel(c.req.param("jobId")));
       }),
     );
+    if (family === "pdf") {
+      const receipt = async (service: Service, jobId: string) => {
+        if ((await service.get(jobId)).state !== "succeeded")
+          throw new ZeroPdfCsvError("pdf_csv_unavailable");
+        // The scoped reader rechecks current owner/file grants after receipt I/O.
+        return service.artifact(jobId);
+      };
+      app.get(`${prefix}/jobs/:jobId/tables/:tableCsv{[^/]+[.]csv}`, (c) =>
+        scoped(c, async (service) => {
+          if (Object.keys(c.req.query()).length) return c.json({ error: "invalid_request" }, 400);
+          const jobId = c.req.param("jobId");
+          const result = projectZeroPdfCsv(
+            await receipt(service, jobId),
+            jobId,
+            c.req.param("tableCsv").slice(0, -4),
+          );
+          c.header("content-type", "text/csv; charset=utf-8");
+          c.header("content-disposition", 'attachment; filename="pdf-table.csv"');
+          c.header("x-content-type-options", "nosniff");
+          c.header("x-zero-source-sha256", result.metadata.sourceSha256);
+          c.header("x-zero-receipt-sha256", result.metadata.receipt.sha256);
+          c.header("x-zero-csv-sha256", result.metadata.csv.sha256);
+          c.header("x-zero-pdf-table-index", String(result.metadata.table.index));
+          c.header("x-zero-pdf-provenance", JSON.stringify(result.metadata.table.provenance));
+          return c.body(result.csv);
+        }),
+      );
+      app.get(`${prefix}/jobs/:jobId/tables/:tableIndex/csv`, (c) =>
+        scoped(c, async (service) => {
+          const query = c.req.queries();
+          const offsetText = query.offset?.[0] ?? "0";
+          const limitText = query.limit?.[0] ?? String(ZERO_PDF_CSV_LIMITS.pageBytes);
+          if (
+            Object.entries(query).some(
+              ([key, values]) => (key !== "offset" && key !== "limit") || values.length !== 1,
+            ) ||
+            !/^(?:0|[1-9][0-9]*)$/u.test(offsetText) ||
+            !/^[1-9][0-9]*$/u.test(limitText)
+          )
+            return c.json({ error: "pdf_csv_invalid_page" }, 400);
+          const offset = Number(offsetText),
+            limit = Number(limitText);
+          if (
+            !Number.isSafeInteger(offset) ||
+            offset > ZERO_PDF_CSV_LIMITS.csvBytes ||
+            !Number.isSafeInteger(limit) ||
+            limit > ZERO_PDF_CSV_LIMITS.pageBytes
+          )
+            return c.json({ error: "pdf_csv_invalid_page" }, 400);
+          const jobId = c.req.param("jobId");
+          return c.json(
+            projectZeroPdfCsvPage(
+              await receipt(service, jobId),
+              jobId,
+              c.req.param("tableIndex"),
+              offset,
+              limit,
+            ),
+          );
+        }),
+      );
+    }
     app.get(`${prefix}/jobs/:jobId/artifact`, (c) =>
       scoped(c, async (service) => {
         const query = c.req.query();

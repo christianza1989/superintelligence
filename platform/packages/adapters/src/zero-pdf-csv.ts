@@ -10,8 +10,17 @@ import {
   zeroPdfInputRefSchema,
 } from "./zero-pdf-contract.js";
 
-import { ZERO_PDF_CSV_LIMITS, zeroPdfCsvMetadataSchema, zeroPdfCsvPageSchema } from "./zero-pdf-csv-contract.js";
-export { ZERO_PDF_CSV_LIMITS, zeroPdfCsvMetadataSchema, zeroPdfCsvPageSchema } from "./zero-pdf-csv-contract.js";
+import {
+  ZERO_PDF_CSV_LIMITS,
+  zeroPdfCsvMetadataSchema,
+  zeroPdfCsvPageSchema,
+} from "./zero-pdf-csv-contract.js";
+
+export {
+  ZERO_PDF_CSV_LIMITS,
+  zeroPdfCsvMetadataSchema,
+  zeroPdfCsvPageSchema,
+} from "./zero-pdf-csv-contract.js";
 export class ZeroPdfCsvError extends Error {
   constructor(
     public readonly code:
@@ -27,12 +36,18 @@ export class ZeroPdfCsvError extends Error {
   }
 }
 const hash = z.string().regex(/^[a-f0-9]{64}$/u);
-const artifactSchema = z.object({
-  artifactId: z.string().min(1).max(128).regex(/^[A-Za-z0-9_-]+$/u),
-  revision: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
-  sha256: hash,
-  content: z.string(),
-}).strict();
+const artifactSchema = z
+  .object({
+    artifactId: z
+      .string()
+      .min(1)
+      .max(128)
+      .regex(/^[A-Za-z0-9_-]+$/u),
+    revision: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+    sha256: hash,
+    content: z.string(),
+  })
+  .strict();
 export type ZeroPdfCsvArtifact = z.infer<typeof artifactSchema>;
 const headerSchema = z.object({
   kind: z.literal("zero.pdf.receipt.v1"),
@@ -59,10 +74,8 @@ export function projectZeroPdfCsv(
   expectedJobId: string,
   tableIndex: string,
 ) {
-  if (
-    !/^(?:0|[1-9][0-9]?)$/u.test(tableIndex) ||
-    Number(tableIndex) >= ZERO_PDF_CSV_LIMITS.tables
-  ) throw new ZeroPdfCsvError("pdf_csv_invalid_index");
+  if (!/^(?:0|[1-9][0-9]?)$/u.test(tableIndex) || Number(tableIndex) >= ZERO_PDF_CSV_LIMITS.tables)
+    throw new ZeroPdfCsvError("pdf_csv_invalid_index");
   if (typeof artifact?.content !== "string") throw new ZeroPdfCsvError("pdf_csv_invalid_receipt");
   if (Buffer.byteLength(artifact.content) > ZERO_PDF_JOB_LIMITS.artifactBytes)
     throw new ZeroPdfCsvError("pdf_csv_limit_exceeded");
@@ -79,8 +92,10 @@ export function projectZeroPdfCsv(
     if (
       receipt.inputSha256 !== receipt.source.sha256 ||
       receipt.extraction.sourceSha256 !== receipt.source.sha256
-    ) throw new ZeroPdfCsvError("pdf_csv_invalid_receipt");
-    const index = Number(tableIndex), table = receipt.extraction.tables[index];
+    )
+      throw new ZeroPdfCsvError("pdf_csv_invalid_receipt");
+    const index = Number(tableIndex),
+      table = receipt.extraction.tables[index];
     if (!table) throw new ZeroPdfCsvError("pdf_csv_table_missing");
     const { num_rows: rowCount, num_cols: columnCount, table_cells: cells } = table.data;
     const rows = Array.from({ length: rowCount }, () => Array<string>(columnCount).fill(""));
@@ -93,10 +108,11 @@ export function projectZeroPdfCsv(
         throw new ZeroPdfCsvError("pdf_csv_limit_exceeded");
       rows[cell.start_row_offset_idx]![cell.start_col_offset_idx] = cell.text;
     }
-    const csv = rows.map((row) => row.length === 1 && row[0] === "" ? '""' : csvFormatRows([row])).join("\n");
+    const csv = rows
+      .map((row) => (row.length === 1 && row[0] === "" ? '""' : csvFormatRows([row])))
+      .join("\n");
     const bytes = Buffer.byteLength(csv);
-    if (bytes > ZERO_PDF_CSV_LIMITS.csvBytes)
-      throw new ZeroPdfCsvError("pdf_csv_limit_exceeded");
+    if (bytes > ZERO_PDF_CSV_LIMITS.csvBytes) throw new ZeroPdfCsvError("pdf_csv_limit_exceeded");
     return {
       csv,
       metadata: zeroPdfCsvMetadataSchema.parse({
@@ -107,7 +123,13 @@ export function projectZeroPdfCsv(
           revision: artifact.revision,
           sha256: artifact.sha256,
         },
-        csv: { sha256: zeroPdfHash(csv), bytes, encoding: "utf-8" as const, delimiter: "," as const, lineTerminator: "\n" as const },
+        csv: {
+          sha256: zeroPdfHash(csv),
+          bytes,
+          encoding: "utf-8" as const,
+          delimiter: "," as const,
+          lineTerminator: "\n" as const,
+        },
         table: {
           index,
           count: receipt.extraction.tables.length,
@@ -131,7 +153,13 @@ export function projectZeroPdfCsvPage(
   offset: number,
   limit: number,
 ) {
-  if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > ZERO_PDF_CSV_LIMITS.pageBytes)
+  if (
+    !Number.isSafeInteger(offset) ||
+    offset < 0 ||
+    !Number.isSafeInteger(limit) ||
+    limit < 1 ||
+    limit > ZERO_PDF_CSV_LIMITS.pageBytes
+  )
     throw new ZeroPdfCsvError("pdf_csv_invalid_page");
   const projection = projectZeroPdfCsv(artifact, expectedJobId, tableIndex);
   const bytes = Buffer.from(projection.csv);
