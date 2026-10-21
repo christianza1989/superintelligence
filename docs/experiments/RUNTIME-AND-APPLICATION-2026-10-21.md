@@ -66,6 +66,8 @@ The proof also checks private artifact denial, current owner and cross-scope bou
 
 This qualifies the fixed recipe's backend development path. It does not establish Library/MCP application controls, general AI-authored coding, downloadable browser-file export, native plugin acceptance, the frozen 30-task cohort or G2. Earlier standalone screenshot failures remain retained; the 21-case API epoch required no assertion or source correction during execution.
 
+Subsequent UI integration review found that the default UTF-8 decoder could remove a BOM while the request retained the original file hash. The fixed profile now rejects such lossy decoding before request storage or queue dispatch; it does not silently normalize the file. All **29** focused service tests pass, including matching BOM-bearing source metadata and proof of zero enqueue/storage. BOM input remains unsupported for this profile; the qualified non-BOM recipe and browser harness are unchanged.
+
 ## Integrated offline coverage
 
 At the earlier integration checkpoint, `test:components` passed **160/160 across 13 files**. The command now includes 16 files, adding the new service, policy and API checks; its full combined run passes in the latest CI below. The MCP execution suite passes **73/73**, including correct external-entity annotations for URL research versus local PDF work. These suites overlap earlier reports and must not be added into a unique-test total. No new native host installation or 0.7 host lifecycle acceptance is claimed.
