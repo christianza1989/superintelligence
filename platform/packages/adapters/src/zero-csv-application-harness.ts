@@ -86,7 +86,7 @@ try {
     await frame.locator("#csv-input").fill(csv);
     await frame.getByRole("button", { name: "Import CSV", exact: true }).click();
     assert(name + "_three_rows", await frame.locator("#expense-rows tr").count() === 3);
-    assert(name + "_visible_totals", await frame.locator("#totals").innerText().then((text) => text.includes("15.50") && text.includes("7.25")));
+    assert(name + "_visible_totals", await frame.locator("#totals > div").evaluateAll((rows) => JSON.stringify(rows.map((row) => ({ category: row.querySelector("dt").textContent, amount: row.querySelector("dd").textContent })))) === JSON.stringify([{ category: "Travel", amount: "15.50" }, { category: "Food", amount: "7.25" }]));
     await frame.getByLabel("Category", { exact: true }).selectOption("Travel");
     assert(name + "_filtered_rows", await frame.locator("#expense-rows tr").count() === 2);
     await frame.getByRole("button", { name: "Export CSV", exact: true }).click();

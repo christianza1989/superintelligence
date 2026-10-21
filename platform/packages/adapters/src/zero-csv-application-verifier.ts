@@ -12,6 +12,7 @@ import { createZeroCsvApplicationWorkspace } from "./zero-csv-application.js";
 import { prepareZeroCsvComponent, zeroCsvHash } from "./zero-csv-profile.js";
 import { zeroBrowserDockerRunArguments } from "./zero-browser-docker.js";
 import { captureZeroDockerProcess } from "./zero-docker-process.js";
+import { withAbort } from "./web-ssrf.js";
 
 export interface ZeroCsvApplicationVerifierConfig {
   dockerExecutable: string;
@@ -100,10 +101,15 @@ export type ZeroCsvApplicationVerification =
  * Source generation alone never manufactures a successful verification receipt.
  */
 async function verifyCapturedCsvApplication(
-  config: ZeroCsvApplicationVerifierConfig,
+  supplied: ZeroCsvApplicationVerifierConfig,
   input: { csv: string; workspace: ZeroCsvApplicationWorkspace },
   signal: AbortSignal,
 ): Promise<ZeroCsvApplicationVerification> {
+  // Snapshot all operator values before any await; callbacks retain their live grant checks.
+  const config = Object.freeze({
+    ...supplied,
+    attribution: Object.freeze({ ...supplied.attribution }),
+  });
   const began = Date.now();
   if (
     process.platform !== "linux" ||
@@ -182,7 +188,8 @@ async function verifyCapturedCsvApplication(
       image.stdout.trim() !== config.imageId + " " + config.buildInputLockSha256
     )
       throw new Error("application_image_rejected");
-    await config.beforeDispatch?.();
+    if (config.beforeDispatch)
+      await withAbort(Promise.resolve().then(config.beforeDispatch), active);
     active.throwIfAborted();
     const nonce = randomUUID();
     const args = zeroBrowserDockerRunArguments(config.imageId, name, operation);
