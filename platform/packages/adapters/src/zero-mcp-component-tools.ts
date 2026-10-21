@@ -76,7 +76,7 @@ export function registerZeroComponentMcpTools(
             : "Read one operator-allowlisted static HTML file in a sealed, network-isolated browser worker. Returns fixed title, headings, original lexical links, visible text and PNG evidence of a declared inert rendering. Raw input and rendered hashes are distinct; screenshots do not assert original-page fidelity. JavaScript, active elements and external requests are disabled; no navigation, selectors or host-project edits.",
       inputSchema: family === "research" ? zeroUrlResearchSubmitSchema : zeroExtractionInputSchema,
       outputSchema: zeroExtractionSubmittedSchema,
-      annotations: { ...annotations, readOnlyHint: false },
+      annotations: { ...annotations, readOnlyHint: false, openWorldHint: family === "research" },
     },
     (input: ZeroExtractionInput) => result(() => client.extract(input)),
   );

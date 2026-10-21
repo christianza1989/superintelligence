@@ -84,6 +84,8 @@ describe("fixed extraction MCP boundary", () => {
     fixture(async (client) => {
       const inventory = await client.listTools();
       expect(inventory.tools).toHaveLength(16);
+      expect(inventory.tools.find((tool) => tool.name === "zero_research_extract")?.annotations?.openWorldHint).toBe(true);
+      expect(inventory.tools.find((tool) => tool.name === "zero_pdf_extract")?.annotations?.openWorldHint).toBe(false);
       expect(inventory.tools.map((tool) => tool.name)).toEqual(
         expect.arrayContaining([...ZERO_MCP_COMPONENT_OPERATIONS]),
       );
