@@ -179,6 +179,8 @@ async function main() {
     inMemoryJobs ??
     new GraphileJobWorkerHost(pool, {
       concurrency: parsePositiveInteger(process.env.GRAPHILE_WORKER_CONCURRENCY, 4),
+      // The application owns shutdown and drains all shared services.
+      noHandleSignals: true,
     });
   // One provider instance so emulator launches and polls share the same Map.
   const cloudAgent = createCloudAgentConnection();
