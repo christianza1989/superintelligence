@@ -77,7 +77,7 @@ try {
     await browserContext.route("**/*", (route) => { networkAttempts++; return route.abort(); });
     const page = await browserContext.newPage();
     page.on("pageerror", () => { pageErrors++; });
-    await page.setContent('<iframe sandbox="allow-scripts" style="border:0;width:100%;height:100vh" title="Expense application"></iframe>');
+    await page.setContent('<style>html,body{margin:0;height:100%}iframe{display:block;border:0;width:100%;height:100%}</style><iframe sandbox="allow-scripts" title="Expense application"></iframe>');
     await page.locator("iframe").evaluate((frame, html) => { frame.srcdoc = html; }, source.get("index.html"));
     const frame = page.frameLocator("iframe");
     await frame.locator("#expense-rows tr").first().waitFor();
