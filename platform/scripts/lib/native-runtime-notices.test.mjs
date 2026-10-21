@@ -6,6 +6,7 @@ import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { bundledRuntimePackages, copyBundledRuntimeNotices } from "./native-runtime-notices.mjs";
+import { nativeRuntimeLicenseEvidence } from "./native-runtime-stage-policy.mjs";
 
 const hash = bytes => createHash("sha256").update(bytes).digest("hex");
 async function fixture(run) {
@@ -74,5 +75,64 @@ test("reviewed exact-source license assets retain their original pinned bytes", 
     }
   }
   assert.equal(manifest.distributionReady, false);
-  assert.equal(manifest.unresolved.length, 8);
+  assert.equal(manifest.unresolved.length, 7);
+});
+
+test("protobuf supplemental evidence preserves both license texts and rejects a missing or truncated BSD notice", async () => {
+  const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+  const evidenceRoot = path.join(workspace, "runtime/native-license-evidence");
+  const manifest = JSON.parse(await readFile(path.join(evidenceRoot, "manifest.json"), "utf8"));
+  const entry = manifest.entries.find(item => item.package === "@bufbuild/protobuf" && item.version === "2.14.1");
+  assert.ok(entry);
+  assert.deepEqual(entry.files.map(file => file.outputName).sort(), ["LICENSE", "NOTICE-GOOGLE-BSD-3-CLAUSE.txt"]);
+  const bsd = entry.files.find(file => file.outputName === "NOTICE-GOOGLE-BSD-3-CLAUSE.txt");
+  assert.equal(bsd.source.kind, "exact-installed-package-source-notice");
+  assert.equal(bsd.source.npmGitHead, "09c98f182a86cd6d4bb89a418f261812d8eb2108");
+  assert.equal(bsd.source.sourceFileSha256, "5a78ffe702716989b7c1d5f5deb73f7283655af5a7ecb3d885ae0b19f59eeaeb");
+  const input = "node_modules/.pnpm/@bufbuild+protobuf@2.14.1/node_modules/@bufbuild/protobuf/" + bsd.source.sourcePath;
+  const packages = await bundledRuntimePackages(workspace, [input]);
+  assert.equal(packages.get("@bufbuild/protobuf@2.14.1").packageJsonSha256, entry.packageJsonSha256);
+  const source = await readFile(path.join(workspace, input));
+  const notice = await readFile(path.join(evidenceRoot, bsd.file));
+  assert.equal(hash(source), bsd.source.sourceFileSha256);
+  assert.equal(bsd.source.sourceByteRange.offset, 0);
+  assert.equal(bsd.source.sourceByteRange.bytes, source.indexOf(Buffer.from("/**\n")));
+  assert.deepEqual(notice, source.subarray(0, bsd.source.sourceByteRange.bytes));
+  assert.equal(hash(notice), "0e952cb110ff6944789fbe47c25b38819a3866c04c7c5cbea8d0c0d8f3a92f0e");
+  assert.deepEqual(manifest.unresolved.map(item => item.package + "@" + item.version), [
+    "@better-auth/utils@0.4.2", "@better-auth/utils@0.5.0",
+    "chat-adapter-sendblue@0.2.0",
+    "@img/sharp-libvips-linux-x64@1.3.3", "@img/sharp-libvips-linuxmusl-x64@1.3.3",
+    "@koromix/koffi-linux-x64@3.2.1", "@prisma/dev@0.24.17",
+  ]);
+  const scratch = await mkdtemp(path.join(os.tmpdir(), "zero-protobuf-notices-"));
+  try {
+    const output = path.join(scratch, "complete");
+    const [preserved] = await copyBundledRuntimeNotices({ packages, output, evidenceRoot, evidence: [entry] });
+    assert.equal(preserved.license, "(Apache-2.0 AND BSD-3-Clause)");
+    assert.equal(preserved.licenseApproval, "unknown");
+    assert.equal(preserved.files.length, 2);
+    const otherRuntimeGaps = manifest.unresolved.filter(item => item.package !== "chat-adapter-sendblue");
+    const runtimePackages = new Map(packages);
+    for (const gap of otherRuntimeGaps) runtimePackages.set(gap.package + "@" + gap.version, { packageJsonSha256: gap.packageJsonSha256 });
+    runtimePackages.set("react-remove-scroll-bar@2.3.8", {});
+    const gate = nativeRuntimeLicenseEvidence({
+      notices: [preserved, { package: "react-remove-scroll-bar", version: "2.3.8", license: "MIT", files: [] }],
+      packages: runtimePackages, knownUnresolved: manifest.unresolved,
+    });
+    assert.equal(gate.releaseLicenseEvidenceGate, "blocked");
+    assert.equal(gate.licenseApproval, "unknown");
+    assert.equal(gate.unresolvedLicenseEvidence.length, 7);
+    assert.ok(gate.unresolvedLicenseEvidence.some(item => item.package === "react-remove-scroll-bar"));
+    assert.ok(gate.unresolvedLicenseEvidence.every(item => item.package !== "@bufbuild/protobuf"));
+    for (const file of entry.files) {
+      assert.deepEqual(await readFile(path.join(output, preserved.files.find(item => item.path.endsWith("/" + file.outputName)).path)), await readFile(path.join(evidenceRoot, file.file)));
+    }
+    const incomplete = path.join(scratch, "incomplete"); await mkdir(incomplete);
+    const apache = entry.files.find(file => file.outputName === "LICENSE");
+    await writeFile(path.join(incomplete, apache.file), await readFile(path.join(evidenceRoot, apache.file)));
+    await assert.rejects(copyBundledRuntimeNotices({ packages, output: path.join(scratch, "missing"), evidenceRoot: incomplete, evidence: [entry] }), { code: "ENOENT" });
+    await writeFile(path.join(incomplete, bsd.file), notice.subarray(0, 64));
+    await assert.rejects(copyBundledRuntimeNotices({ packages, output: path.join(scratch, "truncated"), evidenceRoot: incomplete, evidence: [entry] }), /content mismatch/);
+  } finally { await rm(scratch, { recursive: true, force: true }); }
 });

@@ -131,6 +131,29 @@
             "url": "https://raw.githubusercontent.com/bufbuild/protobuf-es/09c98f182a86cd6d4bb89a418f261812d8eb2108/LICENSE",
             "sourcePath": "LICENSE"
           }
+        },
+        {
+          "file": "0e952cb110ff6944789fbe47c25b38819a3866c04c7c5cbea8d0c0d8f3a92f0e.txt",
+          "outputName": "NOTICE-GOOGLE-BSD-3-CLAUSE.txt",
+          "evidenceKind": "official-exact-commit-license",
+          "sha256": "0e952cb110ff6944789fbe47c25b38819a3866c04c7c5cbea8d0c0d8f3a92f0e",
+          "source": {
+            "kind": "exact-installed-package-source-notice",
+            "registryUrl": "https://registry.npmjs.org/%40bufbuild%2Fprotobuf/2.14.1",
+            "registryMetadataSha256": "5fe194f56ae88f18bbd3d31f563d5285dab3ac9726d71e85dd088e206d51a9af",
+            "npmGitHead": "09c98f182a86cd6d4bb89a418f261812d8eb2108",
+            "repository": {
+              "url": "git+https://github.com/bufbuild/protobuf-es.git",
+              "type": "git",
+              "directory": "packages/protobuf"
+            },
+            "sourcePath": "dist/esm/wire/varint.js",
+            "sourceFileSha256": "5a78ffe702716989b7c1d5f5deb73f7283655af5a7ecb3d885ae0b19f59eeaeb",
+            "sourceByteRange": {
+              "offset": 0,
+              "bytes": 1812
+            }
+          }
         }
       ]
     },
@@ -695,15 +718,6 @@
         },
         "sourceFiles": []
       }
-    },
-    {
-      "package": "@bufbuild/protobuf",
-      "version": "2.14.1",
-      "packageJsonSha256": "bbe6ac30115d7b793eddd45e177908b151d0298258b80e894ad47e3bc17e15cf",
-      "declaredLicense": "(Apache-2.0 AND BSD-3-Clause)",
-      "reason": "Declared Apache-2.0 AND BSD-3-Clause; retrieved exact source root LICENSE covers Apache only. Required BSD notice coverage remains unresolved.",
-      "registryUrl": "https://registry.npmjs.org/%40bufbuild%2Fprotobuf/2.14.1",
-      "registryMetadataSha256": "5fe194f56ae88f18bbd3d31f563d5285dab3ac9726d71e85dd088e206d51a9af"
     },
     {
       "package": "chat-adapter-sendblue",
