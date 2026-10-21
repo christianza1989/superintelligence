@@ -1,6 +1,8 @@
-import { chmod, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { constants } from "node:fs";
+import { appendFile, chmod, mkdir, mkdtemp, open, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { captureZeroDockerProcess } from "./zero-docker-process.js";
 import {
   admitsUrlDocumentNavigation,
@@ -15,6 +17,14 @@ import {
 import type { ZeroUrlDocumentRuntimeConfig } from "./zero-url-document-runtime.js";
 import { executeZeroUrlDocument } from "./zero-url-document-runtime.js";
 
+vi.mock("node:fs/promises", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:fs/promises")>();
+  return { ...actual, open: vi.fn(actual.open) };
+});
+beforeEach(async () => {
+  const actual = await vi.importActual<typeof import("node:fs/promises")>("node:fs/promises");
+  vi.mocked(open).mockImplementation(actual.open);
+});
 vi.mock("./zero-docker-process.js", () => ({ captureZeroDockerProcess: vi.fn() }));
 const capture = vi.mocked(captureZeroDockerProcess);
 const directories: string[] = [];
@@ -273,6 +283,48 @@ describe("release-pinned document runtime transport (mocked, no Docker qualifica
     expect(
       (await executeZeroUrlDocument(config, input(), new AbortController().signal)).state,
     ).toBe("failed");
+    expect(capture).not.toHaveBeenCalled();
+  });
+  it("opens runner FIFOs nonblocking and rejects them before dispatch", async () => {
+    const config = await fixture();
+    const runnerPath = path.join(config.runnerDirectory, "runner.js");
+    await rm(runnerPath);
+    execFileSync("/usr/bin/mkfifo", ["-m", "600", runnerPath]);
+    // Keep a peer open so this regression cannot strand a libuv thread on old code.
+    const peer = await open(runnerPath, constants.O_RDWR | constants.O_NONBLOCK);
+    await chmod(runnerPath, 0o400);
+    try {
+      vi.mocked(open).mockClear();
+      const result = await executeZeroUrlDocument(config, input(), new AbortController().signal);
+      expect(result).toMatchObject({ state: "failed", cleanup: "not_started" });
+      expect(Number(vi.mocked(open).mock.calls[0][1]) & constants.O_NONBLOCK).not.toBe(0);
+      expect(capture).not.toHaveBeenCalled();
+    } finally {
+      await peer.close();
+    }
+  });
+  it("bounds reads to the initial size plus one when runner source grows after stat", async () => {
+    const config = await fixture();
+    const runnerPath = path.join(config.runnerDirectory, "runner.js");
+    const file = await open(runnerPath, constants.O_RDONLY | constants.O_NOFOLLOW);
+    const originalStat = file.stat.bind(file);
+    let originalSize = 0;
+    vi.spyOn(file, "stat").mockImplementationOnce(async () => {
+      const stat = await originalStat();
+      originalSize = stat.size;
+      await chmod(runnerPath, 0o600);
+      await appendFile(runnerPath, Buffer.alloc(2_097_153, 65));
+      await chmod(runnerPath, 0o400);
+      return stat;
+    });
+    const reads = vi.spyOn(file, "read");
+    const unboundedRead = vi.spyOn(file, "readFile");
+    vi.mocked(open).mockResolvedValueOnce(file);
+    const result = await executeZeroUrlDocument(config, input(), new AbortController().signal);
+    expect(result).toMatchObject({ state: "failed", cleanup: "not_started" });
+    expect(unboundedRead).not.toHaveBeenCalled();
+    expect(reads).toHaveBeenCalled();
+    expect(reads.mock.calls[0][0]).toHaveProperty("byteLength", originalSize + 1);
     expect(capture).not.toHaveBeenCalled();
   });
   it("snapshots config before a current-authority callback changes the caller object", async () => {

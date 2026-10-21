@@ -90,7 +90,7 @@ async function loadRunner(directory: string, expected: string) {
   await ownedDirectory(directory);
   const file = await open(
     path.join(directory, "runner.js"),
-    constants.O_RDONLY | constants.O_NOFOLLOW,
+    constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK,
   );
   try {
     const stat = await file.stat();
@@ -103,10 +103,23 @@ async function loadRunner(directory: string, expected: string) {
       stat.size > ZERO_URL_DOCUMENT_LIMITS.runnerBytes
     )
       throw new Error("runner");
-    const bytes = await file.readFile();
+    // Snapshot-sized allocation and reads stay bounded even if the owner grows the file.
+    // The extra byte proves EOF at the original size; never follow a moving EOF.
+    const buffer = Buffer.alloc(stat.size + 1);
+    let length = 0;
+    while (length < buffer.length) {
+      const { bytesRead } = await file.read(buffer, length, buffer.length - length, length);
+      if (bytesRead === 0) break;
+      length += bytesRead;
+    }
+    const bytes = buffer.subarray(0, length);
     const after = await file.stat();
     if (
       bytes.length !== stat.size ||
+      !after.isFile() ||
+      after.uid !== stat.uid ||
+      after.nlink !== stat.nlink ||
+      after.mode !== stat.mode ||
       after.dev !== stat.dev ||
       after.ino !== stat.ino ||
       after.size !== stat.size ||
