@@ -1,3 +1,6 @@
+import { loadZeroCsvApplicationAttribution } from "./zero-csv-application-attribution.js";
+import type { ZeroCsvApplicationBinding } from "./zero-csv-application-service-contract.js";
+import { zeroCsvApplicationBindingSchema } from "./zero-csv-application-service-contract.js";
 import path from "node:path";
 import type { Actor } from "@rakazo/contracts";
 import { IsolationError } from "@rakazo/db";
@@ -114,6 +117,15 @@ const browserSchema = z
 const grantSchema = principalSchema
   .extend({
     verification: verificationSchema.optional(),
+    csvApplication: zeroCsvApplicationBindingSchema
+      .extend({
+        runtime: zeroCsvApplicationBindingSchema.shape.runtime
+          .omit({ attribution: true })
+          .extend({ dockerExecutable: operatorPath, dockerConfigDirectory: operatorPath })
+          .strict(),
+      })
+      .strict()
+      .optional(),
     jev: zeroJevProfileSchema.optional(),
     pdf: pdfSchema.optional(),
     browser: browserSchema.optional(),
@@ -241,6 +253,19 @@ export function createZeroProjectPolicy(file: string) {
             runtime: { bundleDirectory: grant.pdf.bundleDirectory },
           }
         : undefined;
+    },
+    async resolveApplication(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroCsvApplicationBinding | undefined> {
+      const grant = await checkedGrant(principal);
+      if (!grant.csvApplication) return undefined;
+      const attribution = await loadZeroCsvApplicationAttribution();
+      const current = await checkedGrant(principal);
+      if (!current.csvApplication) return undefined;
+      return {
+        ...current.csvApplication,
+        runtime: { ...current.csvApplication.runtime, attribution },
+      };
     },
     async resolveUrlResearch(
       principal: ZeroCsvPrincipal,
