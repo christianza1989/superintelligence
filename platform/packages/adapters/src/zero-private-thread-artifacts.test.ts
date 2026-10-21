@@ -88,7 +88,6 @@ describe("private component artifacts cannot be attached or materialized by gene
             artifactId: "private",
             name: "ordinary.png",
             mimeType: "image/png",
-            size: 7,
           },
         ],
         context,

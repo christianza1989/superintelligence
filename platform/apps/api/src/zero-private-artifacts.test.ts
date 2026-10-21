@@ -1,3 +1,6 @@
+import { RPCHandler } from "@orpc/server/fetch";
+import type { RouterDeps } from "./router.js";
+import { createRouter } from "./router.js";
 import type { Actor } from "@rakazo/contracts";
 import { IsolationError } from "@rakazo/db";
 import { describe, expect, it, vi } from "vitest";
@@ -149,5 +152,52 @@ describe("generic artifact routes cannot bypass job grant boundaries", () => {
     const result = await getSpaceArtifactById(f.deps as never, actor, { artifactId: "private" });
     expect(Buffer.from(result.contentBase64, "base64").toString()).toBe("private");
     expect(f.artifacts.get).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("private artifact RPC denial", () => {
+  function handler() {
+    const f = fixture();
+    const deps = {
+      ...f.deps,
+      env: {},
+      dataDir: "/tmp/artifact-boundary-test",
+    } as unknown as RouterDeps;
+    return { ...f, rpc: new RPCHandler(createRouter(deps)) };
+  }
+  it.each([
+    ["getById", { artifactId: "private" }],
+    ["listVersions", { familyId: "private" }],
+    ["remove", { artifactId: "private" }],
+  ])("returns a redacted forbidden response for %s", async (route, input) => {
+    const f = handler();
+    const { response } = await f.rpc.handle(
+      new Request("http://localhost/rpc/artifacts/" + route, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ json: input }),
+      }),
+      { prefix: "/rpc", context: { actor } },
+    );
+    expect(response.status).toBe(403);
+    const text = await response.text();
+    expect(text).toContain("FORBIDDEN");
+    expect(text).not.toContain("private-principal");
+    expect(text).not.toContain("secret");
+    expect(f.artifacts.get).not.toHaveBeenCalled();
+    expect(f.artifacts.remove).not.toHaveBeenCalled();
+  });
+  it("keeps unrelated storage failures as internal errors", async () => {
+    const f = handler();
+    f.artifact.findFirst.mockRejectedValue(new Error("storage unavailable"));
+    const { response } = await f.rpc.handle(
+      new Request("http://localhost/rpc/artifacts/getById", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ json: { artifactId: "private" } }),
+      }),
+      { prefix: "/rpc", context: { actor } },
+    );
+    expect(response.status).toBe(500);
   });
 });

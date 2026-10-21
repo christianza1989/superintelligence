@@ -786,6 +786,17 @@ export function createRouter(deps: RouterDeps) {
     return next({ context: { ...context, actor: context.actor } });
   });
 
+  // Generic artifacts have no access to private job storage. Map only the
+  // existing isolation denial; unrelated failures retain their original handling.
+  const artifactAuthed = authed.use(async ({ next }) => {
+    try {
+      return await next();
+    } catch (error) {
+      if (error instanceof IsolationError) throw new ORPCError("FORBIDDEN");
+      throw error;
+    }
+  });
+
   const boardEnabled = os
     .use(async ({ next }) => {
       if (!deps.env?.ticketBoardEnabled) throw new ORPCError("NOT_FOUND");
@@ -5818,7 +5829,7 @@ export function createRouter(deps: RouterDeps) {
       ),
     },
     artifacts: {
-      list: authed.artifacts.list.handler(async ({ context, input }) => {
+      list: artifactAuthed.artifacts.list.handler(async ({ context, input }) => {
         await repos.getBot(context.actor, input.botId);
         const rows = await deps.prisma.artifact.findMany({
           where: {
@@ -5828,20 +5839,22 @@ export function createRouter(deps: RouterDeps) {
             userId: context.actor.userId,
           },
         });
-        return rows.filter(row=>!isZeroPrivateArtifact(row)).map((row) => ({
-          id: row.id,
-          botId: row.botId,
-          groupId: row.groupId,
-          runId: row.runId,
-          name: row.name,
-          description: row.description,
-          mimeType: row.mimeType,
-          size: row.size,
-          version: row.version,
-          createdAt: row.createdAt.toISOString(),
-        }));
+        return rows
+          .filter((row) => !isZeroPrivateArtifact(row))
+          .map((row) => ({
+            id: row.id,
+            botId: row.botId,
+            groupId: row.groupId,
+            runId: row.runId,
+            name: row.name,
+            description: row.description,
+            mimeType: row.mimeType,
+            size: row.size,
+            version: row.version,
+            createdAt: row.createdAt.toISOString(),
+          }));
       }),
-      listSpace: authed.artifacts.listSpace.handler(async ({ context, input }) => {
+      listSpace: artifactAuthed.artifacts.listSpace.handler(async ({ context, input }) => {
         if (input.botId) await repos.getBot(context.actor, input.botId);
         try {
           return await listSpaceArtifacts(deps, context.actor, input);
@@ -5852,10 +5865,10 @@ export function createRouter(deps: RouterDeps) {
           throw error;
         }
       }),
-      listVersions: authed.artifacts.listVersions.handler(async ({ context, input }) => {
+      listVersions: artifactAuthed.artifacts.listVersions.handler(async ({ context, input }) => {
         return listArtifactVersions(deps, context.actor, input);
       }),
-      create: authed.artifacts.create.handler(async ({ context, input }) => {
+      create: artifactAuthed.artifacts.create.handler(async ({ context, input }) => {
         const botId = input.botId
           ? (await repos.getBot(context.actor, input.botId)).id
           : (await groupRepos.getGroupTarget(context.actor, input.groupId!)).members[0]?.bot.id;
@@ -5869,7 +5882,7 @@ export function createRouter(deps: RouterDeps) {
           throw error;
         }
       }),
-      get: authed.artifacts.get.handler(async ({ context, input }) => {
+      get: artifactAuthed.artifacts.get.handler(async ({ context, input }) => {
         if (input.groupId) {
           const group = await groupRepos.getGroupTarget(context.actor, input.groupId);
           const contextBotId = group.members[0]?.bot.id;
@@ -5881,20 +5894,15 @@ export function createRouter(deps: RouterDeps) {
           });
         }
         await repos.getBot(context.actor, input.botId!);
-        try {
-          return await getOwnedArtifact(deps, context.actor, {
-            botId: input.botId!,
-            artifactId: input.artifactId,
-          });
-        } catch (error) {
-          if (error instanceof IsolationError) throw error;
-          throw error;
-        }
+        return getOwnedArtifact(deps, context.actor, {
+          botId: input.botId!,
+          artifactId: input.artifactId,
+        });
       }),
-      getById: authed.artifacts.getById.handler(async ({ context, input }) => {
+      getById: artifactAuthed.artifacts.getById.handler(async ({ context, input }) => {
         return getSpaceArtifactById(deps, context.actor, input);
       }),
-      remove: authed.artifacts.remove.handler(async ({ context, input }) => {
+      remove: artifactAuthed.artifacts.remove.handler(async ({ context, input }) => {
         return deleteArtifactFamily(deps, context.actor, { familyId: input.artifactId });
       }),
     },

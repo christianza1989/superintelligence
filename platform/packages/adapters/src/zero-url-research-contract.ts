@@ -2,18 +2,18 @@ import { z } from "zod";
 import { isBlockedHostname } from "./web-ssrf.js";
 import { zeroComponentPrincipalSchema } from "./zero-component-jobs.js";
 
-export const ZERO_URL_RESEARCH_PROFILE = "zero-url-research-v1" as const;
-export const ZERO_URL_RESEARCH_MODE = "safe-http-fetch+inert-snapshot" as const;
-export const ZERO_URL_RESEARCH_LIMITS = Object.freeze({
-  sourceBytes: 16_384,
-  fetchMs: 8000,
-  runtimeMs: 30_000,
-  artifactBytes: 2_097_152,
-  tasks: 10,
-  outstandingJobsPerScope: 4,
-  redirects: 0,
-  paidModelCalls: 0,
-});
+import {
+  ZERO_URL_RESEARCH_LIMITS,
+  ZERO_URL_RESEARCH_PROFILE,
+} from "./zero-url-research-profile.js";
+export {
+  ZERO_URL_RESEARCH_LIMITS,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_PROFILE,
+  zeroUrlResearchSubmitSchema,
+} from "./zero-url-research-profile.js";
+export type { ZeroUrlResearchSubmit } from "./zero-url-research-profile.js";
+
 const id = z
   .string()
   .min(1)
@@ -71,16 +71,6 @@ export const zeroUrlResearchBindingSchema = z
   })
   .strict();
 export type ZeroUrlResearchBinding = z.infer<typeof zeroUrlResearchBindingSchema>;
-export const zeroUrlResearchSubmitSchema = z
-  .object({
-    taskId: id,
-    idempotencyKey: z.string().min(1).max(128),
-    deadline: z
-      .string()
-      .datetime({ offset: true })
-      .refine((value) => Number.isFinite(Date.parse(value))),
-  })
-  .strict();
 export const zeroUrlResearchRequestSchema = z
   .object({
     kind: z.literal("zero.research.request.v1"),
