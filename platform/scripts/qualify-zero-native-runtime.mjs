@@ -60,6 +60,11 @@ if (options.plan) {
     return record;
   }
   let commandNumber = 0;
+  const runtimeProcessOutcomes = () => children.filter(record => ["migration", "api", "worker"].includes(record.name)).map(record => ({
+    name: record.name, code: record.code ?? null, signal: record.signal ?? null,
+    exited: record.exited, stopRequested: record.stopRequested === true,
+    forced: record.forced === true, error: record.error ?? null, overflow: record.overflow,
+  }));
   async function command(executable, args, settings = {}) {
     const record = start(executable, args, { name: "command-" + ++commandNumber, signal: AbortSignal.any([settings.signal ?? active, AbortSignal.timeout(20_000)]), ...settings });
     await record.closed;
@@ -205,11 +210,13 @@ if (options.plan) {
     report.status = "PASS_HOST_PACKAGE_FEASIBILITY_ONLY";
   } catch (error) {
     report.status = "FAIL"; report.failureKind = error.code === "ERR_ASSERTION" ? "assertion" : "runtime";
+    report.runtimeProcessOutcomesAtFailure = runtimeProcessOutcomes();
     await writeFile(path.join(evidence, "private-failure.txt"), String(error.stack ?? error), { mode: 0o600 }); process.exitCode = 1;
   } finally {
     report.stageAtCompletion = report.stage;
     const stopped = await Promise.allSettled(children.map(record => cleanupNativeQualificationProcess(record)));
     if (stopped.some(result => result.status === "rejected")) { report.processCleanup = "unknown"; report.status = "FAIL"; process.exitCode = 1; } else report.processCleanup = "owned-children-stopped";
+    report.runtimeProcessOutcomesAfterCleanup = runtimeProcessOutcomes();
     try { report.auditEvidenceCopy = await retainNativeQualificationAudits(scratch, evidence); }
     catch { report.auditEvidenceCopy = "unavailable"; }
     const cleanup = AbortSignal.timeout(15_000);
