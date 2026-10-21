@@ -24,6 +24,87 @@
     "requiredUnmeasuredCategories": ["New integrated sealed application including compiled shared web, exact external/native closures, migrations, licenses and BUILD metadata", "Shared glibc Node runtime image and OS libraries unless already counted by exact layer identity", "Docker engine, CLI, Compose and required initialized engine metadata", "PostgreSQL initialized data, WAL, indexes and bounded application/artifact data", "External private operator files and installed native MCP/plugin payload", "Profile configuration and any required verifier assets not included in supplied union"],
     "separateMeasurements": ["Logical bytes and actual allocated bytes with exact image-layer deduplication evidence", "Peak download/cache/build bytes", "Retained old image and failed experiment bytes", "Peak complete process-tree memory and bounded data growth"],
     "qualifiedReplacementOptions": ["Actually qualify CSV on the shared pinned glibc Node image", "Start a new PostgreSQL 18.6 Alpine durability epoch with its own complete evidence"],
+    "combinedBrowserCsvDevelopment": {
+      "selection": "combined-browser-csv-development",
+      "status": "explicit-operator-selection-development-qualified-only",
+      "sourceRevision": "f0d0db0b0ed1d75ddedce78b7a86100af9d27b80",
+      "operatorBinding": {
+        "grant.verification.imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af",
+        "grant.browser.imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af",
+        "nodeVersion": "24.22.0",
+        "browserBuildInputLockSha256": "96cd2c725060ba0dfc36688ef57cd174375c74bcf4a76d72e6a4c9108ddc90c4",
+        "selectionRule": "Explicit private operator grant only when this exact browser image is already installed; no image auto-selection, pull or new default"
+      },
+      "requiredImageSet": [
+        {
+          "roles": [
+            "browser",
+            "csv-project-verifier"
+          ],
+          "imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af"
+        },
+        {
+          "roles": [
+            "pdf"
+          ],
+          "imageId": "sha256:d016f2d236645626f243ca8fbf31778b1206f00af3d6e0661c33f2831db83f98"
+        },
+        {
+          "roles": [
+            "postgres-18.6"
+          ],
+          "imageId": "sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336"
+        }
+      ],
+      "csvOnly": {
+        "existingImageReference": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "selectionAndCiUnchanged": true
+      },
+      "excludedRequiredImageForThisSelectionOnly": {
+        "reference": "node@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f",
+        "logicalBytes": 243473588,
+        "retainedCachedImageUnchanged": true
+      },
+      "evidence": {
+        "report": "docs/experiments/RUNTIME-AND-APPLICATION-2026-10-21.md",
+        "direct": {
+          "checksPassed": 8,
+          "driverSha256": "138f8b6ffc563b93b0b8ae7b28d3b22f4c73329c4d934635e34f29e91aa1a21a",
+          "receiptSha256": "ee3e8e6710ccface25b1e399fb924e1c7234f0b4e0d0df0400ae417d9c151a45"
+        },
+        "processEpoch2": {
+          "checksPassed": 4,
+          "runnerSha256": "048b37c19211e366b773b4b1b30c85b14fc14e3d4dcb1a0af06445cd0e70db64",
+          "checkerSha256": "c19f12e0934b611df002b5ff16e77b91445540a5997da906b365b5abce2bb6fb",
+          "receiptSha256": "322c8541c0c7d317804578e387edd826e899618c1ab4e344527d58679daa46d7"
+        },
+        "processEpoch1": "Preserved FAIL: operator files were beneath a checkout; production guard rejected them before verifier dispatch"
+      },
+      "logicalArithmetic": {
+        "measurement": "conservative-required-profile-lower-bound-not-a-new-installed-measurement",
+        "baselineBytes": 2447073318,
+        "excludedOldCsvBytes": 243473588,
+        "remainingBytes": 2203599730,
+        "overLimitBytes": 203599730,
+        "additionalUnmeasured": [
+          "Docker engine, CLI, Compose and required engine metadata",
+          "Private operator configuration and installed MCP/plugin assets",
+          "Bounded application, artifact and database growth"
+        ],
+        "physicalDiskAndRetainedExperimentsUnchanged": true
+      },
+      "installerImplemented": false,
+      "sealedBuildUnchanged": true,
+      "wholeInstallBytes": null,
+      "physicalDedupBytes": null,
+      "g0Qualified": false,
+      "limitations": [
+        "This selection requires the qualified exact installed image and private operator binding; it is not an installer",
+        "API and worker on browser-image Node remain separately unqualified; host Node remains in this lower bound",
+        "Existing runplan and Compose plan remain plan-only; CSV-only requirements and CI are not replaced",
+        "Development conformance is not native-host adoption, independent holdout benefit, distribution or whole G0 approval"
+      ]
+    },
     "wholeInstalledProductionBytes": null,
     "physicalDedupBytes": null
   },

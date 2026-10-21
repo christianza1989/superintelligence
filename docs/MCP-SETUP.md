@@ -74,6 +74,39 @@ Abu failai turi būti Linux absoliučiuose keliuose už Git checkout ribų, curr
 
 Verification reikia papildomo operatoriaus grant.verification: profile=zero-csv-project-v1, explicit Linux projectRoot ir atskiro stagingRoot, absoliutaus dockerExecutable, exact vietinio imageId=sha256:64hex ir limits(maxFiles=5, maxFileBytes≤131072, maxTotalBytes≤262144). Šie privatūs nustatymai negrąžinami per resolve/status ir nepriimami iš tool argumentų. Tikrinami app.mjs bei keturi paruošto vendor/d3-dsv failai; app eksportuoja parseCsv. Windows mount root, symlink ir private failai neįleidžiami. Staging turi baigtines keturias vietas po 1 MiB vienam scope; crash orphan vietos automatiškai netrinamos.
 
+### Aiškus bendras browser / CSV development pasirinkimas
+
+Jeigu tikslus naršyklės image jau įdiegtas, operatorius gali pasirinkti `combined-browser-csv-development`: to paties privataus grant `verification.imageId` ir `browser.imageId` nustato į `sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af`, o `browser.buildInputLockSha256` — į `96cd2c725060ba0dfc36688ef57cd174375c74bcf4a76d72e6a4c9108ddc90c4`. Šio image Node yra `24.22.0`; CSV verifier išlaiko aiškų `/usr/local/bin/node` entrypoint ir visas esamas ribas. Tai tik operatoriaus pasirinkimas: image automatiškai neparenkamas ir neatsisiunčiamas. CSV-only ankstesnis image ir CI lieka leidžiami bei nepakeisti.
+
+Toliau — nepaleidžiamas privataus policy šablonas. Visus identity, laiko, kelių ir failo SHA placeholder pakeisti tik operatoriaus konfigūracijoje už visų checkout ribų; jos neskelbti. Naršyklės failo allowlist ir CSV projekto leidimai išlieka atskiri.
+
+```json
+{
+  "version": 1,
+  "grants": [{
+    "spaceId": "<SPACE_ID>", "userId": "<USER_ID>", "scopeId": "<SCOPE_ID>",
+    "policyRevision": "<POLICY_REVISION>", "expiresAt": "<FUTURE_ISO_TIMESTAMP>",
+    "verification": {
+      "profile": "zero-csv-project-v1",
+      "projectRoot": "<ABSOLUTE_CSV_PROJECT_ROOT>", "stagingRoot": "<ABSOLUTE_CSV_STAGING_ROOT>",
+      "dockerExecutable": "<ABSOLUTE_DOCKER_EXECUTABLE>",
+      "imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af",
+      "limits": { "maxFiles": 5, "maxFileBytes": 131072, "maxTotalBytes": 262144 }
+    },
+    "browser": {
+      "profile": "zero-browser-static-v1",
+      "projectRoot": "<ABSOLUTE_BROWSER_PROJECT_ROOT>", "stagingRoot": "<ABSOLUTE_BROWSER_STAGING_ROOT>",
+      "dockerExecutable": "<ABSOLUTE_DOCKER_EXECUTABLE>", "dockerConfigDirectory": "<ABSOLUTE_PRIVATE_DOCKER_CONFIG>",
+      "imageId": "sha256:b74bf06b473909daae82590fb427c1ee37888568f605340ee88c0f858385b6af",
+      "buildInputLockSha256": "96cd2c725060ba0dfc36688ef57cd174375c74bcf4a76d72e6a4c9108ddc90c4",
+      "files": [{ "fileId": "<FILE_ID>", "path": "<RELATIVE_HTML_PATH>", "sha256": "<SOURCE_SHA256>" }]
+    }
+  }]
+}
+```
+
+[Runplan](../platform/runtime/native-runtime-runplan.json) šiam uždaram pasirinkimui reikalaujamų image aibėje b74 skaičiuoja vieną kartą browser ir CSV vaidmenims. Tik šio pasirinkimo aibėje atskiras ankstesnis CSV image (243473588 B) nebereikalingas. [Development įrodymai](experiments/RUNTIME-AND-APPLICATION-2026-10-21.md): source `f0d0db0b0ed1d75ddedce78b7a86100af9d27b80`, tiesioginis 8/8 ir API/Graphile/MCP 4/4 PASS; pirmojo proceso epochos FAIL išsaugotas. Konservatyvi loginė apatinė riba po šio atėmimo vis dar **2203599730 B**, daugiau nei 2000000000 B prieš Docker/CLI/Compose, operatoriaus failų ir duomenų augimo sąnaudas. Išsaugoti cache image ir eksperimentai netrinami, fizinis diskas nematuotas iš naujo. Runplan / Compose lieka plan-only, sealed BUILD nekeičiamas; installer, native host, visas G0 ir platinimas šiuo pasirinkimu nepatvirtinami.
+
 Host pats perskaito hash-verified paruošimo artefaktą ir integruoja komponentą. zero_verify priima tik preparationJobId, idempotencyKey ir deadline; tas pats zero_job/zero_artifact/zero_cancel kelias aptarnauja abu job tipus. Būtina skaityti vidinį verification.outcome, freshness ir limitations: succeeded job reiškia užbaigtą tikrinimo procedūrą, ne visos programos ar nepriklausomo holdout PASS.
 
 Receipt vidinė freshness aprašo būseną jo sukūrimo metu. Po host pakeitimo zero_freshness su verification jobId atskirai palygina dabartinius penkis failus su sėkmingai tikrintu snapshot. Grąžina unchanged arba changed, checkedAt ir abu snapshot hash bei originalų receipt hash. Istorinio artefakto nekeičia ir kodo iš naujo nevykdo. Reikia to paties galiojančio grant/verifier binding; queued, failed ir preparation job netinka. Snapshot apimtis ≤256 KiB, keturios staging vietos; 5 s / expiry signal tikrinamas authority ir skaitymo ribose, bet kernel užstrigusio FS skaitymo kieto nutraukimo šis helper nežada. Native kliento HTTP operacija taip pat turi baigtinį timeout.
