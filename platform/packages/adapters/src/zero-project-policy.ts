@@ -10,6 +10,11 @@ import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.j
 import { ZERO_CSV_PROJECT_FILES, ZERO_CSV_PROJECT_LIMITS } from "./zero-csv-project-verifier.js";
 import { zeroJevProfileSchema } from "./zero-jev-profile.js";
 import { readZeroOperatorFile as readOperatorFile } from "./zero-operator-file.js";
+import type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
+import {
+  zeroUrlResearchBindingSchema,
+  zeroUrlResearchRuntimeSchema,
+} from "./zero-url-research-contract.js";
 import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 
 export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({ bytes: 65_536, grants: 64 });
@@ -112,6 +117,14 @@ const grantSchema = principalSchema
     jev: zeroJevProfileSchema.optional(),
     pdf: pdfSchema.optional(),
     browser: browserSchema.optional(),
+    urlResearch: zeroUrlResearchBindingSchema
+      .extend({
+        runtime: zeroUrlResearchRuntimeSchema.extend({
+          dockerExecutable: operatorPath,
+          dockerConfigDirectory: operatorPath,
+        }),
+      })
+      .optional(),
   })
   .strict();
 const policySchema = z
@@ -228,6 +241,12 @@ export function createZeroProjectPolicy(file: string) {
             runtime: { bundleDirectory: grant.pdf.bundleDirectory },
           }
         : undefined;
+    },
+    async resolveUrlResearch(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroUrlResearchBinding | undefined> {
+      const grant = await checkedGrant(principal);
+      return grant.urlResearch;
     },
     async resolveBrowser(principal: ZeroCsvPrincipal): Promise<ZeroBrowserBinding | undefined> {
       const grant = await checkedGrant(principal);

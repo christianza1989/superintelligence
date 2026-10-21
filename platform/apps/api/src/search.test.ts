@@ -35,6 +35,14 @@ function fixture(count: number) {
 }
 
 describe("artifact search batching", () => {
+  it("hides private job artifacts from bot and group search metadata", async () => {
+    const {prisma,artifacts,groupArtifacts}=fixture(2);
+    artifacts[0]!.name="zero-jev-request.json";
+    Object.assign(groupArtifacts[0]!,{clientNonce:"zero.csv.request:private"});
+    prisma.$queryRaw.mockResolvedValueOnce(artifacts.map(row=>({artifactId:row.id,id:"message-"+row.id,seq:1}))).mockResolvedValueOnce(groupArtifacts.map(row=>({artifactId:row.id,id:"message-"+row.id,seq:2})));
+    const hits=await querySpaceSearch(prisma as unknown as PrismaClient,actor,"report");
+    expect(hits.map(hit=>hit.artifactId)).toEqual(["artifact-1","group-artifact-1"]);
+  });
   it.each([1, 25])("uses one lookup per destination for %i matching artifacts", async (count) => {
     const { prisma } = fixture(count);
     await querySpaceSearch(prisma as unknown as PrismaClient, actor, "report");

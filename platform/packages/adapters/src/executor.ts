@@ -74,6 +74,7 @@ import {
   isCallClientNonce,
   isMessagingChannelRun,
   isOneShotRoutineCrons,
+  isZeroPrivateArtifact,
   isTerminal,
   messagingChannelId,
   messagingChannelPrivacyBlock,
@@ -6090,9 +6091,10 @@ export function createRunExecutor(deps: ExecutorDeps) {
                 if (!deps.artifacts) return null;
                 const row = await deps.prisma.artifact.findFirst({
                   where: { id, spaceId: run.spaceId, userId: run.userId },
-                  select: { mimeType: true, storageKey: true },
+                  select: { mimeType: true, storageKey: true, name: true, clientNonce: true },
                 });
-                if (!row || !isAttachmentImageMimeType(row.mimeType)) return null;
+                if (!row || isZeroPrivateArtifact(row) || !isAttachmentImageMimeType(row.mimeType))
+                  return null;
                 try {
                   return await deps.artifacts.get(row.storageKey, context);
                 } catch {
@@ -8655,7 +8657,7 @@ export async function loadCurrentTurnImages(
 
   for (const block of imageBlocks) {
     const row = byId.get(block.artifactId);
-    if (!row || !isAttachmentImageMimeType(block.mimeType)) continue;
+    if (!row || isZeroPrivateArtifact(row) || !isAttachmentImageMimeType(block.mimeType)) continue;
     try {
       const bytes = await deps.artifacts.get(row.storageKey, context);
       images.push({
@@ -8730,7 +8732,7 @@ async function loadTurnImagesWithinBudget(
       spaceId: context.spaceId,
       userId: context.userId,
     },
-    select: { id: true, storageKey: true, size: true },
+    select: { id: true, storageKey: true, size: true, name: true, clientNonce: true },
   });
   const byId = new Map(rows.map((row) => [row.id, row]));
   const newestFirst: NonNullable<AgentRunRequest["currentTurnImages"]> = [];
@@ -8743,7 +8745,7 @@ async function loadTurnImagesWithinBudget(
     const block = imageBlocks[index];
     if (!block || !isAttachmentImageMimeType(block.mimeType)) continue;
     const row = byId.get(block.artifactId);
-    if (!row) {
+    if (!row || isZeroPrivateArtifact(row)) {
       unavailable.add(index);
       continue;
     }

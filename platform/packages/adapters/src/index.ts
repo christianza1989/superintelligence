@@ -141,7 +141,10 @@ export {
   ZERO_BROWSER_STATIC_JOB_LIMITS,
   ZERO_BROWSER_STATIC_PROFILE,
 } from "./zero-browser-contract.js";
-export type { ZeroComponentAuthorize, ZeroComponentPrincipal } from "./zero-component-jobs.js";
+export type {
+  ZeroComponentAuthorize,
+  ZeroComponentPrincipal,
+} from "./zero-component-jobs.js";
 export type {
   ZeroBrowserBinding,
   ZeroBrowserResolve,
@@ -180,8 +183,31 @@ export {
 } from "./zero-jev-worker.js";
 export { ZERO_PDF_JOB_LIMITS, ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 export {
+  projectZeroPdfCsv,
+  projectZeroPdfCsvPage,
+  ZeroPdfCsvError,
+} from "./zero-pdf-csv.js";
+export type {
+  ZeroPdfCsvMetadata,
+  ZeroPdfCsvPage,
+} from "./zero-pdf-csv-contract.js";
+export {
+  ZERO_PDF_CSV_LIMITS,
+  zeroPdfCsvMetadataSchema,
+  zeroPdfCsvPageSchema,
+} from "./zero-pdf-csv-contract.js";
+export {
   createZeroProjectPolicy,
   readZeroOperatorFile as readOperatorFile,
   ZeroProjectPolicyError,
   zeroProjectPolicyFromEnv,
 } from "./zero-project-policy.js";
+
+export {
+  ZERO_URL_RESEARCH_PROFILE,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_LIMITS,
+} from "./zero-url-research-contract.js";
+export type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
+export { createZeroUrlResearchService, runZeroUrlResearch } from "./zero-url-research.js";
+export type { ZeroUrlResearchResolve, ZeroUrlResearchTestTransport } from "./zero-url-research.js";

@@ -29,6 +29,21 @@ const policies = Object.freeze({
       }),
     }),
   }),
+  research: Object.freeze({
+    requestName: "zero-research-request.json",
+    receiptName: "zero-research-receipt.json",
+    receiptKind: "zero.research.receipt.v1",
+    legacyNoncePrefix: "zero.research",
+    requestBytes: 8192,
+    artifactBytes: 2_097_152,
+    requestKinds: Object.freeze({
+      "zero.research.request.v1": Object.freeze({
+        profile: "zero-url-research-v1",
+        jobName: "zero.research.extract",
+        runtimeMs: 30_000,
+      }),
+    }),
+  }),
   browser: Object.freeze({
     requestName: "zero-browser-request.json",
     receiptName: "zero-browser-receipt.json",
@@ -132,7 +147,7 @@ export const zeroComponentContext = (
   signal: AbortSignal.timeout(
     family === "csv"
       ? ZERO_CSV_LIMITS.runtimeMs
-      : family === "pdf"
+      : family === "pdf" || family === "research"
         ? ZERO_PDF_LIMITS.runtimeMs
         : 20_000,
   ),

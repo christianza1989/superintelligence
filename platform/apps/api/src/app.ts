@@ -17,6 +17,7 @@ import type {
   ConnectorRegistry,
   DestinationEmulator,
   RemoteConnectorDependencies,
+  ZeroUrlResearchTestTransport,
 } from "@rakazo/adapters";
 import {
   applyMessagingOutboundStatus,
@@ -181,6 +182,7 @@ export async function createApp(
     contextStrategy?: AgentContextStrategy;
     zeroCsvScopes?: ZeroCsvScopePolicy;
     zeroComponentScopes?: ZeroComponentScopePolicy;
+    zeroUrlResearchTestTransport?: ZeroUrlResearchTestTransport;
     zeroJevScopes?: ZeroJevScopePolicy;
     zeroJevFetch?: typeof fetch;
   } = {},
@@ -201,6 +203,7 @@ export async function createApp(
     contextStrategy,
     zeroCsvScopes: zeroCsvScopesOverride,
     zeroComponentScopes: zeroComponentScopesOverride,
+    zeroUrlResearchTestTransport,
     zeroJevScopes: zeroJevScopesOverride,
     zeroJevFetch,
     ...envOverrides
@@ -542,6 +545,10 @@ export async function createApp(
     resolveZeroPdf: zeroComponentScopes?.resolvePdf
       ? (principal) => zeroComponentScopes.resolvePdf!(principal)
       : undefined,
+    resolveZeroUrlResearch: zeroComponentScopes?.resolveUrlResearch
+      ? (principal) => zeroComponentScopes.resolveUrlResearch!(principal)
+      : undefined,
+    zeroUrlResearchTestTransport,
     resolveZeroBrowser: zeroComponentScopes?.resolveBrowser
       ? (principal) => zeroComponentScopes.resolveBrowser!(principal)
       : undefined,
@@ -694,6 +701,7 @@ export async function createApp(
     artifacts,
     jobs,
     policy: zeroComponentScopes,
+    urlResearchTestTransport: zeroUrlResearchTestTransport,
     authenticate: sessionActor,
     trustedOrigin: (origin) => isTrustedOrigin(origin, env),
   });

@@ -6,6 +6,9 @@ import {
   AttachmentValidationError,
   decodeAttachmentBase64,
   inferAttachmentMimeType,
+  isZeroPrivateArtifact,
+  ZERO_PRIVATE_ARTIFACT_NAMES,
+  ZERO_PRIVATE_ARTIFACT_NONCE_PREFIXES,
   messageBlockForArtifact,
   promptTextForAttachments,
   validateAttachmentMimeType,
@@ -40,6 +43,7 @@ export async function createOwnedArtifact(
     clientNonce?: string;
   },
 ) {
+  if (isZeroPrivateArtifact(input)) throw new IsolationError();
   const replayed = await findReplayedArtifact(deps.prisma, actor, input);
   if (replayed) return createdArtifact(replayed);
   const mimeType =
@@ -61,6 +65,13 @@ export async function createOwnedArtifact(
       name: input.name,
     },
     async (tx, { rootArtifactId, version }) => {
+      if (rootArtifactId) {
+        const root = await tx.artifact.findFirst({
+          where: { id: rootArtifactId, spaceId: actor.spaceId, userId: actor.userId },
+          select: { name: true, clientNonce: true },
+        });
+        if (!root || isZeroPrivateArtifact(root)) throw new IsolationError();
+      }
       // A retry of the same upload has the same name and target, so it waits on the same lock.
       const raced = await findReplayedArtifact(tx, actor, input);
       if (raced) return { row: raced, replay: true };
@@ -102,6 +113,7 @@ async function findReplayedArtifact(
     where: { spaceId: actor.spaceId, userId: actor.userId, clientNonce: input.clientNonce },
   });
   if (!row) return null;
+  if (isZeroPrivateArtifact(row)) throw new IsolationError();
   // A group upload is stored under whichever member bot was first, which can change between retries.
   const sameTarget = input.groupId
     ? row.groupId === input.groupId
@@ -197,6 +209,7 @@ async function readArtifact(
     storageKey: string;
     name: string;
     description: string | null;
+    clientNonce?: string | null;
     mimeType: string;
     size: number;
     version: number;
@@ -204,6 +217,7 @@ async function readArtifact(
   },
   contextBotId: string,
 ) {
+  if (isZeroPrivateArtifact(row)) throw new IsolationError();
   const bytes = await artifacts.get(
     row.storageKey,
     adapterContext(actor, contextBotId, `artifact-get:${row.id}`),
@@ -314,11 +328,16 @@ export async function listSpaceArtifacts(
     cursorFilter = Prisma.sql`AND (latest."createdAt", latest.id) < (${new Date(cursor.createdAt)}, ${cursor.id})`;
   }
 
+  const privateNonceClauses = ZERO_PRIVATE_ARTIFACT_NONCE_PREFIXES.map(
+    (prefix) => Prisma.sql`LOWER(COALESCE("clientNonce", '')) LIKE ${prefix + "%"}`,
+  );
+  const privateClause = Prisma.sql`LOWER(BTRIM(name)) IN (${Prisma.join([...ZERO_PRIVATE_ARTIFACT_NAMES])}) OR ${Prisma.join(privateNonceClauses, " OR ")}`;
   const rows = await deps.prisma.$queryRaw<ListSpaceRow[]>(Prisma.sql`
     WITH scoped AS (
       SELECT * FROM "artifacts"
       WHERE "spaceId" = ${actor.spaceId} AND "userId" = ${actor.userId} ${botFilter}
         AND "createdAt" <= ${asOf}
+        AND NOT (${privateClause})
     ),
     latest AS (
       SELECT DISTINCT ON (COALESCE("rootArtifactId", id))
@@ -380,9 +399,9 @@ export async function listArtifactVersions(
 ) {
   const anchor = await deps.prisma.artifact.findFirst({
     where: { id: input.familyId, spaceId: actor.spaceId, userId: actor.userId },
-    select: { id: true, rootArtifactId: true },
+    select: { id: true, rootArtifactId: true, name: true, clientNonce: true },
   });
-  if (!anchor) throw new IsolationError();
+  if (!anchor || isZeroPrivateArtifact(anchor)) throw new IsolationError();
   const rootId = anchor.rootArtifactId ?? anchor.id;
   const rows = await deps.prisma.artifact.findMany({
     where: {
@@ -392,6 +411,7 @@ export async function listArtifactVersions(
     },
     orderBy: { version: "desc" },
   });
+  if (rows.some(isZeroPrivateArtifact)) throw new IsolationError();
   return rows.map((row) => ({
     id: row.id,
     version: row.version,
@@ -400,7 +420,13 @@ export async function listArtifactVersions(
   }));
 }
 
-type ArtifactMember = { id: string; storageKey: string; botId: string | null };
+type ArtifactMember = {
+  id: string;
+  storageKey: string;
+  botId: string | null;
+  name?: string;
+  clientNonce?: string | null;
+};
 
 // Delete each blob before its row, and the root only while it has no versions.
 export async function deleteArtifactFamily(
@@ -410,9 +436,9 @@ export async function deleteArtifactFamily(
 ) {
   const anchor = await deps.prisma.artifact.findFirst({
     where: { id: input.familyId, spaceId: actor.spaceId, userId: actor.userId },
-    select: { id: true, rootArtifactId: true, botId: true },
+    select: { id: true, rootArtifactId: true, botId: true, name: true, clientNonce: true },
   });
-  if (!anchor) throw new IsolationError();
+  if (!anchor || isZeroPrivateArtifact(anchor)) throw new IsolationError();
   const rootId = anchor.rootArtifactId ?? anchor.id;
 
   for (;;) {
@@ -422,8 +448,9 @@ export async function deleteArtifactFamily(
         userId: actor.userId,
         OR: [{ id: rootId }, { rootArtifactId: rootId }],
       },
-      select: { id: true, storageKey: true, botId: true },
+      select: { id: true, storageKey: true, botId: true, name: true, clientNonce: true },
     });
+    if (members.some(isZeroPrivateArtifact)) throw new IsolationError();
     if (members.length === 0) return { ok: true as const };
     const child = members.find((row) => row.id !== rootId);
     if (child) {
@@ -481,6 +508,7 @@ async function removeArtifactBlob(
   actor: Actor,
   member: ArtifactMember,
 ): Promise<void> {
+  if (isZeroPrivateArtifact(member)) throw new IsolationError();
   try {
     await artifacts.remove(
       member.storageKey,
@@ -523,6 +551,7 @@ type SendAttachmentRow = {
   mimeType: string;
   size: number;
   storageKey: string;
+  clientNonce?: string | null;
 };
 
 function normalizeAttachmentIds(artifactIds: string[] | undefined) {
@@ -534,7 +563,7 @@ function normalizeAttachmentIds(artifactIds: string[] | undefined) {
 }
 
 function toAttachmentResolution<T extends SendAttachmentRow>(ids: string[], rows: T[]) {
-  if (rows.length !== ids.length) throw new IsolationError();
+  if (rows.length !== ids.length || rows.some(isZeroPrivateArtifact)) throw new IsolationError();
   const byId = new Map(rows.map((row) => [row.id, row]));
   const artifacts = ids.map((id) => byId.get(id)!);
   const blocks = artifacts.map((row) =>

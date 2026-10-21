@@ -25,6 +25,8 @@ import type { ZeroBrowserResolve, ZeroPdfResolve } from "./zero-component-servic
 import { runZeroBrowserExtraction, runZeroPdfExtraction } from "./zero-component-services.js";
 import type { ZeroCsvAuthorize, ZeroCsvResolveVerifier } from "./zero-csv-preparation.js";
 import { runZeroCsvPreparation, runZeroCsvVerification } from "./zero-csv-preparation.js";
+import type { ZeroUrlResearchResolve, ZeroUrlResearchTestTransport } from "./zero-url-research.js";
+import { runZeroUrlResearch } from "./zero-url-research.js";
 import type { ZeroJevWorkerDependencies } from "./zero-jev-worker.js";
 import { runZeroJevTool } from "./zero-jev-worker.js";
 
@@ -36,6 +38,8 @@ export function createBackgroundJobHandlers(deps: {
   authorizeZeroComponent?: ZeroCsvAuthorize;
   resolveZeroPdf?: ZeroPdfResolve;
   resolveZeroBrowser?: ZeroBrowserResolve;
+  resolveZeroUrlResearch?: ZeroUrlResearchResolve;
+  zeroUrlResearchTestTransport?: ZeroUrlResearchTestTransport;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
   sandbox: SandboxProvider;
@@ -67,6 +71,19 @@ export function createBackgroundJobHandlers(deps: {
   };
 
   return {
+    "zero.research.extract": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("Component artifact store unavailable");
+      await runZeroUrlResearch(
+        {
+          prisma: deps.prisma,
+          artifacts: deps.artifacts,
+          authorize: deps.authorizeZeroComponent,
+          resolveUrlResearch: deps.resolveZeroUrlResearch,
+          testOnlyTransport: deps.zeroUrlResearchTestTransport,
+        },
+        requestArtifactId,
+      );
+    },
     "zero.pdf.extract": async ({ requestArtifactId }) => {
       if (!deps.artifacts) throw new Error("Component artifact store unavailable");
       await runZeroPdfExtraction(
