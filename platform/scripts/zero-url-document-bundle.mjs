@@ -48,11 +48,16 @@ for (const input of Object.keys(build.metafile.inputs).sort()) {
     metadata;
   while (directory !== path.dirname(directory)) {
     try {
-      metadata = JSON.parse(await readFile(path.join(directory, "package.json"), "utf8"));
-      break;
+      const candidate = JSON.parse(await readFile(path.join(directory, "package.json"), "utf8"));
+      // Subpath package.json files may declare only type/exports; find the owning package.
+      if (typeof candidate.name === "string" && typeof candidate.version === "string") {
+        metadata = candidate;
+        break;
+      }
     } catch {
-      directory = path.dirname(directory);
+      // A source directory need not itself contain package metadata.
     }
+    directory = path.dirname(directory);
   }
   if (!metadata?.name || !metadata?.version) throw new Error("Source metadata required");
   sourcePins.push({
