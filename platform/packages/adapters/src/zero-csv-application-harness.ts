@@ -69,9 +69,9 @@ try {
     headless: true,
     args: ["--no-sandbox", "--disable-dev-shm-usage", "--disable-background-networking", "--disable-component-update", "--disable-extensions", "--disable-sync", "--no-first-run"],
   });
-  for (const [name, width, height] of [["desktop", 1280, 900], ["mobile", 390, 844]]) {
+  for (const [name, width, height] of [["desktop", 1280, 720], ["mobile", 390, 844]]) {
     const browserContext = await browser.newContext({
-      acceptDownloads: false, serviceWorkers: "block", viewport: { width, height },
+      acceptDownloads: false, serviceWorkers: "block", viewport: { width, height }, deviceScaleFactor: 1,
       locale: "en-US", timezoneId: "UTC", colorScheme: "light", reducedMotion: "reduce",
     });
     await browserContext.route("**/*", (route) => { networkAttempts++; return route.abort(); });
@@ -108,7 +108,7 @@ try {
     }));
     const png = await page.screenshot({ type: "png", fullPage: false, animations: "disabled", timeout: 3000 });
     if (png.length > 1048576) throw Error("screenshot_limit");
-    screenshots.push({ viewport: name, mimeType: "image/png", bytes: png.length, sha256: hash(png), contentBase64: png.toString("base64") });
+    screenshots.push({ viewport: name, width, height, mimeType: "image/png", bytes: png.length, sha256: hash(png), contentBase64: png.toString("base64") });
     await browserContext.close();
   }
   assert("network_effects_absent", networkAttempts === 0);
@@ -119,7 +119,7 @@ try {
     checks, screenshots,
     actualUse: { scope: "fixed-source-module-import-boundary", entrypoint: "csvParseRows", calls },
     runtime: { node: process.versions.node, chromium: browser.version(), networkAttempts, pageErrors },
-    limitations: ["Visible deterministic development assertions; not an independent holdout or G2 grader", "Parser invocation instrumentation is honest fixed-recipe evidence, not adversarial same-VM attestation", "Browser preview is the hash-bound index in an opaque allow-scripts iframe; no authenticated product origin is used"],
+    limitations: ["Visible deterministic development assertions; not an independent holdout or G2 grader", "Parser invocation instrumentation is honest fixed-recipe evidence, not adversarial same-VM attestation", "Browser preview is the hash-bound index in an opaque allow-scripts iframe; no authenticated product origin is used", "Viewport captures are desktop 1280x720 and mobile 390x844; full-page capture is outside this fixed resource profile"],
   }));
 } finally { await browser?.close(); }
 `;

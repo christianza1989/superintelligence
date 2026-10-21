@@ -39,7 +39,8 @@ async function fixture() {
       if (args[0] === "image") return { code: 0, stdout: originalImage + " " + originalLock };
       if (args[0] !== "run") return { code: 0, stdout: "" };
       const payload = JSON.parse(stdin);
-      const png = Buffer.from("89504e470d0a1a0a", "hex");
+      const png = Buffer.alloc(24);
+      Buffer.from("89504e470d0a1a0a", "hex").copy(png);
       return {
         code: 0,
         stdout: JSON.stringify({
@@ -51,13 +52,22 @@ async function fixture() {
             name: "mock-unit-control-" + i,
             passed: true,
           })),
-          screenshots: ["desktop", "mobile"].map((viewport) => ({
-            viewport,
-            mimeType: "image/png",
-            bytes: png.length,
-            sha256: zeroCsvHash(png),
-            contentBase64: png.toString("base64"),
-          })),
+          screenshots: ["desktop", "mobile"].map((viewport) => {
+            const width = viewport === "desktop" ? 1280 : 390,
+              height = viewport === "desktop" ? 720 : 844;
+            const image = Buffer.from(png);
+            image.writeUInt32BE(width, 16);
+            image.writeUInt32BE(height, 20);
+            return {
+              viewport,
+              width,
+              height,
+              mimeType: "image/png",
+              bytes: image.length,
+              sha256: zeroCsvHash(image),
+              contentBase64: image.toString("base64"),
+            };
+          }),
           actualUse: {
             scope: "fixed-source-module-import-boundary",
             entrypoint: "csvParseRows",

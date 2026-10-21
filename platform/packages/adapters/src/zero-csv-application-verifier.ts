@@ -46,8 +46,10 @@ const resultSchema = z
         z
           .object({
             viewport: z.enum(["desktop", "mobile"]),
+            width: z.union([z.literal(1280), z.literal(390)]),
+            height: z.union([z.literal(720), z.literal(844)]),
             mimeType: z.literal("image/png"),
-            bytes: z.number().int().min(8).max(ZERO_CSV_APPLICATION_LIMITS.screenshotBytes),
+            bytes: z.number().int().min(24).max(ZERO_CSV_APPLICATION_LIMITS.screenshotBytes),
             sha256: digest,
             contentBase64: z.string().max(1_398_104),
           })
@@ -237,7 +239,13 @@ async function verifyCapturedCsvApplication(
       if (
         bytes.length !== image.bytes ||
         zeroCsvHash(bytes) !== image.sha256 ||
-        bytes.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a"
+        bytes.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a" ||
+        bytes.length < 24 ||
+        bytes.readUInt32BE(16) !== image.width ||
+        bytes.readUInt32BE(20) !== image.height ||
+        (image.viewport === "desktop"
+          ? image.width !== 1280 || image.height !== 720
+          : image.width !== 390 || image.height !== 844)
       )
         throw new Error("application_evidence_rejected");
     }
