@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import type { AdapterContext } from "@rakazo/adapter-kit";
 import { IsolationError, Prisma } from "@rakazo/db";
 import { z } from "zod";
+import type { ResolveHostname } from "./web-ssrf.js";
+import { fetchSafeWebBytes } from "./web-ssrf.js";
 import { ZERO_BROWSER_STATIC_PROFILE, zeroBrowserRequestSchema } from "./zero-browser-contract.js";
 import { executeZeroBrowser } from "./zero-browser-static-runtime.js";
 import type {
@@ -23,8 +25,12 @@ import {
   zeroComponentDigest,
   zeroComponentHash,
 } from "./zero-component-jobs.js";
-import type { ResolveHostname } from "./web-ssrf.js";
-import { fetchSafeWebBytes } from "./web-ssrf.js";
+import {
+  ZERO_URL_DOCUMENT_LIMITS,
+  ZERO_URL_DOCUMENT_MODE,
+  ZERO_URL_DOCUMENT_PROFILE,
+} from "./zero-url-document-contract.js";
+import { executeZeroUrlDocument } from "./zero-url-document-runtime.js";
 import type {
   ZeroUrlResearchBinding,
   ZeroUrlResearchRequest,
@@ -34,8 +40,8 @@ import {
   ZERO_URL_RESEARCH_MODE,
   ZERO_URL_RESEARCH_PROFILE,
   zeroUrlResearchBindingSchema,
+  zeroUrlResearchExecutionSubmitSchema,
   zeroUrlResearchRequestSchema,
-  zeroUrlResearchSubmitSchema,
 } from "./zero-url-research-contract.js";
 
 export type ZeroUrlResearchResolve = (
@@ -51,8 +57,20 @@ export type ZeroUrlResearchDependencies = ZeroComponentDependencies & {
   testOnlyTransport?: ZeroUrlResearchTestTransport;
 };
 const family = "research" as const;
-const registryHash = (binding: ZeroUrlResearchBinding) =>
-  zeroComponentHash(
+const registryHash = (binding: ZeroUrlResearchBinding) => {
+  if (binding.profile === ZERO_URL_DOCUMENT_PROFILE)
+    return zeroComponentHash(
+      JSON.stringify({
+        profile: binding.profile,
+        tasks: binding.tasks,
+        imageId: binding.runtime.imageId,
+        buildInputLockSha256: binding.runtime.buildInputLockSha256,
+        runnerSha256: binding.runtime.runnerSha256,
+        resourceProfile: binding.resourceProfile,
+      }),
+    );
+  // Preserve the historical inert-profile registry serialization exactly.
+  return zeroComponentHash(
     JSON.stringify({
       profile: binding.profile,
       tasks: binding.tasks,
@@ -60,6 +78,7 @@ const registryHash = (binding: ZeroUrlResearchBinding) =>
       buildInputLockSha256: binding.runtime.buildInputLockSha256,
     }),
   );
+};
 async function bindingFor(
   deps: ZeroUrlResearchDependencies,
   principal: ZeroComponentPrincipal,
@@ -111,15 +130,49 @@ export function createZeroUrlResearchService(
       await bindingFor(deps, principal);
       return true;
     },
+    async status() {
+      await authorizeZeroComponent(deps, principal);
+      const binding = await bindingFor(deps, principal);
+      await authorizeZeroComponent(deps, principal);
+      return binding.profile === ZERO_URL_DOCUMENT_PROFILE
+        ? {
+            profile: binding.profile,
+            backend: "available" as const,
+            paidModelCalls: 0 as const,
+            execution: ZERO_URL_DOCUMENT_MODE,
+            resourceProfile: binding.resourceProfile,
+            limits: { ...ZERO_URL_RESEARCH_LIMITS, ...ZERO_URL_DOCUMENT_LIMITS },
+          }
+        : {
+            profile: ZERO_URL_RESEARCH_PROFILE,
+            backend: "available" as const,
+            paidModelCalls: 0 as const,
+            execution: ZERO_URL_RESEARCH_MODE,
+            limits: ZERO_URL_RESEARCH_LIMITS,
+          };
+    },
     async submit(input: unknown) {
-      const parsed = zeroUrlResearchSubmitSchema.parse(input);
+      const parsed = zeroUrlResearchExecutionSubmitSchema.parse(input);
       await authorizeZeroComponent(deps, principal);
       const binding = await bindingFor(deps, principal),
         task = binding.tasks.find((item) => item.taskId === parsed.taskId);
-      if (!task) throw new IsolationError();
+      if (
+        !task ||
+        ("profile" in parsed ? parsed.profile : ZERO_URL_RESEARCH_PROFILE) !== binding.profile
+      )
+        throw new IsolationError();
+      const execution =
+        binding.profile === ZERO_URL_DOCUMENT_PROFILE
+          ? {
+              kind: "zero.research.document.request.v1" as const,
+              profile: ZERO_URL_DOCUMENT_PROFILE,
+            }
+          : {
+              kind: "zero.research.request.v1" as const,
+              profile: ZERO_URL_RESEARCH_PROFILE,
+            };
       const body = {
-        kind: "zero.research.request.v1" as const,
-        profile: ZERO_URL_RESEARCH_PROFILE,
+        ...execution,
         principal,
         fileId: task.taskId,
         sourceId: task.sourceId,
@@ -129,6 +182,12 @@ export function createZeroUrlResearchService(
         imageId: binding.runtime.imageId,
         buildInputLockSha256: binding.runtime.buildInputLockSha256,
         deadline: parsed.deadline,
+        ...(binding.profile === ZERO_URL_DOCUMENT_PROFILE
+          ? {
+              resourceProfile: binding.resourceProfile,
+              runnerSha256: binding.runtime.runnerSha256,
+            }
+          : {}),
       };
       const request = zeroUrlResearchRequestSchema.parse({
         ...body,
@@ -390,6 +449,86 @@ export async function runZeroUrlResearch(
     if (process.platform !== "linux" || !process.getuid || process.getuid() === 0)
       throw new Error("research_runtime_unsupported");
     const input = await sourceFor(guarded, id, request, recheck, signal);
+    if (request.kind === "zero.research.document.request.v1") {
+      if (
+        binding.profile !== ZERO_URL_DOCUMENT_PROFILE ||
+        binding.runtime.runnerSha256 !== request.runnerSha256 ||
+        binding.resourceProfile !== request.resourceProfile
+      )
+        throw new IsolationError();
+      const result = await executeZeroUrlDocument(
+        {
+          dockerExecutable: binding.runtime.dockerExecutable,
+          dockerConfigDirectory: binding.runtime.dockerConfigDirectory,
+          imageId: request.imageId,
+          buildInputLockSha256: request.buildInputLockSha256,
+          runnerDirectory: binding.runtime.runnerDirectory,
+          runnerSha256: request.runnerSha256,
+          authorize: async (active) => {
+            active.throwIfAborted();
+            await recheck();
+            active.throwIfAborted();
+          },
+        },
+        {
+          source: {
+            url: input.source.url,
+            sha256: input.source.sha256,
+            bytes: input.source.bytes,
+          },
+          contentBase64: Buffer.from(input.bytes).toString("base64"),
+        },
+        signal,
+      );
+      if (pollError) throw pollError;
+      await recheck();
+      if (result.state !== "succeeded") {
+        await publishZeroComponent(
+          guarded,
+          family,
+          id,
+          header,
+          result.state === "unknown" ? "blocked" : "failed",
+          {
+            reason: result.code,
+            ...(result.state === "unknown"
+              ? { cleanup: { state: "unknown", quarantineId: result.quarantineId } }
+              : {}),
+          },
+        );
+        return;
+      }
+      await publishZeroComponent(guarded, family, id, header, "succeeded", {
+        startedAt,
+        mode: ZERO_URL_DOCUMENT_MODE,
+        resourceProfile: request.resourceProfile,
+        taskId: request.fileId,
+        registrySha256: request.registrySha256,
+        source: input.source,
+        sourceCapture: {
+          kind: deps.testOnlyTransport ? "synthetic_fixture_transport" : "bounded_https_fetch",
+        },
+        sourceContent: {
+          encoding: "base64",
+          contentBase64: Buffer.from(input.bytes).toString("base64"),
+        },
+        imageId: request.imageId,
+        buildInputLockSha256: request.buildInputLockSha256,
+        runnerSha256: request.runnerSha256,
+        cleanup: result.cleanup,
+        extraction: result.output,
+        elapsedMs: Date.now() - started,
+        limitations: [
+          "Original-URL captured-response replay; Chromium does not perform live TLS fetch or interactive browsing",
+          "Scripts and external resources are disabled; no original-page fidelity",
+          "First visible paragraph is an observed source quote; task truth grading is separate",
+          "Execution success does not establish frozen acceptance, native host support or G2",
+          "Private source snapshots and receipts require operator-managed retention",
+        ],
+      });
+      return;
+    }
+    if (binding.profile !== ZERO_URL_RESEARCH_PROFILE) throw new IsolationError();
     const body = zeroBrowserRequestSchema.parse({
       kind: "zero.browser.request.v1",
       profile: ZERO_BROWSER_STATIC_PROFILE,

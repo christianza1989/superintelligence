@@ -1,9 +1,9 @@
 import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
 import type {
   ZeroBrowserResolve,
-  ZeroCsvApplicationResolve,
   ZeroComponentAuthorize,
   ZeroComponentPrincipal,
+  ZeroCsvApplicationResolve,
   ZeroPdfResolve,
   ZeroUrlResearchResolve,
   ZeroUrlResearchTestTransport,
@@ -11,20 +11,17 @@ import type {
 import {
   createZeroBrowserService,
   createZeroCsvApplicationService,
-  ZERO_CSV_APPLICATION_PROFILE,
-  ZERO_CSV_APPLICATION_LIMITS,
   createZeroPdfService,
   createZeroUrlResearchService,
   projectZeroPdfCsv,
   projectZeroPdfCsvPage,
   ZERO_BROWSER_STATIC_JOB_LIMITS,
   ZERO_BROWSER_STATIC_PROFILE,
+  ZERO_CSV_APPLICATION_LIMITS,
+  ZERO_CSV_APPLICATION_PROFILE,
   ZERO_PDF_CSV_LIMITS,
   ZERO_PDF_JOB_LIMITS,
   ZERO_PDF_PROFILE,
-  ZERO_URL_RESEARCH_LIMITS,
-  ZERO_URL_RESEARCH_MODE,
-  ZERO_URL_RESEARCH_PROFILE,
   ZeroPdfCsvError,
 } from "@rakazo/adapters";
 import type { Actor } from "@rakazo/contracts";
@@ -42,7 +39,8 @@ export interface ZeroComponentScopePolicy {
   resolveApplication?: ZeroCsvApplicationResolve;
 }
 type Service = ReturnType<typeof createZeroPdfService> &
-  Partial<Pick<ReturnType<typeof createZeroCsvApplicationService>, "workspace">>;
+  Partial<Pick<ReturnType<typeof createZeroCsvApplicationService>, "workspace">> &
+  Partial<Pick<ReturnType<typeof createZeroUrlResearchService>, "status">>;
 const PAGE_BYTES = 16_384;
 export function mountZeroComponentRoutes(
   app: Hono,
@@ -168,6 +166,10 @@ export function mountZeroComponentRoutes(
     };
     app.get(`${prefix}/status`, (c) =>
       scoped(c, async (service) => {
+        if (family === "research") {
+          if (!service.status) throw new IsolationError();
+          return c.json(await service.status());
+        }
         if (!(await service.available()))
           return c.json({ error: "component_profile_unavailable" }, 503);
         return c.json({
@@ -176,9 +178,7 @@ export function mountZeroComponentRoutes(
               ? ZERO_PDF_PROFILE
               : family === "browser"
                 ? ZERO_BROWSER_STATIC_PROFILE
-                : family === "research"
-                  ? ZERO_URL_RESEARCH_PROFILE
-                  : ZERO_CSV_APPLICATION_PROFILE,
+                : ZERO_CSV_APPLICATION_PROFILE,
           backend: "available",
           paidModelCalls: 0,
           execution:
@@ -186,17 +186,13 @@ export function mountZeroComponentRoutes(
               ? "pdf-extraction"
               : family === "browser"
                 ? "browser-static-extraction"
-                : family === "research"
-                  ? ZERO_URL_RESEARCH_MODE
-                  : "native-esm-expense-build+opaque-browser-check",
+                : "native-esm-expense-build+opaque-browser-check",
           limits:
             family === "pdf"
               ? ZERO_PDF_JOB_LIMITS
               : family === "browser"
                 ? ZERO_BROWSER_STATIC_JOB_LIMITS
-                : family === "research"
-                  ? ZERO_URL_RESEARCH_LIMITS
-                  : ZERO_CSV_APPLICATION_LIMITS,
+                : ZERO_CSV_APPLICATION_LIMITS,
         });
       }),
     );

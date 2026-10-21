@@ -57,6 +57,11 @@ const policies = Object.freeze({
         jobName: "zero.research.extract",
         runtimeMs: 30_000,
       }),
+      "zero.research.document.request.v1": Object.freeze({
+        profile: "zero-url-captured-document-v1",
+        jobName: "zero.research.extract",
+        runtimeMs: 30_000,
+      }),
     }),
   }),
   browser: Object.freeze({

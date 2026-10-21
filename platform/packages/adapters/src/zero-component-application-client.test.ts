@@ -346,3 +346,25 @@ describe("scoped PDF CSV transport", () => {
     }
   });
 });
+
+it("fails closed when a research scope advertises captured replay beyond this client's supported profile", async () => {
+  const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
+    json({
+      profile: "zero-url-captured-document-v1",
+      backend: "available",
+      paidModelCalls: 0,
+      execution: "original-url-captured-response-replay",
+      resourceProfile: "zero-url-document-scratch16m-v1",
+      limits: { ...ZERO_URL_RESEARCH_LIMITS, scratchFileBytes: 16_777_216 },
+    }),
+  );
+  const client = createZeroComponentApplicationClient("research", binding(), { fetch });
+  await expect(client.status()).rejects.toMatchObject({ code: "invalid_response" });
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(
+    zeroExtractionSchemas("research").status.safeParse({
+      ...statusFor("research"),
+      profile: "zero-url-captured-document-v1",
+    }).success,
+  ).toBe(false);
+});

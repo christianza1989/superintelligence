@@ -1,6 +1,3 @@
-import { loadZeroCsvApplicationAttribution } from "./zero-csv-application-attribution.js";
-import type { ZeroCsvApplicationBinding } from "./zero-csv-application-service-contract.js";
-import { zeroCsvApplicationBindingSchema } from "./zero-csv-application-service-contract.js";
 import path from "node:path";
 import type { Actor } from "@rakazo/contracts";
 import { IsolationError } from "@rakazo/db";
@@ -8,17 +5,21 @@ import { z } from "zod";
 import { ZERO_BROWSER_STATIC_PROFILE } from "./zero-browser-contract.js";
 import { ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS } from "./zero-component-input.js";
 import type { ZeroBrowserBinding, ZeroPdfBinding } from "./zero-component-services.js";
+import { loadZeroCsvApplicationAttribution } from "./zero-csv-application-attribution.js";
+import type { ZeroCsvApplicationBinding } from "./zero-csv-application-service-contract.js";
+import { zeroCsvApplicationBindingSchema } from "./zero-csv-application-service-contract.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
 import { ZERO_CSV_PROJECT_FILES, ZERO_CSV_PROJECT_LIMITS } from "./zero-csv-project-verifier.js";
 import { zeroJevProfileSchema } from "./zero-jev-profile.js";
 import { readZeroOperatorFile as readOperatorFile } from "./zero-operator-file.js";
+import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 import type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
 import {
-  zeroUrlResearchBindingSchema,
+  zeroUrlResearchDocumentBindingSchema,
+  zeroUrlResearchInertBindingSchema,
   zeroUrlResearchRuntimeSchema,
 } from "./zero-url-research-contract.js";
-import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 
 export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({ bytes: 65_536, grants: 64 });
 const principalSchema = z
@@ -129,13 +130,22 @@ const grantSchema = principalSchema
     jev: zeroJevProfileSchema.optional(),
     pdf: pdfSchema.optional(),
     browser: browserSchema.optional(),
-    urlResearch: zeroUrlResearchBindingSchema
-      .extend({
-        runtime: zeroUrlResearchRuntimeSchema.extend({
-          dockerExecutable: operatorPath,
-          dockerConfigDirectory: operatorPath,
+    urlResearch: z
+      .discriminatedUnion("profile", [
+        zeroUrlResearchInertBindingSchema.extend({
+          runtime: zeroUrlResearchRuntimeSchema.extend({
+            dockerExecutable: operatorPath,
+            dockerConfigDirectory: operatorPath,
+          }),
         }),
-      })
+        zeroUrlResearchDocumentBindingSchema.extend({
+          runtime: zeroUrlResearchDocumentBindingSchema.shape.runtime.extend({
+            dockerExecutable: operatorPath,
+            dockerConfigDirectory: operatorPath,
+            runnerDirectory: operatorPath,
+          }),
+        }),
+      ])
       .optional(),
   })
   .strict();
