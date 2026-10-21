@@ -19,6 +19,7 @@ try {
   const client = createZeroCsvApplicationClientFromFile(file);
   const pdf = createZeroComponentApplicationClientFromFile("pdf", file);
   const browser = createZeroComponentApplicationClientFromFile("browser", file);
+  const research = createZeroComponentApplicationClientFromFile("research", file);
   const extractionStatus = async (component: typeof pdf) => {
     try {
       await component.status();
@@ -40,6 +41,7 @@ try {
     componentStatus: {
       pdf: () => extractionStatus(pdf),
       browser: () => extractionStatus(browser),
+      research: () => extractionStatus(research),
     },
     executionStatus: async () => {
       try {
@@ -62,6 +64,7 @@ try {
   registerZeroCsvMcpTools(server, client);
   registerZeroComponentMcpTools(server, pdf);
   registerZeroComponentMcpTools(server, browser);
+  registerZeroComponentMcpTools(server, research);
   await connectZeroMcpStdio(server);
 } catch {
   process.stderr.write(

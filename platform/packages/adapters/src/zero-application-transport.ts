@@ -45,6 +45,12 @@ const errorCodes = [
   "component_input_cleanup_required",
   "component_backend_unavailable",
   "component_input_rejected",
+  "pdf_csv_invalid_page",
+  "pdf_csv_invalid_index",
+  "pdf_csv_table_missing",
+  "pdf_csv_unavailable",
+  "pdf_csv_limit_exceeded",
+  "pdf_csv_invalid_receipt",
   "invalid_job_bounds",
   "request_limit_exceeded",
   "authentication_required",
@@ -138,10 +144,10 @@ async function readJson(response: Response, signal: AbortSignal): Promise<unknow
 
 export function createZeroApplicationTransport(
   trustedBinding: ZeroApplicationBinding,
-  family: "csv" | "jev" | "pdf" | "browser",
+  family: "csv" | "jev" | "pdf" | "browser" | "research",
   options: ZeroApplicationTransportOptions = {},
 ) {
-  if (!["csv", "jev", "pdf", "browser"].includes(family)) fail("invalid_binding");
+  if (!["csv", "jev", "pdf", "browser", "research"].includes(family)) fail("invalid_binding");
   const parsed = bindingSchema.safeParse(trustedBinding);
   if (!parsed.success) fail("invalid_binding");
   const binding = parsed.data;

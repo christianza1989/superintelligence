@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import {
   cp,
   chmod,
@@ -34,7 +35,7 @@ export async function testExecutionPackage(
     calls++;
     assert.equal(request.headers.authorization, `Bearer ${expectedToken}`);
     assert.equal(request.headers["x-rakazo-space-id"], "fixture-space");
-    const route = /^\/api\/zero\/(csv|pdf|browser)\/scopes\/fixture-scope\//.exec(request.url);
+    const route = /^\/api\/zero\/(csv|pdf|browser|research)\/scopes\/fixture-scope\//.exec(request.url);
     assert.ok(route);
     const family = route[1];
     response.setHeader("content-type", "application/json");
@@ -47,11 +48,12 @@ export async function testExecutionPackage(
     if (request.url.endsWith("/status")) {
       if (family !== "csv") {
         const pdf = family === "pdf";
+        const research = family === "research";
         response.end(JSON.stringify({
-          profile: pdf ? "pdfplumber-0.11.10-born-digital-lines-v1" : "zero-browser-static-v1",
+          profile: pdf ? "pdfplumber-0.11.10-born-digital-lines-v1" : research ? "zero-url-research-v1" : "zero-browser-static-v1",
           backend: "available", paidModelCalls: 0,
-          execution: pdf ? "pdf-extraction" : "browser-static-extraction",
-          limits: { inputBytes: pdf ? 1048576 : 16384, runtimeMs: pdf ? 30000 : 20000,
+          execution: pdf ? "pdf-extraction" : research ? "safe-http-fetch+inert-snapshot" : "browser-static-extraction",
+          limits: research ? { sourceBytes: 16384, fetchMs: 8000, runtimeMs: 30000, artifactBytes: 2097152, tasks: 10, outstandingJobsPerScope: 4, redirects: 0, paidModelCalls: 0 } : { inputBytes: pdf ? 1048576 : 16384, runtimeMs: pdf ? 30000 : 20000,
             artifactBytes: pdf ? 1064960 : 2097152, outstandingJobsPerScope: 4 },
         }));
         return;
@@ -79,10 +81,25 @@ export async function testExecutionPackage(
       for await (const chunk of request) body += chunk;
       const input = JSON.parse(body);
       if (family === "csv") assert.equal(input.csv, "a\n1");
+      else if (family === "research") assert.equal(input.taskId, "approved-fixture");
       else assert.equal(input.fileId, "approved-fixture");
       response
         .writeHead(202)
         .end(JSON.stringify({ jobId, requestDigest: "a".repeat(64) }));
+    } else if (family === "pdf" && /\/tables\/0\/csv\?offset=0&limit=8192$/.test(request.url)) {
+      const csv = Buffer.from("name,value\nA,12");
+      const sha256 = "a".repeat(64);
+      response.end(JSON.stringify({
+        metadata: {
+          profile: "pdfplumber-0.11.10-born-digital-lines-v1",
+          sourceSha256: sha256,
+          receipt: { artifactId: "receipt", revision: 2, sha256 },
+          csv: { sha256: createHash("sha256").update(csv).digest("hex"), bytes: csv.length, encoding: "utf-8", delimiter: ",", lineTerminator: "\n" },
+          table: { index: 0, count: 1, rows: 2, columns: 2, provenance: [{ page_no: 1, bbox: { l: 1, t: 1, r: 10, b: 10, coord_origin: "TOPLEFT" } }] },
+        },
+        totalBytes: csv.length, offset: 0, nextOffset: null,
+        encoding: "base64", contentBase64: csv.toString("base64"),
+      }));
     } else {
       response.writeHead(404).end(JSON.stringify({ error: "invalid_request" }));
     }
@@ -201,7 +218,12 @@ export async function testExecutionPackage(
           "zero_pdf_cancel",
           "zero_pdf_extract",
           "zero_pdf_job",
+          "zero_pdf_csv",
           "zero_prepare",
+          "zero_research_extract",
+          "zero_research_job",
+          "zero_research_artifact",
+          "zero_research_cancel",
           "zero_search",
           "zero_status",
           "zero_verify",
@@ -209,15 +231,19 @@ export async function testExecutionPackage(
       );
       const available = await status(run.client, "available");
       assert.equal(available.profile, "scoped-component-jobs");
-      assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available" });
-      for (const family of ["pdf", "browser"]) {
+      assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available", research: "available" });
+      for (const family of ["pdf", "browser", "research"]) {
         const extracted = await run.client.callTool({ name: `zero_${family}_extract`, arguments: {
-          fileId: "approved-fixture", idempotencyKey: `fixture-${family}`,
+          ...(family === "research" ? { taskId: "approved-fixture" } : { fileId: "approved-fixture" }), idempotencyKey: `fixture-${family}`,
           deadline: new Date(Date.now() + 30000).toISOString(),
         } });
         assert.deepEqual(extracted.structuredContent, { jobId, requestDigest: "a".repeat(64) });
         cleanResult(extracted);
       }
+      const csv = await run.client.callTool({ name: "zero_pdf_csv", arguments: { jobId, tableIndex: 0 } });
+      assert.equal(csv.isError, undefined);
+      assert.equal(Buffer.from(csv.structuredContent.contentBase64, "base64").toString(), "name,value\nA,12");
+      cleanResult(csv);
       const receipt = await run.client.callTool({
         name: "zero_prepare",
         arguments: {

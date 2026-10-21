@@ -1,10 +1,12 @@
 import { once } from "node:events";
+import { createHash } from "node:crypto";
 import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { ZeroApplicationTransportError } from "./zero-application-transport.js";
+import { ZERO_URL_RESEARCH_LIMITS } from "./zero-url-research-profile.js";
 import {
   createZeroComponentApplicationClient,
   createZeroComponentApplicationClientFromFile,
@@ -21,8 +23,8 @@ const binding = () => ({
   sessionToken: token,
   expiresAt: new Date(Date.now() + 60_000).toISOString(),
 });
-const input = () => ({
-  fileId: "approved-input",
+const input = (family: "pdf" | "browser" | "research" = "pdf") => ({
+  ...(family === "research" ? { taskId: "approved-task" } : { fileId: "approved-input" }),
   idempotencyKey: "fixture-key",
   deadline: new Date(Date.now() + 30_000).toISOString(),
 });
@@ -41,8 +43,34 @@ const page = {
   encoding: "base64",
   contentBase64: "e30=",
 };
-const statusFor = (family: "pdf" | "browser") =>
-  family === "pdf"
+const csvBytes = Buffer.from('name,value\n"A,B",12');
+const csvPage = {
+  metadata: {
+    profile: "pdfplumber-0.11.10-born-digital-lines-v1",
+    sourceSha256: digest,
+    receipt: { artifactId: "receipt", revision: 2, sha256: digest },
+    csv: {
+      sha256: createHash("sha256").update(csvBytes).digest("hex"),
+      bytes: csvBytes.length,
+      encoding: "utf-8", delimiter: ",", lineTerminator: "\n",
+    },
+    table: { index: 0, count: 2, rows: 2, columns: 2, provenance: [{
+      page_no: 1, bbox: { l: 1, t: 1, r: 10, b: 10, coord_origin: "TOPLEFT" },
+    }] },
+  },
+  totalBytes: csvBytes.length, offset: 0, nextOffset: null,
+  encoding: "base64", contentBase64: csvBytes.toString("base64"),
+};
+const statusFor = (family: "pdf" | "browser" | "research") =>
+  family === "research"
+    ? {
+        profile: "zero-url-research-v1",
+        backend: "available",
+        paidModelCalls: 0,
+        execution: "safe-http-fetch+inert-snapshot",
+        limits: ZERO_URL_RESEARCH_LIMITS,
+      }
+    : family === "pdf"
     ? {
         profile: "pdfplumber-0.11.10-born-digital-lines-v1",
         backend: "available",
@@ -68,7 +96,7 @@ const statusFor = (family: "pdf" | "browser") =>
         },
       };
 
-describe.each(["pdf", "browser"] as const)("fixed %s application transport", (family) => {
+describe.each(["pdf", "browser", "research"] as const)("fixed %s application transport", (family) => {
   it("uses real loopback HTTP, existing session/space headers and fixed route family", async () => {
     const seen: Array<{
       url: string;
@@ -104,6 +132,8 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
               ? { jobId, requestDigest: digest }
               : url.endsWith("/cancel")
                 ? terminal
+                : url.includes("/tables/0/csv?")
+                  ? csvPage
                 : url.includes("/artifact?")
                   ? page
                   : { ...terminal, revision: 2, sha256: digest },
@@ -120,12 +150,16 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
         apiUrl: `http://127.0.0.1:${address.port}`,
       });
       expect(await client.status()).toEqual(statusFor(family));
-      const submitted = input();
+      const submitted = input(family);
       expect(await client.extract(submitted)).toEqual({ jobId, requestDigest: digest });
       expect((await client.get(jobId)).state).toBe("succeeded");
       expect((await client.cancel(jobId)).state).toBe("succeeded");
       expect(await client.artifactPage(jobId)).toEqual(page);
-      expect(seen).toHaveLength(5);
+      if (family === "pdf") {
+        expect(await client.pdfCsvPage(jobId, 0)).toEqual(csvPage);
+        expect(seen[5]?.url).toBe(`/api/zero/pdf/scopes/scope/jobs/${jobId}/tables/0/csv?offset=0&limit=8192`);
+      }
+      expect(seen).toHaveLength(family === "pdf" ? 6 : 5);
       for (const call of seen) {
         expect(call.auth).toBe(`Bearer ${token}`);
         expect(call.space).toBe("space");
@@ -153,7 +187,7 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
       { deadline: new Date(Date.now() - 1).toISOString() },
       { deadline: new Date(Date.now() + 700_000).toISOString() },
     ])
-      await expect(client.extract({ ...input(), ...patch })).rejects.toMatchObject({
+      await expect(client.extract({ ...input(family), ...patch })).rejects.toMatchObject({
         code: "invalid_request",
       });
     await expect(client.get("../foreign")).rejects.toMatchObject({ code: "invalid_request" });
@@ -195,7 +229,7 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
       .mockResolvedValueOnce(json({ error: `private-${token}` }, 500));
     const client = createZeroComponentApplicationClient(family, binding(), { fetch });
     await expect(client.status()).rejects.toMatchObject({ code: "component_profile_unavailable" });
-    await expect(client.extract(input())).rejects.toMatchObject({
+    await expect(client.extract(input(family))).rejects.toMatchObject({
       code: "component_input_cleanup_required",
     });
     const error = await client.status().catch((error) => error);
@@ -224,4 +258,51 @@ describe.each(["pdf", "browser"] as const)("fixed %s application transport", (fa
 });
 it("does not accept an arbitrary extraction family", () => {
   expect(() => zeroExtractionSchemas("shell" as never)).toThrow(ZeroApplicationTransportError);
+});
+
+describe("scoped PDF CSV transport", () => {
+  it("rejects invalid table/page arguments and non-PDF families before I/O", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    const client = createZeroComponentApplicationClient("pdf", binding(), { fetch });
+    for (const table of [-1, 32, 0.5, Number.NaN])
+      await expect(client.pdfCsvPage(jobId, table)).rejects.toMatchObject({ code: "invalid_request" });
+    for (const page of [{ limit: 8193 }, { offset: -1 }, { offset: 262145 }, { path: "/private" }])
+      await expect(client.pdfCsvPage(jobId, 0, page)).rejects.toMatchObject({ code: "invalid_request" });
+    for (const family of ["browser", "research"] as const)
+      await expect(createZeroComponentApplicationClient(family, binding(), { fetch }).pdfCsvPage(jobId, 0))
+        .rejects.toMatchObject({ code: "invalid_request" });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("rejects foreign table metadata, wrong cursors and oversized pages even on HTTP200", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    const client = createZeroComponentApplicationClient("pdf", binding(), { fetch });
+    for (const value of [
+      { ...csvPage, metadata: { ...csvPage.metadata, table: { ...csvPage.metadata.table, index: 1 } } },
+      { ...csvPage, offset: 1 },
+      { ...csvPage, nextOffset: csvPage.totalBytes },
+      { ...csvPage, totalBytes: csvPage.totalBytes - 1 },
+    ]) {
+      fetch.mockResolvedValueOnce(json(value));
+      await expect(client.pdfCsvPage(jobId, 0)).rejects.toMatchObject({ code: "invalid_response" });
+    }
+    fetch.mockResolvedValueOnce(json(csvPage));
+    await expect(client.pdfCsvPage(jobId, 0, { limit: 1 })).rejects.toMatchObject({ code: "invalid_response" });
+    fetch.mockResolvedValueOnce(json({ error: "pdf_csv_unavailable" }, 409));
+    await expect(client.pdfCsvPage(jobId, 0)).rejects.toMatchObject({ code: "pdf_csv_unavailable" });
+  });
+  it("reloads the protected binding before every CSV page", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "zero-pdf-csv-binding-"));
+    const file = path.join(root, "binding.json");
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(json(csvPage));
+    try {
+      await writeFile(file, JSON.stringify(binding()), { mode: 0o600 });
+      const client = createZeroComponentApplicationClientFromFile("pdf", file, { fetch });
+      expect(await client.pdfCsvPage(jobId, 0)).toEqual(csvPage);
+      await writeFile(file, JSON.stringify({ ...binding(), expiresAt: new Date(0).toISOString() }));
+      await expect(client.pdfCsvPage(jobId, 0)).rejects.toMatchObject({ code: "binding_expired" });
+      expect(fetch).toHaveBeenCalledTimes(1);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
 });

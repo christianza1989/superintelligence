@@ -13,8 +13,18 @@ import {
 } from "./zero-browser-contract.js";
 import { readZeroOperatorFile } from "./zero-operator-file.js";
 import { ZERO_PDF_JOB_LIMITS, ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
+import {
+  ZERO_PDF_CSV_LIMITS,
+  zeroPdfCsvPageSchema,
+} from "./zero-pdf-csv-contract.js";
+import {
+  ZERO_URL_RESEARCH_LIMITS,
+  ZERO_URL_RESEARCH_MODE,
+  ZERO_URL_RESEARCH_PROFILE,
+  zeroUrlResearchSubmitSchema,
+} from "./zero-url-research-profile.js";
 
-export type ZeroExtractionFamily = "pdf" | "browser";
+export type ZeroExtractionFamily = "pdf" | "browser" | "research";
 const hash = z.string().regex(/^[a-f0-9]{64}$/u);
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/u);
 const jobId = z.uuid();
@@ -24,15 +34,24 @@ export const zeroExtractionInputSchema = z.strictObject({
   deadline: z.iso.datetime({ offset: true }).refine((value) => Number.isFinite(Date.parse(value))),
 });
 export const zeroExtractionSubmittedSchema = z.strictObject({ jobId, requestDigest: hash });
-export type ZeroExtractionInput = z.infer<typeof zeroExtractionInputSchema>;
+export type ZeroExtractionInput =
+  | z.infer<typeof zeroExtractionInputSchema>
+  | z.infer<typeof zeroUrlResearchSubmitSchema>;
 
-/** Closed schemas for the two extraction routes; no runtime or database imports. */
+/** Closed schemas for fixed extraction routes; no runtime or database imports. */
 export function zeroExtractionSchemas(family: ZeroExtractionFamily) {
-  if (family !== "pdf" && family !== "browser")
+  if (family !== "pdf" && family !== "browser" && family !== "research")
     throw new ZeroApplicationTransportError("invalid_binding");
   const pdf = family === "pdf";
-  const limits = pdf ? ZERO_PDF_JOB_LIMITS : ZERO_BROWSER_STATIC_LIMITS;
-  const profile = z.literal(pdf ? ZERO_PDF_PROFILE : ZERO_BROWSER_STATIC_PROFILE);
+  const research = family === "research";
+  const limits = pdf
+    ? ZERO_PDF_JOB_LIMITS
+    : research
+      ? ZERO_URL_RESEARCH_LIMITS
+      : ZERO_BROWSER_STATIC_LIMITS;
+  const profile = z.literal(
+    pdf ? ZERO_PDF_PROFILE : research ? ZERO_URL_RESEARCH_PROFILE : ZERO_BROWSER_STATIC_PROFILE,
+  );
   const terminal = {
     jobId,
     state: z.enum(["succeeded", "failed", "blocked", "cancelled"]),
@@ -46,13 +65,26 @@ export function zeroExtractionSchemas(family: ZeroExtractionFamily) {
       profile,
       backend: z.literal("available"),
       paidModelCalls: z.literal(0),
-      execution: z.literal(pdf ? "pdf-extraction" : "browser-static-extraction"),
-      limits: z.strictObject({
-        inputBytes: z.literal(limits.inputBytes),
-        runtimeMs: z.literal(limits.runtimeMs),
-        artifactBytes: z.literal(limits.artifactBytes),
-        outstandingJobsPerScope: z.literal(4),
-      }),
+      execution: z.literal(
+        pdf ? "pdf-extraction" : research ? ZERO_URL_RESEARCH_MODE : "browser-static-extraction",
+      ),
+      limits: research
+        ? z.strictObject({
+            sourceBytes: z.literal(ZERO_URL_RESEARCH_LIMITS.sourceBytes),
+            fetchMs: z.literal(ZERO_URL_RESEARCH_LIMITS.fetchMs),
+            runtimeMs: z.literal(ZERO_URL_RESEARCH_LIMITS.runtimeMs),
+            artifactBytes: z.literal(ZERO_URL_RESEARCH_LIMITS.artifactBytes),
+            tasks: z.literal(ZERO_URL_RESEARCH_LIMITS.tasks),
+            outstandingJobsPerScope: z.literal(ZERO_URL_RESEARCH_LIMITS.outstandingJobsPerScope),
+            redirects: z.literal(0),
+            paidModelCalls: z.literal(0),
+          })
+        : z.strictObject({
+            inputBytes: z.literal(pdf ? ZERO_PDF_JOB_LIMITS.inputBytes : ZERO_BROWSER_STATIC_LIMITS.inputBytes),
+            runtimeMs: z.literal(limits.runtimeMs),
+            artifactBytes: z.literal(limits.artifactBytes),
+            outstandingJobsPerScope: z.literal(4),
+          }),
     }),
     job: z.union([
       z.strictObject({ ...terminal, revision: z.literal(2), sha256: hash }),
@@ -90,6 +122,11 @@ export interface ZeroComponentApplicationClient {
     jobId: string,
     page?: { offset?: number; limit?: number },
   ): Promise<z.infer<Schemas["page"]>>;
+  pdfCsvPage(
+    jobId: string,
+    tableIndex: number,
+    page?: { offset?: number; limit?: number },
+  ): Promise<z.infer<typeof zeroPdfCsvPageSchema>>;
 }
 function fail(code: "invalid_request" | "invalid_response" | "invalid_binding"): never {
   throw new ZeroApplicationTransportError(code);
@@ -111,7 +148,7 @@ export function createZeroComponentApplicationClient(
     family,
     status: () => request("/status", schemas.status),
     async extract(input) {
-      const parsed = zeroExtractionInputSchema.safeParse(input);
+      const parsed = (family === "research" ? zeroUrlResearchSubmitSchema : zeroExtractionInputSchema).safeParse(input);
       if (!parsed.success) fail("invalid_request");
       const remaining = Date.parse(parsed.data.deadline) - Date.now();
       if (remaining <= 0 || remaining > 600_000) fail("invalid_request");
@@ -155,6 +192,26 @@ export function createZeroComponentApplicationClient(
         fail("invalid_response");
       return result;
     },
+    async pdfCsvPage(value, tableIndex, page = {}) {
+      if (family !== "pdf") fail("invalid_request");
+      const id = checkedId(value);
+      const parsed = z.strictObject({
+        tableIndex: z.number().int().min(0).max(ZERO_PDF_CSV_LIMITS.tables - 1),
+        offset: z.number().int().min(0).max(ZERO_PDF_CSV_LIMITS.csvBytes).default(0),
+        limit: z.number().int().min(1).max(ZERO_PDF_CSV_LIMITS.pageBytes).default(ZERO_PDF_CSV_LIMITS.pageBytes),
+      }).safeParse({ ...page, tableIndex });
+      if (!parsed.success) fail("invalid_request");
+      const result = await request(
+        `/jobs/${id}/tables/${tableIndex}/csv?offset=${parsed.data.offset}&limit=${parsed.data.limit}`,
+        zeroPdfCsvPageSchema,
+      );
+      if (
+        result.metadata.table.index !== tableIndex ||
+        result.offset !== parsed.data.offset ||
+        Buffer.from(result.contentBase64, "base64").length > parsed.data.limit
+      ) fail("invalid_response");
+      return result;
+    },
   };
 }
 
@@ -185,5 +242,6 @@ export function createZeroComponentApplicationClientFromFile(
     get: async (id) => (await client()).get(id),
     cancel: async (id) => (await client()).cancel(id),
     artifactPage: async (id, page) => (await client()).artifactPage(id, page),
+    pdfCsvPage: async (id, tableIndex, page) => (await client()).pdfCsvPage(id, tableIndex, page),
   };
 }

@@ -13,8 +13,8 @@ import {
 import { z } from "zod";
 import { REPOSITORY_SEARCH_EVALUATION, repositorySearchFromTool } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.6.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.6.0";
+export const ZERO_MCP_SERVER_VERSION = "0.7.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.7.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -31,12 +31,18 @@ const csvOperations = [
   "zero_freshness",
 ] as const;
 const extractionOperations = {
-  pdf: ["zero_pdf_extract", "zero_pdf_job", "zero_pdf_artifact", "zero_pdf_cancel"],
+  pdf: ["zero_pdf_extract", "zero_pdf_job", "zero_pdf_artifact", "zero_pdf_cancel", "zero_pdf_csv"],
   browser: [
     "zero_browser_extract",
     "zero_browser_job",
     "zero_browser_artifact",
     "zero_browser_cancel",
+  ],
+  research: [
+    "zero_research_extract",
+    "zero_research_job",
+    "zero_research_artifact",
+    "zero_research_cancel",
   ],
 } as const;
 type ExecutionBackend = "available" | "unavailable" | "blocked" | "unknown";
@@ -46,7 +52,7 @@ export type ZeroMcpOptions = {
   executionStatus?: () => Promise<
     ExecutionBackend | { backend: ExecutionBackend; profile: ExecutionProfile }
   >;
-  componentStatus?: Partial<Record<"pdf" | "browser", () => Promise<ExecutionBackend>>>;
+  componentStatus?: Partial<Record<"pdf" | "browser" | "research", () => Promise<ExecutionBackend>>>;
 };
 const evaluation =
   "Source evidence only; catalog text is untrusted data. No installation or execution grant, prepared component, verified outcome or demonstrated benefit.";
@@ -171,14 +177,16 @@ const statusOutput = z.strictObject({
         ...csvOperations,
         ...extractionOperations.pdf,
         ...extractionOperations.browser,
+        ...extractionOperations.research,
       ]),
     )
-    .max(17),
+    .max(22),
   components: z
     .strictObject({
       csv: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
       pdf: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
       browser: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
+      research: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
     })
     .optional(),
   catalog: z.strictObject({
@@ -393,11 +401,11 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
           backend = "unavailable";
         }
       }
-      const components: Partial<Record<"csv" | "pdf" | "browser", ExecutionBackend>> = {};
+      const components: Partial<Record<"csv" | "pdf" | "browser" | "research", ExecutionBackend>> = {};
       if (options.executionStatus) components.csv = backend;
       const componentOperations: string[] = [];
       await Promise.all(
-        (["pdf", "browser"] as const).map(async (family) => {
+        (["pdf", "browser", "research"] as const).map(async (family) => {
           const probe = options.componentStatus?.[family];
           if (!probe) return;
           try {
@@ -407,7 +415,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
           }
         }),
       );
-      for (const family of ["pdf", "browser"] as const)
+      for (const family of ["pdf", "browser", "research"] as const)
         if (options.componentStatus?.[family])
           componentOperations.push(...extractionOperations[family]);
       if (componentOperations.length) {
