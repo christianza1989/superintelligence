@@ -8,7 +8,7 @@ import net from "node:net";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, qualifyNativeSharedWeb, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, retainNativeQualificationAudits, qualifyNativeSharedWeb, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
 
 const hash = value => createHash("sha256").update(value).digest("hex");
 const revision = "a".repeat(40), image = "sha256:" + "b".repeat(64);
@@ -48,6 +48,28 @@ test("PostgreSQL mount parent permits its separate UID to traverse without expos
   for (const name of ["home", "tmp", "data", "operator", "cwd/child", "docker"]) {
     assert.equal(await mode(name), 0o700);
   }
+});
+
+test("audit retention preserves private failure evidence with bounded files and rejects symlinks", async t => {
+  const scratch = await mkdtemp(path.join(os.tmpdir(), "zero-qualification-audits-"));
+  t.after(() => rm(scratch, { recursive: true, force: true }));
+  await prepareNativeQualificationDirectories(scratch);
+  const evidence = path.join(scratch, "evidence"); await mkdir(evidence, { mode: 0o700 });
+  const operator = path.join(scratch, "operator");
+  const audit = JSON.stringify({ deniedFilesystem: 1 });
+  await writeFile(path.join(operator, "migration-guard-audit.1.json"), audit);
+  await writeFile(path.join(operator, "api-guard-audit.2.json"), Buffer.alloc(65_537));
+  await writeFile(path.join(scratch, "outside.json"), "private");
+  await symlink("../outside.json", path.join(operator, "worker-guard-audit.3.json"));
+  await writeFile(path.join(operator, "unrelated.json"), "ignored");
+  assert.deepEqual(await retainNativeQualificationAudits(scratch, evidence), { copiedFiles: 1, rejectedFiles: 2, truncated: false });
+  assert.equal(await readFile(path.join(evidence, "migration-guard-audit.1.json"), "utf8"), audit);
+  assert.equal((await stat(path.join(evidence, "migration-guard-audit.1.json"))).mode & 0o777, 0o600);
+  assert.deepEqual(await readdir(evidence), ["migration-guard-audit.1.json"]);
+  for (let pid = 10; pid < 30; pid++) await writeFile(path.join(operator, "worker-guard-audit." + pid + ".json"), audit);
+  const bounded = await retainNativeQualificationAudits(scratch, evidence);
+  assert.equal(bounded.truncated, true);
+  assert.equal(bounded.copiedFiles + bounded.rejectedFiles, 16);
 });
 
 test("sealed inventory relocates contained symlinks and rejects stale pins, tamper and extra files", async t => {

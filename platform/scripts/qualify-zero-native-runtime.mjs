@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, retainNativeQualificationAudits, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
 
 const options = nativeQualificationArguments(process.argv.slice(2));
 if (options.plan) {
@@ -195,7 +195,6 @@ if (options.plan) {
       assert.ok(auditFiles.length >= (name === "migration" ? 2 : 1));
       const audits = await Promise.all(auditFiles.map(async file => {
         const bytes = await readFile(path.join(auditRoot, file));
-        await writeFile(path.join(evidence, file), bytes, { mode: 0o600 });
         return JSON.parse(bytes);
       }));
       for (const audit of audits) { assert.equal(audit.deniedModules, 0); assert.equal(audit.deniedFilesystem, 0); assert.equal(audit.deniedNetwork, 0); assert.ok(audit.moduleResolutions > 0); }
@@ -210,6 +209,8 @@ if (options.plan) {
     report.stageAtCompletion = report.stage;
     const stopped = await Promise.allSettled(children.map(record => cleanupNativeQualificationProcess(record)));
     if (stopped.some(result => result.status === "rejected")) { report.processCleanup = "unknown"; report.status = "FAIL"; process.exitCode = 1; } else report.processCleanup = "owned-children-stopped";
+    try { report.auditEvidenceCopy = await retainNativeQualificationAudits(scratch, evidence); }
+    catch { report.auditEvidenceCopy = "unavailable"; }
     const cleanup = AbortSignal.timeout(15_000);
     try {
       if (!postgresAttempted) { report.containerCleanup = "no-fixture-start-attempted"; }

@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
-import { chmod, cp, lstat, mkdir, readFile, readdir, realpath } from "node:fs/promises";
+import { constants, createReadStream } from "node:fs";
+import { chmod, cp, lstat, mkdir, open, readFile, readdir, realpath, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const hashFile = async file => {
@@ -19,6 +19,27 @@ export async function prepareNativeQualificationDirectories(scratch) {
   // directory. Only the empty mounted parent needs cross-UID traversal; the
   // private host scratch root and the actual PGDATA remain inaccessible.
   await chmod(path.join(scratch, "pg-data"), 0o711);
+}
+
+export async function retainNativeQualificationAudits(scratch, evidence) {
+  const root = path.join(scratch, "operator");
+  const names = (await readdir(root)).filter(name => /^(?:migration|api|worker)-guard-audit\.[1-9]\d{0,9}\.json$/.test(name)).sort();
+  const result = { copiedFiles: 0, rejectedFiles: 0, truncated: names.length > 16 };
+  for (const name of names.slice(0, 16)) {
+    let file;
+    try {
+      file = await open(path.join(root, name), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+      const info = await file.stat();
+      if (!info.isFile() || info.size < 1 || info.size > 65_536) throw new Error("NATIVE_AUDIT_FILE_BOUND");
+      const bytes = Buffer.alloc(info.size + 1);
+      const { bytesRead } = await file.read(bytes, 0, bytes.length, 0);
+      if (bytesRead !== info.size) throw new Error("NATIVE_AUDIT_FILE_CHANGED");
+      await writeFile(path.join(evidence, name), bytes.subarray(0, bytesRead), { mode: 0o600, flag: "wx" });
+      result.copiedFiles++;
+    } catch { result.rejectedFiles++; }
+    finally { await file?.close(); }
+  }
+  return result;
 }
 
 export function nativeQualificationArguments(args) {
