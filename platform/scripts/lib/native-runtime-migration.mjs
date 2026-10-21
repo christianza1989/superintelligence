@@ -2,6 +2,13 @@ import { createHash } from "node:crypto";
 import { lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 
+export function assertNativeMigrationInventory(expected, actual) {
+  const expectedNames = [...expected].sort(), actualNames = [...actual].sort();
+  if (actualNames.length !== expectedNames.length || actualNames.some((name, index) => name !== expectedNames[index])) {
+    throw new Error("NATIVE_CANONICAL_MIGRATION_INVENTORY");
+  }
+}
+
 export async function nativeMigrationEngine(output, closure) {
   const engines = closure.packages.filter(pkg => pkg.name === "@prisma/engines");
   if (engines.length !== 1) throw new Error("Native migration requires one exact Prisma engines package");

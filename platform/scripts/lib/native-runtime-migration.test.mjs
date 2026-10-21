@@ -4,7 +4,23 @@ import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
-import { nativeMigrationEngine, nativeMigrationSources } from "./native-runtime-migration.mjs";
+import { assertNativeMigrationInventory, nativeMigrationEngine, nativeMigrationSources } from "./native-runtime-migration.mjs";
+
+test("canonical migration inventory ignores SQL collation order but rejects missing, duplicate and unexpected names", () => {
+  const section = "20260828090002_group_organization_section_idx_concurrent";
+  const repair = "20260828090002a_group_organization_repair_invalid_idx";
+  const expected = ["0001_init", section, repair];
+  const postgresOrder = ["0001_init", repair, section];
+  assert.doesNotThrow(() => assertNativeMigrationInventory(expected, postgresOrder));
+  for (const actual of [
+    postgresOrder.slice(0, 2),
+    [...postgresOrder, repair],
+    ["0001_init", repair, repair],
+    [...postgresOrder, "unexpected_migration"],
+  ]) assert.throws(() => assertNativeMigrationInventory(expected, actual), /NATIVE_CANONICAL_MIGRATION_INVENTORY/);
+  assert.deepEqual(expected, ["0001_init", section, repair]);
+  assert.deepEqual(postgresOrder, ["0001_init", repair, section]);
+});
 
 async function fixture(run) {
   const root = await mkdtemp(path.join(os.tmpdir(), "zero-native-migrate-"));

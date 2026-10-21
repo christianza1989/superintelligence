@@ -7,6 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertNativeMigrationInventory } from "./lib/native-runtime-migration.mjs";
 import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, retainNativeQualificationAudits, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
 
 const options = nativeQualificationArguments(process.argv.slice(2));
@@ -119,7 +120,7 @@ if (options.plan) {
     assert.equal(migration.code, 0); assert.ok(!migration.error && !migration.overflow);
     const expectedMigrations = verified.build.files.filter(file => /^db\/prisma\/migrations\/[^/]+\/migration\.sql$/.test(file.path)).map(file => file.path.split("/")[3]).sort();
     const actualMigrations = (await sql('SELECT migration_name FROM "_prisma_migrations" WHERE finished_at IS NOT NULL ORDER BY migration_name')).trim().split(/\s+/).filter(Boolean);
-    assert.deepEqual(actualMigrations, expectedMigrations); assert.ok(actualMigrations.length >= 103);
+    assertNativeMigrationInventory(expectedMigrations, actualMigrations); assert.ok(actualMigrations.length >= 103);
     report.canonicalMigrations = actualMigrations.length; scenario("relocated-canonical-prisma-migrate-deploy");
     report.stage = "actual-api-worker-startup";
     const api = await guarded("app/api.mjs", "api"), worker = await guarded("app/worker.mjs", "worker");
