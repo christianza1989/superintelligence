@@ -459,9 +459,7 @@ describe("captured-document research seam (mocked runtime; no browser qualificat
         JSON.stringify({
           profile: f.documentBinding.profile,
           tasks: f.documentBinding.tasks,
-          imageId: f.documentBinding.runtime.imageId,
-          buildInputLockSha256: f.documentBinding.runtime.buildInputLockSha256,
-          runnerSha256: f.documentBinding.runtime.runnerSha256,
+          runtime: f.documentBinding.runtime,
           resourceProfile: f.documentBinding.resourceProfile,
         }),
       ),
@@ -638,6 +636,50 @@ describe("captured research current-authority and fetch guards", () => {
       expect(renderDocument).not.toHaveBeenCalled();
       expect(render).not.toHaveBeenCalled();
       if (kind === "privateDNS") expect(f.fetch).not.toHaveBeenCalled();
+    },
+  );
+});
+
+describe("captured profile opaque operator-runtime binding", () => {
+  it.each(["runnerDirectory", "dockerConfigDirectory", "dockerExecutable"] as const)(
+    "denies changed %s after private I/O before capture or dispatch",
+    async (field) => {
+      const f = documentFixture(),
+        job = await f.submit();
+      const original = f.artifacts.get.getMockImplementation()!;
+      f.artifacts.get.mockImplementationOnce(async (id) => {
+        const bytes = await original(id);
+        f.documentBinding.runtime[field] += "-changed";
+        return bytes;
+      });
+      await runZeroUrlResearch(f.deps as never, job.jobId);
+      expect(f.fetch).not.toHaveBeenCalled();
+      expect(renderDocument).not.toHaveBeenCalled();
+      const row = [...f.rows.values()].find((row) => row.name === "zero-research-receipt.json")!;
+      expect(JSON.parse(String(row.description)).state).toBe("blocked");
+      const receipt = JSON.parse(Buffer.from(f.storage.get(String(row.storageKey))!).toString());
+      expect(receipt).not.toHaveProperty("extraction");
+      await expect(f.service.artifact(job.jobId)).rejects.toBeInstanceOf(IsolationError);
+    },
+  );
+  it.each(["runnerDirectory", "dockerConfigDirectory", "dockerExecutable"] as const)(
+    "denies publication when %s changes after runtime output",
+    async (field) => {
+      const f = documentFixture(),
+        job = await f.submit();
+      const original = renderDocument.getMockImplementation()!;
+      renderDocument.mockImplementation(async (...args) => {
+        const result = await original(...args);
+        f.documentBinding.runtime[field] += "-changed";
+        return result;
+      });
+      await runZeroUrlResearch(f.deps as never, job.jobId);
+      expect(renderDocument).toHaveBeenCalledTimes(1);
+      const row = [...f.rows.values()].find((row) => row.name === "zero-research-receipt.json")!;
+      const receipt = JSON.parse(Buffer.from(f.storage.get(String(row.storageKey))!).toString());
+      expect(receipt.state).toBe("blocked");
+      expect(receipt).not.toHaveProperty("extraction");
+      expect(JSON.stringify(receipt)).not.toContain(f.documentBinding.runtime[field]);
     },
   );
 });

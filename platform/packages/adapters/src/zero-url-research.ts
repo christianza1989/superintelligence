@@ -63,9 +63,7 @@ const registryHash = (binding: ZeroUrlResearchBinding) => {
       JSON.stringify({
         profile: binding.profile,
         tasks: binding.tasks,
-        imageId: binding.runtime.imageId,
-        buildInputLockSha256: binding.runtime.buildInputLockSha256,
-        runnerSha256: binding.runtime.runnerSha256,
+        runtime: binding.runtime,
         resourceProfile: binding.resourceProfile,
       }),
     );

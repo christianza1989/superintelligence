@@ -50,7 +50,9 @@ function fixture() {
   const get = vi.fn(),
     put = vi.fn(),
     enqueue = vi.fn();
-  const resolveUrlResearch = vi.fn(async (): Promise<ZeroUrlResearchBinding> => binding);
+  const resolveUrlResearch = vi.fn(
+    async (): Promise<ZeroUrlResearchBinding | undefined> => binding,
+  );
   const app = new Hono();
   mountZeroComponentRoutes(app, {
     prisma: { spaceMember: { findUnique: async () => ({ id: "member" }) } } as never,
@@ -188,4 +190,15 @@ describe("captured-document research HTTP seam (offline; no API/worker qualifica
     expect(f.put).not.toHaveBeenCalled();
     expect(f.enqueue).not.toHaveBeenCalled();
   });
+});
+
+it("maps a currently unavailable research profile to the existing 503 response", async () => {
+  const f = fixture();
+  f.resolveUrlResearch.mockResolvedValue(undefined);
+  const response = await f.call("/status");
+  expect(response.status).toBe(503);
+  expect(await response.json()).toEqual({ error: "component_profile_unavailable" });
+  expect(f.get).not.toHaveBeenCalled();
+  expect(f.put).not.toHaveBeenCalled();
+  expect(f.enqueue).not.toHaveBeenCalled();
 });
