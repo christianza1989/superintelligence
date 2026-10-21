@@ -10,6 +10,7 @@ export const ZERO_URL_DOCUMENT_LIMITS = Object.freeze({
   capsuleBytes: 3_145_728,
   outputBytes: 2_097_152,
   screenshotBytes: 1_048_576,
+  scratchFileBytes: 16_777_216,
   textBytes: 65_536,
   answerBytes: 4096,
   runtimeMs: 30_000,

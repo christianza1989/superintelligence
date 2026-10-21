@@ -223,6 +223,11 @@ export async function executeZeroUrlDocument(
     const cpu = base.indexOf("--cpus=2");
     if (cpu < 0 || base.lastIndexOf("--cpus=2") !== cpu) throw new Error("cpu");
     base[cpu] = "--cpus=1";
+    const scratch = base.indexOf("--ulimit=fsize=4194304:4194304");
+    if (scratch < 0 || base.filter((arg) => arg.startsWith("--ulimit=fsize=")).length !== 1)
+      throw new Error("scratch_file_limit");
+    base[scratch] =
+      `--ulimit=fsize=${ZERO_URL_DOCUMENT_LIMITS.scratchFileBytes}:${ZERO_URL_DOCUMENT_LIMITS.scratchFileBytes}`;
     const script =
       'import { createRequire } from "node:module"; const require = createRequire("/opt/zero-browser/entrypoint.mjs");\n' +
       runner +

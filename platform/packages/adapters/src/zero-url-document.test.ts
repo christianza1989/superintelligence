@@ -3,12 +3,14 @@ import { constants } from "node:fs";
 import { appendFile, chmod, mkdir, mkdtemp, open, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { zeroBrowserDockerRunArguments } from "./zero-browser-docker.js";
 import { captureZeroDockerProcess } from "./zero-docker-process.js";
 import {
   admitsUrlDocumentNavigation,
   isUrlDocumentUrl,
   urlDocumentHash,
   ZERO_URL_DOCUMENT_CSP,
+  ZERO_URL_DOCUMENT_LIMITS,
   ZERO_URL_DOCUMENT_MODE,
   ZERO_URL_DOCUMENT_PROFILE,
   zeroUrlDocumentOutputSchema,
@@ -248,6 +250,24 @@ describe("release-pinned document runtime transport (mocked, no Docker qualifica
     expect(run[3]).toContain('createRequire("/opt/zero-browser/entrypoint.mjs")');
     expect(run[3]).toContain(input().contentBase64);
     expect(config.authorize).toHaveBeenCalledTimes(4);
+  });
+  it("overrides exactly one scratch file limit from the contract while leaving the shared profile unchanged", async () => {
+    const config = await fixture();
+    expect(
+      zeroBrowserDockerRunArguments(
+        config.imageId,
+        "zero-browser-11111111-1111-4111-8111-111111111111",
+        "a".repeat(64),
+      ).filter((arg) => arg.startsWith("--ulimit=fsize=")),
+    ).toEqual(["--ulimit=fsize=4194304:4194304"]);
+    const result = await executeZeroUrlDocument(config, input(), new AbortController().signal);
+    expect(result.state).toBe("succeeded");
+    const args = capture.mock.calls.find((call) => call[1][0] === "run")![1];
+    expect(args.filter((arg) => arg.startsWith("--ulimit=fsize="))).toEqual([
+      `--ulimit=fsize=${ZERO_URL_DOCUMENT_LIMITS.scratchFileBytes}:${ZERO_URL_DOCUMENT_LIMITS.scratchFileBytes}`,
+    ]);
+    expect(ZERO_URL_DOCUMENT_LIMITS.scratchFileBytes).toBe(16_777_216);
+    expect(args).toContain("--tmpfs=/tmp:rw,noexec,nosuid,nodev,size=134217728");
   });
   it("rejects caller code/header options and changed runner bytes before dispatch", async () => {
     const config = await fixture();
