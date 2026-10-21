@@ -110,6 +110,9 @@ async function loadInput(
   let csv: string;
   try {
     csv = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    // The fixed profile binds original UTF-8 bytes; decoding must not silently remove a BOM.
+    if (zeroComponentHash(Buffer.from(csv)) !== expectedHash)
+      throw new Error("component_input_integrity_failed");
     validateZeroCsv(csv);
   } catch {
     throw new Error("component_input_integrity_failed");

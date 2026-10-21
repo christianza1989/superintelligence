@@ -182,6 +182,17 @@ describe("application service uses existing scoped durable lifecycle", () => {
       expect(f.deps.jobs.enqueue).not.toHaveBeenCalled();
     },
   );
+  it("rejects UTF-8 BOM bytes before queueing a lossy source binding", async () => {
+    const f = await fixture();
+    const bytes = Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), f.csv]);
+    f.storage.set("input", bytes);
+    f.source.size = bytes.length;
+    f.source.hash = zeroComponentHash(bytes);
+    f.input.expectedInputSha256 = f.source.hash;
+    await expect(f.service.submit(f.input)).rejects.toThrow("component_input_integrity_failed");
+    expect(f.deps.jobs.enqueue).not.toHaveBeenCalled();
+    expect(f.deps.artifacts.put).not.toHaveBeenCalled();
+  });
   it("checks actual stored bytes against the expected digest", async () => {
     const f = await fixture();
     f.storage.set("input", Buffer.from("category,amount\nChanged,9\n"));
