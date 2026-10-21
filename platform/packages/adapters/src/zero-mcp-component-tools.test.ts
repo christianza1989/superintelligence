@@ -1,5 +1,5 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { createHash } from "node:crypto";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it, vi } from "vitest";
@@ -56,7 +56,11 @@ async function fixture(
   ) => Promise<void>,
 ) {
   const server = createZeroMcpServer({
-    componentStatus: { pdf: async () => "available", browser: async () => "blocked", research: async () => "unavailable" },
+    componentStatus: {
+      pdf: async () => "available",
+      browser: async () => "blocked",
+      research: async () => "unavailable",
+    },
   });
   const pdf = api("pdf"),
     browser = api("browser"),
@@ -155,19 +159,44 @@ describe("fixed extraction MCP boundary", () => {
           profile: "pdfplumber-0.11.10-born-digital-lines-v1",
           sourceSha256: sha256,
           receipt: { artifactId: "receipt", revision: 2, sha256 },
-          csv: { sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length, encoding: "utf-8", delimiter: ",", lineTerminator: "\n" },
-          table: { index: 0, count: 1, rows: 1, columns: 1, provenance: [{ page_no: 1, bbox: { l: 1, t: 1, r: 10, b: 10, coord_origin: "TOPLEFT" } }] },
+          csv: {
+            sha256: createHash("sha256").update(bytes).digest("hex"),
+            bytes: bytes.length,
+            encoding: "utf-8",
+            delimiter: ",",
+            lineTerminator: "\n",
+          },
+          table: {
+            index: 0,
+            count: 1,
+            rows: 1,
+            columns: 1,
+            provenance: [
+              { page_no: 1, bbox: { l: 1, t: 1, r: 10, b: 10, coord_origin: "TOPLEFT" } },
+            ],
+          },
         },
-        totalBytes: bytes.length, offset: 0, nextOffset: null,
-        encoding: "base64", contentBase64: bytes.toString("base64"),
+        totalBytes: bytes.length,
+        offset: 0,
+        nextOffset: null,
+        encoding: "base64",
+        contentBase64: bytes.toString("base64"),
       });
       const args = { jobId, tableIndex: 0 };
       const output = await client.callTool({ name: "zero_pdf_csv", arguments: args });
       expect(output.isError).not.toBe(true);
       expect(Buffer.byteLength(JSON.stringify(output))).toBeLessThanOrEqual(32768);
       expect(pdf.pdfCsvPage).toHaveBeenCalledWith(jobId, 0, { offset: 0, limit: 8192 });
-      for (const extra of [{ limit: 8193 }, { tableIndex: 32 }, { scopeId: "foreign" }, { path: "/private" }])
-        expect((await client.callTool({ name: "zero_pdf_csv", arguments: { ...args, ...extra } })).isError).toBe(true);
+      for (const extra of [
+        { limit: 8193 },
+        { tableIndex: 32 },
+        { scopeId: "foreign" },
+        { path: "/private" },
+      ])
+        expect(
+          (await client.callTool({ name: "zero_pdf_csv", arguments: { ...args, ...extra } }))
+            .isError,
+        ).toBe(true);
       expect(pdf.pdfCsvPage).toHaveBeenCalledTimes(1);
       vi.mocked(pdf.pdfCsvPage).mockRejectedValueOnce(new Error("PRIVATE_PDF_BINDING"));
       const denied = await client.callTool({ name: "zero_pdf_csv", arguments: args });
