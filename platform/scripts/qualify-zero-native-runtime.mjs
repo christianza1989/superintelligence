@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, relocateNativeQualificationPackage, qualifyNativeSharedWeb, stopNativeQualificationProcess } from "./lib/native-runtime-qualification.mjs";
 
 const options = nativeQualificationArguments(process.argv.slice(2));
 if (options.plan) {
@@ -20,7 +20,7 @@ if (options.plan) {
   const evidence = path.join(root, "platform/.local/native-runtime-qualification", nonce);
   const scratch = await mkdtemp(path.join(os.tmpdir(), "zero-native-package-proof-"));
   await mkdir(evidence, { recursive: true, mode: 0o700 });
-  for (const name of ["home", "tmp", "data", "operator", "cwd/child", "pg-data", "docker"]) await mkdir(path.join(scratch, name), { recursive: true, mode: 0o700 });
+  await prepareNativeQualificationDirectories(scratch);
   await writeFile(path.join(evidence, "private-scratch-path.txt"), scratch + "\n", { mode: 0o600 });
   const cwd = path.join(scratch, "cwd/child"), relocated = path.join(scratch, "runtime");
   const owner = "zero-native-runtime-proof-" + nonce, database = "zero_native_runtime_test_" + nonce, user = "zero_fixture";
@@ -211,7 +211,14 @@ if (options.plan) {
       else {
       const ids = (await docker(["ps", "--all", "--quiet", "--no-trunc", "--filter", "label=repositoryzero.owner=" + owner], { signal: cleanup })).trim().split(/\s+/).filter(Boolean);
       assert.ok(ids.length <= 1);
-      for (const id of ids) { await ownsPostgres(id, cleanup); await docker(["rm", "--force", id], { signal: cleanup }); }
+      for (const id of ids) {
+        await ownsPostgres(id, cleanup);
+        // Preserve the real server diagnostic before removing our fixture.
+        // A log retrieval failure must never prevent owned-container cleanup.
+        try { await docker(["logs", "--tail", "100", id], { signal: cleanup }); }
+        catch { report.postgresLogCapture = "unavailable"; }
+        await docker(["rm", "--force", id], { signal: cleanup });
+      }
       report.containerCleanup = "owned-fixture-removed-bind-data-retained";
       }
     } catch { report.containerCleanup = "unknown"; report.status = "FAIL"; process.exitCode = 1; }

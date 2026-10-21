@@ -2,13 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import net from "node:net";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, qualifyNativeSharedWeb, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
+import { assertNativeQualificationProcessAlive, cleanupNativeQualificationProcess, stopNativeQualificationProcess, nativeQualificationArguments, nativeQualificationEnvironment, prepareNativeQualificationDirectories, qualifyNativeSharedWeb, relocateNativeQualificationPackage, verifyNativeQualificationPackage } from "./native-runtime-qualification.mjs";
 
 const hash = value => createHash("sha256").update(value).digest("hex");
 const revision = "a".repeat(40), image = "sha256:" + "b".repeat(64);
@@ -35,6 +35,19 @@ test("qualification is explicit and requires exact independent source, image and
   assert.throws(() => nativeQualificationArguments(args.slice(1)));
   assert.throws(() => nativeQualificationArguments(args.map(value => value === image ? "postgres:latest" : value)));
   assert.throws(() => nativeQualificationArguments(args.map(value => value === "/fixture/package" ? "relative" : value)));
+});
+
+test("PostgreSQL mount parent permits its separate UID to traverse without exposing private host roots", async t => {
+  const scratch = await mkdtemp(path.join(os.tmpdir(), "zero-qualification-permissions-"));
+  t.after(() => rm(scratch, { recursive: true, force: true }));
+  await prepareNativeQualificationDirectories(scratch);
+  const mode = async file => (await stat(path.join(scratch, file))).mode & 0o777;
+  assert.equal(await mode("."), 0o700);
+  assert.equal(await mode("pg-data") & 0o011, 0o011);
+  assert.equal(await mode("pg-data") & 0o066, 0);
+  for (const name of ["home", "tmp", "data", "operator", "cwd/child", "docker"]) {
+    assert.equal(await mode(name), 0o700);
+  }
 });
 
 test("sealed inventory relocates contained symlinks and rejects stale pins, tamper and extra files", async t => {

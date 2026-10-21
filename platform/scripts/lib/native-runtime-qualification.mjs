@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { cp, lstat, readFile, readdir, realpath } from "node:fs/promises";
+import { chmod, cp, lstat, mkdir, readFile, readdir, realpath } from "node:fs/promises";
 import path from "node:path";
 
 const hashFile = async file => {
@@ -10,6 +10,16 @@ const hashFile = async file => {
 };
 const safeRelative = value => typeof value === "string" && value.length > 0 && !path.isAbsolute(value) && value.split(/[\\/]/).every(part => part && part !== "." && part !== "..");
 const inside = (root, file) => file === root || file.startsWith(root + path.sep);
+
+export async function prepareNativeQualificationDirectories(scratch) {
+  for (const name of ["home", "tmp", "data", "operator", "cwd/child", "pg-data", "docker"]) {
+    await mkdir(path.join(scratch, name), { recursive: true, mode: 0o700 });
+  }
+  // PG18 drops to its own UID before initializing the versioned child data
+  // directory. Only the empty mounted parent needs cross-UID traversal; the
+  // private host scratch root and the actual PGDATA remain inaccessible.
+  await chmod(path.join(scratch, "pg-data"), 0o711);
+}
 
 export function nativeQualificationArguments(args) {
   if (args.length === 1 && args[0] === "--plan") return { plan: true };
