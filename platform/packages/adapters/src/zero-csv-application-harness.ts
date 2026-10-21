@@ -106,7 +106,7 @@ try {
     assert(name + "_opaque_origin", await actualFrame.evaluate(() => {
       try { void parent.document; return false; } catch { return true; }
     }));
-    const png = await page.screenshot({ type: "png", fullPage: true });
+    const png = await page.screenshot({ type: "png", fullPage: false, animations: "disabled", timeout: 3000 });
     if (png.length > 1048576) throw Error("screenshot_limit");
     screenshots.push({ viewport: name, mimeType: "image/png", bytes: png.length, sha256: hash(png), contentBase64: png.toString("base64") });
     await browserContext.close();
