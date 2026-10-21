@@ -99,12 +99,12 @@ test("protobuf supplemental evidence preserves both license texts and rejects a 
   assert.equal(bsd.source.sourceByteRange.bytes, source.indexOf(Buffer.from("/**\n")));
   assert.deepEqual(notice, source.subarray(0, bsd.source.sourceByteRange.bytes));
   assert.equal(hash(notice), "0e952cb110ff6944789fbe47c25b38819a3866c04c7c5cbea8d0c0d8f3a92f0e");
-  assert.deepEqual(manifest.unresolved.map(item => item.package + "@" + item.version), [
+  assert.deepEqual(manifest.unresolved.map(item => item.package + "@" + item.version).toSorted(), [
     "@better-auth/utils@0.4.2", "@better-auth/utils@0.5.0",
     "chat-adapter-sendblue@0.2.0",
     "@img/sharp-libvips-linux-x64@1.3.3", "@img/sharp-libvips-linuxmusl-x64@1.3.3",
     "@koromix/koffi-linux-x64@3.2.1", "@prisma/dev@0.24.17",
-  ]);
+  ].toSorted());
   const scratch = await mkdtemp(path.join(os.tmpdir(), "zero-protobuf-notices-"));
   try {
     const output = path.join(scratch, "complete");
