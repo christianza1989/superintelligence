@@ -29,6 +29,21 @@ const policies = Object.freeze({
       }),
     }),
   }),
+  application: Object.freeze({
+    requestName: "zero-application-request.json",
+    receiptName: "zero-application-receipt.json",
+    receiptKind: "zero.application.receipt.v1",
+    legacyNoncePrefix: "zero.application",
+    requestBytes: 8192,
+    artifactBytes: 2_097_152,
+    requestKinds: Object.freeze({
+      "zero.application.request.v1": Object.freeze({
+        profile: "zero-csv-expense-application-v1",
+        jobName: "zero.application.create",
+        runtimeMs: 30_000,
+      }),
+    }),
+  }),
   research: Object.freeze({
     requestName: "zero-research-request.json",
     receiptName: "zero-research-receipt.json",
@@ -104,6 +119,7 @@ export interface ZeroComponentHeader {
   deadline?: string;
   inputSha256?: string | null;
   fileId?: string;
+  bindingSha256?: string;
 }
 export type ZeroComponentState = "succeeded" | "failed" | "blocked" | "cancelled";
 type StorageDependencies = Pick<ZeroComponentDependencies, "prisma" | "artifacts"> & {
@@ -147,7 +163,7 @@ export const zeroComponentContext = (
   signal: AbortSignal.timeout(
     family === "csv"
       ? ZERO_CSV_LIMITS.runtimeMs
-      : family === "pdf" || family === "research"
+      : family === "pdf" || family === "research" || family === "application"
         ? ZERO_PDF_LIMITS.runtimeMs
         : 20_000,
   ),
@@ -211,11 +227,16 @@ export async function loadZeroComponentHeader(
   const kind = metadata.kind ?? (family === "csv" ? "zero.csv.request.v1" : undefined);
   const profile = Object.entries(policy.requestKinds).find(([key]) => key === kind)?.[1].profile;
   if (!profile) throw new IsolationError();
+  if (family === "application" && !hashSchema.safeParse(metadata.bindingSha256).success)
+    throw new IsolationError();
   const header: ZeroComponentHeader = {
     principal: owner,
     kind,
     profile,
     requestDigest: hashSchema.parse(metadata.requestDigest),
+    ...(metadata.bindingSha256 !== undefined
+      ? { bindingSha256: hashSchema.parse(metadata.bindingSha256) }
+      : {}),
     ...(metadata.deadline
       ? {
           deadline: z
@@ -507,6 +528,7 @@ export async function submitZeroComponent(
               inputSha256: options.inputSha256 ?? null,
               ...("fileId" in request ? { fileId: request.fileId } : {}),
               requestDigest: request.requestDigest,
+              ...(request.bindingSha256 ? { bindingSha256: request.bindingSha256 } : {}),
             }),
             mimeType: "application/json",
             size: bytes.byteLength,

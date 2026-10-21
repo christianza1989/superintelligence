@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { isZeroPrivateArtifact } from "./zero-private-artifacts.js";
 describe("private job artifact namespace", () => {
   it.each([
+    "zero-application-request.json",
+    "zero-application-receipt.json",
+    "zero-application-workspace.json",
     "zero-csv-request.json",
     "zero-csv-receipt.json",
     "zero-pdf-input.pdf",
@@ -19,6 +22,7 @@ describe("private job artifact namespace", () => {
     expect(isZeroPrivateArtifact({ name })).toBe(true),
   );
   it.each([
+    "zero.application.workspace:job",
     "zero.csv.request:job",
     "zero.pdf.input:source",
     "zero.browser.receipt:job",

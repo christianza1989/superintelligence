@@ -1,5 +1,8 @@
 /** Internal bounded-job artifacts have their own current-grant readers and writers. */
 export const ZERO_PRIVATE_ARTIFACT_NAMES = Object.freeze([
+  "zero-application-request.json",
+  "zero-application-receipt.json",
+  "zero-application-workspace.json",
   "zero-csv-request.json",
   "zero-csv-receipt.json",
   "zero-pdf-request.json",
@@ -15,6 +18,7 @@ export const ZERO_PRIVATE_ARTIFACT_NAMES = Object.freeze([
   "zero-jev-receipt.json",
 ]);
 export const ZERO_PRIVATE_ARTIFACT_NONCE_PREFIXES = Object.freeze([
+  "zero.application.",
   "zero.csv.",
   "zero.pdf.",
   "zero.browser.",

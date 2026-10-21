@@ -16,6 +16,12 @@ import { ZERO_CSV_PROFILE } from "./zero-csv-profile.js";
 import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 
 const families = [
+  [
+    "application",
+    "zero.application.request.v1",
+    "zero-csv-expense-application-v1",
+    "zero-application-request.json",
+  ],
   ["csv", "zero.csv.request.v1", ZERO_CSV_PROFILE, "zero-csv-request.json"],
   ["research", "zero.research.request.v1", "zero-url-research-v1", "zero-research-request.json"],
   ["browser", "zero.browser.request.v1", "zero-browser-static-v1", "zero-browser-request.json"],
@@ -35,6 +41,7 @@ function fixture(family: ZeroComponentFamily = "csv") {
     principal,
     kind: entry[1],
     profile: entry[2],
+    ...(family === "application" ? { bindingSha256: "a".repeat(64) } : {}),
     deadline: new Date(now + 60_000).toISOString(),
   };
   const request = { ...body, requestDigest: zeroComponentDigest(body) };

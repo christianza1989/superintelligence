@@ -1,3 +1,5 @@
+import type { ZeroCsvApplicationResolve } from "./zero-csv-application-service.js";
+import { runZeroCsvApplication } from "./zero-csv-application-service.js";
 import type {
   AgentHomeStore,
   AgentRuntime,
@@ -39,6 +41,7 @@ export function createBackgroundJobHandlers(deps: {
   resolveZeroPdf?: ZeroPdfResolve;
   resolveZeroBrowser?: ZeroBrowserResolve;
   resolveZeroUrlResearch?: ZeroUrlResearchResolve;
+  resolveZeroApplication?: ZeroCsvApplicationResolve;
   zeroUrlResearchTestTransport?: ZeroUrlResearchTestTransport;
   executor: ReturnType<typeof createRunExecutor>;
   prisma: PrismaClient;
@@ -71,6 +74,18 @@ export function createBackgroundJobHandlers(deps: {
   };
 
   return {
+    "zero.application.create": async ({ requestArtifactId }) => {
+      if (!deps.artifacts) throw new Error("Component artifact store unavailable");
+      await runZeroCsvApplication(
+        {
+          prisma: deps.prisma,
+          artifacts: deps.artifacts,
+          authorize: deps.authorizeZeroComponent,
+          resolveApplication: deps.resolveZeroApplication,
+        },
+        requestArtifactId,
+      );
+    },
     "zero.research.extract": async ({ requestArtifactId }) => {
       if (!deps.artifacts) throw new Error("Component artifact store unavailable");
       await runZeroUrlResearch(

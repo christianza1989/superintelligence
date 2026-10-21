@@ -545,6 +545,9 @@ export async function createApp(
     resolveZeroPdf: zeroComponentScopes?.resolvePdf
       ? (principal) => zeroComponentScopes.resolvePdf!(principal)
       : undefined,
+    resolveZeroApplication: zeroComponentScopes?.resolveApplication
+      ? (principal) => zeroComponentScopes.resolveApplication!(principal)
+      : undefined,
     resolveZeroUrlResearch: zeroComponentScopes?.resolveUrlResearch
       ? (principal) => zeroComponentScopes.resolveUrlResearch!(principal)
       : undefined,

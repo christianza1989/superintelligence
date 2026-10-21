@@ -30,6 +30,7 @@ function handlers(): BackgroundJobHandlers {
     "zero.csv.verify": vi.fn(async () => undefined),
     "zero.pdf.extract": vi.fn(async () => undefined),
     "zero.browser.extract": vi.fn(async () => undefined),
+    "zero.application.create": vi.fn(async () => undefined),
     "zero.research.extract": vi.fn(async () => undefined),
     "run.continue": vi.fn(async () => undefined),
     "routine.wakeup": vi.fn(async () => undefined),

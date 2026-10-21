@@ -635,6 +635,7 @@ export interface BackgroundJobPayloads {
   "zero.csv.verify": { requestArtifactId: string };
   "zero.pdf.extract": { requestArtifactId: string };
   "zero.browser.extract": { requestArtifactId: string };
+  "zero.application.create": { requestArtifactId: string };
   "zero.research.extract": { requestArtifactId: string };
   "run.continue": { runId: string };
   "routine.wakeup": { routineId: string; scheduledFor: string };

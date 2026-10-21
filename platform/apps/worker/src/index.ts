@@ -253,6 +253,9 @@ async function main() {
       ? (principal) => zeroCsvScopes.authorize(principal)
       : undefined,
     resolveZeroPdf: zeroCsvScopes ? (principal) => zeroCsvScopes.resolvePdf(principal) : undefined,
+    resolveZeroApplication: zeroCsvScopes
+      ? (principal) => zeroCsvScopes.resolveApplication(principal)
+      : undefined,
     resolveZeroUrlResearch: zeroCsvScopes
       ? (principal) => zeroCsvScopes.resolveUrlResearch(principal)
       : undefined,

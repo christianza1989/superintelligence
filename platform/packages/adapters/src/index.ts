@@ -211,3 +211,14 @@ export {
 export type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
 export { createZeroUrlResearchService, runZeroUrlResearch } from "./zero-url-research.js";
 export type { ZeroUrlResearchResolve, ZeroUrlResearchTestTransport } from "./zero-url-research.js";
+
+export {
+  createZeroCsvApplicationService,
+  runZeroCsvApplication,
+} from "./zero-csv-application-service.js";
+export type { ZeroCsvApplicationResolve } from "./zero-csv-application-service.js";
+export type { ZeroCsvApplicationBinding } from "./zero-csv-application-service-contract.js";
+export {
+  ZERO_CSV_APPLICATION_LIMITS,
+  ZERO_CSV_APPLICATION_PROFILE,
+} from "./zero-csv-application-contract.js";

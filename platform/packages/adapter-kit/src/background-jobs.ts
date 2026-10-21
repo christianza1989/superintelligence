@@ -12,6 +12,7 @@ const payloadSchemas = {
   "zero.csv.verify": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.pdf.extract": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.browser.extract": z.object({ requestArtifactId: z.string().uuid() }).strict(),
+  "zero.application.create": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "zero.research.extract": z.object({ requestArtifactId: z.string().uuid() }).strict(),
   "run.continue": z.object({ runId: z.string().min(1) }),
   "routine.wakeup": z.object({

@@ -1,6 +1,7 @@
 import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
 import type {
   ZeroBrowserResolve,
+  ZeroCsvApplicationResolve,
   ZeroComponentAuthorize,
   ZeroComponentPrincipal,
   ZeroPdfResolve,
@@ -9,6 +10,9 @@ import type {
 } from "@rakazo/adapters";
 import {
   createZeroBrowserService,
+  createZeroCsvApplicationService,
+  ZERO_CSV_APPLICATION_PROFILE,
+  ZERO_CSV_APPLICATION_LIMITS,
   createZeroPdfService,
   createZeroUrlResearchService,
   projectZeroPdfCsv,
@@ -35,8 +39,10 @@ export interface ZeroComponentScopePolicy {
   resolvePdf?: ZeroPdfResolve;
   resolveBrowser?: ZeroBrowserResolve;
   resolveUrlResearch?: ZeroUrlResearchResolve;
+  resolveApplication?: ZeroCsvApplicationResolve;
 }
-type Service = ReturnType<typeof createZeroPdfService>;
+type Service = ReturnType<typeof createZeroPdfService> &
+  Partial<Pick<ReturnType<typeof createZeroCsvApplicationService>, "workspace">>;
 const PAGE_BYTES = 16_384;
 export function mountZeroComponentRoutes(
   app: Hono,
@@ -51,7 +57,7 @@ export function mountZeroComponentRoutes(
   },
 ) {
   // Family is selected only here at composition, never from a body or tool argument.
-  for (const family of ["pdf", "browser", "research"] as const) {
+  for (const family of ["pdf", "browser", "research", "application"] as const) {
     const prefix = `/api/zero/${family}/scopes/:scopeId`;
     const scoped = async (c: Context, action: (service: Service) => Promise<Response>) => {
       c.header("cache-control", "no-store");
@@ -82,13 +88,18 @@ export function mountZeroComponentRoutes(
             ? createZeroPdfService
             : family === "browser"
               ? createZeroBrowserService
-              : createZeroUrlResearchService
+              : family === "research"
+                ? createZeroUrlResearchService
+                : createZeroCsvApplicationService
         )(
           {
             prisma: deps.prisma,
             artifacts: deps.artifacts,
             jobs: deps.jobs,
             authorize: (owner) => deps.policy!.authorize(owner),
+            resolveApplication: deps.policy.resolveApplication
+              ? (owner) => deps.policy!.resolveApplication!(owner)
+              : undefined,
             resolveUrlResearch: deps.policy.resolveUrlResearch
               ? (owner) => deps.policy!.resolveUrlResearch!(owner)
               : undefined,
@@ -165,7 +176,9 @@ export function mountZeroComponentRoutes(
               ? ZERO_PDF_PROFILE
               : family === "browser"
                 ? ZERO_BROWSER_STATIC_PROFILE
-                : ZERO_URL_RESEARCH_PROFILE,
+                : family === "research"
+                  ? ZERO_URL_RESEARCH_PROFILE
+                  : ZERO_CSV_APPLICATION_PROFILE,
           backend: "available",
           paidModelCalls: 0,
           execution:
@@ -173,17 +186,21 @@ export function mountZeroComponentRoutes(
               ? "pdf-extraction"
               : family === "browser"
                 ? "browser-static-extraction"
-                : ZERO_URL_RESEARCH_MODE,
+                : family === "research"
+                  ? ZERO_URL_RESEARCH_MODE
+                  : "native-esm-expense-build+opaque-browser-check",
           limits:
             family === "pdf"
               ? ZERO_PDF_JOB_LIMITS
               : family === "browser"
                 ? ZERO_BROWSER_STATIC_JOB_LIMITS
-                : ZERO_URL_RESEARCH_LIMITS,
+                : family === "research"
+                  ? ZERO_URL_RESEARCH_LIMITS
+                  : ZERO_CSV_APPLICATION_LIMITS,
         });
       }),
     );
-    app.post(`${prefix}/extract`, (c) =>
+    app.post(prefix + (family === "application" ? "/create" : "/extract"), (c) =>
       scoped(c, async (service) => {
         const parsed = await body(c);
         if (parsed.error) return parsed.error;
@@ -269,40 +286,46 @@ export function mountZeroComponentRoutes(
         }),
       );
     }
-    app.get(`${prefix}/jobs/:jobId/artifact`, (c) =>
-      scoped(c, async (service) => {
-        const query = c.req.query();
-        if (
-          Object.keys(query).some((key) => key !== "offset" && key !== "limit") ||
-          !/^\d+$/u.test(query.offset ?? "0") ||
-          !/^\d+$/u.test(query.limit ?? String(PAGE_BYTES))
-        )
-          return c.json({ error: "invalid_page" }, 400);
-        const offset = Number(query.offset ?? "0"),
-          limit = Number(query.limit ?? PAGE_BYTES);
-        if (
-          !Number.isSafeInteger(offset) ||
-          offset < 0 ||
-          !Number.isSafeInteger(limit) ||
-          limit < 1 ||
-          limit > PAGE_BYTES
-        )
-          return c.json({ error: "invalid_page" }, 400);
-        const artifact = await service.artifact(c.req.param("jobId"));
-        const bytes = Buffer.from(artifact.content);
-        if (offset > bytes.length) return c.json({ error: "invalid_page" }, 400);
-        const end = Math.min(offset + limit, bytes.length);
-        return c.json({
-          artifactId: artifact.artifactId,
-          revision: artifact.revision,
-          sha256: artifact.sha256,
-          totalBytes: bytes.length,
-          offset,
-          nextOffset: end < bytes.length ? end : null,
-          encoding: "base64",
-          contentBase64: bytes.subarray(offset, end).toString("base64"),
-        });
-      }),
-    );
+    for (const artifactKind of (family === "application"
+      ? ["artifact", "workspace"]
+      : ["artifact"]) as Array<"artifact" | "workspace">) {
+      app.get(prefix + "/jobs/:jobId/" + artifactKind, (c) =>
+        scoped(c, async (service) => {
+          const query = c.req.queries(),
+            offsetText = query.offset?.[0] ?? "0",
+            limitText = query.limit?.[0] ?? String(PAGE_BYTES);
+          if (
+            Object.entries(query).some(
+              ([key, values]) => (key !== "offset" && key !== "limit") || values.length !== 1,
+            ) ||
+            !/^(?:0|[1-9][0-9]*)$/u.test(offsetText) ||
+            !/^[1-9][0-9]*$/u.test(limitText)
+          )
+            return c.json({ error: "invalid_page" }, 400);
+          const offset = Number(offsetText),
+            limit = Number(limitText);
+          if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(limit) || limit > PAGE_BYTES)
+            return c.json({ error: "invalid_page" }, 400);
+          const jobId = c.req.param("jobId");
+          const artifact =
+            artifactKind === "workspace"
+              ? await service.workspace!(jobId)
+              : await service.artifact(jobId);
+          const bytes = Buffer.from(artifact.content);
+          if (offset > bytes.length) return c.json({ error: "invalid_page" }, 400);
+          const end = Math.min(offset + limit, bytes.length);
+          return c.json({
+            artifactId: artifact.artifactId,
+            revision: artifact.revision,
+            sha256: artifact.sha256,
+            totalBytes: bytes.length,
+            offset,
+            nextOffset: end < bytes.length ? end : null,
+            encoding: "base64",
+            contentBase64: bytes.subarray(offset, end).toString("base64"),
+          });
+        }),
+      );
+    }
   }
 }

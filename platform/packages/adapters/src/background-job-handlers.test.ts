@@ -8,12 +8,16 @@ import type {
 import type { PrismaClient, ThreadEvents } from "@rakazo/db";
 import { createLogger, createTestSink, installLogger } from "@rakazo/logging";
 import { describe, expect, it, vi } from "vitest";
+import { runZeroCsvApplication } from "./zero-csv-application-service.js";
 import { createBackgroundJobHandlers } from "./background-job-handlers.js";
 import { createRunExecutor } from "./executor.js";
 import { compactHistory } from "./history-compaction.js";
 import { deliverMessagingOutbound, mirrorMessagingOutbound } from "./messaging-delivery.js";
 import type { EncryptedSecretStore } from "./secrets.js";
 
+vi.mock("./zero-csv-application-service.js", () => ({
+  runZeroCsvApplication: vi.fn(async () => undefined),
+}));
 vi.mock("./history-compaction.js", () => ({ compactHistory: vi.fn(async () => undefined) }));
 vi.mock("./messaging-delivery.js", () => ({
   deliverMessagingOutbound: vi.fn(async () => undefined),
@@ -21,6 +25,28 @@ vi.mock("./messaging-delivery.js", () => ({
 }));
 
 describe("createBackgroundJobHandlers", () => {
+  it("dispatches application jobs through the existing worker with only the trusted request ID", async () => {
+    const prisma = {} as PrismaClient,
+      artifacts = {} as never;
+    const authorizeZeroComponent = vi.fn(async () => undefined),
+      resolveZeroApplication = vi.fn(async () => undefined);
+    const handlers = createBackgroundJobHandlers({
+      prisma,
+      artifacts,
+      authorizeZeroComponent,
+      resolveZeroApplication,
+    } as unknown as Parameters<typeof createBackgroundJobHandlers>[0]);
+    await handlers["zero.application.create"]({ requestArtifactId: "request-id" });
+    expect(runZeroCsvApplication).toHaveBeenCalledWith(
+      {
+        prisma,
+        artifacts,
+        authorize: authorizeZeroComponent,
+        resolveApplication: resolveZeroApplication,
+      },
+      "request-id",
+    );
+  });
   it("delivers directly when shutdown rejects a completed run's mirror job", async () => {
     const enqueueError = new Error("Background job publisher is closing");
     const jobs = {
