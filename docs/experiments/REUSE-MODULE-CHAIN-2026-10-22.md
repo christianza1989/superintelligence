@@ -80,6 +80,19 @@ Automatic activation occurred with the disclosed project guidance. One overlong 
 
 The subsequent 0.8.2/schema 1.9.0 repair makes returned module candidate IDs directly inspectable with pinned file hashes, original license, exact module limits and source-vendoring facts. The shared raw-query limit is now 2,048 characters rather than 256, with no truncation of trailing hard requirements. A first regression exposed a second core-normalization limit after the adapter limit was extended; that failure is retained and both boundaries now share one constant. The final focused suite passed 158 tests across seven files. A [harder RepairDesk plan-only task](../../benchmarks/native-repairdesk-plans/v1/README.md), allowing ordinary libraries, is a separate frozen epoch; no prompt or checker was changed inside the completed StockDesk pair.
 
+## Harder RepairDesk plan-only pair
+
+After the repairs were committed, a separate frozen RepairDesk pair used the same natural request/specification, Luna/high and core 0.163.0-alpha.11.1. Both workspaces remained byte-unchanged. B ran first, then A; neither this pair nor the earlier StockDesk pair is a balanced repeated-benefit study.
+
+| Side | Native planning time | Input / cached input / output tokens | Result |
+|---|---|---|---|
+| A | 52.852 s | 100,202 / 88,448 / 4,732 | Django/SQLite and server templates proposed; substantial language drift in the original response, preserved unchanged |
+| B | 63.545 s | 267,589 / 245,248 / 6,100 | FastAPI/SQLite and React proposed; six successful Zero calls, no actual reuse proposed |
+
+B called status, three searches and two module inspections. All calls succeeded; hashes, license, exact limits and vendoring facts were returned. The broad application query returned no foundation candidate from the dated catalog. This does not assert that GitHub has no suitable foundation. B rejected the bounded Papa Parse profile as insufficient for general workshop imports and the ZIP-creation-only fflate profile as insufficient for full backup/restore with attachments. Those are limits of the prepared profiles, not the entire upstream libraries.
+
+Automatic activation and module inspection now work for this native profile. Useful broad source selection and a concrete integration proposal remain unproven. B was slower and used more cumulative input; A's language failure remains part of the outcome. No numerical plan-quality winner, working-code verdict or general benefit is inferred. The next product gap is library/foundation coverage and separation of source suitability from the narrower prepared runtime profile, followed by human plan review before implementation. Jev calls were zero and the allocation journal unchanged in both plan-only pairs.
+
 ## Limits and next gate
 
 The selected Node Docker profile is read-only, network-disabled and bounded to 128 MiB, one CPU and ten seconds. Evidence concerns the component snapshot and exercised calls. It is not hostile-code isolation, a whole-application verdict, a hidden holdout, or proof of benefit. Later edits require a new verification. Packaging these worker-side source assets into a relocated runtime is a separate qualification.
