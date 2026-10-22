@@ -1,6 +1,6 @@
-# Native Codex value pilot — preparation
+# Native Codex value pilot — preparation and planning
 
-2026-10-22. **NOT_RUN:** no coding pair or benefit result exists yet. The user prioritized a practical native Codex comparison before continuing the remaining full-MVP implementation. This is a bounded development pilot, not a decision to abandon the wider roadmap or a claim of independent holdout qualification.
+2026-10-22. **Natural planning comparison completed; coding NOT_RUN:** no coding pair or demonstrated benefit exists yet. The user prioritized a practical native Codex comparison before continuing the remaining full-MVP implementation. This is a bounded development pilot, not a decision to abandon the wider roadmap or a claim of independent holdout qualification.
 
 The proposed first task is [local inventory import](../../benchmarks/native-inventory-pilot/v1/SPEC.md), with a [shared prompt](../../benchmarks/native-inventory-pilot/v1/prompt.txt) and neutral starter. The 16 KiB / 128-row scope is a separate new pilot matching the prepared CSV component limits; it does not rewrite the older 5 MiB / 10,000-row draft in [the native benchmark method](../NATIVE-CODEX-BENCHMARK.md). Task, starter, grader, component and configuration digests must be frozen before either coding chat starts.
 
@@ -35,3 +35,29 @@ The user subsequently clarified that the actual test must be **natural user beha
 The new natural planning epoch uses a separate [natural prompt](../../benchmarks/native-inventory-pilot/v1/natural-plan-prompt.txt) and two fresh, unforked Luna/high native chats. The exact same request refers to the same unchanged SPEC, asks for a complete plan and a stop, and gives no library-search strategy. B's fixed installed skill/MCP must itself prompt appropriate discovery; no special B-only user hint is added. Configurations, runtime/component and grader code are unchanged. All planning attempts remain visible; this prompt change is user-directed before the new epoch, not an in-place repair of an active pair. Plans alone still do not demonstrate implementation quality or benefit.
 
 The task tool XML-escapes prompt text inside its delegation carrier. For the new epoch, record the source-file and exact sent-input hashes, each full carrier hash, and compare the extracted input after one XML entity-decoding pass with the exact sent text. No newline or other normalization is allowed beyond the predeclared source `trimEnd()`.
+
+## Natural planning epoch — completed
+
+Frozen source `78a4b10e3e8445177ea12d9f89b903dd78be67fe`; random order A then B. Both clean native chats used the exact same natural application request and plan-first stop, with `gpt-6-luna` / `high` confirmed by their sole host transcript turn context. Sent input SHA-256 `85e44d29201fd2dae92a68a0800d7f1218227cb4f198030a0aaab4cc12afe1c9` matches each recorded, entity-decoded delegation input. No extra Zero/GitHub/reuse hint was sent to B. Each working tree retained exactly the same three files and hashes after the plan; no application was implemented, installed or run.
+
+| Host-reported planning metric | A without Zero | B with configured Zero |
+|---|---:|---:|
+| Native turn duration | 31.794 s | 27.883 s |
+| Cumulative input tokens | 100,981 | 102,715 |
+| Cached input subset | 88,704 | 90,112 |
+| Input excluding cached subset | 12,277 | 12,603 |
+| Output tokens | 1,500 | 1,811 |
+| Reported reasoning output | 259 | 539 |
+| Reported total tokens | 102,481 | 104,526 |
+| Native orchestration calls | 2 | 2 |
+| Actual Zero MCP calls | 0 | 0 |
+
+These times cover the native model turn, not all protocol construction/setup or dispatch overhead. Token counters are cumulative across the turn's model requests, not unique words in the prompt. Cached input is part of input; reasoning is not added again to the reported total. Subscription dollar cost and provider billing attestation remain unknown. Earlier setup/preflight and the superseded directive B attempt are retained separately.
+
+Both plans cover parser/validation, HTTP endpoints, atomic SQLite import/key ledger, replay/conflict handling, responsive accessible UI, tests and README. Both plan to write a CSV parser and name no externally reused parser module. Their outlines are broadly similar; neither provides implementation evidence, a complete concurrency/transaction design, or executed tests. A short timing difference on this single planning pair cannot establish a speed benefit, particularly with no Zero invocation. B used more reported tokens. **This natural planning pair did not demonstrate the intended automatic reuse behavior or a Zero benefit.**
+
+The preceding fresh Luna B preflight proved nine enabled operations, a working scoped backend and CSV availability; the same project configuration remained byte-identical. The planning transcript records no MCP calls. The transcript's turn-context fields do not contain a full startup skill/tool inventory, so absence of strings there is not used as proof that tools were absent. Do not repair this result by adding a B-only prompt hint or quietly changing the installed skill/search while the pair is active. A future activation/search improvement and repeat need a new identified epoch.
+
+One earlier directive B plan did invoke status plus two searches, both returning empty prepared profiles and source candidates for natural CSV descriptions. Those failures remain preserved alongside that superseded single attempt; there was no corresponding A trial. They are useful discovery diagnostics, not a natural-pair benefit comparison.
+
+The temporary synthetic backend was stopped after the plans for user review: grant revoked, API/worker/database connections closed and only the owned initially stopped PostgreSQL fixture stopped, all cleanup checks PASS. Database/evidence retained; zero model dispatches and zero usage records. The native host's subscription usage is separate. Any later execution stage requires fresh backend authorization/readiness and a recorded continuation protocol. No roadmap or full-MVP acceptance box was closed.
