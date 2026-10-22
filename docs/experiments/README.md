@@ -1,5 +1,7 @@
 # Istorinių eksperimentų ataskaitos
 
+Naujausia papildoma analizė: [StudioDesk planavimo sąnaudos ir konkrečių modulių atrankos spragos](STUDIODESK-PLANNING-DIAGNOSIS-2026-10-22.md). Tai diagnozė, ne naujas gyvas bandymas ar įgyvendinta pataisa.
+
 Šios ataskaitos išsaugo konkrečias modelio/CLI/prompt/grader epochas ir nesėkmes. Jos nėra nurodymas tęsti seną „aktyvią“ kohortą. Aktualus [kalibravimo metodas](../CALIBRATION.md), [produkto būsena](../IMPLEMENTATION.md).
 
 - [Frozen thirty-task development acceptance plan, all outcomes NOT_RUN/BLOCKED](DEVELOPMENT-ACCEPTANCE-2026-10-20.md).

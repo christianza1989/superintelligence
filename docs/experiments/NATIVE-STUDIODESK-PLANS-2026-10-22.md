@@ -1,5 +1,7 @@
 # Native StudioDesk plans: larger media/AI task
 
+Papildoma [planavimo sąnaudų, atrankos spragų ir siūlomų pataisų diagnozė](STUDIODESK-PLANNING-DIAGNOSIS-2026-10-22.md) remiasi galutinės 0.10.5 poros originaliais žurnalais; nauji vykdymai joje neatlikti.
+
 **Naujausia: [galutinė 0.10.5 pora](#galutinė-0105-planų-pora), A 78.994 s / 238,301 host tokenų; B 221.097 s / 2,005,791 host tokenas. GitHub/Jev ir pinned source skaitymas veikė; kūrimo nauda ir kodas NOT_RUN. Žemiau esantis 0.10.1 aprašas yra originali istorija, vėlesni atskiri bandymai pateikti pabaigoje.**
 
 The user requested a much larger application after the completed RepairDesk repeat. The separate [frozen StudioDesk fixture](../../benchmarks/native-studiodesk-plans/v1/README.md) covers layered images, video/audio editing, real exports, subtitles, local image/speech AI, project recovery and resource-limited background work. Both fresh native chats received identical natural prompt/SPEC bytes without GitHub, reuse or Zero hints and stopped after complete plans. No program code, dependencies or AI models were installed/generated/executed.
