@@ -8,6 +8,7 @@ import {
   repositoryWords,
 } from "./zero-need-normalization.js";
 import { searchPreparedProfiles } from "./zero-prepared-profiles.js";
+import { discoverSourceProfiles } from "./zero-source-profiles.js";
 
 export type { RepositoryRequirements } from "./zero-need-normalization.js";
 export { ZERO_REPOSITORY_QUERY_MAX_CHARS } from "./zero-need-normalization.js";
@@ -37,6 +38,7 @@ export function retrieveRepositoryNeed(options: SearchOptions = {}) {
   return {
     preparedProfiles: searchPreparedProfiles(options),
     sourceCandidates: searchRepositories(options),
+    sourceProfiles: discoverSourceProfiles(options.query ?? "", options.category),
   };
 }
 

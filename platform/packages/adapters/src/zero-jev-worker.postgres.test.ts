@@ -40,6 +40,33 @@ postgres(
     const dispatch = vi.fn<typeof fetch>(async (_url, options) => {
       expect(String(_url)).toBe("https://openrouter.ai/api/v1/systemone");
       const body = JSON.parse(String(options?.body));
+      if (mode.startsWith("source-")) {
+        expect(body.state.task).toBe(
+          "Workshop foundation; offline runtime and SQLite required",
+        );
+        expect(body.state.candidates.length).toBeGreaterThan(0);
+        expect(JSON.stringify(body.state.candidates)).toContain(
+          "reviewedFiles",
+        );
+        expect(JSON.stringify(body)).not.toContain("PRIVATE_LOCAL_DATA");
+        return Response.json({
+          answers: {
+            repository: {
+              type: "choice",
+              choice:
+                mode === "source-abstain"
+                  ? "abstain"
+                  : mode === "source-invalid"
+                    ? "repo99"
+                    : "repo0",
+            },
+          },
+          id: "fixture-source-request",
+          model: "fixture/jev",
+          provider: "fixture",
+          usage: { input_tokens: 81, output_tokens: 3, cost: 0.00002 },
+        });
+      }
       expect(body.state).toEqual({
         task: mode.startsWith("module.csv.")
           ? "Strict bounded CSV parser"
@@ -345,6 +372,128 @@ postgres(
       await runZeroJevTool(deps(), submitted.jobId);
       expect(dispatch).toHaveBeenCalledOnce();
       expect(modelRun).not.toHaveBeenCalled();
+    });
+    const sourceInput = () => ({
+      ...input("source-selection-v1"),
+      mode: "select-source" as const,
+      goal: "Workshop foundation; offline runtime and SQLite required",
+      candidateIds: ["frappe/erpnext", "inventree/InvenTree"],
+    });
+    it("uses the real queue, budget and usage observer for advisory source planning without preparing or executing code", async () => {
+      await configure();
+      profile.tools = [];
+      profile.sourceRepositories = sourceInput().candidateIds;
+      mode = "source-recommend";
+      const params = sourceInput();
+      const submitted = await service.submit(params);
+      expect(await service.submit(params)).toEqual(submitted);
+      await start();
+      const result = await terminal(submitted.jobId);
+      expect(result).toMatchObject({
+        state: "succeeded",
+        phase: "selected",
+        prepared: false,
+        verified: false,
+        tool: null,
+        dispatchAttempts: 1,
+        selection: {
+          status: "recommended",
+          repository: "frappe/erpnext",
+          engine: "jev",
+          evidence: "source_only",
+        },
+      });
+      expect(result.component).toBeUndefined();
+      const usage = await db.prisma.usageRecord.findMany({
+        where: { callId: submitted.callId },
+      });
+      expect(usage).toHaveLength(1);
+      expect(usage[0]).toMatchObject({
+        inputTokens: 81,
+        outputTokens: 3,
+        operationKind: "retrieval",
+        operationId: submitted.jobId,
+      });
+      await runZeroJevTool(deps(), submitted.jobId);
+      expect(dispatch).toHaveBeenCalledOnce();
+      expect(modelRun).not.toHaveBeenCalled();
+    });
+    it("assesses and can reject the only eligible source instead of assuming it fits", async () => {
+      await configure();
+      profile.sourceRepositories = ["inventree/InvenTree"];
+      mode = "source-abstain";
+      const submitted = await service.submit({
+        ...sourceInput(),
+        candidateIds: profile.sourceRepositories,
+      });
+      await start();
+      expect(await terminal(submitted.jobId)).toMatchObject({
+        state: "abstained",
+        phase: "selected",
+        prepared: false,
+        selection: { status: "abstained" },
+        tool: null,
+        dispatchAttempts: 1,
+      });
+      expect(dispatch).toHaveBeenCalledOnce();
+    });
+    it("rejects unknown, unallowlisted and wrongly shaped planning input before any durable write or dispatch", async () => {
+      await configure();
+      const before = await db.prisma.artifact.count({ where: { userId } });
+      await expect(service.submit(sourceInput())).rejects.toThrow(
+        "source_selection_not_authorized",
+      );
+      profile.sourceRepositories = sourceInput().candidateIds;
+      for (const patch of [
+        { candidateIds: ["unknown/unknown"] },
+        { data: "PRIVATE_LOCAL_DATA" },
+        { mode: "prepare-component" },
+        { candidateIds: ["frappe/erpnext", "frappe/erpnext"] },
+      ])
+        await expect(
+          service.submit({ ...sourceInput(), ...patch }),
+        ).rejects.toThrow();
+      expect(await db.prisma.artifact.count({ where: { userId } })).toBe(
+        before,
+      );
+      expect(dispatch).not.toHaveBeenCalled();
+    });
+    it("revokes queued source-selection permission before paid dispatch", async () => {
+      await configure();
+      profile.sourceRepositories = sourceInput().candidateIds;
+      mode = "source-recommend";
+      const submitted = await service.submit(sourceInput());
+      profile.sourceRepositories = ["inventree/InvenTree"];
+      await start();
+      expect(await terminal(submitted.jobId)).toMatchObject({
+        state: "blocked",
+        dispatchAttempts: 0,
+      });
+      expect(dispatch).not.toHaveBeenCalled();
+    });
+    it("enforces a zero source-selection cap and rejects provider choices outside the signed shortlist", async () => {
+      await configure(0);
+      profile.sourceRepositories = sourceInput().candidateIds;
+      mode = "source-recommend";
+      const blocked = await service.submit(sourceInput());
+      await start();
+      expect(await terminal(blocked.jobId)).toMatchObject({
+        state: "blocked",
+        dispatchAttempts: 0,
+      });
+      expect(dispatch).not.toHaveBeenCalled();
+      await configure();
+      profile.sourceRepositories = sourceInput().candidateIds;
+      mode = "source-invalid";
+      const invalid = await service.submit(sourceInput());
+      await start();
+      expect(await terminal(invalid.jobId)).toMatchObject({
+        state: "blocked",
+        selection: { reason: "choice_outside_request_enum" },
+        dispatchAttempts: 1,
+        tool: null,
+      });
+      expect(dispatch).toHaveBeenCalledOnce();
     });
     it("executes the permitted JSON alternative and abstains on a meaningful no-fit", async () => {
       await configure();

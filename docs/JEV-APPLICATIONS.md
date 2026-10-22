@@ -1,6 +1,6 @@
 # Jev rolė RepositoryZero
 
-2026-10-17. Jev — siauras struktūrizuoto pasirinkimo adapteris po deterministinio retrieval. Jis nėra pagrindinis coding modelis ar naujas scheduler. Branduolys išlieka provider-neutral; naudotojo pasirinktam MVP profiliui reikia tikro Jev/OpenRouter ToolSelector.
+2026-10-22. Jev — siauras struktūrizuoto pasirinkimo adapteris po deterministinio retrieval. Jis nėra pagrindinis coding modelis ar naujas scheduler. Branduolys išlieka provider-neutral; naudotojo pasirinktam MVP profiliui reikia tikro Jev/OpenRouter ToolSelector.
 
 | Vartas | Faktinė būsena | Priėmimas |
 |---|---|---|
@@ -11,7 +11,11 @@
 
 Pirmas matuojamas darbas: vienam konkrečiam poreikiui iš mažo prasmingo paruoštų tools rinkinio pasirinkti vieną alternatyvą arba abstain. Kartu naudotini komponentai nėra klaidingai pateikiami kaip tarpusavyje nesuderinamos alternatyvos. Jev negali suteikti leidimo, pakeisti hard constraints ar padaryti source-only kandidatą vykdomu.
 
-Repo relevance, konteksto fragmentų ir testų atranka — vėlesni atskiri profiliai. Automatinį pagrindinių coding modelių keitimą atidėti, kol yra palyginamų profilių matavimai. Score, confidence ir modelio savivertė nėra bendras repo kokybės įrodymas.
+Source 0.9.0 prideda atskirą advisory repo planavimo profilį: `zero_select` → esamas API/Graphile/Jev → source-only rekomendacija arba abstain. Operatorius leidžia iki 5 konkrečių repo ID; dabartinis peržiūrėtų source profilių rinkinys turi 3 repo ir 13 failų. Modelis gauna tikslų poreikį, modulių faktus, setup, spragas ir source pins, ne projekto failus. Net vienintelis kandidatas šiame profilyje vertinamas modeliu ir gali būti atmestas. Planavimo receipt neparuošia ir nevykdo kodo. 33 tikros API/PostgreSQL/worker kontrolės su imitaciniu tiekėju PASS; šio naujo profilio live ir native kvalifikacija dar NOT_RUN. Ankstesnėse natūraliose planų porose Jev kvietimų buvo 0. [Tiksli apimtis](experiments/REUSE-MODULE-CHAIN-2026-10-22.md).
+
+Atranka taikoma vienam poreikiui tarp alternatyvų, ne vienam vieninteliam įrankiui visam projektui. Papildantys gebėjimai parenkami atskirai, o bendrą integravimo architektūrą ir suderinamumą vertina pagrindinis modelis. Vieno klausimo 5 kandidatų riba nėra viso projekto komponentų riba. Confidence ar choice probability nėra kalibruotas poreikių atitikimo procentas; dabartinė repo jungtis grąžina pasirinktą ID arba abstain, ne procentinę repo lentelę.
+
+Gyva platesnio GitHub paieška, konteksto fragmentų ir testų atranka išlieka atskiri neužbaigti darbai. Vietinis 796 įrašų katalogas ir trys peržiūrėti repo nėra visa plane numatyta atrankos sistema. Automatinį pagrindinių coding modelių keitimą atidėti, kol yra palyginamų profilių matavimai.
 
 Kiekvienam dispatch tas pats call ID sieja request, rezervą, faktinį usage ir decision receipt. Account nustato trusted connection resolver. Mokėtojo account cap bendras visiems jį naudojantiems modeliams, routing turi papildomą ribą; rezervas nepakeičia tikros provider sąskaitos. Nepatvirtinti fallback/paid child keliai išjungti. Dabartinis `AgentRunModel.accountId` yra gateway laukas — ne universalus mokėtojo ID.
 

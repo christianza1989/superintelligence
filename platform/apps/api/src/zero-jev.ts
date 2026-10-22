@@ -74,7 +74,11 @@ export function mountZeroJevRoutes(
       await deps.policy.authorize(principal);
       return await action(principal);
     } catch (error) {
-      if (error instanceof IsolationError)
+      if (
+        error instanceof IsolationError ||
+        (error instanceof Error &&
+          error.message === "source_selection_not_authorized")
+      )
         return c.json({ error: "project_scope_rejected" }, 403);
       if (error instanceof Error && error.name === "ZodError")
         return c.json({ error: "invalid_request" }, 400);

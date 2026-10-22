@@ -7,8 +7,10 @@ import {
   zeroJevJobSchema,
   zeroJevSubmittedSchema,
 } from "./zero-jev-application-client.js";
+import { ZERO_SOURCE_SELECTION_MARKER } from "./zero-jev-contract.js";
 
 export const ZERO_MCP_REUSE_OPERATIONS = [
+  "zero_select",
   "zero_reuse",
   "zero_reuse_job",
   "zero_reuse_artifact",
@@ -57,6 +59,34 @@ export function registerZeroReuseMcpTools(
     }
   };
   server.registerTool(
+    "zero_select",
+    {
+      description:
+        "Ask the authorized Jev worker to assess one source foundation against the planning goal from inspected canonical candidate IDs, or abstain. Uses the operator's finite paid routing allocation and reviewed source facts, including setup and gaps. Available for an authorized plan-only request: does not download, prepare, install or execute application code. Returns a durable job ID; read zero_reuse_job and hash-check zero_reuse_artifact. A recommendation is source-only, not license approval, runtime qualification or proof of complete fit.",
+      inputSchema: z.strictObject({
+        goal: z.string().trim().min(1).max(2000),
+        candidateIds: z
+          .array(
+            z.string().regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/),
+          )
+          .min(1)
+          .max(5)
+          .refine((ids) => new Set(ids).size === ids.length),
+        ...controls,
+      }),
+      outputSchema: zeroJevSubmittedSchema,
+      annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
+    },
+    (input) =>
+      result(() =>
+        client.execute({
+          ...input,
+          data: ZERO_SOURCE_SELECTION_MARKER,
+          mode: "select-source",
+        }),
+      ),
+  );
+  server.registerTool(
     "zero_reuse",
     {
       description:
@@ -82,7 +112,7 @@ export function registerZeroReuseMcpTools(
     "zero_reuse_job",
     {
       description:
-        "Read the actual terminal/unknown state of an authorized source-module selection or verification job. Selection, preparation, application use and verification remain separate facts.",
+        "Read the actual terminal/unknown state of an authorized source recommendation, module preparation or verification job. Selection, preparation, application use and verification remain separate facts.",
       inputSchema: z.strictObject({ jobId }),
       outputSchema: z.strictObject({ job: zeroJevJobSchema }),
       annotations: readOnly,

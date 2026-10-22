@@ -82,7 +82,11 @@ export async function testExecutionPackage(
       );
     } else if (family === "jev" && request.url.endsWith("/execute")) {
       let raw = ""; for await (const chunk of request) raw += chunk;
-      assert.equal(JSON.parse(raw).mode, "prepare-component");
+      const input = JSON.parse(raw);
+      if (input.mode === "select-source") {
+        assert.equal(input.data, "source-selection-v1");
+        assert.deepEqual(input.candidateIds, ["inventree/InvenTree"]);
+      } else assert.equal(input.mode, "prepare-component");
       response.writeHead(202).end(JSON.stringify({ jobId, callId: jobId, requestDigest: "a".repeat(64) }));
     } else if (request.url.endsWith("/prepare") || (family !== "csv" && request.url.endsWith("/extract"))) {
       let body = "";
@@ -237,6 +241,7 @@ export async function testExecutionPackage(
           "zero_reuse_artifact",
           "zero_reuse_verify",
           "zero_search",
+          "zero_select",
           "zero_status",
           "zero_verify",
         ].sort(),
@@ -244,6 +249,9 @@ export async function testExecutionPackage(
       const available = await status(run.client, "available");
       assert.equal(available.profile, "scoped-component-jobs");
       assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available", research: "available", reuse: "available" });
+      const selectedSource = await run.client.callTool({ name: "zero_select", arguments: { goal: "Offline inventory foundation", candidateIds: ["inventree/InvenTree"], idempotencyKey: "fixture-plan", deadline: new Date(Date.now() + 30000).toISOString() } });
+      cleanResult(selectedSource);
+      assert.equal(selectedSource.structuredContent.callId, jobId);
       const preparedModule = await run.client.callTool({ name: "zero_reuse", arguments: { goal: "Strict CSV parser", idempotencyKey: "fixture-reuse", deadline: new Date(Date.now() + 30000).toISOString() } });
       cleanResult(preparedModule);
       assert.equal(preparedModule.structuredContent.callId, jobId);

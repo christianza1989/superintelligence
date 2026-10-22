@@ -58,4 +58,10 @@ describe("agent reuse discovery", () => {
     expect(repositorySearchFromTool({ query: "x".repeat(2049) })).toHaveProperty("error");
     expect(repositorySearchTool.inputSchema).toMatchObject({ properties: { query: { maxLength: 2048 } } });
   });
+  it("shares reviewed foundation recall with the existing agent tool, beyond native MCP", () => {
+    const result = repositorySearchFromTool({ query: "customer quotations and stock warehouse repair" });
+    expect(result.sourceProfiles).toEqual(expect.arrayContaining([
+      expect.objectContaining({ candidateId: "frappe/erpnext", prepared: false, runtimeTested: false, licenseApproved: false }),
+    ]));
+  });
 });

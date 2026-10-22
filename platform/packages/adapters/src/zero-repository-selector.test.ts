@@ -39,6 +39,15 @@ function setup(choice = "repo0") {
   return { fetch, reserve, authorizeDispatch, stillEligible, hold };
 }
 describe("bounded source-only repository advice (offline)", () => {
+  it("assesses a single planning candidate and can abstain instead of assuming fit", async () => {
+    const s = setup("abstain");
+    const result = await selectRepositoryWithJev(config, s, {
+      ...input(), candidates: [candidate], assessSingle: true,
+    });
+    expect(result.status).toBe("abstained");
+    expect(s.fetch).toHaveBeenCalledOnce();
+    expect(s.reserve).toHaveBeenCalledOnce();
+  });
   it("forwards the real provider usage event to the caller's awaited observer", async () => {
     const s = setup();
     const onUsage = vi.fn(async () => undefined);

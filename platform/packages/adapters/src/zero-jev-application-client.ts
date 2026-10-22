@@ -11,22 +11,12 @@ import {
 import { zeroCsvArtifactPageSchema } from "./zero-csv-application-client.js";
 import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 import { readZeroOperatorFile } from "./zero-operator-file.js";
+import { zeroJevExecuteInputSchema } from "./zero-jev-contract.js";
+export { zeroJevExecuteInputSchema } from "./zero-jev-contract.js";
 
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
 const jobId = z.string().uuid();
-export const zeroJevExecuteInputSchema = z
-  .object({
-    goal: z.string().trim().min(1).max(ZERO_JEV_LIMITS.goalChars),
-    data: z.string().min(1).max(ZERO_JEV_LIMITS.inputBytes),
-    deadline: z
-      .string()
-      .datetime({ offset: true })
-      .refine((value) => Number.isFinite(Date.parse(value))),
-    idempotencyKey: z.string().min(1).max(128),
-    mode: z.enum(["prepare-component", "verify-component"]).optional(),
-  })
-  .strict();
 export const zeroJevStatusSchema = z
   .object({
     profile: z.literal("jev-tool-selector-v1"),
@@ -37,8 +27,13 @@ export const zeroJevStatusSchema = z
     model: z.string().min(1).max(200),
     tools: z
       .array(z.enum(["csv.parse", "json.normalize", ...ZERO_REUSE_TOOL_IDS]))
-      .min(1)
+      .min(0)
       .max(5),
+    sourceRepositories: z
+      .array(z.string().regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/))
+      .min(1)
+      .max(5)
+      .optional(),
     limits: z
       .object({
         inputBytes: z.literal(ZERO_JEV_LIMITS.inputBytes),

@@ -38,11 +38,22 @@ export const zeroJevProfileSchema = z
     allowTaskDataToOpenRouter: z.literal(true),
     tools: z
       .array(z.enum(["csv.parse", "json.normalize", ...ZERO_REUSE_TOOL_IDS]))
-      .min(1)
+      .min(0)
       .max(5)
       .refine((tools) => new Set(tools).size === tools.length),
+    /** Explicit operator opt-in for paid, source-only planning recommendations. */
+    sourceRepositories: z
+      .array(z.string().regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/))
+      .min(1)
+      .max(5)
+      .refine((ids) => new Set(ids).size === ids.length)
+      .optional(),
   })
-  .strict();
+  .strict()
+  .refine(
+    (profile) =>
+      profile.tools.length > 0 || !!profile.sourceRepositories?.length,
+  );
 export type ZeroJevProfile = z.infer<typeof zeroJevProfileSchema>;
 export interface ZeroJevConnection {
   profile: ZeroJevProfile;

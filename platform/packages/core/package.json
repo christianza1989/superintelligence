@@ -53,6 +53,10 @@
       "types": "./src/zero-reuse-modules.ts",
       "default": "./src/zero-reuse-modules.ts"
     },
+    "./zero-source-profiles": {
+      "types": "./src/zero-source-profiles.ts",
+      "default": "./src/zero-source-profiles.ts"
+    },
     "./repositoryzero": {
       "types": "./src/zero-catalog.ts",
       "default": "./src/zero-catalog.ts"

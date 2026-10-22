@@ -37,21 +37,19 @@ import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 import { prepareZeroReuseModule } from "./zero-reuse-module.js";
 import type { ZeroReuseVerifierConfig } from "./zero-reuse-verifier.js";
 import { verifyZeroReuseModule } from "./zero-reuse-verifier.js";
+import {
+  zeroJevExecuteInputSchema,
+  zeroJevStoredInputSchema,
+} from "./zero-jev-contract.js";
+import { sourceSelectionOptions } from "./zero-source-selection.js";
+import { selectRepositoryWithJev } from "./zero-repository-selector.js";
 
 export { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 const instant = z
   .string()
   .datetime({ offset: true })
   .refine((value) => Number.isFinite(Date.parse(value)));
-const inputSchema = z
-  .object({
-    goal: z.string().trim().min(1).max(ZERO_JEV_LIMITS.goalChars),
-    data: z.string().min(1).max(ZERO_JEV_LIMITS.inputBytes),
-    deadline: instant,
-    idempotencyKey: z.string().min(1).max(128),
-    mode: z.enum(["prepare-component", "verify-component"]).optional(),
-  })
-  .strict();
+const inputSchema = zeroJevExecuteInputSchema;
 const requestSchema = z
   .object({
     kind: z.literal("zero.jev.request.v1"),
@@ -59,9 +57,13 @@ const requestSchema = z
     profile: zeroJevProfileSchema,
     connectionDigest: z.string().regex(/^[a-f0-9]{64}$/),
     callId: z.string().uuid(),
-    input: inputSchema.omit({ idempotencyKey: true }),
+    input: zeroJevStoredInputSchema,
     // Zod preserves schema order. Keep signed optional fields after input, as in submit().
     moduleCatalogDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
+    sourceCatalogDigest: z
       .string()
       .regex(/^[a-f0-9]{64}$/)
       .optional(),
@@ -181,7 +183,17 @@ async function recheck(deps: ZeroJevWorkerDependencies, request: Request) {
     current.connectionDigest !== request.connectionDigest ||
     (request.input.mode === "prepare-component" &&
       request.moduleCatalogDigest !==
-        zeroCsvHash(JSON.stringify(zeroReuseModules)))
+        zeroCsvHash(JSON.stringify(zeroReuseModules))) ||
+    (request.input.mode === "select-source" &&
+      request.sourceCatalogDigest !==
+        zeroCsvHash(
+          JSON.stringify(
+            sourceSelectionOptions(
+              request.input.candidateIds!,
+              current.profile.sourceRepositories ?? [],
+            ),
+          ),
+        ))
   )
     throw new IsolationError();
   return current;
@@ -408,6 +420,9 @@ export async function getZeroJevAvailability(
     profileRevision: resolved.profile.revision,
     model: resolved.profile.model,
     tools: resolved.profile.tools,
+    ...(resolved.profile.sourceRepositories
+      ? { sourceRepositories: resolved.profile.sourceRepositories }
+      : {}),
     limits: ZERO_JEV_LIMITS,
   };
 }
@@ -494,6 +509,18 @@ export function createZeroJevToolService(
           ? {
               moduleCatalogDigest: zeroCsvHash(
                 JSON.stringify(zeroReuseModules),
+              ),
+            }
+          : {}),
+        ...(params.mode === "select-source"
+          ? {
+              sourceCatalogDigest: zeroCsvHash(
+                JSON.stringify(
+                  sourceSelectionOptions(
+                    params.candidateIds!,
+                    resolved.profile.sourceRepositories ?? [],
+                  ),
+                ),
               ),
             }
           : {}),
@@ -744,59 +771,123 @@ export async function runZeroJevTool(
         Math.max(1, Date.parse(request.input.deadline) - Date.now()),
       ),
     );
-    const selection = await selectToolWithJev(
-      {
-        apiKey: resolved.apiKey,
-        model: resolved.profile.model,
-        timeoutMs: resolved.profile.timeoutMs,
+    const config = {
+      apiKey: resolved.apiKey,
+      model: resolved.profile.model,
+      timeoutMs: resolved.profile.timeoutMs,
+    };
+    const paid = {
+      fetch: deps.fetch,
+      reserve: async (invocationId: string) => {
+        await recheck(deps, request);
+        reservationUncertain = true;
+        const admitted = await reserveBudgetInvocation(pool, {
+          invocationId,
+          accountId: request.profile.payerAccountId,
+          lane: request.profile.lane,
+          usdMicros: BigInt(request.profile.reserveUsdMicros),
+          tokens: BigInt(request.profile.reserveTokens),
+        });
+        if (!admitted) {
+          const prior = await pool.query(
+            'SELECT 1 FROM zero_budget_reservations WHERE "invocationId" = $1',
+            [invocationId],
+          );
+          priorInvocation = prior.rowCount === 1;
+        }
+        reservationUncertain = false;
+        if (
+          admitted &&
+          deps.reserveExternalBudget &&
+          !(await deps.reserveExternalBudget(invocationId))
+        )
+          return null;
+        return admitted;
       },
-      {
-        fetch: deps.fetch,
-        reserve: async (invocationId) => {
-          await recheck(deps, request);
-          reservationUncertain = true;
-          const admitted = await reserveBudgetInvocation(pool, {
-            invocationId,
-            accountId: request.profile.payerAccountId,
-            lane: request.profile.lane,
-            usdMicros: BigInt(request.profile.reserveUsdMicros),
-            tokens: BigInt(request.profile.reserveTokens),
-          });
-          if (!admitted) {
-            const prior = await pool.query(
-              'SELECT 1 FROM zero_budget_reservations WHERE "invocationId" = $1',
-              [invocationId],
+      authorizeDispatch: async () => {
+        await recheck(deps, request);
+        return true;
+      },
+      onUsage: async (event: SystemOneUsageEvent) => {
+        usage = event;
+        await recordUsage(deps.prisma, event, {
+          spaceId: request.principal.spaceId,
+          userId: request.principal.userId,
+          operationId: id,
+          operationKind: "retrieval",
+        });
+      },
+    };
+    const accounting = () => ({
+      usage,
+      dispatchAttempts: usage
+        ? 1
+        : priorInvocation || reservationUncertain
+          ? null
+          : 0,
+      priorInvocation,
+      startedAt: new Date(startedAt).toISOString(),
+      elapsedMs: Date.now() - startedAt,
+    });
+    if (request.input.mode === "select-source") {
+      const candidates = sourceSelectionOptions(
+        request.input.candidateIds!,
+        request.profile.sourceRepositories ?? [],
+      );
+      const selection = await selectRepositoryWithJev(
+        config,
+        {
+          ...paid,
+          stillEligible: async (repository, revision) => {
+            await recheck(deps, request);
+            return candidates.some(
+              (candidate) =>
+                candidate.repository === repository &&
+                candidate.sourceRevision === revision,
             );
-            priorInvocation = prior.rowCount === 1;
-          }
-          reservationUncertain = false;
-          if (
-            admitted &&
-            deps.reserveExternalBudget &&
-            !(await deps.reserveExternalBudget(invocationId))
-          )
-            return null;
-          return admitted;
+          },
         },
-        authorizeDispatch: async () => {
-          await recheck(deps, request);
-          return true;
+        {
+          invocationId: request.callId,
+          generation: 0,
+          signal,
+          goal: request.input.goal,
+          candidates,
+          assessSingle: true,
         },
+      );
+      await publish(deps, request, id, {
+        state:
+          priorInvocation || reservationUncertain
+            ? "unknown"
+            : selection.status === "recommended"
+              ? "succeeded"
+              : selection.status === "missing"
+                ? "abstained"
+                : selection.status,
+        phase: "selected",
+        selection,
+        candidates: candidates.map(({ repository, sourceRevision }) => ({
+          repository,
+          sourceRevision,
+        })),
+        prepared: false,
+        verified: false,
+        tool: null,
+        ...accounting(),
+      });
+      return;
+    }
+    const selection = await selectToolWithJev(
+      config,
+      {
+        ...paid,
         stillEligible: async (toolId, revision) => {
           await recheck(deps, request);
           return (
             request.profile.tools.some((id) => id === toolId) &&
             revision === request.profile.revision
           );
-        },
-        onUsage: async (event) => {
-          usage = event;
-          await recordUsage(deps.prisma, event, {
-            spaceId: request.principal.spaceId,
-            userId: request.principal.userId,
-            operationId: id,
-            operationKind: "retrieval",
-          });
         },
       },
       {
@@ -821,17 +912,6 @@ export async function runZeroJevTool(
           })),
       },
     );
-    const accounting = () => ({
-      usage,
-      dispatchAttempts: usage
-        ? 1
-        : priorInvocation || reservationUncertain
-          ? null
-          : 0,
-      priorInvocation,
-      startedAt: new Date(startedAt).toISOString(),
-      elapsedMs: Date.now() - startedAt,
-    });
     if (selection.status !== "selected") {
       await publish(deps, request, id, {
         state:

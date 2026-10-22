@@ -60,7 +60,7 @@ Toliau pateikiami pagrindiniai vardai ir apimtys. Griežtos runtime schemos įgy
 
 | Įrankis | Discovery preview | Pilnas vietinis MCP kelias | Ribos |
 |---|---|---|---|
-| `zero_search` | Taip | Taip | Vietinis katalogas, ribotas query, kategorija/poreikio filtrai; daugiausia 5 kandidatai. Nevykdo install ar mokamo rerank |
+| `zero_search` | Taip | Taip | Vietinis katalogas, ribotas query, kategorija/poreikio filtrai; daugiausia 5 istoriniai kandidatai, atskirai iki 3 peržiūrėtų source profilių ir iki 3 paruošiamų modulių alternatyvų. Nevykdo gyvos GitHub paieškos, install ar mokamo rerank |
 | `zero_inspect` | Taip | Taip | Canonical candidate/profile/recipe ID → turimi pin, source, readiness, licencijos faktai, entrypoint ir ribos. Ne bendras URL fetch ar filesystem reader |
 | `zero_status` | Taip | Taip | Serverio/schema/catalog versijos, aktyvus execution profilis, turimų operacijų ir backend būsena. Jokių keys, account PII ar visų vietinių projektų sąrašo |
 | `zero_prepare` | Ne | Taip | Kandidatas/profilis + scope + idempotency key → job. Tik fiksuotas leistinas preparer, pin/lock, izoliuotas smoke, paruoštas artefaktas ir integration receipt |
@@ -73,6 +73,8 @@ Toliau pateikiami pagrindiniai vardai ir apimtys. Griežtos runtime schemos įgy
 | `zero_browser_extract/job/artifact/cancel` | Ne | Static HTML profilis | Operator fileId + SHA; inertinis DOM/PNG, atskiri raw/rendered hash; be JS, išorinių užklausų ar originalo vizualaus tikslumo teiginio |
 | `zero_research_extract/job/artifact/cancel` | Ne | Patvirtinto URL tyrimas | Operator taskId ir fiksuotas public HTTPS šaltinių registras; bounded fetch be redirect, nekintamas source snapshot ir inertinis renderis; ne arbitrary URL/browser navigation |
 | `zero_pdf_csv` | Ne | PDF CSV projekcija | Autorizuotas succeeded PDF receipt, vienos lentelės bounded byte pages, source/receipt/CSV hash ir page/bbox provenance; jokių naujų jobs |
+| `zero_select` | Ne | Pasirinktas Jev planavimo profilis | Iki 5 operatoriaus leistinų, peržiūrėtų source kandidatų vienam poreikiui → mokamas advisory job per esamą Jev worker. Plan-only leidžiamas tik su atskirai autorizuotu profiliu ir baigtiniu cap; jokio kodo paruošimo ar vykdymo. Rekomendacija arba abstain nėra tinkamumo procentas |
+| `zero_reuse/job/artifact/verify` | Ne | Paruošiamų modulių profilis | Atskira Jev atranka ir pinned source paruošimas; host integruoja, izoliuotas verify tikrina konkretų modulį. `zero_reuse_job/artifact` taip pat skaito source-only `zero_select` rezultatą; `phase: selected` nėra `prepared` ar `verified` |
 
 Atskiras `zero_apply` ar bendras shell tool pirmajam keliui nereikalingas. Host savo native įrankiais pritaiko komponentą ir kodą. Tai sumažina concurrent-writer problemą: Zero dirba izoliuotoje staging vietoje, o host valdo originalų darbo medį.
 

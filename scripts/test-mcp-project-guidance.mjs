@@ -73,9 +73,10 @@ test("clean uninstall removes an entirely managed document", () =>
 test("edited or duplicate managed blocks cannot overwrite user instructions", () =>
   fixture(async (dir, file) => {
     for (const changed of [
-      projectGuidance.replace("read-only", "edited"),
+      projectGuidance.replace("RepositoryZero is enabled", "Edited project guidance"),
       projectGuidance + projectGuidance,
     ]) {
+      assert.notEqual(changed, projectGuidance, "Tamper control must actually change the managed block");
       await writeFile(file, changed);
       await assert.rejects(configureProjectGuidance(dir, "apply"), /edited/);
       await assert.rejects(configureProjectGuidance(dir, "remove"), /edited/);

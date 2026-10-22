@@ -11,6 +11,11 @@ import {
   repositorySourceUrl,
 } from "@rakazo/core/repositoryzero";
 import { z } from "zod";
+import type { SourceProfile } from "@rakazo/core/zero-source-profiles";
+import {
+  getSourceProfile,
+  sourceProfileSnapshot,
+} from "@rakazo/core/zero-source-profiles";
 import {
   discoverZeroReuseModules,
   ZERO_REUSE_TOOL_IDS,
@@ -23,8 +28,8 @@ import {
   repositorySearchFromTool,
 } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.8.2";
-export const ZERO_MCP_SCHEMA_VERSION = "1.9.0";
+export const ZERO_MCP_SERVER_VERSION = "0.9.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.10.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -61,6 +66,7 @@ const extractionOperations = {
     "zero_research_cancel",
   ],
   reuse: [
+    "zero_select",
     "zero_reuse",
     "zero_reuse_job",
     "zero_reuse_artifact",
@@ -118,13 +124,22 @@ const moduleCandidateSchema = z.strictObject({
 const moduleInspectionSchema = moduleCandidateSchema.extend({
   source: z.string().max(512),
   npmIntegrity: z.string().max(256),
-  sourceFiles: z.array(z.strictObject({
-    path: z.string().max(128),
-    sha256: z.string().regex(/^[a-f0-9]{64}$/u),
-    bytes: z.number().int().nonnegative().max(131072),
-  })).max(8),
-  limits: z.record(z.string().max(40), z.number().int().nonnegative().max(1048576)),
-  delivery: z.literal("Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution."),
+  sourceFiles: z
+    .array(
+      z.strictObject({
+        path: z.string().max(128),
+        sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+        bytes: z.number().int().nonnegative().max(131072),
+      }),
+    )
+    .max(8),
+  limits: z.record(
+    z.string().max(40),
+    z.number().int().nonnegative().max(1048576),
+  ),
+  delivery: z.literal(
+    "Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution.",
+  ),
 });
 function moduleFacts(module: (typeof zeroReuseModules)[number]) {
   return {
@@ -139,6 +154,82 @@ function moduleFacts(module: (typeof zeroReuseModules)[number]) {
     licenseSource: module.license,
     entrypoint: module.entrypoint,
     fit: "candidate; task constraints unverified" as const,
+  };
+}
+const sourceModuleSchema = z.strictObject({
+  id: z.string().max(64),
+  purpose: z.string().max(512),
+  path: z.string().max(256),
+});
+const sourceProfileSummarySchema = z.strictObject({
+  candidateId,
+  repository: candidateId,
+  kind: z.enum(["framework", "application-foundation"]),
+  purpose: z.string().max(512),
+  sourceRevision: z.string().regex(/^[a-f0-9]{40}$/u),
+  observedAt: z.iso.datetime({ offset: true }),
+  licenseSource: z.string().max(512),
+  matchedModules: z.array(sourceModuleSchema).max(8),
+  unmatchedTerms: z.array(z.string().max(64)).max(64),
+  fit: z.literal("partial source recall; complete task constraints unverified"),
+  prepared: z.literal(false),
+  runtimeTested: z.literal(false),
+  licenseApproved: z.literal(false),
+});
+const sourceProfileInspectionSchema = z.strictObject({
+  candidateId,
+  repository: candidateId,
+  kind: z.enum(["framework", "application-foundation"]),
+  purpose: z.string().max(512),
+  sourceRevision: z.string().regex(/^[a-f0-9]{40}$/u),
+  observedAt: z.iso.datetime({ offset: true }),
+  licenseSource: z.string().max(512),
+  sourceFiles: z
+    .array(
+      z.strictObject({
+        path: z.string().max(256),
+        gitBlobSha: z.string().regex(/^[a-f0-9]{40}$/u),
+        sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+        bytes: z.number().int().nonnegative().max(131072),
+        source: z.string().max(768),
+      }),
+    )
+    .max(16),
+  modules: z.array(sourceModuleSchema).max(8),
+  setup: z.array(z.string().max(512)).max(8),
+  gaps: z.array(z.string().max(512)).max(8),
+  documentation: z
+    .array(
+      z.strictObject({ url: z.string().max(768), note: z.string().max(512) }),
+    )
+    .max(8),
+  sourceAvailable: z.literal(true),
+  prepared: z.literal(false),
+  runtimeTested: z.literal(false),
+  licenseApproved: z.literal(false),
+});
+function sourceProfileFacts(profile: SourceProfile) {
+  return {
+    candidateId: profile.repository,
+    repository: profile.repository,
+    kind: profile.kind,
+    purpose: profile.purpose,
+    sourceRevision: profile.sourceRevision,
+    observedAt: profile.observedAt,
+    licenseSource: profile.licenseSource,
+    sourceFiles: profile.sourceFiles,
+    modules: profile.modules.map(({ id, purpose, path }) => ({
+      id,
+      purpose,
+      path,
+    })),
+    setup: profile.setup,
+    gaps: profile.gaps,
+    documentation: "documentation" in profile ? profile.documentation : [],
+    sourceAvailable: true,
+    prepared: false,
+    runtimeTested: false,
+    licenseApproved: false,
   };
 }
 const commonOutput = {
@@ -223,19 +314,27 @@ const searchOutput = z.strictObject({
     "prepared_profiles",
     "source_candidates",
     "module_candidates",
+    "source_profiles",
     "missing",
   ]),
   preparedProfiles: z.array(preparedProfileSchema).max(1),
   candidates: z.array(candidateSchema).max(5),
   moduleCandidates: z.array(moduleCandidateSchema).max(3),
+  sourceProfiles: z.array(sourceProfileSummarySchema).max(3),
 });
 const inspectOutput = z.strictObject({
   ...commonOutput,
-  status: z.enum(["source_candidate", "module_candidate", "missing"]),
+  status: z.enum([
+    "source_candidate",
+    "module_candidate",
+    "source_profile",
+    "missing",
+  ]),
   candidate: candidateSchema
     .extend({ note: z.string().max(8192), metadata: metadataSchema.optional() })
     .nullable(),
   module: moduleInspectionSchema.optional(),
+  sourceProfile: sourceProfileInspectionSchema.optional(),
   readiness: z.literal("source-only"),
 });
 const statusOutput = z.strictObject({
@@ -263,7 +362,7 @@ const statusOutput = z.strictObject({
         ...extractionOperations.reuse,
       ]),
     )
-    .max(26),
+    .max(27),
   components: z
     .strictObject({
       csv: z
@@ -293,6 +392,12 @@ const statusOutput = z.strictObject({
     sha256: z.string().regex(/^[a-f0-9]{64}$/u),
     records: z.number().int().nonnegative().max(100_000),
     basis: z.literal("dated-source-facts-only"),
+  }),
+  sourceProfiles: z.strictObject({
+    observedAt: z.iso.datetime({ offset: true }),
+    sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+    records: z.number().int().nonnegative().max(1000),
+    basis: z.literal("reviewed-source-slices; no runtime qualification"),
   }),
   checkedAt: z.iso.datetime(),
   nonce: z.string().min(1).max(64).optional(),
@@ -408,7 +513,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_search",
     {
       description:
-        "Discover focused reusable modules within an application request, then search the fixed prepared CSV profile and source catalog. Query limit: 2048 characters; use one focused capability per query. Each moduleCandidates.candidateId can be passed unchanged to zero_inspect for source hashes, licenses, bounds and vendoring facts. Candidates do not assert that the entire request fits. In an authorized backend, zero_reuse may select/prepare a focused module with Jev; the host integrates and verifies separately. Discovery grants no installation or execution permission.",
+        "Discover foundations and focused components for a software task. Query limit: 2048 characters. sourceProfiles recall reviewed code areas with unmatched request terms; inspect their candidateId unchanged for pins, licenses, module paths, setup and gaps. moduleCandidates describe separate bounded preparation profiles, not all capabilities of upstream libraries. Catalog, source profiles and prepared-profile facts never assert complete task fit or runtime approval. Discovery grants no execution permission.",
       inputSchema: z.strictObject(
         {
           query: z
@@ -451,6 +556,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
             ...candidate,
           })),
           moduleCandidates: modules.map(moduleFacts),
+          sourceProfiles: result.sourceProfiles,
         },
         ZERO_MCP_OUTPUT_LIMITS.search,
       );
@@ -461,51 +567,75 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_inspect",
     {
       description:
-        "Inspect a candidateId returned by zero_search, unchanged: owner/repository for a catalog source, or module.csv.d3, module.csv.papaparse, module.zip.fflate for a focused module. Module inspection includes pinned file hashes, license, exact limits and source-vendoring facts. Catalog inspection includes separate dated GitHub metadata. A source pin is not a runtime test or approval. No URL fetch, project read, install or execution.",
+        "Inspect candidateId unchanged from any zero_search result. Repository IDs return historical catalog facts and, when present, reviewed source profiles with code areas, file hashes, setup and gaps. Module IDs return bounded preparation-profile facts. Source profiles and narrower prepared modules are distinct: an insufficient prepared profile does not by itself reject the upstream foundation. No URL fetch, project read, install, execution or approval.",
       inputSchema: z.strictObject(
-        { candidateId: z.string().min(3).max(256).regex(/^(?:[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+|module\.[a-z0-9_.-]+)$/u) },
+        {
+          candidateId: z
+            .string()
+            .min(3)
+            .max(256)
+            .regex(
+              /^(?:[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+|module\.[a-z0-9_.-]+)$/u,
+            ),
+        },
         { error: "Invalid discovery arguments" },
       ),
       outputSchema: inspectOutput,
       annotations,
     },
     ({ candidateId: id }) => {
-      const module = zeroReuseModules.find((candidate) => candidate.toolId === id);
-      if (module) return boundedResult(inspectOutput, {
-        schemaVersion: ZERO_MCP_SCHEMA_VERSION,
-        researchDate: repositorySnapshot.researchDate,
-        evaluation,
-        status: "module_candidate",
-        readiness: "source-only",
-        candidate: null,
-        module: {
-          ...moduleFacts(module),
-          source: module.source,
-          npmIntegrity: module.npmIntegrity,
-          sourceFiles: module.sourceFiles,
-          limits: module.capability === "csv" ? {
-            inputBytes: ZERO_REUSE_MODULE_LIMITS.csvBytes,
-            rows: ZERO_REUSE_MODULE_LIMITS.csvRows,
-            columns: ZERO_REUSE_MODULE_LIMITS.csvColumns,
-            cellChars: ZERO_REUSE_MODULE_LIMITS.csvCellChars,
-          } : {
-            files: ZERO_REUSE_MODULE_LIMITS.zipFiles,
-            inputBytes: ZERO_REUSE_MODULE_LIMITS.zipInputBytes,
-            outputBytes: ZERO_REUSE_MODULE_LIMITS.zipOutputBytes,
+      const module = zeroReuseModules.find(
+        (candidate) => candidate.toolId === id,
+      );
+      if (module)
+        return boundedResult(
+          inspectOutput,
+          {
+            schemaVersion: ZERO_MCP_SCHEMA_VERSION,
+            researchDate: repositorySnapshot.researchDate,
+            evaluation,
+            status: "module_candidate",
+            readiness: "source-only",
+            candidate: null,
+            module: {
+              ...moduleFacts(module),
+              source: module.source,
+              npmIntegrity: module.npmIntegrity,
+              sourceFiles: module.sourceFiles,
+              limits:
+                module.capability === "csv"
+                  ? {
+                      inputBytes: ZERO_REUSE_MODULE_LIMITS.csvBytes,
+                      rows: ZERO_REUSE_MODULE_LIMITS.csvRows,
+                      columns: ZERO_REUSE_MODULE_LIMITS.csvColumns,
+                      cellChars: ZERO_REUSE_MODULE_LIMITS.csvCellChars,
+                    }
+                  : {
+                      files: ZERO_REUSE_MODULE_LIMITS.zipFiles,
+                      inputBytes: ZERO_REUSE_MODULE_LIMITS.zipInputBytes,
+                      outputBytes: ZERO_REUSE_MODULE_LIMITS.zipOutputBytes,
+                    },
+              delivery:
+                "Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution.",
+            },
           },
-          delivery: "Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution.",
-        },
-      }, ZERO_MCP_OUTPUT_LIMITS.inspect);
+          ZERO_MCP_OUTPUT_LIMITS.inspect,
+        );
       const entry = repositorySnapshot.records.find(
         (candidate) => candidate.repository === id,
       );
+      const sourceProfile = getSourceProfile(id);
       return boundedResult(
         inspectOutput,
         {
           schemaVersion: ZERO_MCP_SCHEMA_VERSION,
           researchDate: repositorySnapshot.researchDate,
           evaluation,
-          status: entry ? "source_candidate" : "missing",
+          status: entry
+            ? "source_candidate"
+            : sourceProfile
+              ? "source_profile"
+              : "missing",
           readiness: "source-only",
           candidate: entry
             ? {
@@ -524,6 +654,9 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
                 metadata: getRepositoryMetadata(entry.repository),
               }
             : null,
+          ...(sourceProfile
+            ? { sourceProfile: sourceProfileFacts(sourceProfile) }
+            : {}),
         },
         ZERO_MCP_OUTPUT_LIMITS.inspect,
       );
@@ -619,6 +752,14 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
               .digest("hex"),
             records: repositoryMetadataSnapshot.records.length,
             basis: "dated-source-facts-only",
+          },
+          sourceProfiles: {
+            observedAt: sourceProfileSnapshot.observedAt,
+            sha256: createHash("sha256")
+              .update(JSON.stringify(sourceProfileSnapshot))
+              .digest("hex"),
+            records: sourceProfileSnapshot.profiles.length,
+            basis: "reviewed-source-slices; no runtime qualification",
           },
           checkedAt: new Date().toISOString(),
           ...(nonce === undefined ? {} : { nonce }),

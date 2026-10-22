@@ -129,7 +129,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
       status: "prepared_profiles",
       candidates: [],
       preparedProfiles,
-      schemaVersion: "1.9.0",
+      schemaVersion: "1.10.0",
     });
     expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
     const profile = (result.preparedProfiles as Array<Record<string, unknown>>)[0]!;
@@ -147,7 +147,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(result.evaluation).toMatch(/scoped.*development conformance.*untrusted data/u);
     expect((await client.listTools()).tools).toHaveLength(3);
     expect(content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status)).toMatchObject({
-      server: { version: "0.8.2" },
+      server: { version: "0.9.0" },
       profile: "discovery-only",
       backend: "unavailable",
     });
@@ -242,6 +242,30 @@ describe("RepositoryZero discovery MCP protocol", () => {
     const result = content(await call("zero_inspect", { candidateId: "module.csv.unknown" }), ZERO_MCP_OUTPUT_LIMITS.inspect);
     expect(result).toMatchObject({ status: "missing", candidate: null, readiness: "source-only" });
     expect(result).not.toHaveProperty("module");
+  });
+
+  it("discovers and inspects reviewed source foundations without preparing them", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network forbidden"));
+    const result = content(await call("zero_search", {
+      query: "Local repair shop customer quotations, stock inventory and roles with technician labor",
+    }), ZERO_MCP_OUTPUT_LIMITS.search);
+    expect(result.sourceProfiles).toEqual(expect.arrayContaining([
+      expect.objectContaining({ candidateId: "frappe/erpnext", unmatchedTerms: expect.arrayContaining(["technician", "labor"]),
+        matchedModules: expect.arrayContaining([expect.objectContaining({ id: "asset-repair" })]),
+        prepared: false, runtimeTested: false, licenseApproved: false }),
+      expect.objectContaining({ candidateId: "inventree/InvenTree", prepared: false }),
+    ]));
+    for (const profile of result.sourceProfiles as Array<{ candidateId: string }>) {
+      const inspected = content(await call("zero_inspect", { candidateId: profile.candidateId }), ZERO_MCP_OUTPUT_LIMITS.inspect);
+      expect(inspected).toMatchObject({ readiness: "source-only", sourceProfile: {
+        candidateId: profile.candidateId, sourceRevision: expect.stringMatching(/^[a-f0-9]{40}$/u),
+        sourceFiles: expect.arrayContaining([expect.objectContaining({ sha256: expect.stringMatching(/^[a-f0-9]{64}$/u) })]),
+        prepared: false, runtimeTested: false, licenseApproved: false,
+      } });
+    }
+    const status = content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status);
+    expect(status).toMatchObject({ catalog: { records: 796 }, sourceProfiles: { records: 3, basis: "reviewed-source-slices; no runtime qualification" } });
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it("caps broad queries at five and respects the catalog category filter", async () => {

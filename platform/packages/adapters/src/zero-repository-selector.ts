@@ -53,6 +53,8 @@ export async function selectRepositoryWithJev(
     generation: number;
     goal: string;
     candidates: readonly RepositoryOption[];
+    /** Planning must assess fit even when only one source is eligible. */
+    assessSingle?: boolean;
     signal?: AbortSignal;
   },
 ): Promise<RepositorySelection> {
@@ -66,6 +68,7 @@ export async function selectRepositoryWithJev(
     input.goal.length > 8_000 ||
     !Array.isArray(input.candidates) ||
     input.candidates.length > 5 ||
+    (input.assessSingle !== undefined && typeof input.assessSingle !== "boolean") ||
     typeof dependencies.stillEligible !== "function"
   )
     return { status: "blocked", reason: "invalid_repository_request" };
@@ -80,7 +83,7 @@ export async function selectRepositoryWithJev(
         typeof c.sourceAvailable !== "boolean" ||
         typeof c.archived !== "boolean" ||
         typeof c.capability !== "string" ||
-        c.capability.length > 1_000 ||
+        c.capability.length > 6_000 ||
         typeof c.licenseSource !== "string" ||
         c.licenseSource.length > 1_000,
     ) ||
@@ -127,7 +130,8 @@ export async function selectRepositoryWithJev(
       return { status: "blocked", reason: "source_policy_unavailable", ...metadata };
     }
   };
-  if (candidates.length === 1) return result(candidates[0]!, "single_eligible");
+  if (candidates.length === 1 && !input.assessSingle)
+    return result(candidates[0]!, "single_eligible");
   const decision = await requestSystemOneDecision(
     config,
     {

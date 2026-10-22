@@ -82,6 +82,7 @@ describe("bounded prepared-profile overlay", () => {
     expect(retrieveRepositoryNeed({ query: "image editor" })).toEqual({
       preparedProfiles: [],
       sourceCandidates: image,
+      sourceProfiles: [],
     });
     expect(repositorySnapshot.records).toHaveLength(796);
     expect(JSON.stringify(repositorySnapshot)).toBe(before);

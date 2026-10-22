@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-22T12:06:07.961Z",
+  "evaluation": "Pinned source slices reviewed; partial recall only. No complete application fit, preparation, license approval, runtime verification or demonstrated benefit.",
+  "profiles": [
+    {
+      "repository": "frappe/erpnext",
+      "kind": "application-foundation",
+      "purpose": "ERP application source with stock entries, asset repairs and customer quotations; a foundation to assess, not a ready workshop application.",
+      "licenseSource": "GPL-3.0 license text observed; exact grants, exceptions and dependency licenses require review.",
+      "modules": [
+        {
+          "id": "stock-entry",
+          "purpose": "Stock entry schema describes stock receipt, issue and movement, with source/target warehouses and item rows.",
+          "path": "erpnext/stock/doctype/stock_entry/stock_entry.json",
+          "keywords": [
+            "stock",
+            "inventory",
+            "warehouse",
+            "warehouses",
+            "parts",
+            "sandelis",
+            "sandeliu",
+            "atsargos",
+            "atsargu",
+            "dalys",
+            "daliu"
+          ]
+        },
+        {
+          "id": "asset-repair",
+          "purpose": "Asset repair schema records repair status/cost and consumed stock items. It is an asset workflow, not a complete customer repair desk.",
+          "path": "erpnext/assets/doctype/asset_repair/asset_repair.json",
+          "keywords": [
+            "repair",
+            "repairs",
+            "maintenance",
+            "asset",
+            "assets",
+            "remontas",
+            "remonto",
+            "remontu",
+            "prieziura",
+            "irenginiai"
+          ]
+        },
+        {
+          "id": "quotation",
+          "purpose": "Quotation schema includes customer/lead party, item rows and offered prices.",
+          "path": "erpnext/selling/doctype/quotation/quotation.json",
+          "keywords": [
+            "quotation",
+            "quotes",
+            "customer",
+            "customers",
+            "client",
+            "clients",
+            "sales",
+            "estimate",
+            "estimates",
+            "klientai",
+            "klientu",
+            "samata",
+            "samatos"
+          ]
+        }
+      ],
+      "setup": [
+        "Requires the Frappe application stack; schemas declare InnoDB. These modules are not standalone SQLite files.",
+        "Local installation size, memory, Windows support and production suitability are not measured."
+      ],
+      "gaps": [
+        "Customer-device intake, technician labor/time and repair status rules need explicit adaptation.",
+        "Inspect server controllers, transactions and permissions beyond the reviewed schemas before integration."
+      ],
+      "sourceRevision": "8d60c082960de0934311021c9b8adf281b02e66c",
+      "sourceFiles": [
+        {
+          "path": "license.txt",
+          "gitBlobSha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+          "bytes": 35149,
+          "source": "https://github.com/frappe/erpnext/blob/8d60c082960de0934311021c9b8adf281b02e66c/license.txt"
+        },
+        {
+          "path": "erpnext/assets/doctype/asset_repair/asset_repair.json",
+          "gitBlobSha": "5902871047cea41e557b4dce20dceffbfc7d07dc",
+          "sha256": "684d58772aa152c9eb3150fca2bc198ce3d04237cc58c0cc6573d7fcbbe51c68",
+          "bytes": 7329,
+          "source": "https://github.com/frappe/erpnext/blob/8d60c082960de0934311021c9b8adf281b02e66c/erpnext/assets/doctype/asset_repair/asset_repair.json"
+        },
+        {
+          "path": "README.md",
+          "gitBlobSha": "bb7a8bc2c33033e506dc5c15469aaacfe31ceee5",
+          "sha256": "c7d12496fddc6771a44d9c84dcaa6868eea52ef32aca5a6a68d5b59d88a7022b",
+          "bytes": 7442,
+          "source": "https://github.com/frappe/erpnext/blob/8d60c082960de0934311021c9b8adf281b02e66c/README.md"
+        },
+        {
+          "path": "erpnext/stock/doctype/stock_entry/stock_entry.json",
+          "gitBlobSha": "6b5012647e4ff2a83b7c96c2eae38f2d83d992d2",
+          "sha256": "49be8662daf9f719f7dfa2bd1f40eedbb3d5fd668a240acde1e42af1155948f1",
+          "bytes": 20704,
+          "source": "https://github.com/frappe/erpnext/blob/8d60c082960de0934311021c9b8adf281b02e66c/erpnext/stock/doctype/stock_entry/stock_entry.json"
+        },
+        {
+          "path": "erpnext/selling/doctype/quotation/quotation.json",
+          "gitBlobSha": "73451dbdf2667a400a5694e5f1afb7fcd22e9ab2",
+          "sha256": "2475ad6f31ec17e0e37fab1fe7a373f8c9f7a93ad8be41811d1d87b82c0bbb8a",
+          "bytes": 28025,
+          "source": "https://github.com/frappe/erpnext/blob/8d60c082960de0934311021c9b8adf281b02e66c/erpnext/selling/doctype/quotation/quotation.json"
+        }
+      ],
+      "sourceAvailable": true,
+      "licenseApproved": false,
+      "runtimeTested": false,
+      "prepared": false,
+      "observedAt": "2026-10-22T12:06:07.961Z"
+    },
+    {
+      "repository": "frappe/frappe",
+      "kind": "framework",
+      "purpose": "Metadata-driven Python/JavaScript full-stack application framework; review for forms, data models and role-based permissions.",
+      "licenseSource": "MIT license text observed; dependency and composed-application licenses require review.",
+      "modules": [
+        {
+          "id": "doctype-framework",
+          "purpose": "README describes a full-stack metadata-driven application framework using Python and MariaDB.",
+          "path": "README.md",
+          "keywords": [
+            "framework",
+            "lowcode",
+            "forms",
+            "form",
+            "model",
+            "models",
+            "schema",
+            "application",
+            "karkasas",
+            "formos",
+            "duomenu"
+          ]
+        },
+        {
+          "id": "role",
+          "purpose": "Role DocType schema defines role name, desk access and role administration fields; verify actual enforcement separately.",
+          "path": "frappe/core/doctype/role/role.json",
+          "keywords": [
+            "role",
+            "roles",
+            "permission",
+            "permissions",
+            "users",
+            "authorization",
+            "access",
+            "vaidmenys",
+            "vaidmenu",
+            "teises",
+            "teisiu",
+            "prieiga",
+            "naudotojai"
+          ]
+        }
+      ],
+      "setup": [
+        "README specifies Python and MariaDB with a tightly integrated client; assess the full stack rather than copying a DocType into an unrelated app.",
+        "Runtime installation and backup/recovery are not qualified by this source review."
+      ],
+      "gaps": [
+        "No workshop or stock business model is supplied by these reviewed framework slices.",
+        "Review authentication, permission enforcement, migrations and deployment before selecting a release."
+      ],
+      "sourceRevision": "4f5ca6e6f3e2c0c4c3000b0d1ae78a91b61d2a38",
+      "sourceFiles": [
+        {
+          "path": "LICENSE",
+          "gitBlobSha": "6919960f8ba9c6ea72a8a0b07d6e98b4b46c7531",
+          "sha256": "bc6001a54ffcc4ab520424d7dbb85b293578efcdcb7d8f8055e00dddf942e5d7",
+          "bytes": 1118,
+          "source": "https://github.com/frappe/frappe/blob/4f5ca6e6f3e2c0c4c3000b0d1ae78a91b61d2a38/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "gitBlobSha": "6a323de3ab44c55a81aea8d225c36e0c95f4d06f",
+          "sha256": "53f0bf586e9a3203e1c025ec816594810ceb6e34b8282d543c46951074c869ac",
+          "bytes": 6360,
+          "source": "https://github.com/frappe/frappe/blob/4f5ca6e6f3e2c0c4c3000b0d1ae78a91b61d2a38/README.md"
+        },
+        {
+          "path": "frappe/core/doctype/role/role.json",
+          "gitBlobSha": "5143d93eece8f6a8209d2002aa84111fe2f99dad",
+          "sha256": "cb1bd0e8af4c6cea7dd3f1f0d421679dcbb9f25c3f01923eb5eba6eba6f9abbe",
+          "bytes": 3538,
+          "source": "https://github.com/frappe/frappe/blob/4f5ca6e6f3e2c0c4c3000b0d1ae78a91b61d2a38/frappe/core/doctype/role/role.json"
+        }
+      ],
+      "sourceAvailable": true,
+      "licenseApproved": false,
+      "runtimeTested": false,
+      "prepared": false,
+      "observedAt": "2026-10-22T12:06:07.961Z"
+    },
+    {
+      "repository": "inventree/InvenTree",
+      "kind": "application-foundation",
+      "purpose": "Django-based inventory and part-tracking application with REST API and plugins; review as an extensible stock foundation.",
+      "licenseSource": "MIT license text observed; dependency licenses require review.",
+      "modules": [
+        {
+          "id": "stock-app",
+          "purpose": "Stock application package; README describes low-level stock control. Controllers and transaction paths still need review.",
+          "path": "src/backend/InvenTree/stock/apps.py",
+          "keywords": [
+            "stock",
+            "inventory",
+            "warehouse",
+            "warehouses",
+            "sandelis",
+            "sandeliu",
+            "atsargos",
+            "atsargu"
+          ]
+        },
+        {
+          "id": "part-app",
+          "purpose": "Part application package within the inventory system, backed by the README part-tracking description.",
+          "path": "src/backend/InvenTree/part/apps.py",
+          "keywords": [
+            "parts",
+            "part",
+            "component",
+            "components",
+            "dalys",
+            "daliu",
+            "detales",
+            "detaliu"
+          ]
+        },
+        {
+          "id": "users-app",
+          "purpose": "Users application package; complete role and access-control behavior is not certified by its app configuration.",
+          "path": "src/backend/InvenTree/users/apps.py",
+          "keywords": [
+            "user",
+            "users",
+            "accounts",
+            "roles",
+            "naudotojai",
+            "naudotoju",
+            "paskyros",
+            "vaidmenys"
+          ]
+        }
+      ],
+      "setup": [
+        "Official process documentation recommends PostgreSQL for production and limits SQLite to development/testing.",
+        "Assess web/proxy/background-worker/cache processes, packaging and local footprint; none has been run in this review."
+      ],
+      "gaps": [
+        "Customer repair orders, technician time, quotes and payment-state workflows need an explicit extension or another foundation.",
+        "Review import atomicity, archive restore, attachments and stock concurrency against the real application requirements."
+      ],
+      "documentation": [
+        {
+          "url": "https://docs.inventree.org/en/stable/start/processes/",
+          "note": "Production database/process requirements, checked on the profile observation date."
+        }
+      ],
+      "sourceRevision": "b9793b0a1fb803f2d2833d58ac77e6020acc5381",
+      "sourceFiles": [
+        {
+          "path": "LICENSE",
+          "gitBlobSha": "3a4626c1c4cd5afcd036830160c224a4027b6f0b",
+          "sha256": "70f21a7a9bb007581b06860ad76d623c95d5c92663a2326b5fa79a198aed55e0",
+          "bytes": 1079,
+          "source": "https://github.com/inventree/InvenTree/blob/b9793b0a1fb803f2d2833d58ac77e6020acc5381/LICENSE"
+        },
+        {
+          "path": "README.md",
+          "gitBlobSha": "5295f4fb9c67cec437a3925487386b76ffca5a36",
+          "sha256": "bb9552543406114e970d5f854aa584c78fad82b2481d83f100b184890f3bdc1e",
+          "bytes": 12649,
+          "source": "https://github.com/inventree/InvenTree/blob/b9793b0a1fb803f2d2833d58ac77e6020acc5381/README.md"
+        },
+        {
+          "path": "src/backend/InvenTree/stock/apps.py",
+          "gitBlobSha": "14ebab890f962016430846643508b442a0e7b014",
+          "sha256": "1e852a305a14e80475c594fd9edb5eed753278ccbcc18235cb699e2f094bd1c8",
+          "bytes": 153,
+          "source": "https://github.com/inventree/InvenTree/blob/b9793b0a1fb803f2d2833d58ac77e6020acc5381/src/backend/InvenTree/stock/apps.py"
+        },
+        {
+          "path": "src/backend/InvenTree/part/apps.py",
+          "gitBlobSha": "7949da0e8e7d2a7f75928709404dc6ae49e8cd40",
+          "sha256": "3db160437358fb3f9cce98cd05d753b8a999aa8ea774b20bf6519424e0e2782f",
+          "bytes": 2696,
+          "source": "https://github.com/inventree/InvenTree/blob/b9793b0a1fb803f2d2833d58ac77e6020acc5381/src/backend/InvenTree/part/apps.py"
+        },
+        {
+          "path": "src/backend/InvenTree/users/apps.py",
+          "gitBlobSha": "f49e4ab3c7a366b1c91921d19c5a53d915c0abbf",
+          "sha256": "8d0fc60e8198e8b2a3d37bd80faa9fa65cbacfcc688e472e00e5d55dfb21c6c9",
+          "bytes": 1946,
+          "source": "https://github.com/inventree/InvenTree/blob/b9793b0a1fb803f2d2833d58ac77e6020acc5381/src/backend/InvenTree/users/apps.py"
+        }
+      ],
+      "sourceAvailable": true,
+      "licenseApproved": false,
+      "runtimeTested": false,
+      "prepared": false,
+      "observedAt": "2026-10-22T12:06:07.961Z"
+    }
+  ]
+}

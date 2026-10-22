@@ -40,6 +40,12 @@ postgres(
       expect(JSON.stringify(options?.body)).not.toContain("PRIVATE_LOCAL_PAYLOAD");
       const packet = JSON.parse(String(options?.body));
       const goal: string = packet.state.task;
+      if (packet.questions.repository)
+        return Response.json({
+          answers: { repository: { type: "choice", choice: "repo0" } },
+          id: "fixture-source-provider-receipt",
+          usage: { input_tokens: 91, output_tokens: 2, cost: 0.00002 },
+        });
       const choice = goal.includes("photograph")
         ? "abstain"
         : goal.includes("JSON")
@@ -284,6 +290,70 @@ postgres(
       expect(
         (await request(`/jobs/${accepted.jobId}/artifact`, { cookie: otherCookie })).status,
       ).toBe(403);
+    });
+    it("authorizes paid planning separately and returns a source-only receipt without application execution", async () => {
+      const candidateIds = ["inventree/InvenTree", "frappe/erpnext"];
+      const params = input({
+        goal: "Choose an inventory foundation; local offline runtime and SQLite required",
+        data: "source-selection-v1",
+        mode: "select-source",
+        candidateIds,
+      });
+      const callsBefore = dispatch.mock.calls.length;
+      expect(
+        (await request("/execute", { method: "POST", body: params })).status,
+      ).toBe(403);
+      expect(dispatch.mock.calls.length).toBe(callsBefore);
+      profile.sourceRepositories = candidateIds;
+      await grant();
+      try {
+        expect(await (await request("/status")).json()).toMatchObject({
+          sourceRepositories: profile.sourceRepositories,
+        });
+        const response = await request("/execute", {
+          method: "POST",
+          body: params,
+        });
+        expect(response.status).toBe(202);
+        const { jobId, callId } = (await response.json()) as {
+          jobId: string;
+          callId: string;
+        };
+        await handles.awaitIdle!();
+        const summary = (await (await request(`/jobs/${jobId}`)).json()) as {
+          sha256: string;
+        };
+        const page = (await (
+          await request(`/jobs/${jobId}/artifact`)
+        ).json()) as { contentBase64: string; nextOffset: null };
+        expect(page.nextOffset).toBeNull();
+        const bytes = Buffer.from(page.contentBase64, "base64");
+        expect(createHash("sha256").update(bytes).digest("hex")).toBe(
+          summary.sha256,
+        );
+        const receipt = JSON.parse(bytes.toString());
+        expect(receipt).toMatchObject({
+          state: "succeeded",
+          phase: "selected",
+          prepared: false,
+          verified: false,
+          tool: null,
+          selection: {
+            status: "recommended",
+            repository: "inventree/InvenTree",
+            evidence: "source_only",
+            engine: "jev",
+          },
+        });
+        expect(receipt.component).toBeUndefined();
+        expect(
+          await handles.prisma.usageRecord.count({ where: { callId } }),
+        ).toBe(1);
+        expect(dispatch.mock.calls.length).toBe(callsBefore + 1);
+      } finally {
+        delete profile.sourceRepositories;
+        await grant();
+      }
     });
     it("executes JSON and a meaningful abstention through the same authenticated path", async () => {
       for (const [goal, data, state, tool] of [

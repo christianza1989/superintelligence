@@ -115,6 +115,40 @@ describe("operator-bound module reuse MCP", () => {
     expect(api.execute).not.toHaveBeenCalled();
     expect(JSON.stringify(denied)).not.toContain("fixture-secret");
   });
+  it("submits advisory planning without preparing code or accepting arbitrary source URLs", async () => {
+    const input = {
+      goal: "Offline inventory foundation with local roles",
+      candidateIds: ["inventree/InvenTree"],
+      ...controls(),
+    };
+    const result = await client.callTool({
+      name: "zero_select",
+      arguments: input,
+    });
+    expect(result.isError).not.toBe(true);
+    expect(api.execute).toHaveBeenCalledExactlyOnceWith({
+      ...input,
+      data: "source-selection-v1",
+      mode: "select-source",
+    });
+    vi.mocked(api.execute).mockClear();
+    for (const candidateIds of [
+      ["https://example.invalid/repo"],
+      ["inventree/InvenTree", "inventree/InvenTree"],
+    ]) {
+      const rejected = await client.callTool({
+        name: "zero_select",
+        arguments: { ...input, candidateIds },
+      });
+      expect(rejected.isError).toBe(true);
+    }
+    expect(api.execute).not.toHaveBeenCalled();
+    expect(
+      (await client.listTools()).tools.find(
+        (tool) => tool.name === "zero_select",
+      )?.annotations,
+    ).toMatchObject({ readOnlyHint: false, openWorldHint: true });
+  });
   it("preserves job states and page hashes instead of manufacturing PASS", async () => {
     const result = await client.callTool({
       name: "zero_reuse_job",
