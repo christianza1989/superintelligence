@@ -265,11 +265,15 @@ function searchPlan(query: string) {
         word,
       ),
   );
-  const first = meaningful[0] ?? terms[0]!;
-  // An acronym or mixed-case project token is an identity hint, never proof of fit.
+  const dottedIdentity = (word: string) =>
+    /^[A-Za-z][A-Za-z0-9_-]*(?:\.[A-Za-z][A-Za-z0-9_-]*)+$/.test(word);
+  const first = meaningful.find(dottedIdentity) ?? meaningful[0] ?? terms[0]!;
+  // Dotted repository names, acronyms and mixed-case tokens are identity hints,
+  // never proof of fit. A strong dotted token may follow a generic need word.
   // Do not AND a known name with every requested behavior: repo metadata rarely
   // enumerates an entire application requirement.
   const named =
+    dottedIdentity(first) ||
     /^[A-Z]{2,}[a-z0-9+#_.-]*$/.test(first) ||
     /^[A-Za-z][a-z]+[A-Z][A-Za-z0-9+#_.-]*$/.test(first);
   return {
@@ -278,7 +282,12 @@ function searchPlan(query: string) {
     primaryScope: named ? ("name" as const) : ("name-description" as const),
     primaryStrategy: named ? ("name-anchor" as const) : ("requested" as const),
     fallback: named
-      ? (meaningful.length ? meaningful : terms).slice(0, 2).join(" ")
+      ? [
+          first,
+          ...(meaningful.length ? meaningful : terms)
+            .filter((word) => word.toLowerCase() !== first.toLowerCase())
+            .slice(0, 1),
+        ].join(" ")
       : (meaningful.length ? meaningful : terms)
           .slice(0, terms.length > 2 ? 2 : 1)
           .join(" "),

@@ -72,13 +72,15 @@ function moduleFocusTerms(need?: GithubModuleNeed) {
   );
 }
 type ObservedDeclaration = { offset: number; text: string };
-function selectedDeclarations(
-  observed: ObservedDeclaration[],
-  text: string,
-  need?: GithubModuleNeed,
-) {
+function declarationSampler(text: string, need?: GithubModuleNeed) {
   const terms = moduleFocusTerms(need);
-  if (terms.length === 0) return observed.slice(0, 12).map((d) => d.text);
+  const outputs = new Set(need ? sourceTokens(need.outputs) : []);
+  const selected: {
+    declaration: ObservedDeclaration;
+    index: number;
+    score: number;
+  }[] = [];
+  let index = 0;
   const score = (declaration: ObservedDeclaration) => {
     const signature = sourceTokens(declaration.text);
     const before = text.slice(
@@ -87,25 +89,38 @@ function selectedDeclarations(
     );
     const end = before.lastIndexOf("*/");
     const start = end >= 0 ? before.lastIndexOf("/*", end) : -1;
-    const doc =
+    const blockDoc =
       start >= 0 && !/[;{}]/.test(before.slice(end + 2))
         ? sourceTokens(before.slice(start, end + 2))
         : [];
+    const commentLines: string[] = [];
+    const precedingLines = before.trimEnd().split(/\r?\n/u);
+    for (let cursor = precedingLines.length - 1; cursor >= 0; cursor--) {
+      const line = precedingLines[cursor]!.trim();
+      if (!line.startsWith("//")) break;
+      commentLines.push(line.slice(2));
+    }
+    const doc = [...blockDoc, ...sourceTokens(commentLines.join(" "))];
     return terms.reduce(
       (n, term) =>
-        n + (signature.includes(term) ? 8 : doc.includes(term) ? 1 : 0),
+        n +
+        (signature.includes(term) || doc.includes(term)
+          ? outputs.has(term)
+            ? 16
+            : 8
+          : 0),
       0,
     );
   };
-  return observed
-    .map((declaration, index) => ({
-      declaration,
-      index,
-      score: score(declaration),
-    }))
-    .sort((a, b) => b.score - a.score || a.index - b.index)
-    .slice(0, 12)
-    .map(({ declaration }) => declaration.text);
+  return {
+    observe(declaration: ObservedDeclaration) {
+      if (terms.length === 0 && selected.length === 12) return;
+      selected.push({ declaration, index: index++, score: score(declaration) });
+      selected.sort((a, b) => b.score - a.score || a.index - b.index);
+      if (selected.length > 12) selected.pop();
+    },
+    values: () => selected.map(({ declaration }) => declaration.text),
+  };
 }
 
 /** Header signatures are source observations, not proof of a linkable public API. */
@@ -130,7 +145,7 @@ function nativeHeaderDeclarations(
     public: boolean;
     name: string | null;
   }[] = [];
-  const signatures: ObservedDeclaration[] = [];
+  const signatures = declarationSampler(text, need);
   let boundary = 0;
   let matchedThrough = -1;
   let continuedDirective = false;
@@ -162,11 +177,32 @@ function nativeHeaderDeclarations(
       }
       const match =
         signature.length <= 1200
-          ? signature.match(
-              /^\s*([\w\s:*&<>,\[\]~]+?)\s*\(([^;{}]*)\)\s*(?:(?:const|noexcept|override|final)\s*|[&]\s*|=\s*(?:0|default|delete)\s*)*;/,
-            )
+          ? signature.match(/^\s*([\w\s:*&<>,\[\]~]+?)\s*\(/)
           : null;
-      if (match && match[0].length <= 1200) {
+      let close = -1;
+      if (match) {
+        let depth = 1;
+        for (
+          let cursor = match[0].length;
+          cursor < signature.length;
+          cursor++
+        ) {
+          if (signature[cursor] === "(") depth++;
+          if (signature[cursor] === ")" && --depth === 0) {
+            close = cursor;
+            break;
+          }
+        }
+      }
+      const tail =
+        close >= 0
+          ? signature
+              .slice(close + 1)
+              .match(
+                /^\s*(?:(?:const|noexcept|override|final)\s*|[&]\s*|=\s*(?:0|default|delete)\s*)*;/,
+              )
+          : null;
+      if (match && tail) {
         const prefix = match[1]!.trim();
         const name = prefix.match(/([\w:~]+)$/)?.[1];
         const returnType = name ? prefix.slice(0, -name.length).trim() : "";
@@ -176,7 +212,9 @@ function nativeHeaderDeclarations(
           (prefix === scope.name || prefix === `~${scope.name}`);
         // A function-pointer data member is a callback slot, not a function
         // this source unit provides. Do not mistake its return type for a ctor.
-        const callbackMember = /^\s*[*&]/.test(match[2]!);
+        const callbackMember = /^\s*[*&]/.test(
+          signature.slice(match[0].length, close),
+        );
         if (
           name &&
           (returnType || constructor) &&
@@ -188,10 +226,10 @@ function nativeHeaderDeclarations(
         ) {
           const leading = match[0].length - match[0].trimStart().length;
           const sourceStart = start + leading;
-          signatures.push({
+          signatures.observe({
             offset: sourceStart,
             text: text
-              .slice(sourceStart, start + match[0].length)
+              .slice(sourceStart, start + close + 1 + tail[0].length)
               .trim()
               .slice(0, 240),
           });
@@ -226,9 +264,8 @@ function nativeHeaderDeclarations(
         boundary = index + 1;
       } else if (line[j] === ";") boundary = index + 1;
     }
-    if (signatures.length >= 64) break;
   }
-  return selectedDeclarations(signatures, text, need);
+  return signatures.values();
 }
 
 /** Text observations, explicitly not a parser/conformance claim. Never inspect README as code. */
@@ -293,27 +330,21 @@ export function moduleFileFacts(
   if (!codeExtension.test(file)) return facts;
   const lines = text.split(/\r?\n/u);
   let lineOffset = 0;
-  facts.declarations = /\.(?:h|hh|hpp|hxx)$/i.test(file)
-    ? nativeHeaderDeclarations(text, need)
-    : selectedDeclarations(
-        lines
-          .flatMap((line) => {
-            const offset = lineOffset;
-            lineOffset +=
-              line.length + (text[offset + line.length] === "\r" ? 2 : 1);
-            return declaration.test(line)
-              ? [
-                  {
-                    offset: offset + line.length - line.trimStart().length,
-                    text: line.trim().slice(0, 240),
-                  },
-                ]
-              : [];
-          })
-          .slice(0, 64),
-        text,
-        need,
-      );
+  if (/\.(?:h|hh|hpp|hxx)$/i.test(file))
+    facts.declarations = nativeHeaderDeclarations(text, need);
+  else {
+    const observed = declarationSampler(text, need);
+    for (const line of lines) {
+      const offset = lineOffset;
+      lineOffset += line.length + (text[offset + line.length] === "\r" ? 2 : 1);
+      if (declaration.test(line))
+        observed.observe({
+          offset: offset + line.length - line.trimStart().length,
+          text: line.trim().slice(0, 240),
+        });
+    }
+    facts.declarations = observed.values();
+  }
   // Follow observed public alias assignments to their actual function definitions.
   const aliases = facts.declarations.flatMap((line) => {
     const match = line.match(/=\s*([A-Za-z_$][\w$]*)\s*;$/);

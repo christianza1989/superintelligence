@@ -37,7 +37,10 @@ export async function selectSourceModuleWithJev(
       language: c.language,
       licenseSpdx: c.licenseSpdx,
       purposeEvidence: c.purposeEvidence,
-      declarations: c.declarations.slice(0, 6),
+      declarations: c.declarations.slice(0, 12).map((d) => d.slice(0, 120)),
+      declarationsTruncated:
+        c.declarations.length > 12 ||
+        c.declarations.some((d) => d.length > 120),
       imports: c.imports.slice(0, 8),
       implementationSnippets: c.implementationSnippets,
       codeExcerpt: c.source.excerpt.slice(0, 1200),

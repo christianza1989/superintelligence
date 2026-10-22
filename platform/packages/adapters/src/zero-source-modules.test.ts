@@ -244,15 +244,80 @@ describe("concrete source module planning", () => {
       focus,
     ).declarations;
     expect(declarations).toHaveLength(12);
-    expect(declarations.slice(0, 2)).toEqual([
-      "int media_render_frame(MediaContext *context, Frame *frame);",
-      "int media_receive(MediaContext *context, void *result);",
-    ]);
+    expect(new Set(declarations.slice(0, 2))).toEqual(
+      new Set([
+        "int media_render_frame(MediaContext *context, Frame *frame);",
+        "int media_receive(MediaContext *context, void *result);",
+      ]),
+    );
     expect(
       moduleFileFacts("include/media.h", source).declarations,
     ).not.toContain(declarations[0]);
     for (const declaration of declarations)
       expect(source).toContain(declaration);
+  });
+  it("retains documented high-level APIs beyond long metadata prefixes with bounded output and exact source spans", () => {
+    const source = [
+      "#define STREAM_API",
+      "#define DEPRECATED_EXPORT(func, hint) func",
+      'extern "C" {',
+      ...Array.from(
+        { length: 80 },
+        (_, index) => `STREAM_API unsigned decoder_version_${index}(void);`,
+      ),
+      "typedef void (*progress_fn)(int progress, void *data);",
+      "struct SessionParams {",
+      "  progress_fn progress_callback;",
+      "  bool (*abort_callback)(void *data);",
+      "};",
+      "DEPRECATED_EXPORT(",
+      "  STREAM_API int old_decode(const float *audio),",
+      '  "Use the newer entrypoint"',
+      ");",
+      "// Convert decoded PCM audio to timestamped text segments.",
+      "// This is a complete processing operation; callbacks are parameters.",
+      "STREAM_API int decoder_run(Session *context, SessionParams params, const float *samples, int length);",
+      "STREAM_API int decoder_segments_count(Session *context);",
+      "// Start and end of each timestamped segment.",
+      "STREAM_API int64_t decoder_segment_t0(Session *context, int index);",
+      "STREAM_API int64_t decoder_segment_t1(Session *context, int index);",
+      "STREAM_API const char *decoder_segment_text(Session *context, int index);",
+      "STREAM_API int decoder_language(Session *context);",
+      "}",
+    ].join("\r\n");
+    const focused = moduleFileFacts("include/decoder.h", source, {
+      inputs:
+        "Decoded PCM audio, language hint, progress and cancellation callbacks",
+      outputs: "Timestamped text segments and detected language metadata",
+      runtime: "Offline native library",
+    });
+    expect(focused.declarations).toHaveLength(12);
+    expect(focused.declarations[0]).toContain("decoder_run(");
+    expect(focused.declarations.join("\n")).toContain("decoder_segment_t0(");
+    expect(focused.declarations.join("\n")).toContain("decoder_segment_t1(");
+    expect(focused.declarations.join("\n")).toContain("decoder_segment_text(");
+    expect(focused.declarations.join("\n")).toContain("decoder_language(");
+    expect(focused.declarations.join("\n")).not.toMatch(
+      /old_decode|DEPRECATED_EXPORT|progress_callback|abort_callback/,
+    );
+    for (const declaration of focused.declarations) {
+      expect(source).toContain(declaration);
+      expect(declaration.length).toBeLessThanOrEqual(240);
+    }
+  });
+  it("accepts balanced callback parameters without treating annotation wrapper tails as complete declarations", () => {
+    const source = [
+      "ANNOTATE(",
+      "  LIB_API int old_process(const float *audio),",
+      '  "outdated"',
+      ");",
+      "LIB_API int process_audio(const float *audio, void (*progress)(int value, void *data));",
+      "LIB_API struct DecodeParams decode_default_params(void);",
+    ].join("\n");
+    expect(moduleFileFacts("include/decoder.h", source).declarations).toEqual([
+      "LIB_API int process_audio(const float *audio, void (*progress)(int value, void *data));",
+      "LIB_API struct DecodeParams decode_default_params(void);",
+    ]);
   });
   it("recognizes CommonJS/UMD public assignments and Go exports instead of losing non-ESM module APIs", () => {
     const facts = moduleFileFacts(
@@ -345,6 +410,54 @@ describe("concrete source module planning", () => {
       "whole repository need not",
     );
     expect(body.state.candidates[0]).toHaveProperty("declarations");
+    expect(body.state.candidates[0].declarationsTruncated).toBe(false);
+  });
+  it("sends later observed APIs to Jev within the existing declaration byte allowance while preserving full proposal evidence", async () => {
+    const declarations = Array.from({ length: 12 }, (_, index) =>
+      `LIB_API int ${index === 8 ? "process_segments" : `helper_${index}`}(const char *${"argument".repeat(32)});`.slice(
+        0,
+        240,
+      ),
+    );
+    const option = {
+      ...sourceModuleOptions([candidate], need)[0]!,
+      declarations,
+    };
+    const omitted = {
+      ...option,
+      id: "example/second:src/parser.ts",
+      declarations: Array.from(
+        { length: 13 },
+        (_, index) => `int short_${index}(void);`,
+      ),
+    };
+    const p = provider();
+    const result = await selectSourceModuleWithJev(config, p, {
+      invocationId: "declaration-breadth-fixture",
+      goal: "Process text segments",
+      need,
+      candidates: [option, omitted],
+      signal: AbortSignal.timeout(2000),
+    });
+    const body = JSON.parse(String(p.fetch.mock.calls[0]![1]!.body));
+    const sent = body.state.candidates[0];
+    expect(sent.declarations).toHaveLength(12);
+    expect(sent.declarations[8]).toContain("process_segments(");
+    expect(sent.declarations.every((d: string) => d.length <= 120)).toBe(true);
+    expect(
+      sent.declarations.reduce((n: number, d: string) => n + d.length, 0),
+    ).toBeLessThanOrEqual(1440);
+    expect(sent.declarationsTruncated).toBe(true);
+    expect(body.state.candidates[1].declarations).toHaveLength(12);
+    expect(body.state.candidates[1].declarationsTruncated).toBe(true);
+    expect(Buffer.byteLength(JSON.stringify(body.state))).toBeLessThanOrEqual(
+      22000,
+    );
+    expect(result.proposal?.module.declarations).toEqual(declarations);
+    expect(
+      result.proposal?.module.declarations.every((d) => d.length === 240),
+    ).toBe(true);
+    expect(option.declarations).toEqual(declarations);
   });
   it("prioritizes actual package entrypoints and excludes examples/vendor/layout over a coincidental filename", () => {
     const manifest = {

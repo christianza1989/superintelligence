@@ -265,6 +265,156 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       result.candidates[0]!.implementationEvidence.inspectedCodePaths,
     ).toEqual(["src/model.ts"]);
   });
+  it("recovers the canonical upstream and pinned API from frozen ASR phrases despite sparse wrapper matches", async () => {
+    const fixture = githubFixture();
+    const original = fixture.fetch.getMockImplementation()!;
+    // Frozen failed request phrases, with synthetic source/metadata responses.
+    const queries = [
+      "whisper.cpp offline transcription library",
+      "local Lithuanian speech recognition C++ timestamps",
+      "whisper.cpp API streaming cancellation",
+    ];
+    const upstream = {
+      ...fixture.entry,
+      full_name: "ggml-org/whisper.cpp",
+      description: "Native speech recognition library",
+      stargazers_count: 100_000,
+      language: "C++",
+      fork: false,
+    };
+    const wrapper = {
+      ...fixture.entry,
+      full_name: "example/whisper.cpp-service",
+      description: "Offline transcription API wrapper",
+      stargazers_count: 2,
+    };
+    const header = {
+      path: "include/whisper.h",
+      text: "int whisper_full(struct whisper_context *ctx, struct whisper_full_params params, const float *samples, int n_samples);\n",
+    };
+    const headerSha = createHash("sha1")
+      .update(`blob ${Buffer.byteLength(header.text)}\0`)
+      .update(header.text)
+      .digest("hex");
+    fixture.fetch.mockImplementation(async (input, options) => {
+      const url = new URL(String(input));
+      if (url.pathname === "/search/repositories") {
+        const nameLookup = url.searchParams
+          .get("q")!
+          .startsWith("whisper.cpp in:name ");
+        const items = nameLookup
+          ? [wrapper, upstream]
+          : url.searchParams.get("q")!.startsWith("whisper.cpp")
+            ? [wrapper]
+            : [];
+        return Response.json({
+          total_count: items.length,
+          incomplete_results: false,
+          items,
+        });
+      }
+      if (
+        url.pathname ===
+        `/repos/${upstream.full_name}/git/trees/${fixture.tree}`
+      )
+        return Response.json({
+          sha: fixture.tree,
+          truncated: false,
+          tree: [
+            ...fixture.docs.slice(0, 2).map(({ path, sha }) => ({
+              path,
+              sha,
+              mode: "100644",
+              type: "blob",
+            })),
+            { path: header.path, sha: headerSha, mode: "100644", type: "blob" },
+          ],
+        });
+      if (url.pathname.endsWith(`/git/blobs/${headerSha}`))
+        return Response.json({
+          sha: headerSha,
+          size: Buffer.byteLength(header.text),
+          encoding: "base64",
+          content: Buffer.from(header.text).toString("base64"),
+        });
+      url.pathname = url.pathname.replace(
+        /^\/repos\/(?:ggml-org\/whisper\.cpp|example\/whisper\.cpp-service)\//,
+        "/repos/example/unindexed/",
+      );
+      return original(url.toString(), options);
+    });
+    const result = await discoverGithubSources(queries, fixture.boundary, {
+      inputs: "PCM samples and language selection",
+      outputs: "transcribed segments and timestamps",
+      runtime: "offline native host",
+    });
+    expect(result.requestedQueries).toEqual(queries);
+    expect(
+      result.searches.filter((search) => search.strategy === "name-anchor"),
+    ).toEqual([
+      expect.objectContaining({
+        query: "whisper.cpp",
+        scope: "name",
+        originalQueries: [queries[0], queries[2]],
+      }),
+    ]);
+    expect(result.searches).toHaveLength(3);
+    const canonical = result.candidates[0]!;
+    expect(canonical).toMatchObject({
+      repository: upstream.full_name,
+      stars: 100_000,
+      sourceRevision: fixture.pin,
+    });
+    const api = canonical.files.find((file) => file.path === header.path)!;
+    expect(api.gitBlobSha).toBe(headerSha);
+    expect(api.sha256).toBe(
+      createHash("sha256").update(header.text).digest("hex"),
+    );
+    expect(api.moduleFacts?.declarations).toEqual([header.text.trim()]);
+    expect(canonical.implementationEvidence.inspectedCodePaths).toEqual([
+      header.path,
+    ]);
+    expect(result.network.requests).toBeLessThanOrEqual(32);
+  });
+  it.each([
+    ["llama.cpp native inference library", "llama.cpp"],
+    ["ASR processing with signal.box local library", "signal.box"],
+    ["stable-model.cpp offline engine", "stable-model.cpp"],
+  ])(
+    "recognizes general dotted project identities in %s",
+    async (query, identity) => {
+      const fixture = githubFixture();
+      const result = await discoverGithubSources([query], fixture.boundary);
+      expect(result.searches).toEqual([
+        expect.objectContaining({
+          query: identity,
+          originalQuery: query,
+          strategy: "name-anchor",
+          scope: "name",
+        }),
+      ]);
+    },
+  );
+  it("deduplicates dotted project case variants and retains version-like phrases as ordinary keywords", async () => {
+    const fixture = githubFixture();
+    const queries = ["llama.cpp native inference", "LLAMA.CPP local inference"];
+    const result = await discoverGithubSources(queries, fixture.boundary);
+    expect(result.searches).toHaveLength(1);
+    expect(result.searches[0]).toMatchObject({
+      query: "llama.cpp",
+      originalQueries: queries,
+      scope: "name",
+    });
+    const version = await discoverGithubSources(
+      ["v1.2.3 local release"],
+      fixture.boundary,
+    );
+    expect(version.searches[0]).toMatchObject({
+      query: "v1.2.3 local release",
+      strategy: "requested",
+      scope: "name-description",
+    });
+  });
   it("broadens generic needs once, ignores control words and preserves partial search matches", async () => {
     const fixture = githubFixture();
     const original = fixture.fetch.getMockImplementation()!;
