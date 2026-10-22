@@ -24,6 +24,7 @@ Validator tikrina API/import correctness, atomicity po injected failure, retry, 
 
 Pirmiausia backend ir protokolas, tik tada du nauji pokalbiai. Šio audito ar pagrindinio planavimo pokalbio neforkinti į benchmark: jie jau žino kandidatą ir tikrinimo spragas. Pirmas vienos poros bandymas vadinamas pilotu, ne statistiniu pranašumu.
 
+2026-10-22 naudotojo patikslinimas: **natūralus palyginimas turi prasidėti vienoda programos užduotimi be paieškos ar reuse užuominų**. Prompte neprašyti ieškoti GitHub, atrinkti bibliotekų/modulių ar kviesti Zero. B atranką turi paskatinti pats iš anksto užfiksuotas įdiegtas skill/MCP. Jei user paprašo pirmiausia plano ir pauzės, tą patį prašymą gauna abi pusės; specialus modulių atrankos checklist į natūralų promptą nepridedamas. Įprastų bibliotekų/paieškos teisių A pusėje neriboti. Nekvietė MCP ar nerado tinkamo komponento — išsaugomas rezultatas, ne priežastis įterpti papildomą užuominą. Explicit connection/use smoke ir strategiją nurodantis eksperimentas žymimi atskirai.
 ### Intervencijos
 
 | Grupė | Leidžiama aplinka | Ką vertina |

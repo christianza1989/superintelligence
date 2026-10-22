@@ -68,6 +68,18 @@ Extraction argumentai tik `fileId`, `idempotencyKey`, `deadline`; file ID turi b
 
 URL tyrimas priima tik operatoriaus šaltinių registre patvirtintą `taskId`, `idempotencyKey` ir `deadline`; ne savavališką URL. Fiksuotas public HTTPS fetch be redirect sukuria nekintamą source snapshot, tada vykdomas inertinis renderis. `zero_pdf_csv` skaito vienos sėkmingo PDF receipt lentelės baitų puslapius (iki 8192 B), su source/receipt/CSV hash ir page/bbox provenance. Puslapius surinkti prieš UTF-8 dekodavimą ir patikrinti visą CSV hash.
 
+Windows–WSL vykdymo profilyje `ZERO_MCP_BINDING_FILE` turi pasiekti **Linux Node procesą**. Vien Windows MCP `env` įrašas to negarantuoja: native development patikroje jis liko Windows pusėje ir serveris grįžo į discovery-only. Perduoti Linux aplinkai aiškiai, o binding faile laikyti tikrąją sesijos paslaptį:
+
+```toml
+[mcp_servers.repositoryzero]
+command = "wsl.exe"
+args = ["-d", "<distro>", "-u", "<user>", "--exec", "/usr/bin/env", "ZERO_MCP_BINDING_FILE=/private/linux/binding.json", "/absolute/path/to/node", "/absolute/path/to/repositoryzero/scripts/zero-mcp.mjs"]
+startup_timeout_sec = 30
+tool_timeout_sec = 20
+enabled_tools = ["zero_search", "zero_inspect", "zero_status", "zero_prepare", "zero_job", "zero_artifact", "zero_cancel", "zero_verify", "zero_freshness"]
+```
+
+Tai tik paleidimo forma, ne leidimo suteikimas. Reikia veikiančio esamo API/worker, galiojančio operatoriaus grant ir naujo native `zero_status`, patvirtinančio backend bei CSV prieinamumą. Viena pataisyta native 0.7 development patikra nepakeičia kitų host/OS priėmimo.
 API ir worker naudoja tą patį ZERO_PROJECT_POLICY_FILE. Jo JSON yra version:1 ir grants masyvas; kiekvienas leidimas turi spaceId, userId, scopeId, policyRevision ir baigtinį expiresAt. MCP atskiras ZERO_MCP_BINDING_FILE turi apiUrl, spaceId, scopeId, sessionToken ir expiresAt. Tai esamos Zero BetterAuth sesijos binding; coding host prenumeratos autentifikacija neperduodama. Šių privačių reikšmių nedėti į pokalbį ar Git.
 
 Abu failai turi būti Linux absoliučiuose keliuose už Git checkout ribų, current-UID savininko, tikslaus 0600 režimo, be symlink ar hardlink. Failai skaitomi iš naujo kiekvienai operacijai. HTTP klientas leidžia tik literal loopback adresą su portu, neseka redirect ir riboja atsakymą bei laiką. Tool argumentai negali pasirinkti identity, scope, root, API URL ar credential. CSV input saugomas kaip nekintamas request artefaktas.
