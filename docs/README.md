@@ -19,6 +19,10 @@ Prieštaravimo tvarka: naujesnis aiškus priimtas DECISIONS sprendimas → ROADM
 
 [Priimtas MCP planas](MCP-INTEGRATION.md) apibrėžia bendrą backend, native host ribas, svetainės diegimo eigą ir profilių vartus. [Native Codex palyginimas](NATIVE-CODEX-BENCHMARK.md) atskiria jau vykdytas ryšio ir planavimo patikras nuo pilnos, pakartojamos naudos tyrimo. Pirmi riboti bandymai nepatvirtina viso MVP ar pranašumo. Darbai P1X/P1E yra bendrame roadmape. Codex Windows 0.4 discovery plugin update/uninstall/reinstall ir naujų sesijų patikros PASS; platesnis execution lifecycle ir pakartojama nauda dar nepriimti.
 
+## Paieškos atnaujinimo planas
+
+[GitHub ir Jev kandidatų paieškos atnaujinimas](SOURCE-DISCOVERY-UPGRADE-PLAN.md) aprašo kitą darbų seką: platų tęsiamą fondą, stars ir tinkamumą, API įrodymus, pasirenkamą Treg kanalą, apskaitą ir nepriklausomą kvalifikaciją prieš diegimą. Tai planas peržiūrai; įdiegtas 0.12.3 ir ankstesni bandymų rezultatai nepakeisti. Checkboxai — ROADMAP NEED1.1–NEED1.7.
+
 ## MCP ir papildinių tyrimas
 
 [Codex ir Claude Code prijungimas](research/MCP-AND-PLUGINS-2026-10-17.md) — 2026-10-17 oficialių sąsajų, svetainės diegimo ir gyvo native Codex palyginimo tyrimas. Įgyvendinimo apimtį nustato priimti sprendimai ir bendras roadmapas.

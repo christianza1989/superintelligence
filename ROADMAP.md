@@ -1,6 +1,6 @@
 # RepositoryZero pilnas roadmapas
 
-**Atnaujinta 2026-10-17.** Vienintelis checkboxų ir norminių vartų autoritetas. [MVP-ROADMAP](MVP-ROADMAP.md) yra generuojama tų pačių užduočių ištrauka. `[x]` reiškia konkrečiai atliktą darbą jo nurodytoje apimtyje; dokumentas, mockup ir foundation PASS neuždaro gyvo produkto acceptance.
+**Atnaujinta 2026-10-22.** Vienintelis checkboxų ir norminių vartų autoritetas. [MVP-ROADMAP](MVP-ROADMAP.md) yra generuojama tų pačių užduočių ištrauka. `[x]` reiškia konkrečiai atliktą darbą jo nurodytoje apimtyje; dokumentas, mockup ir foundation PASS neuždaro gyvo produkto acceptance.
 
 Priimta bazė — Rakazo, ne naujas Python/CLI produktas. [Sprendimai](docs/DECISIONS.md), [dabartiniai faktai](docs/IMPLEMENTATION.md), [pilnas dokumentų indeksas](docs/README.md). Terminų savaitėmis atsisakyta, kol nėra įgyvendinimo matavimų. Originalūs R0/P0–P7/P1E ID išsaugoti; nauji darbai detalizuoja, o ne ištrina ankstesnius vartus.
 
@@ -24,7 +24,7 @@ Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai
 - [x] OBS1 Request-scoped observer per AgentRunRequest; tas pats callId beforeCall/usage/reservation. Du lygiagretūs runs nesumaišo observer, atsisakymas duoda 0 dispatch. 125 offline regresijos; onUsage lieka apskaitos autoritetas. OBS2 account/cap integracija atskirai atvira; DB migracija nepridėta.
 - [x] TP1 Vienas tikras esamo worker scenarijus: kontroliuojamas CSV input → tikras paruoštas komponentas → vykdymas → versijuotas artefaktas → atskiras validator. Deterministiniame profilyje modelio kvietimų 0; tikras PostgreSQL/Graphile ir MCP proceso proof PASS. [Įrodymai](docs/experiments/MCP-PREVIEW-2026-10-17.md).
 - [x] TP2 TP1 cancel/restart/timeout/duplicate atvejai nedubliuoja efekto, failed/blocked/unknown išsaugoti. API/MCP proceso restart, Graphile host stop/start, timeout ir vieno terminal receipt kontrolės PASS. Tai siaura aprėptis, ne visas G1 ar worker SIGKILL kvalifikacija.
-- [ ] NEED1 Poreikių ir fit/no-fit retrieval rinkinys su hard constraints bei LT/EN sinonimais; vietinis indeksas ir ribotas, autorizuotas gyvas GitHub/package/source tyrimas už katalogo ribų pagal PROJECT-CREATION. Didelis projektas skaidomas į papildančius poreikius, alternatyvos lyginamos kiekvienam atskirai ir vertinamas bendras suderinamumas. Užfiksuoti dev/holdout atskyrimą; 48 užklausos (24/24) pradinis pasiūlymas, o ne įrodytas optimumas. Singleton netinkamas source negali būti rekomenduotas vien dėl to, kad vienintelis. Nei keli peržiūrėti profiliai, nei maždaug 3 000 metadata įrašų savaime neuždaro šio vartų.
+- [ ] NEED1 Poreikių ir fit/no-fit retrieval rinkinys su hard constraints bei LT/EN sinonimais; vietinis indeksas ir ribotas, autorizuotas gyvas GitHub/package/source tyrimas už katalogo ribų pagal PROJECT-CREATION. Didelis projektas skaidomas į papildančius poreikius, alternatyvos lyginamos kiekvienam atskirai ir vertinamas bendras suderinamumas. Užfiksuoti dev/holdout atskyrimą; 48 užklausos (24/24) pradinis pasiūlymas, o ne įrodytas optimumas. Singleton netinkamas source negali būti rekomenduotas vien dėl to, kad vienintelis. Nei keli peržiūrėti profiliai, nei maždaug 3 000 metadata įrašų savaime neuždaro šio vartų. [Konkretus paieškos atnaujinimo planas](docs/SOURCE-DISCOVERY-UPGRADE-PLAN.md) ir NEED1.1–NEED1.7 detalizuoja platų fondą, stars/tinkamumą, API įrodymus bei diegimo vartus; įdiegta versija kol kas 0.12.3.
 - [x] PREP1 Vienas ribotas source/package preparer su exact pin/lock, source kilme, tikru entrypoint/runtime/license/permissions patikrinimu ir reuse receipt. d3-dsv3.0.1 / ISC profilis tikrina tikslius failų hash ir lock, perduoda notices, vykdo ribotą parserį ir nepriklausomą reference; projekto actual use patikra atskira. Tai ne viso katalogo runtime approval.
 - [ ] TRACE1 Backend runner ir verifier susieja poreikio/atrankos/paruošimo/invocation/artifact revision/verification receipts; pradžiai bounded JSON artefaktai. Nepriklausomas panaudojimo ir outcome įrodymas, modelio PASS nepakanka.
 - [x] OBS2 Vieno live profilio trusted connection/account mapping ir atominis account + routing lane rezervas. Jev kvalifikacijoje tas pats callId sieja DB rezervą, originalų cumulative ledger, awaited recordUsage ir receipt; unknown hold / cap0 / replay kontrolės PASS. [Profilio ribos ir sąnaudos](docs/experiments/JEV-WORKER-2026-10-17.md). Tai nėra visų provider/model/host išlaidų enforcement; fallback/child išjungti iki OBS3.
@@ -35,6 +35,18 @@ Checkboxai čia ir likusiuose skyriuose yra vienas norminis backlogas. TP darbai
 - [ ] J3 Atliktas užšaldytas B prieš tą patį B+Jev C palyginimas: kokybė, aprėptis, klaidingi pasirinkimai, visas laikas/kaina ir sąžininga išvada. „Atliktas“ nereiškia „nauda įrodyta“; nuo J2/NEED1.
 
 **Pirmo techninio preview vartai:** TP0 + TP1 + TP2 ir aiškus emuliacijos žymėjimas. Tai neuždaro gyvo modelio, Jev, trijų modulių ar beta.
+
+## NEED1 paieškos atnaujinimas
+
+[Planas peržiūrai](docs/SOURCE-DISCOVERY-UPGRADE-PLAN.md) parengtas 2026-10-22; užduotys žemiau lieka neįgyvendintos. Tai NEED1 detalizavimas, ne naujas scheduler ar viso MVP priėmimas. Treg source kanalas pasirenkamas ir nepakeičia P0.16/P2.11–P2.13 vartų.
+
+- [ ] NEED1.1 Poreikio apribojimų išsaugojimas ir platus GitHub rinkimas: funkcinės frazės, README/topics, best-match ir stars kanalai, pagination/shards, upstream priklausomybių sekimas ir dedup; be mažo fiksuoto bendro kandidatų cap ar benchmark repo sąrašo.
+- [ ] NEED1.2 Patvarūs etapų checkpointai esamame API/PostgreSQL/Graphile, originalus deadline ir lease/fence, visų Jev/Treg dispatch apskaita prieš kelių partijų įjungimą; resume/replay/cancel/revoke/unknown/cap kontrolės.
+- [ ] NEED1.3 Tinkamumo ir stars politika, bibliotekos/CLI/testo/pavyzdžio klasifikacija, konkretus API ir realizacijos/priklausomybių rinkinys, dalinis padengimas ir naujų apžiūros/Jev partijų tęstinumas.
+- [ ] NEED1.4 Pasirenkamas read-only Treg source adapteris per bendrą connection/grant/budget: schema ir kainų patikra, be tylaus mokamo waterfall; originalaus public upstream pin/hash. Gyvas bandymas tik su atskiru baigtiniu Treg allocation, ne paveldėtu Jev leidimu.
+- [ ] NEED1.5 Kompaktiškas MCP receipt su poreikių padengimu, alternatyvomis, realiu API, integravimo planu, dalinės aprėpties/sustojimo priežastimi ir known/unknown kaina; fondas lieka backend, esamo kliento suderinamumas.
+- [ ] NEED1.6 Užšaldytas multi-domain development ir nepriklausomas holdout, 0.12.3/stars-only/naujo GitHub/Treg variantų palyginimas, source/retrieval ir tikro panaudojimo statusų atskyrimas; be saugumo, apskaitos ar privalomų apribojimų regresijų.
+- [ ] NEED1.7 Tik po kvalifikacijos naujas Linux/Windows paketas ir native preflight; pakartoti tik B StudioDesk planą tuo pačiu promptu/SPEC bei Luna/high, A nepaleisti, sustoti po plano. Istorinis palyginimas nėra nauja kontroliuota pora ar kūrimo naudos įrodymas.
 
 ## P1X. MCP ir native klientai — MVP dalis
 

@@ -2,6 +2,8 @@
 
 0.12.3 / schema 1.13.3 papildo esamą `zero_discover` kelią. API, PostgreSQL, Graphile worker, operatoriaus grant ir baigtinis Jev biudžetas lieka tie patys. Tai šaltinių pasiūlymai planui, ne universalus paruošimas ar runtime kvalifikacija. [Tikslinė Whisper kvalifikacija](experiments/WHISPER-MODULE-QUALIFICATION-2026-10-22.md) tikrina Zero grandinę; ji nepakeičia ankstesnės native planų poros rezultato.
 
+Kitas atnaujinimas aprašytas [atskirame paieškos plane](SOURCE-DISCOVERY-UPGRADE-PLAN.md): platus tęsiamas fondas, stars/tinkamumas, modulių įrodymai ir pasirenkamas Treg. Tai dar neįgyvendintas planas; žemiau lieka faktinis 0.12.3 elgesys ir jo ribos.
+
 ## Vienas poreikis — vienas pasirinkimas
 
 `goal` saugo realius apribojimus, `queries` — trumpas alternatyvias vieno gebėjimo frazes. Pasirenkamas `module` aprašo `inputs`, `outputs` ir `runtime`. Nepriklausomiems gebėjimams reikia atskirų pasirinkimų: vienas TTS repo nepakeičia STT ir paveikslų generavimo atrankos.

@@ -64,6 +64,10 @@ npm run dev:worker
 
 `SANDBOX_PROVIDER=none` yra vietinio development parinktis, ne hostile kodo izoliacijos įrodymas. Neviešinti `.env`, connections ar privačių reportų. Lab nereikalauja paleisti viso API/DB: atskiras [LOCAL-LAB runbook](LOCAL-LAB.md). Paketui: `npm run package:local`, tik Linux; tai source export, ne native installer.
 
+## Paieškos atnaujinimas prieš kitą native bandymą
+
+Parengtas [konkretus planas](SOURCE-DISCOVERY-UPGRADE-PLAN.md), detalizuotas ROADMAP NEED1.1–NEED1.7. Jis apima platų kandidatų fondą, stars ir tinkamumo rikiavimą, API/priklausomybių įrodymus, patvarias tyrimo partijas, pasirenkamą Treg ir pilną kvietimų apskaitą. Tai dokumentų etapas: source, įdiegtas 0.12.3 ir užšaldyti v9/v10 rezultatai nepakeisti; naujas B ir programos kūrimas nepradėti.
+
 ## Kas toliau
 
 Toliau kvalifikuoti palaikomo execution profilio lifecycle ir bendrą perkeltą runtime paketą, išmatuoti visą G0 ir užbaigti likusias G1 retention / gedimų kontroles. Numatyto Codex Windows discovery plugin update/uninstall/reinstall jau patikrintas; browser/PDF API/worker development kelias sujungtas. Native CSV integracija priimta tik savo ribotai development apimčiai. P1E.10–P1E.11 formalus palyginimas, Library projekto sukūrimas, G2 ir naujo žmogaus MVP1 lieka atviri. [Profilių ribos](MCP-INTEGRATION.md#7-profilių-vartai-ir-įgyvendinimo-seka), [ROADMAP](../ROADMAP.md), [MVP-ROADMAP](../MVP-ROADMAP.md). Atviri vartai nežymimi PASS dėl maketo ar dokumentų sutvarkymo.

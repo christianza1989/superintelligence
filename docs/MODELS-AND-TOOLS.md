@@ -52,9 +52,11 @@ Užduoties attempt įrašo faktinį provider/model/config ir, jei atskleidžiama
 
 **Naudotojo reikalavimas:** prijungti treg.to bendrą įrankių katalogą. Tai atskiras module / MCP arba HTTP gateway adapteris už bendro policy brokerio; nėra antras modelių provideris ar mūsų branduolio priklausomybė visoms užduotims.
 
-Naudotojas nurodė **2800+ tools**. Perskaityta `treg:treg` skill dokumentacija skelbia maždaug 2600 endpointų ir 40 providerų. Šie skaičiai gali reikšti skirtingą laiką ar katalogo apimtį. Gyvo katalogo šioje sesijoje netikrinome; oficialūs vieši puslapiai iš šios aplinkos grąžino proxy403. Nei 2800, nei 2600 nepervadiname mūsų nepriklausomai patvirtintu dabartiniu skaičiumi. Katalogo kiekis netampa kokybės, nemokamumo ar visų account prieigų garantija.
+Naudotojas nurodė **2800+ tools**. Perskaityta `treg:treg` skill dokumentacija skelbia maždaug 2600 endpointų ir 40 providerų. Šie skaičiai gali reikšti skirtingą laiką ar katalogo apimtį. Ankstesnio tyrimo metu gyvas katalogas nebuvo tikrintas, vieši puslapiai grąžino proxy403. 2026-10-22 per host prijungtą Treg katalogą atlikti search/get: GitHub paieška pateikė 14 endpointų, patikrintos pasirinktų repo/profile/files, web paieškos ir paketų informacijos schemos bei deklaruota kainodara. Endpointų vykdymas ir Zero worker integracija tuo nepatvirtinti; visas katalogo dydis nesuskaičiuotas. Nei 2800, nei 2600 nepervadiname mūsų nepriklausomai patvirtintu dabartiniu skaičiumi. Katalogo kiekis netampa kokybės, nemokamumo ar visų account prieigų garantija.
 
 Skill dokumentuotas kelias: MCP `https://treg.to/mcp/`, HTTP `X-Treg-Token`, katalogo search / get / call, balance ir my_tools operacijos, organization-scoped agent tokenai su tool allowlist bei call/day cap. Tikslios einamosios schemos, transporto/auth suderinamumas, revocation, tarifai ir serverio sąlygos turi būti patvirtinti prieš runtime integraciją. [Tiekėjo puslapis](https://treg.to/), [LLM dokumentacija](https://treg.to/llms.txt). Dokumentuotas URL nėra čia patikrintas veikiantis prisijungimas.
+
+Siauro pasirenkamo source paieškos kanalo darbai aprašyti [naujame plane](SOURCE-DISCOVERY-UPGRADE-PLAN.md). Jie nepakeičia žemiau esančių bendro Treg adapterio auth/terms/permissions vartų; Jev biudžetas Treg kvietimams nepaveldimas.
 
 Planuojama eiga:
 
