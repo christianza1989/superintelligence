@@ -791,8 +791,11 @@ export async function runZeroJevTool(
         },
       );
       await publish(deps, request, id, {
-        state: "succeeded",
+        state: inspection.entries.length ? "succeeded" : "blocked",
         phase: "inspected",
+        ...(inspection.entries.length
+          ? {}
+          : { reason: "source_read_unavailable" }),
         discoveryJobId: request.input.data,
         discoverySha256: source.sha256,
         inspection,

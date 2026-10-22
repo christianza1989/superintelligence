@@ -272,6 +272,25 @@ describe("operator-bound module reuse MCP", () => {
     expect(result.isError).toBe(true);
     expect(api.execute).not.toHaveBeenCalled();
   });
+  it("accepts only the pinned virtual root without granting a host filesystem root", async () => {
+    const read = await client.callTool({
+      name: "zero_source",
+      arguments: {
+        discoveryJobId: id,
+        repository: "example/unindexed",
+        paths: ["."],
+        ...controls(),
+      },
+    });
+    expect(read.isError).not.toBe(true);
+    expect(api.execute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "inspect-source",
+        data: id,
+        paths: ["."],
+      }),
+    );
+  });
   it("returns the verified readable receipt by default through the real MCP wire", async () => {
     const receipt = {
       kind: "zero.jev.receipt.v1",

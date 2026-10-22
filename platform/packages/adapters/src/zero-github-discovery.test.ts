@@ -106,6 +106,35 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       licenseApproved: false,
     });
   });
+  it("lists the pinned root and preserves valid code reads alongside a missing path", async () => {
+    const fixture = githubFixture();
+    const result = await inspectGithubSource(
+      { repository: "example/unindexed", sourceRevision: fixture.pin },
+      ["missing.ts", ".", "src/model.ts"],
+      fixture.boundary,
+    );
+    expect(result.entries).toContainEqual(
+      expect.objectContaining({ path: ".", type: "directory" }),
+    );
+    expect(result.entries).toContainEqual(
+      expect.objectContaining({
+        path: "src/model.ts",
+        type: "file",
+        excerpt: fixture.docs[2]!.text,
+      }),
+    );
+    expect(result.failures).toEqual([
+      { path: "missing.ts", reason: "source_unavailable" },
+    ]);
+    expect(result.runtimeTested).toBe(false);
+    const missing = await inspectGithubSource(
+      { repository: "example/unindexed", sourceRevision: fixture.pin },
+      ["missing.ts"],
+      fixture.boundary,
+    );
+    expect(missing.entries).toEqual([]);
+    expect(missing.failures).toHaveLength(1);
+  });
   it.each([
     "../secret",
     "/etc/passwd",

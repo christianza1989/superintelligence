@@ -129,7 +129,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
       status: "prepared_profiles",
       candidates: [],
       preparedProfiles,
-      schemaVersion: "1.11.4",
+      schemaVersion: "1.11.5",
     });
     expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
     const profile = (result.preparedProfiles as Array<Record<string, unknown>>)[0]!;
@@ -147,7 +147,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(result.evaluation).toMatch(/scoped.*development conformance.*untrusted data/u);
     expect((await client.listTools()).tools).toHaveLength(3);
     expect(content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status)).toMatchObject({
-      server: { version: "0.10.4" },
+      server: { version: "0.10.5" },
       profile: "discovery-only",
       backend: "unavailable",
     });

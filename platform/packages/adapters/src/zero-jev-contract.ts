@@ -3,7 +3,7 @@ import { z } from "zod";
 import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 import {
   githubQueriesSchema,
-  githubSourcePathSchema,
+  githubInspectionPathSchema,
   ZERO_GITHUB_DISCOVERY_MARKER,
 } from "./zero-github-contract.js";
 
@@ -29,7 +29,7 @@ const fields = {
     .string()
     .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/)
     .optional(),
-  paths: z.array(githubSourcePathSchema).min(1).max(4).optional(),
+  paths: z.array(githubInspectionPathSchema).min(1).max(4).optional(),
   candidateIds: z
     .array(z.string().regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/))
     .min(1)

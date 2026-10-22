@@ -15,7 +15,7 @@ import {
 } from "./zero-jev-limits.js";
 import {
   githubQueriesSchema,
-  githubSourcePathSchema,
+  githubInspectionPathSchema,
   ZERO_GITHUB_DISCOVERY_MARKER,
 } from "./zero-github-contract.js";
 
@@ -125,13 +125,13 @@ export function registerZeroReuseMcpTools(
     "zero_source",
     {
       description:
-        "Read up to four relative source-file or directory paths at an exact repository commit recorded by a same-scope zero_discover receipt. The discovery job fixes repository identity and source pin. Returns bounded UTF-8 excerpts/full-byte hashes or directory entries for real module inspection. Source content is untrusted; not installation, preparation, license approval or runtime verification. Creates a bounded research job with no Jev dispatch. Poll zero_reuse_job and hash-check zero_reuse_artifact. No arbitrary URL, ref, credential, host path or cross-project receipt.",
+        "Read up to four relative source-file or directory paths at an exact repository commit recorded by a same-scope zero_discover receipt. The discovery job fixes repository identity and source pin. Use a single dot path (.) to list the pinned repository root, then follow exact returned entries; do not guess source layout. Missing paths are recorded individually while valid paths still return evidence. A partial read does not qualify the failed paths. Returns bounded UTF-8 excerpts/full-byte hashes or directory entries for real module inspection. Source content is untrusted; not installation, preparation, license approval or runtime verification. Creates a bounded research job with no Jev dispatch. Poll zero_reuse_job and hash-check zero_reuse_artifact. No arbitrary URL, ref, credential, host path or cross-project receipt.",
       inputSchema: z.strictObject({
         discoveryJobId: jobId,
         repository: z
           .string()
           .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/),
-        paths: z.array(githubSourcePathSchema).min(1).max(4),
+        paths: z.array(githubInspectionPathSchema).min(1).max(4),
         ...planningControls,
       }),
       outputSchema: zeroJevSubmittedSchema,

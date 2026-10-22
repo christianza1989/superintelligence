@@ -47,3 +47,11 @@ B pasiekė autentifikuotą public-only GitHub, atliko 3 paieškas be rate-limit 
 Naujoje B sesijoje naudotos trumpesnės frazės ir keturi atskiri source tikslai. B planas užbaigtas per 168 155 ms; host input 1 464 841 (cached 1 357 184), output 10 296, total 1 475 137. Visi keturi source darbai sustojo po maždaug 20 s, Jev dispatch = 0 ir provider USD = 0. Originalūs blocked receipt ir planas išsaugoti. A nepaleistas, todėl tai nėra A/B pora ar lyginamoji naudos išvada.
 
 Reprodukuota priežastis: atskiras GitHub tyrimo abort buvo perduotas kaip viso darbo klaida, todėl jau sukaupti source faktai nepasiekė receipt ir Jev. Pataisa 0.10.4 skiria tyrimo biudžetą nuo tėvinio darbo atšaukimo, išsaugo dalinius įrodymus su aiškiomis ribomis ir palieka laiko Jev; tikrinama atskirai, ne šio bandymo metu.
+
+## Atskira 0.10.4 pora — GitHub ir Jev veikė, papildomi keliai nerasti
+
+Švari pora tuo pačiu SPEC/promptu, Luna/high, eilė B tada A. A: 91 221 ms, input 256 901 (cached 219 648), output 6 980, total 263 881. B: 222 594 ms, input 1 238 145 (cached 998 528), output 13 025, total 1 251 170. Darbo katalogai ir užfiksuoti failai nepakeisti; programų kūrimas NOT_RUN.
+
+B atliko 5 tikrus Jev pasirinkimus: 3 rekomendacijos ir 2 abstain, provider USD 0.000478380; Jev input iš headline host tokenų išimtas. Penki GitHub tyrimai išsaugojo 8 unikalius pins ir 5 hash patikrintus kodo failų pavyzdžius. Visi pažymėjo pasibaigusį ribotą tyrimo biudžetą; tai nėra viso GitHub ar viso repo peržiūra. Rekomenduoti MartinDelophy/ai-video-editor, igorski/bitmappery ir EitanWong/com.eitan.sherpa-onnx-unity liko source-only.
+
+Dvi papildomos modulių apžiūros grąžino source_unavailable. Host pateikė numanomus kelius; pirmas HTTP 404 užbaigė visą kelių grupę. Kiti pateikti keliai nebuvo kvalifikuoti. B teisingai nepaskelbė šių kandidatų paruoštomis priklausomybėmis, tačiau tai neuždaro modulio apžiūros kelio native priėmimo. Plane taip pat yra nelietuviškos kalbos fragmentas. Visas planas, pradiniai receipt ir nesėkmės išsaugoti. 0.10.5 virtualaus repo šakninio katalogo ir per-path rezultatų pataisa vykdoma tik po šios poros.

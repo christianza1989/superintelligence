@@ -9,6 +9,7 @@ import {
   ZERO_GITHUB_LIMITS,
   githubQueriesSchema,
   githubSourcePathSchema,
+  githubInspectionPathSchema,
 } from "./zero-github-contract.js";
 const sha = z.string().regex(/^[a-f0-9]{40}$/);
 const repository = z
@@ -514,23 +515,29 @@ export async function inspectGithubSource(
 ) {
   repository.parse(candidate.repository);
   sha.parse(candidate.sourceRevision);
-  paths = z.array(githubSourcePathSchema).min(1).max(4).parse(paths);
+  paths = z.array(githubInspectionPathSchema).min(1).max(4).parse(paths);
   const api = transport(boundary),
-    entries: SourceInspectionEntry[] = [];
-  if (boundary.tokenFile) {
-    const current = repositorySchema.parse(
-      await api.json(`/repos/${candidate.repository}`),
-    );
-    if (
-      current.full_name.toLowerCase() !== candidate.repository.toLowerCase() ||
-      current.archived
-    )
-      throw new Error("github_public_identity_changed");
-  }
+    entries: SourceInspectionEntry[] = [],
+    failures: { path: string; reason: string }[] = [];
   try {
-    for (const path of paths) {
+    if (boundary.tokenFile) {
+      const current = repositorySchema.parse(
+        await api.json(`/repos/${candidate.repository}`),
+      );
+      if (
+        current.full_name.toLowerCase() !==
+          candidate.repository.toLowerCase() ||
+        current.archived
+      )
+        throw new Error("github_public_identity_changed");
+    }
+  } catch (error) {
+    throw new GithubSourceReadError(failureReason(error));
+  }
+  for (const path of paths) {
+    try {
       const raw = await api.json(
-        `/repos/${candidate.repository}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${candidate.sourceRevision}`,
+        `/repos/${candidate.repository}/contents${path === "." ? "" : "/" + path.split("/").map(encodeURIComponent).join("/")}?ref=${candidate.sourceRevision}`,
       );
       if (Array.isArray(raw)) {
         const directory = z
@@ -569,14 +576,17 @@ export async function inspectGithubSource(
           )),
         });
       }
+    } catch (error) {
+      boundary.signal.throwIfAborted();
+      failures.push({ path, reason: failureReason(error) });
     }
-  } catch (error) {
-    throw new GithubSourceReadError(failureReason(error));
   }
+  await withAbort(boundary.authorize(), boundary.signal);
   const result = {
     repository: candidate.repository,
     sourceRevision: candidate.sourceRevision,
     entries,
+    failures,
     network: api.stats,
     prepared: false,
     runtimeTested: false,

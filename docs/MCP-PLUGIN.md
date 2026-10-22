@@ -1,5 +1,7 @@
 # Vietinis MCP papildinio paketas
 
+**0.10.5 / schema 1.11.5** leidžia `zero_source` skaityti virtualų prisegto repo šakninį katalogą su `paths: ["."]`. Tai nėra host failų sistemos kelias. Modelis gali sekti tikrus grąžintus įrašus, užuot spėjęs modulių išdėstymą. Kiekvieno kelio nesėkmė saugoma atskirai; kitas galiojantis kelias vis tiek perskaitomas. Receipt su bent vienu perskaitytu įrašu turi `phase: inspected`, o visiškai nesėkmingas skaitymas yra `blocked`; `inspection.failures` būtina vertinti abiem atvejais. Dalinis skaitymas nepatvirtina nerastų failų, paruošimo, runtime ar integracijos.
+
 **0.10.4 / schema 1.11.4** išsaugo užbaigtus public-source įrodymus pasibaigus atskiram 12 s tyrimo biudžetui ir pažymi `researchDeadlineReached` bei neperskaitytų dalių nesėkmes. Bendras 30 s worker ir 120 s pateikimo terminas nepadidintas: lieka laiko Jev pasirinkimui. Tėvinio darbo atšaukimas, pasibaigęs leidimas ar pakeistas grant tebėra klaida, ne dalinis PASS. Nėra automatinio užklausų kartojimo ar paslėpto platesnio tyrimo. Pins, perskaitytas kodas, paruošimas, vykdymas ir nauda tebėra skirtingi faktai.
 
 **0.10.3 / schema 1.11.3:** žemiau esančios 0.10.2 prieigos ir skaitymo pataisos papildytos užklausos kontraktu: viena GitHub frazė turi ne daugiau kaip 5 žodžius ir 80 simbolių. Pilni reikalavimai perduodami `goal`, papildantys komponentai vertinami atskirais tikslais. Per ilga reikalavimų eilutė atmetama prieš submit, tinklą ar mokamą dispatch. Tai ribotas paieškos įėjimas, ne nauja viso GitHub aprėpties ar naudos garantija.

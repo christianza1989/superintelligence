@@ -45,3 +45,8 @@ export const githubSourcePathSchema = z
         .every((part) => part !== ".." && part !== "." && part.length > 0),
   );
 export const ZERO_GITHUB_DISCOVERY_MARKER = "github-source-discovery-v1";
+/** The only virtual path is the pinned repository root; never a host directory. */
+export const githubInspectionPathSchema = z.union([
+  z.literal("."),
+  githubSourcePathSchema,
+]);

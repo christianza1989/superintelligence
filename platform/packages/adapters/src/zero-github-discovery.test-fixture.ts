@@ -89,6 +89,10 @@ export function githubFixture(authenticated = false) {
       return Response.json([
         { path: "src/model.ts", sha: docs[2]!.sha, type: "file" },
       ]);
+    if (url.pathname === "/repos/example/unindexed/contents")
+      return Response.json(
+        docs.map((file) => ({ path: file.path, sha: file.sha, type: "file" })),
+      );
     return new Response(null, { status: 404 });
   });
   const authorize = vi.fn(async () => {});
