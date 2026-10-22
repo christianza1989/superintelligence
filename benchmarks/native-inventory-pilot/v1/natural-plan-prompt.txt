@@ -1,0 +1,5 @@
+Sukurk man nedidelę vietinę sandėlio apskaitos programą. Noriu įkelti CSV failą su prekių kodais, pavadinimais ir kiekiais, peržiūrėti duomenis bei klaidas ir saugiai importuoti į SQLite. Duomenys turi išlikti perkrovus programą, o sąsaja patogiai veikti kompiuteryje, telefone ir klaviatūra. Išsamūs funkciniai bei techniniai reikalavimai yra šio projekto SPEC.md — perskaityk juos.
+
+Pirmiausia pateik visą planą, kaip įgyvendinsi šią užduotį, ir sustok, kad galėčiau jį peržiūrėti. Kol kas nerašyk kodo, nekeisk failų, nediek paketų ir nepradėk įgyvendinimo ar vykdymo užduočių.
+
+Planavimui skirk iki 10 minučių. Dirbk tik šiame projekte; kitų pokalbių, kitų bandymų aplankų ir vertinimo kodo neskaityk. Nekeisk modelio ar įrankių konfigūracijos ir nekurk papildomų agentų.
