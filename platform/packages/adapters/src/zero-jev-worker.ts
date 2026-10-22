@@ -50,6 +50,8 @@ import {
   inspectGithubSource,
   GithubSourceReadError,
 } from "./zero-github-discovery.js";
+import { sourceModuleOptions } from "./zero-source-modules.js";
+import { selectSourceModuleWithJev } from "./zero-source-module-selector.js";
 import type { SafeWebFetchOptions } from "./web-ssrf.js";
 
 export { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
@@ -943,15 +945,61 @@ export async function runZeroJevTool(
         throw new IsolationError();
       const discovery =
         request.input.mode === "discover-source"
-          ? await discoverGithubSources(request.input.queries!, {
-              signal,
-              authorize: async () => {
-                await recheck(deps, request);
+          ? await discoverGithubSources(
+              request.input.queries!,
+              {
+                signal,
+                authorize: async () => {
+                  await recheck(deps, request);
+                },
+                testOnlyTransport: deps.githubTestTransport,
+                tokenFile: deps.githubTokenFile,
               },
-              testOnlyTransport: deps.githubTestTransport,
-              tokenFile: deps.githubTokenFile,
-            })
+              request.input.module,
+            )
           : undefined;
+      discoveryEvidence = discovery;
+      if (discovery && request.input.module) {
+        const modules = sourceModuleOptions(
+          discovery.candidates,
+          request.input.module,
+        );
+        const selection = await selectSourceModuleWithJev(config, paid, {
+          invocationId: request.callId,
+          goal: request.input.goal,
+          need: request.input.module,
+          candidates: modules,
+          signal,
+        });
+        await recheck(deps, request);
+        await publish(deps, request, id, {
+          state:
+            priorInvocation || reservationUncertain
+              ? "unknown"
+              : selection.status === "recommended"
+                ? "succeeded"
+                : selection.status === "missing"
+                  ? "abstained"
+                  : selection.status,
+          phase: "module-proposed",
+          discovery,
+          selection,
+          moduleProposal: selection.proposal,
+          inspectedModules: modules.map(
+            ({ id, repository, sourceRevision, path }) => ({
+              id,
+              repository,
+              sourceRevision,
+              path,
+            }),
+          ),
+          prepared: false,
+          verified: false,
+          tool: null,
+          ...accounting(),
+        });
+        return;
+      }
       const candidates = discovery
         ? githubRepositoryOptions(discovery.candidates)
         : sourceSelectionOptions(

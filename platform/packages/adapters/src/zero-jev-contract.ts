@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 import {
   githubQueriesSchema,
+  githubModuleNeedSchema,
   githubInspectionPathSchema,
   ZERO_GITHUB_DISCOVERY_MARKER,
 } from "./zero-github-contract.js";
@@ -25,6 +26,7 @@ const fields = {
     ])
     .optional(),
   queries: githubQueriesSchema.optional(),
+  module: githubModuleNeedSchema.optional(),
   repository: z
     .string()
     .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/)
@@ -42,6 +44,7 @@ function validMode(input: {
   candidateIds?: string[];
   data: string;
   queries?: string[];
+  module?: unknown;
   repository?: string;
   paths?: string[];
 }) {
@@ -59,10 +62,12 @@ function validMode(input: {
       !!input.paths?.length &&
       z.uuid().safeParse(input.data).success &&
       input.candidateIds === undefined &&
-      input.queries === undefined
+      input.queries === undefined &&
+      input.module === undefined
     );
   if (
     input.queries !== undefined ||
+    input.module !== undefined ||
     input.repository !== undefined ||
     input.paths !== undefined
   )

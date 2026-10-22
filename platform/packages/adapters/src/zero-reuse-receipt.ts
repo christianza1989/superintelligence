@@ -10,7 +10,7 @@ export const zeroReuseReceiptViewSchema = z.strictObject({
   sha256: z.string().regex(/^[a-f0-9]{64}$/),
   totalBytes: z.number().int().positive(),
   integrityVerified: z.literal(true),
-  view: z.literal("summary"),
+  view: z.enum(["summary", "decision"]),
   untrustedSource: z.literal(true),
   omittedFields: z.array(z.string()),
   receipt: z.record(z.string(), z.unknown()),
@@ -27,6 +27,7 @@ const candidateViewSchema = z.looseObject({
 export async function readZeroReuseReceipt(
   client: ZeroJevApplicationClient,
   jobId: string,
+  view: "summary" | "decision" = "summary",
 ) {
   const job = await client.get(jobId);
   if (!("sha256" in job)) throw new Error("receipt_not_terminal");
@@ -75,6 +76,116 @@ export async function readZeroReuseReceipt(
     throw new Error("receipt_binding_failed");
   const receipt: Record<string, unknown> = {};
   const omittedFields: string[] = [];
+  if (view === "decision") {
+    const selection = body.selection ? { ...body.selection } : null;
+    if (selection) delete selection.proposal;
+    const discovery = body.discovery;
+    const proposal = body.moduleProposal
+      ? structuredClone(body.moduleProposal)
+      : null;
+    if (proposal?.module) {
+      proposal.module.source.excerpt = proposal.module.source.excerpt.slice(
+        0,
+        800,
+      );
+      proposal.module.source.excerptTruncated = true;
+      proposal.module.declarations = proposal.module.declarations.slice(0, 6);
+      proposal.module.imports = proposal.module.imports.slice(0, 8);
+      if (proposal.module.implementationSnippets)
+        proposal.module.implementationSnippets =
+          proposal.module.implementationSnippets
+            .slice(0, 2)
+            .map((s: { offset: number; text: string }) => ({
+              ...s,
+              text: s.text.slice(0, 600),
+              excerptTruncated: true,
+            }));
+      if (proposal.module.purposeEvidence)
+        proposal.module.purposeEvidence.readme =
+          proposal.module.purposeEvidence.readme.map(
+            (f: { excerpt: string }) => ({
+              ...f,
+              excerpt: f.excerpt.slice(0, 800),
+              excerptTruncated: true,
+            }),
+          );
+      proposal.module.manifests = proposal.module.manifests.map(
+        (m: {
+          dependencies: Record<string, string>;
+          dependenciesOmitted: number;
+        }) => ({
+          ...m,
+          dependencies: Object.fromEntries(
+            Object.entries(m.dependencies).slice(0, 8),
+          ),
+          dependenciesOmitted:
+            m.dependenciesOmitted +
+            Math.max(0, Object.keys(m.dependencies).length - 8),
+        }),
+      );
+    }
+    Object.assign(receipt, {
+      state: body.state,
+      phase: body.phase,
+      ...(body.reason ? { reason: body.reason } : {}),
+      selection,
+      moduleProposal: proposal,
+      prepared: body.prepared,
+      verified: body.verified,
+      ...(discovery
+        ? {
+            research: {
+              matchedRepositories: discovery.matchedRepositories,
+              inspectedRepositories: discovery.candidates.length,
+              network: discovery.network,
+              failures: discovery.failures,
+            },
+          }
+        : {}),
+    });
+    if (
+      Buffer.byteLength(JSON.stringify(receipt)) > 14000 &&
+      proposal?.module
+    ) {
+      proposal.module.source.excerpt = "";
+      proposal.module.declarations = proposal.module.declarations.slice(0, 3);
+      proposal.module.implementationSnippets = [];
+      proposal.module.purposeEvidence = {
+        description: "Omitted in compact view; see full receipt",
+        readme: [],
+      };
+      proposal.module.manifests = proposal.module.manifests.map(
+        (m: {
+          dependencies: Record<string, string>;
+          dependenciesOmitted: number;
+        }) => ({
+          ...m,
+          dependencies: Object.fromEntries(
+            Object.entries(m.dependencies).slice(0, 4),
+          ),
+          dependenciesOmitted:
+            m.dependenciesOmitted +
+            Math.max(0, Object.keys(m.dependencies).length - 4),
+        }),
+      );
+    }
+    if (Buffer.byteLength(JSON.stringify(receipt)) > 14000)
+      throw new Error("decision_view_limit");
+    return zeroReuseReceiptViewSchema.parse({
+      jobId,
+      artifactId: job.artifactId,
+      revision: job.revision,
+      sha256: job.sha256,
+      totalBytes,
+      integrityVerified: true,
+      view,
+      untrustedSource: true,
+      omittedFields: [
+        "Full discovery, unselected source, usage and unabridged module evidence remain in the immutable receipt; decision excerpts/declarations/imports/dependencies are bounded.",
+      ],
+      receipt,
+    });
+  }
   for (const field of [
     "kind",
     "state",
@@ -89,6 +200,8 @@ export async function readZeroReuseReceipt(
     "discoverySha256",
     "inspection",
     "candidates",
+    "moduleProposal",
+    "inspectedModules",
   ])
     if (body[field] !== undefined) receipt[field] = body[field];
   if (body.discovery) {

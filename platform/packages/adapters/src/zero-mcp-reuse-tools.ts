@@ -3,6 +3,7 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import type { ZeroJevApplicationClient } from "./zero-jev-application-client.js";
 import { readZeroReuseReceipt } from "./zero-reuse-receipt.js";
+import { waitForZeroReuseDecision } from "./zero-reuse-wait.js";
 import {
   zeroJevArtifactPageSchema,
   zeroJevJobSchema,
@@ -15,6 +16,7 @@ import {
 } from "./zero-jev-limits.js";
 import {
   githubQueriesSchema,
+  githubModuleNeedSchema,
   githubInspectionPathSchema,
   ZERO_GITHUB_DISCOVERY_MARKER,
 } from "./zero-github-contract.js";
@@ -102,24 +104,42 @@ export function registerZeroReuseMcpTools(
     "zero_discover",
     {
       description:
-        "Search public GitHub beyond the bundled catalog for one concrete capability or foundation need, inspect bounded pinned README/license/tree evidence and ask the authorized Jev worker to recommend one alternative or abstain. Provide up to three concise search phrases and the real constraints in goal. Complements local zero_search; default GitHub relevance and merged query ranks form a bounded shortlist, never a globally-best guarantee. Requires separately authorized public-source research and finite Jev API budget. No code installation or execution. Poll zero_reuse_job and hash-check zero_reuse_artifact; then inspect actual module code through zero_source before finalizing integration claims.",
+        "Find ONE concrete reusable module for ONE capability. Supply module.inputs/outputs/runtime and focused alternative search phrases, with constraints in goal; complementary capabilities need separate requests. The existing worker inspects pinned declarations/imports/manifests and asks authorized Jev to select a source unit or abstain. Waits up to waitMs and returns a hash-verified compact decision with exact module, dependency facts and integration/check plan when ready; no artifact read or source walk needed unless evidence is insufficient. If pending, use zero_reuse_job with bounded wait, never busy-poll. Omitting module retains legacy repository-only research. Requires public-source authorization and finite Jev budget. Bounded search, not globally best or runtime approval. No install or execution.",
       inputSchema: z.strictObject({
         goal: z.string().trim().min(1).max(2000),
         queries: githubQueriesSchema,
+        module: githubModuleNeedSchema.optional(),
+        waitMs: z.number().int().min(0).max(20000).optional(),
         ...planningControls,
       }),
-      outputSchema: zeroJevSubmittedSchema,
+      outputSchema: z.looseObject({
+        jobId,
+        callId: jobId,
+        requestDigest: z.string(),
+      }),
       annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
     },
-    (input) =>
-      planningResult(input, (deadline) =>
-        client.execute({
+    ({ waitMs, ...input }, extra) =>
+      planningResult(input, async (deadline) => {
+        const submitted = await client.execute({
           ...input,
           deadline,
           data: ZERO_GITHUB_DISCOVERY_MARKER,
           mode: "discover-source",
-        }),
-      ),
+        });
+        const boundedWait = waitMs ?? (input.module ? 20000 : 0);
+        return boundedWait > 0
+          ? {
+              ...submitted,
+              ...(await waitForZeroReuseDecision(
+                client,
+                submitted.jobId,
+                boundedWait,
+                extra.signal,
+              )),
+            }
+          : submitted;
+      }),
   );
   server.registerTool(
     "zero_source",
@@ -203,12 +223,20 @@ export function registerZeroReuseMcpTools(
     "zero_reuse_job",
     {
       description:
-        "Read the actual terminal/unknown state of an authorized source recommendation, module preparation or verification job. Selection, preparation, application use and verification remain separate facts.",
-      inputSchema: z.strictObject({ jobId }),
-      outputSchema: z.strictObject({ job: zeroJevJobSchema }),
+        "Wait up to waitMs for the existing authorized job, without resubmitting it. A completed source plan includes its hash-verified compact decision; pending returns retryAfterMs. Use bounded waits instead of repeated immediate polls. Selection, preparation, application use and verification remain separate facts.",
+      inputSchema: z.strictObject({
+        jobId,
+        waitMs: z.number().int().min(0).max(20000).default(0),
+      }),
+      outputSchema: z.looseObject({ job: zeroJevJobSchema }),
       annotations: readOnly,
     },
-    ({ jobId }) => result(async () => ({ job: await client.get(jobId) })),
+    ({ jobId, waitMs }, extra) =>
+      result(() =>
+        waitMs > 0
+          ? waitForZeroReuseDecision(client, jobId, waitMs, extra.signal)
+          : client.get(jobId).then((job) => ({ job })),
+      ),
   );
   server.registerTool(
     "zero_reuse_artifact",

@@ -45,6 +45,13 @@ export const githubSourcePathSchema = z
         .every((part) => part !== ".." && part !== "." && part.length > 0),
   );
 export const ZERO_GITHUB_DISCOVERY_MARKER = "github-source-discovery-v1";
+/** One independently callable capability; complementary needs require separate choices. */
+export const githubModuleNeedSchema = z.strictObject({
+  inputs: z.string().trim().min(1).max(500),
+  outputs: z.string().trim().min(1).max(500),
+  runtime: z.string().trim().min(1).max(200),
+});
+export type GithubModuleNeed = z.infer<typeof githubModuleNeedSchema>;
 /** The only virtual path is the pinned repository root; never a host directory. */
 export const githubInspectionPathSchema = z.union([
   z.literal("."),

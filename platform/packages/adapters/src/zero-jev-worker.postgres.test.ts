@@ -42,6 +42,19 @@ postgres(
     const dispatch = vi.fn<typeof fetch>(async (_url, options) => {
       expect(String(_url)).toBe("https://openrouter.ai/api/v1/systemone");
       const body = JSON.parse(String(options?.body));
+      if (mode === "module-plan") {
+        expect(body.state.need).toEqual({
+          inputs: "Inventory rows",
+          outputs: "Normalized model",
+          runtime: "TypeScript, offline",
+        });
+        expect(body.state.candidates[0].path).toBe("src/model.ts");
+        expect(body.questions).toHaveProperty("module");
+        return Response.json({
+          answers: { module: { type: "choice", choice: "module0" } },
+          usage: { input_tokens: 61, output_tokens: 3, cost: 0.00002 },
+        });
+      }
       if (mode.startsWith("source-")) {
         expect(body.state.task).toBe(
           "Workshop foundation; offline runtime and SQLite required",
@@ -440,6 +453,57 @@ postgres(
       });
       await runZeroJevTool(deps(), submitted.jobId);
       expect(dispatch).toHaveBeenCalledOnce();
+      expect(modelRun).not.toHaveBeenCalled();
+    });
+    it("publishes a pinned module and integration proposal through the existing durable queue without code execution", async () => {
+      await configure();
+      profile.tools = [];
+      profile.allowPublicGithubDiscovery = true;
+      mode = "module-plan";
+      const submitted = await service.submit({
+        ...input("github-source-discovery-v1"),
+        mode: "discover-source",
+        goal: "Normalize inventory rows",
+        queries: ["inventory model"],
+        module: {
+          inputs: "Inventory rows",
+          outputs: "Normalized model",
+          runtime: "TypeScript, offline",
+        },
+      });
+      await start();
+      const result = await terminal(submitted.jobId);
+      expect(result).toMatchObject({
+        state: "succeeded",
+        phase: "module-proposed",
+        moduleProposal: {
+          module: {
+            repository: "example/unindexed",
+            sourceRevision: github.pin,
+            path: "src/model.ts",
+          },
+          integration: {
+            inputs: "Inventory rows",
+            outputs: "Normalized model",
+            strategy: "source-adapter",
+          },
+          prepared: false,
+          runtimeTested: false,
+        },
+        prepared: false,
+        verified: false,
+      });
+      expect(result.moduleProposal.module.source.sha256).toMatch(
+        /^[a-f0-9]{64}$/,
+      );
+      expect(result.inspectedModules).toHaveLength(1);
+      await runZeroJevTool(deps(), submitted.jobId);
+      expect(dispatch).toHaveBeenCalledOnce();
+      const usage = await db.prisma.usageRecord.findMany({
+        where: { callId: submitted.callId },
+      });
+      expect(usage).toHaveLength(1);
+      expect(usage[0]).toMatchObject({ inputTokens: 61, outputTokens: 3 });
       expect(modelRun).not.toHaveBeenCalled();
     });
     it("discovers outside the catalog, uses Jev and inspects pinned code through the same Graphile worker without execution", async () => {

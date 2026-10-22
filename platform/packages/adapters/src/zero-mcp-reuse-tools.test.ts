@@ -77,6 +77,65 @@ describe("operator-bound module reuse MCP", () => {
     await client.close();
     await server.close();
   });
+  it("returns a verified module decision in the discovery call without host polling or artifact requests", async () => {
+    const need = { inputs: "Text", outputs: "Rows", runtime: "TypeScript" };
+    const body = {
+      kind: "zero.jev.receipt.v1",
+      jobId: id,
+      callId: id,
+      requestDigest: hash,
+      state: "succeeded",
+      phase: "module-proposed",
+      selection: { status: "recommended" },
+      prepared: false,
+      verified: false,
+    };
+    const bytes = Buffer.from(JSON.stringify(body));
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    vi.mocked(api.get).mockResolvedValue({
+      jobId: id,
+      callId: id,
+      requestDigest: hash,
+      state: "succeeded",
+      artifactId: "inline",
+      revision: 2,
+      sha256: digest,
+    });
+    vi.mocked(api.artifactPage).mockResolvedValue({
+      artifactId: "inline",
+      revision: 2,
+      sha256: digest,
+      totalBytes: bytes.length,
+      offset: 0,
+      nextOffset: null,
+      encoding: "base64",
+      contentBase64: bytes.toString("base64"),
+    });
+    const result = await client.callTool({
+      name: "zero_discover",
+      arguments: {
+        goal: "Parse text",
+        queries: ["text parser"],
+        module: need,
+        idempotencyKey: "inline-module",
+      },
+    });
+    expect(result.isError).not.toBe(true);
+    expect(result.structuredContent).toMatchObject({
+      jobId: id,
+      job: { state: "succeeded" },
+      decision: {
+        integrityVerified: true,
+        view: "decision",
+        receipt: { phase: "module-proposed", prepared: false },
+      },
+    });
+    expect(api.execute).toHaveBeenCalledOnce();
+    expect(api.execute).toHaveBeenCalledWith(
+      expect.objectContaining({ module: need, mode: "discover-source" }),
+    );
+    expect(api.artifactPage).toHaveBeenCalledOnce();
+  });
   it("discovers modules without dispatch and exposes a separately available reuse component", async () => {
     const search = await client.callTool({
       name: "zero_search",
