@@ -9,6 +9,10 @@ import {
 } from "./zero-jev-application-client.js";
 import { ZERO_SOURCE_SELECTION_MARKER } from "./zero-jev-contract.js";
 import {
+  ZERO_JEV_LIMITS,
+  ZERO_SOURCE_DEADLINE_ERROR,
+} from "./zero-jev-limits.js";
+import {
   githubQueriesSchema,
   githubSourcePathSchema,
   ZERO_GITHUB_DISCOVERY_MARKER,
@@ -27,6 +31,14 @@ const jobId = z.uuid();
 const controls = {
   idempotencyKey: z.string().min(1).max(128),
   deadline: z.iso.datetime({ offset: true }),
+};
+const planningControls = {
+  ...controls,
+  deadline: controls.deadline
+    .describe(
+      "Normally omit: the server assigns a bounded deadline. If supplied, use an ISO datetime in the next 120 seconds.",
+    )
+    .optional(),
 };
 const readOnly = {
   readOnlyHint: true,
@@ -65,6 +77,26 @@ export function registerZeroReuseMcpTools(
       return failure();
     }
   };
+  const planningResult = (
+    input: { deadline?: string },
+    action: (deadline: string) => Promise<object>,
+  ): Promise<CallToolResult> => {
+    const now = Date.now();
+    const deadline =
+      input.deadline ??
+      new Date(now + ZERO_JEV_LIMITS.deadlineMs - 1000).toISOString();
+    const remaining = Date.parse(deadline) - now;
+    if (
+      !Number.isFinite(remaining) ||
+      remaining <= 0 ||
+      remaining > ZERO_JEV_LIMITS.deadlineMs
+    )
+      return Promise.resolve({
+        isError: true,
+        content: [{ type: "text", text: ZERO_SOURCE_DEADLINE_ERROR }],
+      });
+    return result(() => action(deadline));
+  };
   server.registerTool(
     "zero_discover",
     {
@@ -73,15 +105,16 @@ export function registerZeroReuseMcpTools(
       inputSchema: z.strictObject({
         goal: z.string().trim().min(1).max(2000),
         queries: githubQueriesSchema,
-        ...controls,
+        ...planningControls,
       }),
       outputSchema: zeroJevSubmittedSchema,
       annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
     },
     (input) =>
-      result(() =>
+      planningResult(input, (deadline) =>
         client.execute({
           ...input,
+          deadline,
           data: ZERO_GITHUB_DISCOVERY_MARKER,
           mode: "discover-source",
         }),
@@ -98,15 +131,16 @@ export function registerZeroReuseMcpTools(
           .string()
           .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/),
         paths: z.array(githubSourcePathSchema).min(1).max(4),
-        ...controls,
+        ...planningControls,
       }),
       outputSchema: zeroJevSubmittedSchema,
       annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
     },
     ({ discoveryJobId, ...input }) =>
-      result(() =>
+      planningResult(input, (deadline) =>
         client.execute({
           ...input,
+          deadline,
           goal: "Inspect pinned public source for an authorized planning request",
           data: discoveryJobId,
           mode: "inspect-source",
@@ -127,15 +161,16 @@ export function registerZeroReuseMcpTools(
           .min(1)
           .max(5)
           .refine((ids) => new Set(ids).size === ids.length),
-        ...controls,
+        ...planningControls,
       }),
       outputSchema: zeroJevSubmittedSchema,
       annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
     },
     (input) =>
-      result(() =>
+      planningResult(input, (deadline) =>
         client.execute({
           ...input,
+          deadline,
           data: ZERO_SOURCE_SELECTION_MARKER,
           mode: "select-source",
         }),

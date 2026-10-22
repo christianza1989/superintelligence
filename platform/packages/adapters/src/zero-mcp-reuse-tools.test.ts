@@ -2,7 +2,10 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ZeroJevApplicationClient } from "./zero-jev-application-client.js";
-import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
+import {
+  ZERO_JEV_LIMITS,
+  ZERO_SOURCE_DEADLINE_ERROR,
+} from "./zero-jev-limits.js";
 import { registerZeroReuseMcpTools } from "./zero-mcp-reuse-tools.js";
 import { createZeroMcpServer } from "./zero-mcp-server.js";
 
@@ -55,9 +58,12 @@ describe("operator-bound module reuse MCP", () => {
     server = createZeroMcpServer({
       componentStatus: { reuse: async () => "available" },
       sourcePlanningStatus: async () => {
-        const status=await api.status();
-        return {publicGithubResearch:status.allowPublicGithubDiscovery===true,
-          reviewedSourceSelection:!!status.sourceRepositories?.length,paidSelectionAuthorized:true};
+        const status = await api.status();
+        return {
+          publicGithubResearch: status.allowPublicGithubDiscovery === true,
+          reviewedSourceSelection: !!status.sourceRepositories?.length,
+          paidSelectionAuthorized: true,
+        };
       },
     });
     registerZeroReuseMcpTools(server, api);
@@ -121,12 +127,38 @@ describe("operator-bound module reuse MCP", () => {
     expect(JSON.stringify(denied)).not.toContain("fixture-secret");
   });
   it("reports source-planning authorization from the scoped backend and removes it on failure", async () => {
-    vi.mocked(api.status).mockResolvedValue({...await api.status(),allowPublicGithubDiscovery:true,sourceRepositories:["inventree/InvenTree"]});
-    const allowed = await client.callTool({name:"zero_status",arguments:{nonce:"planning-allowed"}});
-    expect(allowed.structuredContent).toMatchObject({sourcePlanning:{backend:"available",publicGithubResearch:true,reviewedSourceSelection:true,paidSelectionAuthorized:true}});
-    vi.mocked(api.status).mockRejectedValue(new Error("private-profile-marker"));
-    const blocked = await client.callTool({name:"zero_status",arguments:{nonce:"planning-revoked"}});
-    expect(blocked.structuredContent).toMatchObject({sourcePlanning:{backend:"unavailable",publicGithubResearch:false,reviewedSourceSelection:false,paidSelectionAuthorized:false}});
+    vi.mocked(api.status).mockResolvedValue({
+      ...(await api.status()),
+      allowPublicGithubDiscovery: true,
+      sourceRepositories: ["inventree/InvenTree"],
+    });
+    const allowed = await client.callTool({
+      name: "zero_status",
+      arguments: { nonce: "planning-allowed" },
+    });
+    expect(allowed.structuredContent).toMatchObject({
+      sourcePlanning: {
+        backend: "available",
+        publicGithubResearch: true,
+        reviewedSourceSelection: true,
+        paidSelectionAuthorized: true,
+      },
+    });
+    vi.mocked(api.status).mockRejectedValue(
+      new Error("private-profile-marker"),
+    );
+    const blocked = await client.callTool({
+      name: "zero_status",
+      arguments: { nonce: "planning-revoked" },
+    });
+    expect(blocked.structuredContent).toMatchObject({
+      sourcePlanning: {
+        backend: "unavailable",
+        publicGithubResearch: false,
+        reviewedSourceSelection: false,
+        paidSelectionAuthorized: false,
+      },
+    });
     expect(JSON.stringify(blocked)).not.toContain("private-profile-marker");
   });
   it("submits advisory planning without preparing code or accepting arbitrary source URLs", async () => {
@@ -226,6 +258,97 @@ describe("operator-bound module reuse MCP", () => {
       sha256: hash,
       contentBase64: "e30=",
     });
+  });
+  it("uses server-clock deadlines when source-planning tools omit one", async () => {
+    const inputs = [
+      {
+        name: "zero_discover",
+        arguments: {
+          goal: "Local workshop foundation",
+          queries: ["repair management"],
+          idempotencyKey: "discovery-default",
+        },
+      },
+      {
+        name: "zero_select",
+        arguments: {
+          goal: "Local workshop foundation",
+          candidateIds: ["inventree/InvenTree"],
+          idempotencyKey: "selection-default",
+        },
+      },
+      {
+        name: "zero_source",
+        arguments: {
+          discoveryJobId: id,
+          repository: "example/unindexed",
+          paths: ["src/model.ts"],
+          idempotencyKey: "inspection-default",
+        },
+      },
+    ];
+    const tools = (await client.listTools()).tools;
+    for (const input of inputs) {
+      expect(
+        tools.find((tool) => tool.name === input.name)?.inputSchema.required,
+      ).not.toContain("deadline");
+      const before = Date.now();
+      const result = await client.callTool(input);
+      expect(result.isError).not.toBe(true);
+      const call = vi.mocked(api.execute).mock.calls.at(-1)![0];
+      expect(Date.parse(call.deadline)).toBeGreaterThan(before + 100_000);
+      expect(Date.parse(call.deadline)).toBeLessThanOrEqual(
+        Date.now() + ZERO_JEV_LIMITS.deadlineMs,
+      );
+    }
+    expect(api.execute).toHaveBeenCalledTimes(3);
+  });
+  it("explains expired or distant source-planning deadlines without submission or private-input reflection", async () => {
+    for (const deadline of [
+      new Date(Date.now() - 60_000).toISOString(),
+      new Date(Date.now() + 3_600_000).toISOString(),
+    ]) {
+      for (const input of [
+        {
+          name: "zero_discover",
+          arguments: {
+            goal: "private-goal-marker",
+            queries: ["repair management"],
+            idempotencyKey: "invalid-discovery",
+            deadline,
+          },
+        },
+        {
+          name: "zero_select",
+          arguments: {
+            goal: "private-goal-marker",
+            candidateIds: ["inventree/InvenTree"],
+            idempotencyKey: "invalid-selection",
+            deadline,
+          },
+        },
+        {
+          name: "zero_source",
+          arguments: {
+            discoveryJobId: id,
+            repository: "example/unindexed",
+            paths: ["private-path-marker"],
+            idempotencyKey: "invalid-inspection",
+            deadline,
+          },
+        },
+      ]) {
+        const result = await client.callTool(input);
+        expect(result.isError).toBe(true);
+        expect(result.content).toEqual([
+          { type: "text", text: ZERO_SOURCE_DEADLINE_ERROR },
+        ]);
+        expect(JSON.stringify(result)).not.toMatch(
+          /private-goal-marker|private-path-marker/,
+        );
+      }
+    }
+    expect(api.execute).not.toHaveBeenCalled();
   });
   it("binds verification to a preparation ID, with no paid selection or root in its input", async () => {
     const input = { preparationJobId: id, ...controls() };

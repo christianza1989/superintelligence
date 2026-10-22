@@ -581,7 +581,23 @@ export function createZeroJevToolService(
             );
             const existing = await tx.artifact.findUnique({ where: identity });
             if (existing) {
-              if (JSON.parse(existing.description ?? "null")?.digest !== digest)
+              const metadata = JSON.parse(existing.description ?? "null");
+              // A replay may receive a new transport deadline from the MCP
+              // clock. Keep the original signed deadline; never extend work.
+              const sourcePlanning =
+                params.mode === "select-source" ||
+                params.mode === "discover-source" ||
+                params.mode === "inspect-source";
+              const replayDigest =
+                sourcePlanning && typeof metadata?.deadline === "string"
+                  ? zeroCsvHash(
+                      JSON.stringify({
+                        ...binding,
+                        input: { ...params, deadline: metadata.deadline },
+                      }),
+                    )
+                  : digest;
+              if (metadata?.digest !== replayDigest)
                 throw new Error("idempotency_key_conflict");
               return existing;
             }

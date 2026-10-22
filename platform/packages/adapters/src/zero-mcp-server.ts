@@ -27,9 +27,10 @@ import {
   ZERO_REPOSITORY_QUERY_MAX_CHARS,
   repositorySearchFromTool,
 } from "./zero-repository-tools.js";
+import { ZERO_SOURCE_DEADLINE_ERROR } from "./zero-jev-limits.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.10.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.11.0";
+export const ZERO_MCP_SERVER_VERSION = "0.10.1";
+export const ZERO_MCP_SCHEMA_VERSION = "1.11.1";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -358,12 +359,14 @@ const statusOutput = z.strictObject({
   ]),
   backend: z.enum(["available", "unavailable", "blocked", "unknown"]),
   protocolVersion: z.string().max(64).nullable(),
-  sourcePlanning: z.strictObject({
-    backend: z.enum(["available", "unavailable"]),
-    publicGithubResearch: z.boolean(),
-    reviewedSourceSelection: z.boolean(),
-    paidSelectionAuthorized: z.boolean(),
-  }).optional(),
+  sourcePlanning: z
+    .strictObject({
+      backend: z.enum(["available", "unavailable"]),
+      publicGithubResearch: z.boolean(),
+      reviewedSourceSelection: z.boolean(),
+      paidSelectionAuthorized: z.boolean(),
+    })
+    .optional(),
   operations: z
     .array(
       z.enum([
@@ -437,6 +440,17 @@ class DiscoveryMcpServer extends McpServer {
         this.protocolVersion = message.result.protocolVersion;
       }
       if ("result" in message && message.result.isError === true) {
+        const deadlineContent = [
+          { type: "text", text: ZERO_SOURCE_DEADLINE_ERROR },
+        ];
+        if (
+          JSON.stringify(message.result.content) ===
+          JSON.stringify(deadlineContent)
+        )
+          return send(
+            { ...message, result: { isError: true, content: deadlineContent } },
+            options,
+          );
         for (const code of [
           "source_data_unavailable",
           "output_limit_exceeded",
@@ -725,8 +739,19 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
         ),
       );
       if (options.sourcePlanningStatus) {
-        try { sourcePlanning = { backend: "available", ...await options.sourcePlanningStatus() }; }
-        catch { sourcePlanning = { backend: "unavailable", publicGithubResearch: false, reviewedSourceSelection: false, paidSelectionAuthorized: false }; }
+        try {
+          sourcePlanning = {
+            backend: "available",
+            ...(await options.sourcePlanningStatus()),
+          };
+        } catch {
+          sourcePlanning = {
+            backend: "unavailable",
+            publicGithubResearch: false,
+            reviewedSourceSelection: false,
+            paidSelectionAuthorized: false,
+          };
+        }
       }
       for (const family of ["pdf", "browser", "research", "reuse"] as const)
         if (options.componentStatus?.[family])

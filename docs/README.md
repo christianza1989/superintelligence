@@ -1,6 +1,6 @@
 # RepositoryZero dokumentų įėjimas
 
-**Atnaujinta 2026-10-21.** Pirmiausia skaityti dabarties dokumentus. Tyrimas, suplanuota funkcija, offline foundation, gyvas vykdymas ir palyginimu įrodyta nauda yra skirtingi statusai.
+**Atnaujinta 2026-10-22.** Pirmiausia skaityti dabarties dokumentus. Tyrimas, suplanuota funkcija, offline foundation, gyvas vykdymas ir palyginimu įrodyta nauda yra skirtingi statusai.
 
 | Eilė | Dokumentas | Autoritetas |
 |---|---|---|

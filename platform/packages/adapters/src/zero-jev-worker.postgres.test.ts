@@ -392,6 +392,25 @@ postgres(
       const params = sourceInput();
       const submitted = await service.submit(params);
       expect(await service.submit(params)).toEqual(submitted);
+      service = createZeroJevToolService({ ...deps(), jobs }, principal);
+      expect(
+        await service.submit({
+          ...params,
+          deadline: new Date(Date.now() + 110_000).toISOString(),
+        }),
+      ).toEqual(submitted);
+      expect(
+        JSON.parse(
+          (
+            await db.prisma.artifact.findUniqueOrThrow({
+              where: { id: submitted.jobId },
+            })
+          ).description!,
+        ).deadline,
+      ).toBe(params.deadline);
+      await expect(
+        service.submit({ ...params, goal: "A different foundation request" }),
+      ).rejects.toThrow("idempotency_key_conflict");
       await start();
       const result = await terminal(submitted.jobId);
       expect(result).toMatchObject({
