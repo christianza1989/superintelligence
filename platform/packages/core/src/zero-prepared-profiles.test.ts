@@ -13,6 +13,7 @@ describe("bounded prepared-profile overlay", () => {
     "CSV",
     "I need a CSV parser",
     "parse strict CSV table",
+    "strict rectangular CSV parser",
     "Reikia CSV lentelių nuskaitymo",
     "CSV nuskaityti",
     "d3-dsv",
@@ -26,6 +27,7 @@ describe("bounded prepared-profile overlay", () => {
   it.each([
     "CSV TSV",
     "CSV streaming",
+    "strict rectangular CSV streaming",
     "CSV write",
     "CSV Excel",
     "CSV OCR",

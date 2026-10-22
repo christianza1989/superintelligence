@@ -69,6 +69,7 @@ const supported = new Set([
   "csv",
   "parse",
   "strict",
+  "rectangular",
   "table",
   "comma",
   "separated",
