@@ -19,8 +19,15 @@ export const githubQueriesSchema = z
       .string()
       .trim()
       .min(2)
-      .max(180)
-      .regex(/^[\p{L}\p{N}\s.,+#_"-]+$/u),
+      .max(80)
+      .regex(/^[\p{L}\p{N}\s.,+#_"-]+$/u)
+      .refine(
+        (value) => value.split(/\s+/u).length <= 5,
+        "Use at most five searchable words per phrase; put full constraints in goal and query separate capabilities separately.",
+      )
+      .describe(
+        "A focused repository search phrase of 1–5 words, such as one component need. Never a requirements sentence: GitHub combines terms restrictively. Full requirements belong in goal.",
+      ),
   )
   .min(1)
   .max(ZERO_GITHUB_LIMITS.queries)

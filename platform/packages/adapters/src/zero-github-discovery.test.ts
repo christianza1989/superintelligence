@@ -122,6 +122,7 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       ["https://example.invalid"],
       ["repo:private/secret"],
       ["inventory", "inventory"],
+      ["local offline software import export database roles permissions"],
       Array(4).fill("stock"),
     ])
       expect(githubQueriesSchema.safeParse(queries).success).toBe(false);

@@ -260,6 +260,18 @@ describe("operator-bound module reuse MCP", () => {
       contentBase64: "e30=",
     });
   });
+  it("rejects requirements sentences before creating a source job or paid dispatch", async () => {
+    const result = await client.callTool({
+      name: "zero_discover",
+      arguments: {
+        goal: "Assess a focused component with the full platform constraints here",
+        queries: ["local desktop application import export users roles"],
+        ...controls(),
+      },
+    });
+    expect(result.isError).toBe(true);
+    expect(api.execute).not.toHaveBeenCalled();
+  });
   it("returns the verified readable receipt by default through the real MCP wire", async () => {
     const receipt = {
       kind: "zero.jev.receipt.v1",

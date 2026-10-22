@@ -1,6 +1,6 @@
 # MCP, papildiniai ir prijungimas iš įprasto coding kliento
 
-**Priimta įgyvendinimo kryptis · atnaujinta 2026-10-22.** [A13–A18](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [būsena](IMPLEMENTATION.md). Source serveris 0.10.2 / schema 1.11.2: trys default discovery ir 29 operator-bound Linux operacijos. [Public source ir skaitomo receipt ribos](MCP-PLUGIN.md), [komponentų ir transporto patikros](experiments/SCOPED-RESEARCH-AND-PDF-CSV-2026-10-21.md) atskirtos nuo tikro native 0.4 priėmimo; visas MVP nepriimtas.
+**Priimta įgyvendinimo kryptis · atnaujinta 2026-10-22.** [A13–A18](DECISIONS.md), [ROADMAP P1X](../ROADMAP.md#p1x-mcp-ir-native-klientai--mvp-dalis), [būsena](IMPLEMENTATION.md). Source serveris 0.10.3 / schema 1.11.3: trys default discovery ir 29 operator-bound Linux operacijos. [Public source ir skaitomo receipt ribos](MCP-PLUGIN.md), [komponentų ir transporto patikros](experiments/SCOPED-RESEARCH-AND-PDF-CSV-2026-10-21.md) atskirtos nuo tikro native 0.4 priėmimo; visas MVP nepriimtas.
 
 Tikslas — žmogui likti savo Codex ar Claude Code, o RepositoryZero naudoti komponentų paieškai, paruošimui ir patikrai. Pirmas klientas — Codex desktop su dabartine naudotojo paskyra. Claude Code kvalifikuojamas atskirai. [Native palyginimo protokolas](NATIVE-CODEX-BENCHMARK.md) atskirtas nuo [istorinio Claude CLI Lab](LOCAL-LAB.md).
 

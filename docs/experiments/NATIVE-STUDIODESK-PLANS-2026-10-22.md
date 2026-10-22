@@ -35,3 +35,9 @@ The larger task produced a plausible application candidate, but complete multi-c
 ## Stop and retained budget
 
 Both workspaces remained byte-unchanged. Application generation is stopped for human plan review. Grants were revoked and the owned API/worker/PostgreSQL fixture stopped; host-managed plugin processes were not broadly terminated. The cumulative additional USD 3 ledger retains USD 0.70 across seven prior/control/native invocations. This pair added USD 0.10 held, distinct from the provider-reported USD 0.000190512. The exhausted historical USD 1 allocation was not reset. No MVP or repeated-benefit gate was closed.
+
+## Atskiras 0.10.2 pakartojimas — išsaugotas no-fit
+
+Po GitHub autentifikavimo ir skaitomo receipt pataisų atlikta atskira švari Luna/high pora, tuo pačiu promptu ir SPEC. A: 109 009 ms, 328 180 input (290 304 cached), 10 216 output, 338 396 total. B: 123 263 ms, 688 197 input (628 736 cached), 11 041 output, 699 238 total. Failai, promptas ir užfiksuota versija poroje nekeisti; programos nekurtos.
+
+B pasiekė autentifikuotą public-only GitHub, atliko 3 paieškas be rate-limit ar prieigos klaidų ir vienu skaitomu artifact kvietimu perskaitė hash patikrintą no-fit receipt. Tačiau trys perduotos frazės buvo ilgos reikalavimų eilutės: grąžinta 0 rezultatų ir 0 pins, todėl Jev dispatch = 0, provider USD = 0, module inspection = 0. Tai nėra pilno GitHub/Jev/modulių kelio native PASS. B savarankiškai pasiūlė Qt/MLT pagal dokumentaciją; šio pasiūlymo negalima priskirti Zero atrankai. Plane yra nelietuviškos kalbos fragmentas. Pirminė pora ir visi nesėkmių faktai išsaugoti; 0.10.3 trumpų frazių kontraktas ir skaidymo gairės tikrinami tik kitoje poroje.
