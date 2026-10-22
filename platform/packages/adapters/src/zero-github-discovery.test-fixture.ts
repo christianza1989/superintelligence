@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { expect, vi } from "vitest";
 
-export function githubFixture() {
+export function githubFixture(authenticated = false) {
   const pin = "a".repeat(40),
     tree = "b".repeat(40);
   const docs = [
@@ -39,7 +39,14 @@ export function githubFixture() {
   const fetch = vi.fn<typeof globalThis.fetch>(async (input, options) => {
     const url = new URL(String(input));
     expect(url.origin).toBe("https://api.github.com");
-    expect(options?.headers).not.toHaveProperty("authorization");
+    if (authenticated)
+      expect(options?.headers).toHaveProperty(
+        "authorization",
+        "Bearer " + "x".repeat(40),
+      );
+    else expect(options?.headers).not.toHaveProperty("authorization");
+    if (url.pathname === "/repos/example/unindexed")
+      return Response.json(entry);
     if (url.pathname === "/search/repositories")
       return Response.json({
         total_count: 1,

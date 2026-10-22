@@ -1,4 +1,7 @@
 import { createHash } from "node:crypto";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { selectRepositoryWithJev } from "./zero-repository-selector.js";
 import {
@@ -14,6 +17,43 @@ import {
 import { githubFixture } from "./zero-github-discovery.test-fixture.js";
 
 describe("bounded live public GitHub discovery (offline transport)", () => {
+  it("uses a private worker credential for public fixed-origin GETs and denies a newly private repository", async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), "zero-github-access-"));
+    const tokenFile = path.join(dir, "token");
+    await writeFile(tokenFile, "x".repeat(40), { mode: 0o600 });
+    try {
+      const fixture = githubFixture(true);
+      const result = await discoverGithubSources(["inventory"], {
+        ...fixture.boundary,
+        tokenFile,
+      });
+      expect(result.network.access).toBe("authenticated-public-only");
+      expect(
+        result.candidates[0]!.implementationEvidence.inspectedCodePaths,
+      ).toEqual(["src/model.ts"]);
+      expect(JSON.stringify(result)).not.toContain("x".repeat(40));
+      fixture.fetch.mockImplementation(async () =>
+        Response.json({ ...fixture.entry, private: true }),
+      );
+      await expect(
+        inspectGithubSource(
+          { repository: "example/unindexed", sourceRevision: fixture.pin },
+          ["src/model.ts"],
+          { ...fixture.boundary, tokenFile },
+        ),
+      ).rejects.toThrow();
+      await writeFile(tokenFile, "invalid\nheader");
+      fixture.fetch.mockClear();
+      const denied = await discoverGithubSources(["inventory"], {
+        ...fixture.boundary,
+        tokenFile,
+      });
+      expect(denied.candidates).toEqual([]);
+      expect(fixture.fetch).not.toHaveBeenCalled();
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
   it("finds an unindexed low-star fork, resolves an exact commit and verifies actual document blob hashes", async () => {
     const fixture = githubFixture();
     const result = await discoverGithubSources(
@@ -30,12 +70,15 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       licenseApproved: false,
       stars: 3,
     });
-    expect(result.candidates[0]!.files).toHaveLength(2);
+    expect(result.candidates[0]!.files).toHaveLength(3);
     expect(result.candidates[0]!.files[0]!.sha256).toBe(
       createHash("sha256").update(fixture.docs[0]!.text).digest("hex"),
     );
-    expect(result.network.requests).toBe(6);
-    expect(fixture.authorize).toHaveBeenCalledTimes(12);
+    expect(result.network.requests).toBe(7);
+    expect(fixture.authorize).toHaveBeenCalledTimes(14);
+    expect(
+      result.candidates[0]!.implementationEvidence.inspectedCodePaths,
+    ).toEqual(["src/model.ts"]);
     const option = githubRepositoryOptions(result.candidates)[0]!;
     expect(option.capability).toContain("UNTRUSTED_SOURCE_MARKER");
     expect(option.capability).toContain("untrusted claims");
@@ -137,7 +180,7 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
     );
     const result = await discoverGithubSources(["inventory"], fixture.boundary);
     expect(result.candidates[0]?.files).toEqual([]);
-    expect(result.failures).toHaveLength(2);
+    expect(result.failures).toHaveLength(3);
   });
   it("bounds multi-directory Unicode output while retaining exact source identity and explicit truncation", async () => {
     const fixture = githubFixture();

@@ -34,7 +34,7 @@ import { runZeroJevTool } from "./zero-jev-worker.js";
 
 export function createBackgroundJobHandlers(deps: {
   artifacts?: ArtifactStore;
-  zeroJev?: Pick<ZeroJevWorkerDependencies, "pool" | "resolve" | "fetch" | "resolveReuseVerifier" | "reserveExternalBudget" | "githubTestTransport">;
+  zeroJev?: Pick<ZeroJevWorkerDependencies, "pool" | "resolve" | "fetch" | "resolveReuseVerifier" | "reserveExternalBudget" | "githubTestTransport" | "githubTokenFile">;
   authorizeZeroCsv?: ZeroCsvAuthorize;
   resolveZeroCsvVerifier?: ZeroCsvResolveVerifier;
   authorizeZeroComponent?: ZeroCsvAuthorize;

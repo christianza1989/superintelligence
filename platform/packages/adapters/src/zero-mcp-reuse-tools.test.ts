@@ -1,4 +1,5 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { createHash } from "node:crypto";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ZeroJevApplicationClient } from "./zero-jev-application-client.js";
@@ -252,12 +253,57 @@ describe("operator-bound module reuse MCP", () => {
     });
     const page = await client.callTool({
       name: "zero_reuse_artifact",
-      arguments: { jobId: id },
+      arguments: { jobId: id, format: "base64" },
     });
     expect(page.structuredContent).toMatchObject({
       sha256: hash,
       contentBase64: "e30=",
     });
+  });
+  it("returns the verified readable receipt by default through the real MCP wire", async () => {
+    const receipt = {
+      kind: "zero.jev.receipt.v1",
+      jobId: id,
+      callId: id,
+      requestDigest: hash,
+      state: "succeeded",
+      phase: "inspected",
+      inspection: {
+        entries: [{ path: "src/a.ts", excerpt: "export const a = 1;" }],
+      },
+    };
+    const bytes = Buffer.from(JSON.stringify(receipt));
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    api.get = async () => ({
+      jobId: id,
+      callId: id,
+      state: "succeeded",
+      requestDigest: hash,
+      artifactId: "fixture-artifact",
+      revision: 2,
+      sha256: digest,
+    });
+    api.artifactPage = async () => ({
+      artifactId: "fixture-artifact",
+      revision: 2,
+      sha256: digest,
+      totalBytes: bytes.length,
+      offset: 0,
+      nextOffset: null,
+      encoding: "base64",
+      contentBase64: bytes.toString("base64"),
+    });
+    const view = await client.callTool({
+      name: "zero_reuse_artifact",
+      arguments: { jobId: id },
+    });
+    expect(view.isError).not.toBe(true);
+    expect(view.structuredContent).toMatchObject({
+      view: "summary",
+      integrityVerified: true,
+      receipt: { inspection: receipt.inspection },
+    });
+    expect(JSON.stringify(view)).not.toContain("contentBase64");
   });
   it("uses server-clock deadlines when source-planning tools omit one", async () => {
     const inputs = [

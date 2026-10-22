@@ -4,6 +4,7 @@ import { z } from "zod";
 import { fetchSafeWebBytes, withAbort } from "./web-ssrf.js";
 import type { SafeWebFetchOptions } from "./web-ssrf.js";
 import type { RepositoryOption } from "./zero-repository-selector.js";
+import { readZeroOperatorFile } from "./zero-operator-file.js";
 import {
   ZERO_GITHUB_LIMITS,
   githubQueriesSchema,
@@ -16,6 +17,8 @@ const repository = z
 type Boundary = {
   signal: AbortSignal;
   authorize(): Promise<void>;
+  /** Trusted worker configuration only, never supplied by the model or source text. */
+  tokenFile?: string;
   /** Test-only boundary injection; never read from operator policy or a model input. */
   testOnlyTransport?: Pick<SafeWebFetchOptions, "fetch" | "resolveHostname">;
 };
@@ -30,6 +33,9 @@ function transport(boundary: Boundary) {
         successfulResponseBytes: bytes,
         responseByteUpperBound: requests * ZERO_GITHUB_LIMITS.responseBytes,
         rateLimited,
+        access: boundary.tokenFile
+          ? "authenticated-public-only"
+          : "anonymous-public-only",
       };
     },
     async json(path: string) {
@@ -39,6 +45,13 @@ function transport(boundary: Boundary) {
       if (requests >= ZERO_GITHUB_LIMITS.requests)
         throw new Error("github_request_limit");
       requests++;
+      const token = boundary.tokenFile
+        ? new TextDecoder("utf-8", { fatal: true })
+            .decode(await readZeroOperatorFile(boundary.tokenFile, 2048))
+            .trim()
+        : undefined;
+      if (token !== undefined && !/^[A-Za-z0-9_]{20,1024}$/.test(token))
+        throw new Error("github_operator_access_unavailable");
       const response = await fetchSafeWebBytes(
         "https://api.github.com" + path,
         {
@@ -50,6 +63,7 @@ function transport(boundary: Boundary) {
           allowedPorts: [443],
           userAgent: "RepositoryZero-source-discovery",
           headers: {
+            ...(token ? { authorization: `Bearer ${token}` } : {}),
             accept: "application/vnd.github+json",
             "x-github-api-version": "2022-11-28",
           },
@@ -107,7 +121,9 @@ async function fileEvidence(
       sha,
       size: z.number().int().min(0).max(ZERO_GITHUB_LIMITS.fileBytes),
       encoding: z.literal("base64"),
-      content: z.string().max(100000),
+      content: z
+        .string()
+        .max(4 * Math.ceil(ZERO_GITHUB_LIMITS.fileBytes / 3) + 16384),
     })
     .parse(await api.json(`/repos/${repo}/git/blobs/${file.sha}`));
   const base64 = blob.content.replace(/\s/g, ""),
@@ -154,8 +170,13 @@ export type GithubSourceCandidate = {
   prepared: false;
   runtimeTested: false;
   licenseApproved: false;
+  implementationEvidence: {
+    observedCodeFiles: number;
+    treeComplete: boolean;
+    inspectedCodePaths: string[];
+  };
 };
-function failureReason(error: unknown) {
+export function githubSourceFailureReason(error: unknown) {
   const message = error instanceof Error ? error.message : "";
   return /HTTP (403|429)|github_rate_or_access_limit/.test(message)
     ? "rate_or_access_limit"
@@ -164,6 +185,12 @@ function failureReason(error: unknown) {
       : /limit|large/.test(message)
         ? "resource_limit"
         : "source_read_failed";
+}
+const failureReason = githubSourceFailureReason;
+export class GithubSourceReadError extends Error {
+  constructor(readonly reason: string) {
+    super("GitHub source read unavailable");
+  }
 }
 export async function discoverGithubSources(
   queries: string[],
@@ -189,7 +216,7 @@ export async function discoverGithubSources(
   }[] = [];
   for (const query of queries) {
     try {
-      const q = `${query} in:name,description,readme is:public archived:false fork:true`;
+      const q = `${query} in:name,description is:public archived:false fork:true`;
       const response = z
         .object({
           total_count: z.number().int().min(0),
@@ -226,6 +253,17 @@ export async function discoverGithubSources(
     if (candidates.length >= ZERO_GITHUB_LIMITS.inspectedRepositories) break;
     const repo = entry.full_name;
     try {
+      // An authenticated token must never widen the public-only discovery grant.
+      if (boundary.tokenFile) {
+        const current = repositorySchema.parse(
+          await api.json(`/repos/${repo}`),
+        );
+        if (
+          current.full_name.toLowerCase() !== repo.toLowerCase() ||
+          current.archived
+        )
+          throw new Error("github_public_identity_changed");
+      }
       const commit = z
         .object({ sha, commit: z.object({ tree: z.object({ sha }) }) })
         .parse(
@@ -288,6 +326,29 @@ export async function discoverGithubSources(
         )
         .slice(0, ZERO_GITHUB_LIMITS.paths)
         .map(({ path, type, sha }) => ({ path, type, sha }));
+      const implementationFiles = tree.tree.filter(
+        (file) =>
+          file.type === "blob" &&
+          file.mode !== "120000" &&
+          /\.(?:[cm]?[jt]sx?|py|rs|go|[ch](?:pp|xx)?|java|swift|cs|vue|svelte)$/i.test(
+            file.path,
+          ),
+      );
+      const code = paths.find((file) =>
+        implementationFiles.some((item) => item.path === file.path),
+      );
+      if (code) {
+        try {
+          files.push(await fileEvidence(api, repo, commit.sha, code));
+        } catch (error) {
+          boundary.signal.throwIfAborted();
+          failures.push({
+            repository: repo,
+            stage: "code",
+            reason: failureReason(error),
+          });
+        }
+      }
       candidates.push({
         repository: repo,
         sourceRevision: commit.sha,
@@ -305,6 +366,15 @@ export async function discoverGithubSources(
         prepared: false,
         runtimeTested: false,
         licenseApproved: false,
+        implementationEvidence: {
+          observedCodeFiles: implementationFiles.length,
+          treeComplete: !partial && !tree.truncated,
+          inspectedCodePaths: files
+            .filter((file) =>
+              implementationFiles.some((item) => item.path === file.path),
+            )
+            .map((file) => file.path),
+        },
       });
     } catch (error) {
       boundary.signal.throwIfAborted();
@@ -367,6 +437,20 @@ export function githubRepositoryOptions(
 function compactCapability(candidate: GithubSourceCandidate) {
   const facts = {
     description: candidate.description,
+    implementationEvidence: candidate.implementationEvidence,
+    sampleCode: candidate.files
+      .filter((file) =>
+        candidate.implementationEvidence?.inspectedCodePaths.includes(
+          file.path,
+        ),
+      )
+      .slice(0, 1)
+      .map((file) => ({
+        path: file.path,
+        sha256: file.sha256,
+        excerpt: file.excerpt.slice(0, 400),
+        excerptTruncated: file.excerptTruncated || file.excerpt.length > 400,
+      })),
     language: candidate.language,
     readme:
       candidate.files.find((file) => /^readme/i.test(file.path))?.excerpt ??
@@ -418,42 +502,61 @@ export async function inspectGithubSource(
   paths = z.array(githubSourcePathSchema).min(1).max(4).parse(paths);
   const api = transport(boundary),
     entries: SourceInspectionEntry[] = [];
-  for (const path of paths) {
-    const raw = await api.json(
-      `/repos/${candidate.repository}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${candidate.sourceRevision}`,
+  if (boundary.tokenFile) {
+    const current = repositorySchema.parse(
+      await api.json(`/repos/${candidate.repository}`),
     );
-    if (Array.isArray(raw)) {
-      const directory = z
-        .array(
-          z.object({
+    if (
+      current.full_name.toLowerCase() !== candidate.repository.toLowerCase() ||
+      current.archived
+    )
+      throw new Error("github_public_identity_changed");
+  }
+  try {
+    for (const path of paths) {
+      const raw = await api.json(
+        `/repos/${candidate.repository}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${candidate.sourceRevision}`,
+      );
+      if (Array.isArray(raw)) {
+        const directory = z
+          .array(
+            z.object({
+              path: githubSourcePathSchema,
+              type: z.enum(["file", "dir", "symlink", "submodule"]),
+              sha,
+            }),
+          )
+          .max(1000)
+          .parse(raw);
+        entries.push({
+          path,
+          type: "directory",
+          truncated: directory.length > 80,
+          entries: directory.slice(0, 80),
+        });
+      } else {
+        const file = z
+          .object({
             path: githubSourcePathSchema,
-            type: z.enum(["file", "dir", "symlink", "submodule"]),
             sha,
-          }),
-        )
-        .max(1000)
-        .parse(raw);
-      entries.push({
-        path,
-        type: "directory",
-        truncated: directory.length > 80,
-        entries: directory.slice(0, 80),
-      });
-    } else {
-      const file = z
-        .object({ path: githubSourcePathSchema, sha, type: z.literal("file") })
-        .parse(raw);
-      if (file.path !== path) throw new Error("github_source_identity_changed");
-      entries.push({
-        type: "file",
-        ...(await fileEvidence(
-          api,
-          candidate.repository,
-          candidate.sourceRevision,
-          file,
-        )),
-      });
+            type: z.literal("file"),
+          })
+          .parse(raw);
+        if (file.path !== path)
+          throw new Error("github_source_identity_changed");
+        entries.push({
+          type: "file",
+          ...(await fileEvidence(
+            api,
+            candidate.repository,
+            candidate.sourceRevision,
+            file,
+          )),
+        });
+      }
     }
+  } catch (error) {
+    throw new GithubSourceReadError(failureReason(error));
   }
   const result = {
     repository: candidate.repository,

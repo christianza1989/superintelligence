@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import type { ZeroJevApplicationClient } from "./zero-jev-application-client.js";
+import { readZeroReuseReceipt } from "./zero-reuse-receipt.js";
 import {
   zeroJevArtifactPageSchema,
   zeroJevJobSchema,
@@ -213,16 +214,28 @@ export function registerZeroReuseMcpTools(
     "zero_reuse_artifact",
     {
       description:
-        "Read bounded base64 pages of a committed reuse receipt and prepared source files. Verify the full receipt hash and each source-file hash before host integration. No arbitrary filesystem paths or other project scopes.",
+        "Read a compact JSON evidence summary of a committed receipt. By default the client internally reassembles all byte pages, verifies the full SHA-256 and job identity, and returns readable selections, pinned source facts, failures or module code excerpts. No host decoding needed. Omitted fields are explicit. Use format=base64 only for raw receipt/prepared-file bytes with offset/limit. Integrity verifies provenance, not source correctness or runtime behavior. Same project scope only.",
       inputSchema: z.strictObject({
         jobId,
+        format: z.enum(["summary", "base64"]).default("summary"),
         offset: z.number().int().min(0).max(98304).default(0),
         limit: z.number().int().min(1).max(8192).default(8192),
       }),
-      outputSchema: zeroJevArtifactPageSchema,
+      outputSchema: z.looseObject({
+        artifactId: z.string(),
+        revision: z.literal(2),
+        sha256: z.string().regex(/^[a-f0-9]{64}$/),
+      }),
       annotations: readOnly,
     },
-    ({ jobId, ...page }) => result(() => client.artifactPage(jobId, page)),
+    ({ jobId, format, ...page }) =>
+      result(() =>
+        format === "base64"
+          ? client
+              .artifactPage(jobId, page)
+              .then((value) => zeroJevArtifactPageSchema.parse(value))
+          : readZeroReuseReceipt(client, jobId),
+      ),
   );
   server.registerTool(
     "zero_reuse_verify",

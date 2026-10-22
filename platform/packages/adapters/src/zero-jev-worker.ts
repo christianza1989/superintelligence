@@ -48,6 +48,7 @@ import {
   discoverGithubSources,
   githubRepositoryOptions,
   inspectGithubSource,
+  GithubSourceReadError,
 } from "./zero-github-discovery.js";
 import type { SafeWebFetchOptions } from "./web-ssrf.js";
 
@@ -98,6 +99,8 @@ export interface ZeroJevWorkerDependencies {
   fetch?: typeof fetch;
   /** Offline public-source transport injection. Production always uses checked public DNS/HTTPS. */
   githubTestTransport?: Pick<SafeWebFetchOptions, "fetch" | "resolveHostname">;
+  /** Private operator-owned GitHub API token file, used only for bounded public GETs. */
+  githubTokenFile?: string;
   resolveReuseVerifier?: (
     principal: ZeroCsvPrincipal,
   ) => Promise<ZeroReuseVerifierConfig | undefined>;
@@ -784,6 +787,7 @@ export async function runZeroJevTool(
             await recheck(deps, request);
           },
           testOnlyTransport: deps.githubTestTransport,
+          tokenFile: deps.githubTokenFile,
         },
       );
       await publish(deps, request, id, {
@@ -942,6 +946,7 @@ export async function runZeroJevTool(
                 await recheck(deps, request);
               },
               testOnlyTransport: deps.githubTestTransport,
+              tokenFile: deps.githubTokenFile,
             })
           : undefined;
       const candidates = discovery
@@ -1101,13 +1106,16 @@ export async function runZeroJevTool(
       },
       ...accounting(),
     });
-  } catch {
+  } catch (error) {
     await publish(deps, request, id, {
       state:
         usage || priorInvocation || reservationUncertain
           ? "unknown"
           : "blocked",
-      reason: "profile_tool_or_receipt_unavailable",
+      reason:
+        error instanceof GithubSourceReadError
+          ? error.reason
+          : "profile_tool_or_receipt_unavailable",
       ...(discoveryEvidence ? { discovery: discoveryEvidence } : {}),
       ...(advisorySelection
         ? {

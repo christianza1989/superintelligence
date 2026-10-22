@@ -236,6 +236,7 @@ async function main() {
   const jobHandlers = createBackgroundJobHandlers({
     zeroJev: {
       pool,
+      githubTokenFile: process.env.ZERO_GITHUB_TOKEN_FILE,
       resolve: zeroCsvScopes
         ? createStoredZeroJevResolver({
             prisma,

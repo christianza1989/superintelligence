@@ -7,7 +7,7 @@ export const ZERO_GITHUB_LIMITS = Object.freeze({
   requests: 32,
   responseBytes: 1048576,
   totalBytes: 33554432,
-  fileBytes: 65536,
+  fileBytes: 524288,
   excerptChars: 1800,
   paths: 60,
   runtimeMs: 20000,
