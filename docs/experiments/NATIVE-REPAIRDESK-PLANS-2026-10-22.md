@@ -60,7 +60,7 @@ Public discovery found nineteen distinct results and inspected five pins using t
 
 The repaired transport reached GitHub and Jev naturally, but useful foundation/module reuse remains unproven. B was slower and used more Codex tokens in this pair. Observed next gaps are separating implementable code from link directories, targeted capability queries and reliable compact receipt consumption. No code/prompt/checker was changed inside the pair. Grants were revoked and owned API/worker/PostgreSQL stopped. The cumulative USD 3 allocation retains USD 0.60 across six prior/control/native invocations; this pair accounts for USD 0.20 held, distinct from reported actual cost. The exhausted historical USD 1 allocation is untouched.
 
-After this pair the user requested a larger task. The separate [StudioDesk plan-only fixture](../../benchmarks/native-studiodesk-plans/v1/README.md) covers several complementary media/AI capabilities. Its results must not be merged with RepairDesk or represented as evidence that the observed retrieval problems are fixed. Application generation remains behind human plan review.
+After this pair the user requested a larger task. The separate [StudioDesk plan-only fixture](../../benchmarks/native-studiodesk-plans/v1/README.md) covers several complementary media/AI capabilities. Its [completed plan comparison](NATIVE-STUDIODESK-PLANS-2026-10-22.md) preserves a concrete source candidate and subsequent access/inspection failures. Results must not be merged with RepairDesk or represented as evidence that the observed retrieval problems are fixed. Application generation remains behind human plan review.
 
 ## Whole-task comparison
 

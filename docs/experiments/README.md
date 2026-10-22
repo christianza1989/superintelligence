@@ -6,6 +6,7 @@
 - [Native Codex value pilot preparation and preserved preflight failures](NATIVE-VALUE-PILOT-2026-10-22.md).
 - [Jev-selected source modules and full scoped development-chain controls](REUSE-MODULE-CHAIN-2026-10-22.md).
 - [RepairDesk native plan comparisons, preserved deadline failure and repaired live GitHub/Jev repeat](NATIVE-REPAIRDESK-PLANS-2026-10-22.md).
+- [Larger StudioDesk native plan pair, source recommendation and preserved access/receipt failures](NATIVE-STUDIODESK-PLANS-2026-10-22.md).
 - [Scoped research, PDF CSV and MCP 0.7 development checks](SCOPED-RESEARCH-AND-PDF-CSV-2026-10-21.md).
 - [Captured original-URL document profile and preserved Chromium limit failure](URL-DOCUMENT-PROFILE-2026-10-21.md).
 - [Relocated runtime failures, repairs and fixed expense application checks](RUNTIME-AND-APPLICATION-2026-10-21.md).
