@@ -6,6 +6,7 @@ export const ZERO_GITHUB_LIMITS = Object.freeze({
   searchTimeoutMs: 2500,
   moduleTreeReads: 3,
   moduleTreeTimeoutMs: 2500,
+  moduleLinkedFiles: 2,
   resultsPerQuery: 10,
   inspectedRepositories: 5,
   inspectionConcurrency: 3,
