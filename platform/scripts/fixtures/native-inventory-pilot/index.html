@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Inventory import reference</title>
+<style>body{font:16px system-ui;margin:1rem;max-width:60rem}button,input{font:inherit;max-width:100%}button{margin:.6rem .4rem .6rem 0}table{width:100%;table-layout:fixed;border-collapse:collapse}td,th{text-align:left;overflow-wrap:anywhere;padding:.35rem;border-bottom:1px solid #bbb}th:first-child{width:22%}th:last-child{width:20%}input{display:block}#errors{white-space:pre-wrap}</style></head>
+<body><h1>Inventory import</h1><label for="file">CSV file</label><input id="file" type="file" accept=".csv,text/csv"><button id="preview">Preview</button><button id="commit" disabled>Commit</button>
+<div id="errors" role="status" aria-live="polite"></div><h2>Preview rows</h2><div id="rows"></div><h2>Saved inventory</h2><div id="items"></div>
+<script type="module">
+const mode = __CONTROL_MODE__;
+const file = document.querySelector('#file');
+const preview = document.querySelector('#preview');
+const commit = document.querySelector('#commit');
+const errors = document.querySelector('#errors');
+let version = 0;
+let bytes;
+let key;
+function table(target, rows) {
+  target.replaceChildren();
+  const table = document.createElement('table');
+  const header = document.createElement('tr');
+  for (const text of ['SKU', 'Name', 'Quantity']) { const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = text; header.append(cell); }
+  table.append(header);
+  for (const row of rows) {
+    const tr = document.createElement('tr');
+    for (const value of [row.sku, row.name, row.quantity]) {
+      const cell = document.createElement('td');
+      if (mode === 'browser-html' && value === row.name) cell.innerHTML = value;
+      else cell.textContent = String(value);
+      tr.append(cell);
+    }
+    table.append(tr);
+  }
+  target.append(table);
+}
+async function load() { const result = await fetch('/api/items').then((r) => r.json()); table(document.querySelector('#items'), result.items); }
+file.addEventListener('change', () => {
+  version += 1;
+  if (mode !== 'browser-stale-preview') { bytes = undefined; commit.disabled = true; table(document.querySelector('#rows'), []); errors.textContent = ''; }
+});
+preview.addEventListener('click', async () => {
+  commit.disabled = true;
+  if (!file.files[0]) { errors.textContent = 'Choose a CSV file'; return; }
+  const current = version;
+  const selectedBytes = await file.files[0].arrayBuffer();
+  const response = await fetch('/api/preview', { method: 'POST', headers: { 'Content-Type': 'text/csv' }, body: selectedBytes });
+  const result = await response.json();
+  if (current !== version) return;
+  errors.textContent = (result.errors ?? []).map((e) => `Row ${e.row} ${e.field}: ${e.message}`).join('\n');
+  table(document.querySelector('#rows'), result.rows ?? []);
+  if (result.valid) { bytes = selectedBytes; key = crypto.randomUUID(); commit.disabled = false; }
+});
+commit.addEventListener('click', async () => {
+  if (!bytes) return;
+  const response = await fetch(mode === 'browser-commit-error' ? '/api/preview' : '/api/commit', { method: 'POST', headers: { 'Content-Type': 'text/csv', 'Idempotency-Key': key }, body: bytes });
+  const result = await response.json();
+  if (!response.ok) errors.textContent = JSON.stringify(result);
+  await load();
+});
+await load();
+</script></body></html>
