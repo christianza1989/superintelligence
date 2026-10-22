@@ -41,7 +41,7 @@ function transport(boundary: Boundary) {
           : "anonymous-public-only",
       };
     },
-    async json(path: string) {
+    async json(path: string, timeoutMs = 8000) {
       boundary.signal.throwIfAborted();
       if (rateLimited) throw new Error("github_rate_or_access_limit");
       await withAbort(boundary.authorize(), boundary.signal);
@@ -60,7 +60,7 @@ function transport(boundary: Boundary) {
         {
           ...boundary.testOnlyTransport,
           signal: boundary.signal,
-          timeoutMs: 8000,
+          timeoutMs,
           maxBytes: ZERO_GITHUB_LIMITS.responseBytes,
           maxRedirects: 0,
           allowedPorts: [443],
@@ -97,6 +97,11 @@ const repositorySchema = z.object({
   stargazers_count: z.number().int().min(0),
   pushed_at: z.string().nullable(),
   license: z.object({ spdx_id: z.string().nullable() }).nullable(),
+});
+const searchResponseSchema = z.object({
+  total_count: z.number().int().min(0),
+  incomplete_results: z.boolean(),
+  items: z.array(repositorySchema).max(10),
 });
 const treeSchema = z.object({
   sha,
@@ -210,6 +215,39 @@ export class GithubSourceReadError extends Error {
     super("GitHub source read unavailable");
   }
 }
+function searchPlan(query: string) {
+  const terms = query
+    .match(/[\p{L}\p{N}][\p{L}\p{N}+#_.-]*/gu)!
+    .filter((term) => !/^(?:AND|OR|NOT)$/i.test(term));
+  const meaningful = terms.filter(
+    (word) =>
+      !/^(?:a|an|the|and|or|for|with|in|of|to|library|libraries|module|component|local|offline|desktop|application|app|framework|multilingual|cross-platform|reusable)$/i.test(
+        word,
+      ),
+  );
+  const first = meaningful[0] ?? terms[0]!;
+  // An acronym or mixed-case project token is an identity hint, never proof of fit.
+  // Do not AND a known name with every requested behavior: repo metadata rarely
+  // enumerates an entire application requirement.
+  const named =
+    /^[A-Z]{2,}[a-z0-9+#_.-]*$/.test(first) ||
+    /^[A-Za-z][a-z]+[A-Z][A-Za-z0-9+#_.-]*$/.test(first);
+  return {
+    original: query,
+    primary: named ? first : terms.slice(0, 5).join(" "),
+    primaryScope: named ? ("name" as const) : ("name-description" as const),
+    primaryStrategy: named ? ("name-anchor" as const) : ("requested" as const),
+    fallback: named
+      ? (meaningful.length ? meaningful : terms).slice(0, 2).join(" ")
+      : (meaningful.length ? meaningful : terms)
+          .slice(0, terms.length > 2 ? 2 : 1)
+          .join(" "),
+    fallbackScope: "name-description" as const,
+    fallbackStrategy: named
+      ? ("intent-refinement" as const)
+      : ("keyword-reduction" as const),
+  };
+}
 export async function discoverGithubSources(
   queries: string[],
   boundary: Boundary,
@@ -237,30 +275,59 @@ export async function discoverGithubSources(
   >();
   const searches: {
     query: string;
+    originalQuery: string;
+    originalQueries: string[];
+    effectiveQuery: string;
+    scope: "name" | "name-description";
+    strategy:
+      "requested" | "keyword-reduction" | "name-anchor" | "intent-refinement";
     relaxedFrom?: string;
     totalCount: number;
     incomplete: boolean;
     returned: number;
   }[] = [];
-  for (const query of queries) {
-    if (researchSignal.aborted) break;
-    try {
-      const search = async (phrase: string, relaxedFrom?: string) => {
-        const q = `${phrase} in:name,description is:public archived:false fork:true`;
-        const response = z
-          .object({
-            total_count: z.number().int().min(0),
-            incomplete_results: z.boolean(),
-            items: z.array(repositorySchema).max(10),
-          })
-          .parse(
-            await api.json(
-              `/search/repositories?q=${encodeURIComponent(q)}&per_page=10`,
-            ),
-          );
+  const requested = new Map<
+    string,
+    {
+      originalQueries: string[];
+      response: Promise<z.infer<typeof searchResponseSchema> | undefined>;
+    }
+  >();
+  const plans = queries.map(searchPlan);
+  const search = async (
+    plan: ReturnType<typeof searchPlan>,
+    fallback: boolean,
+  ) => {
+    const phrase = fallback ? plan.fallback : plan.primary;
+    const scope = fallback ? plan.fallbackScope : plan.primaryScope;
+    const strategy = fallback ? plan.fallbackStrategy : plan.primaryStrategy;
+    const q = `${phrase} in:${scope === "name" ? "name" : "name,description"} is:public archived:false fork:true`;
+    const existing = requested.get(q.toLowerCase());
+    if (existing) {
+      if (!existing.originalQueries.includes(plan.original))
+        existing.originalQueries.push(plan.original);
+      return existing.response;
+    }
+    const originalQueries = [plan.original];
+    const responseTask = (async () => {
+      try {
+        if (researchSignal.aborted) return undefined;
+        const response = searchResponseSchema.parse(
+          await api.json(
+            `/search/repositories?q=${encodeURIComponent(q)}&per_page=10`,
+            ZERO_GITHUB_LIMITS.searchTimeoutMs,
+          ),
+        );
         searches.push({
           query: phrase,
-          ...(relaxedFrom ? { relaxedFrom } : {}),
+          originalQuery: plan.original,
+          originalQueries,
+          effectiveQuery: q,
+          scope,
+          strategy,
+          ...(strategy === "keyword-reduction"
+            ? { relaxedFrom: plan.original }
+            : {}),
           totalCount: response.total_count,
           incomplete: response.incomplete_results,
           returned: response.items.length,
@@ -269,38 +336,56 @@ export async function discoverGithubSources(
           if (entry.archived) return;
           const key = entry.full_name.toLowerCase(),
             old = found.get(key);
-          found.set(key, { entry, score: (old?.score ?? 0) + 1 / (rank + 10) });
+          const exactName =
+            scope === "name" && key.split("/")[1] === phrase.toLowerCase();
+          found.set(key, {
+            entry,
+            score: (old?.score ?? 0) + (exactName ? 3 : 1) / (rank + 10),
+          });
         });
-        return response.items.length;
-      };
-      const count = await search(query);
-      // Deployment constraints belong in the fit check, not every AND-ed repository term.
-      const relaxed = query
-        .split(/\s+/u)
-        .filter(
-          (word) =>
-            !/^(?:library|libraries|module|component|local|offline|desktop|application|app|framework|multilingual|cross-platform|reusable)$/i.test(
-              word,
-            ),
-        )
-        .join(" ");
-      if (!count && relaxed && relaxed !== query && !researchSignal.aborted)
-        await search(relaxed, query);
-    } catch (error) {
-      boundary.signal.throwIfAborted();
-      failures.push({ query, stage: "search", reason: reason(error) });
-    }
-  }
+        return response;
+      } catch (error) {
+        boundary.signal.throwIfAborted();
+        failures.push({ query: q, stage: "search", reason: reason(error) });
+        return undefined;
+      }
+    })();
+    requested.set(q.toLowerCase(), { originalQueries, response: responseTask });
+    return responseTask;
+  };
+  // Two bounded rounds (at most three fixed-origin requests each) leave time for
+  // actual commit/tree/blob reads. Slow or incomplete searches retain their facts;
+  // a broader query is a different retrieval attempt, not a retry loop.
+  const initial = await Promise.all(plans.map((plan) => search(plan, false)));
+  await Promise.all(
+    plans.map((plan, index) => {
+      const response = initial[index];
+      const differs =
+        plan.fallback !== plan.primary ||
+        plan.fallbackScope !== plan.primaryScope;
+      return differs &&
+        (!response ||
+          response.items.length === 0 ||
+          response.incomplete_results) &&
+        !api.stats.rateLimited &&
+        !researchSignal.aborted
+        ? search(plan, true)
+        : undefined;
+    }),
+  );
   const candidates: GithubSourceCandidate[] = [];
-  for (const { entry } of [...found.values()].sort(
-    (a, b) =>
-      b.score - a.score || a.entry.full_name.localeCompare(b.entry.full_name),
-  )) {
-    if (
-      researchSignal.aborted ||
-      candidates.length >= ZERO_GITHUB_LIMITS.inspectedRepositories
+  const ordered = [...found.values()]
+    .sort(
+      (a, b) =>
+        b.score - a.score || a.entry.full_name.localeCompare(b.entry.full_name),
     )
-      break;
+    .slice(0, ZERO_GITHUB_LIMITS.inspectedRepositories);
+  const inspect = async ({
+    entry,
+  }: {
+    entry: z.infer<typeof repositorySchema>;
+  }) => {
+    if (researchSignal.aborted) return undefined;
     const repo = entry.full_name;
     try {
       // An authenticated token must never widen the public-only discovery grant.
@@ -323,18 +408,119 @@ export async function discoverGithubSources(
         );
       let tree: z.infer<typeof treeSchema>,
         partial = false;
-      try {
+      if (moduleNeed) {
+        // A large recursive monorepo response can spend the whole research
+        // allowance before exposing any code. Start at the pinned root and
+        // descend a bounded, relevant source branch instead.
         tree = treeSchema.parse(
           await api.json(
-            `/repos/${repo}/git/trees/${commit.commit.tree.sha}?recursive=1`,
+            `/repos/${repo}/git/trees/${commit.commit.tree.sha}`,
+            ZERO_GITHUB_LIMITS.moduleTreeTimeoutMs,
           ),
         );
-      } catch {
-        partial = true;
-        tree = treeSchema.parse(
-          await api.json(`/repos/${repo}/git/trees/${commit.commit.tree.sha}`),
+        if (tree.sha !== commit.commit.tree.sha)
+          throw new Error("github_tree_pin_mismatch");
+        partial =
+          tree.truncated || tree.tree.some((item) => item.type === "tree");
+        const terms = new Set(
+          [...queries, moduleNeed.inputs, moduleNeed.outputs]
+            .join(" ")
+            .toLowerCase()
+            .split(/[^\p{L}\p{N}]+/u)
+            .filter(
+              (term) =>
+                term.length > 2 &&
+                !/^(?:the|and|for|with|from|into|that|this|input|inputs|output|outputs|local|offline|desktop|application|app|library|libraries|module|component|framework|reusable)$/i.test(
+                  term,
+                ),
+            ),
         );
-      }
+        const directories = (entries: z.infer<typeof treeSchema>["tree"]) =>
+          entries
+            .filter(
+              (item) =>
+                item.type === "tree" &&
+                githubSourcePathSchema.safeParse(item.path).success &&
+                !/(?:^|\/)(?:\.[^/]+|docs?|tests?|examples?|vendor|node_modules|build|dist|assets?|data|translations?|tools|scripts|ci|release-notes|security-advisories)(?:\/|$)/i.test(
+                  item.path,
+                ),
+            )
+            .sort((a, b) => {
+              const score = (value: string) => {
+                const tokens = new Set(
+                  value
+                    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                    .toLowerCase()
+                    .split(/[^\p{L}\p{N}]+/u),
+                );
+                return (
+                  8 * [...terms].filter((term) => tokens.has(term)).length +
+                  (/^(?:include|src|source|lib[^/]*|framework|core|subprojects|packages|modules|crates|components)$/i.test(
+                    value.split("/").at(-1)!,
+                  )
+                    ? 3
+                    : 0)
+                );
+              };
+              return (
+                score(b.path) - score(a.path) || a.path.localeCompare(b.path)
+              );
+            });
+        let frontier = directories(tree.tree);
+        const visited = new Set<string>();
+        let branchEntries: z.infer<typeof treeSchema>["tree"] = [];
+        for (let read = 0; read < ZERO_GITHUB_LIMITS.moduleTreeReads; read++) {
+          if (
+            researchSignal.aborted ||
+            (read > 0 &&
+              moduleCodePaths(branchEntries, queries, []).length >= 1)
+          )
+            break;
+          const directory = frontier.find((item) => !visited.has(item.path));
+          if (!directory) break;
+          visited.add(directory.path);
+          try {
+            const subtree = treeSchema.parse(
+              await api.json(
+                `/repos/${repo}/git/trees/${directory.sha}`,
+                ZERO_GITHUB_LIMITS.moduleTreeTimeoutMs,
+              ),
+            );
+            if (subtree.sha !== directory.sha)
+              throw new Error("github_tree_pin_mismatch");
+            const descendants = subtree.tree.map((item) => ({
+              ...item,
+              path: `${directory.path}/${item.path}`,
+            }));
+            branchEntries = descendants;
+            tree.tree.push(...descendants);
+            // Follow a relevant branch until it exposes code, retaining its
+            // siblings for a later bounded read when the branch is empty.
+            frontier = [...directories(descendants), ...frontier];
+          } catch (error) {
+            boundary.signal.throwIfAborted();
+            failures.push({
+              repository: repo,
+              stage: "tree",
+              reason: reason(error),
+            });
+          }
+        }
+      } else
+        try {
+          tree = treeSchema.parse(
+            await api.json(
+              `/repos/${repo}/git/trees/${commit.commit.tree.sha}?recursive=1`,
+            ),
+          );
+        } catch {
+          partial = true;
+          tree = treeSchema.parse(
+            await api.json(
+              `/repos/${repo}/git/trees/${commit.commit.tree.sha}`,
+            ),
+          );
+        }
       if (tree.sha !== commit.commit.tree.sha)
         throw new Error("github_tree_pin_mismatch");
       const files: FileEvidence[] = [];
@@ -372,25 +558,27 @@ export async function discoverGithubSources(
             .slice(0, 2)
         : [];
       const documentReads = await Promise.allSettled(
-        [...manifests, ...documents].map(async (file) => {
-          try {
-            return await fileEvidence(
-              api,
-              repo,
-              commit.sha,
-              file,
-              !!moduleNeed,
-            );
-          } catch (error) {
-            boundary.signal.throwIfAborted();
-            failures.push({
-              repository: repo,
-              stage: "document",
-              reason: reason(error),
-            });
-            return undefined;
-          }
-        }),
+        manifests
+          .filter((file) => /(?:^|\/)package\.json$/.test(file.path))
+          .map(async (file) => {
+            try {
+              return await fileEvidence(
+                api,
+                repo,
+                commit.sha,
+                file,
+                !!moduleNeed,
+              );
+            } catch (error) {
+              boundary.signal.throwIfAborted();
+              failures.push({
+                repository: repo,
+                stage: "document",
+                reason: reason(error),
+              });
+              return undefined;
+            }
+          }),
       );
       for (const read of documentReads) {
         if (read.status === "rejected") throw read.reason;
@@ -428,21 +616,40 @@ export async function discoverGithubSources(
         : legacyCode
           ? [legacyCode]
           : [];
-      for (const code of codePaths) {
-        try {
-          files.push(
-            await fileEvidence(api, repo, commit.sha, code, !!moduleNeed),
-          );
-        } catch (error) {
-          boundary.signal.throwIfAborted();
-          failures.push({
-            repository: repo,
-            stage: "code",
-            reason: reason(error),
-          });
-        }
+      const remainingReads = await Promise.allSettled(
+        [
+          ...codePaths.map((file) => ({ file, stage: "code" })),
+          ...manifests
+            .filter((file) => !/(?:^|\/)package\.json$/.test(file.path))
+            .map((file) => ({ file, stage: "document" })),
+          ...documents.map((file) => ({ file, stage: "document" })),
+        ].map(async ({ file, stage }) => {
+          try {
+            return await fileEvidence(
+              api,
+              repo,
+              commit.sha,
+              file,
+              !!moduleNeed,
+            );
+          } catch (error) {
+            boundary.signal.throwIfAborted();
+            failures.push({ repository: repo, stage, reason: reason(error) });
+            return undefined;
+          }
+        }),
+      );
+      for (const read of remainingReads) {
+        if (read.status === "rejected") throw read.reason;
+        if (read.value) files.push(read.value);
       }
-      candidates.push({
+      const evidenceOrder = [...manifests, ...documents, ...codePaths].map(
+        (file) => file.path,
+      );
+      files.sort(
+        (a, b) => evidenceOrder.indexOf(a.path) - evidenceOrder.indexOf(b.path),
+      );
+      return {
         repository: repo,
         sourceRevision: commit.sha,
         treeSha: tree.sha,
@@ -456,9 +663,9 @@ export async function discoverGithubSources(
           partial || tree.truncated || tree.tree.length > paths.length,
         files,
         observedAt: new Date().toISOString(),
-        prepared: false,
-        runtimeTested: false,
-        licenseApproved: false,
+        prepared: false as const,
+        runtimeTested: false as const,
+        licenseApproved: false as const,
         implementationEvidence: {
           observedCodeFiles: implementationFiles.length,
           treeComplete: !partial && !tree.truncated,
@@ -468,7 +675,7 @@ export async function discoverGithubSources(
             )
             .map((file) => file.path),
         },
-      });
+      };
     } catch (error) {
       boundary.signal.throwIfAborted();
       failures.push({
@@ -476,13 +683,34 @@ export async function discoverGithubSources(
         stage: "inspect",
         reason: reason(error),
       });
-      if (api.stats.requests >= ZERO_GITHUB_LIMITS.requests) break;
+      return undefined;
     }
+  };
+  // A slow first monorepo must not consume every other candidate's opportunity
+  // to expose a callable unit. Finish the first bounded wave before spending
+  // any remaining allowance on lower-ranked repositories.
+  for (
+    let offset = 0;
+    offset < ordered.length;
+    offset += ZERO_GITHUB_LIMITS.inspectionConcurrency
+  ) {
+    if (
+      researchSignal.aborted ||
+      api.stats.requests >= ZERO_GITHUB_LIMITS.requests
+    )
+      break;
+    const wave = await Promise.all(
+      ordered
+        .slice(offset, offset + ZERO_GITHUB_LIMITS.inspectionConcurrency)
+        .map(inspect),
+    );
+    for (const candidate of wave) if (candidate) candidates.push(candidate);
   }
   boundary.signal.throwIfAborted();
   await withAbort(boundary.authorize(), boundary.signal);
   const result = {
     kind: "public-github-source-discovery-v1" as const,
+    requestedQueries: queries,
     searches,
     matchedRepositories: found.size,
     candidates,

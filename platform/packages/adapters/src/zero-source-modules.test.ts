@@ -44,6 +44,149 @@ function provider(choice = "module0") {
   };
 }
 describe("concrete source module planning", () => {
+  it("observes native header call signatures, preserving exact multiline source spans while excluding macros, callbacks and inline bodies", () => {
+    const source = [
+      "/* void fake_render(void); */",
+      "#define EXPORT_API fake_macro()",
+      "#include <media/profile.h>",
+      'extern "C" {',
+      "MEDIA_API",
+      "MediaConsumer *media_consumer_new(",
+      "    MediaProfile *profile, const char *format);",
+      "int media_consumer_start(MediaConsumer *consumer);",
+      "typedef void (*ProgressCallback)(double progress);",
+      "static int private_helper(MediaConsumer *consumer);",
+      "inline int wrapper(MediaConsumer *consumer) {",
+      "  int internal_call(MediaConsumer *consumer);",
+      "  return media_consumer_start(consumer);",
+      "}",
+      "}",
+    ].join("\r\n");
+    const facts = moduleFileFacts("include/media/consumer.h", source);
+    expect(facts.declarations).toEqual([
+      "MEDIA_API\r\nMediaConsumer *media_consumer_new(\r\n    MediaProfile *profile, const char *format);",
+      "int media_consumer_start(MediaConsumer *consumer);",
+    ]);
+    for (const declaration of facts.declarations)
+      expect(source).toContain(declaration);
+    expect(facts.imports).toEqual(["media/profile.h"]);
+    expect(
+      moduleFileFacts(
+        "consumer.c",
+        "static int helper(void);\nint private(void);\n",
+      ).declarations,
+    ).toEqual([]);
+  });
+  it("retains public C++ header methods and constructors without advertising private or protected members", () => {
+    const facts = moduleFileFacts(
+      "include/media/Timeline.hh",
+      [
+        "namespace Media {",
+        "class API_EXPORT Timeline {",
+        "  void private_default();",
+        "public:",
+        "  Timeline(Profile &profile);",
+        "  ~Timeline();",
+        "  static Timeline *create(Profile &profile);",
+        "  bool append(Clip *clip);",
+        "  int render(const char *file) const noexcept;",
+        "protected:",
+        "  void protected_helper();",
+        "private:",
+        "  void private_helper();",
+        "};",
+        "}",
+      ].join("\n"),
+    );
+    expect(facts.declarations).toEqual([
+      "Timeline(Profile &profile);",
+      "~Timeline();",
+      "static Timeline *create(Profile &profile);",
+      "bool append(Clip *clip);",
+      "int render(const char *file) const noexcept;",
+    ]);
+  });
+  it("excludes native callback fields and unrelated bare names without crowding out the real exported API", () => {
+    const source = [
+      "typedef struct MediaContext {",
+      "  void (*draw_band)(MediaContext *context, int y);",
+      "  enum PixelFormat (*get_format)(MediaContext *context, const enum PixelFormat *formats);",
+      "  void (*progress[12])(double);",
+      "  Unrelated(context);",
+      "} MediaContext;",
+      "int media_send_packet(MediaContext *context, const Packet *packet);",
+      "int media_receive_frame(MediaContext *context, Frame *frame);",
+    ].join("\n");
+    expect(moduleFileFacts("include/media.h", source).declarations).toEqual([
+      "int media_send_packet(MediaContext *context, const Packet *packet);",
+      "int media_receive_frame(MediaContext *context, Frame *frame);",
+    ]);
+  });
+  it("prefers relevant native API headers over internal utilities, source implementations and generated export headers", () => {
+    const paths = [
+      "examples/timeline.h",
+      "src/internal/timeline.h",
+      "src/timeline.cc",
+      "include/timeline.h",
+      "include/exports.h",
+      "include/media_consumer.h",
+    ].map((path) => ({ path, type: "blob", mode: "100644" }));
+    expect(
+      moduleCodePaths(paths, ["timeline consumer"], []).map((f) => f.path),
+    ).toEqual(["include/media_consumer.h", "include/timeline.h"]);
+  });
+  it("gives each inspected repository a shortlist slot before second source units", () => {
+    const candidates = Array.from({ length: 5 }, (_, index) => ({
+      ...candidate,
+      repository: `example/library-${index}`,
+      files: [
+        candidate.files[0]!,
+        { ...candidate.files[0]!, path: "src/secondary.ts" },
+      ],
+    }));
+    expect(
+      sourceModuleOptions(candidates, need).map((m) => m.repository),
+    ).toEqual(candidates.map((c) => c.repository));
+    expect(
+      sourceModuleOptions(candidates.slice(0, 2), need).map((m) => m.path),
+    ).toEqual([
+      "src/parser.ts",
+      "src/parser.ts",
+      "src/secondary.ts",
+      "src/secondary.ts",
+    ]);
+  });
+  it("prefers native library facades and exact need tokens over incidental substrings, independent of query repetition", () => {
+    const paths = [
+      "libmedia/aiff.h",
+      "libmedia/img2_brender_pix.c",
+      "libmedia/media.h",
+      "libmedia/render.h",
+      "libmedia/internal/render.h",
+    ].map((path) => ({ path, type: "blob", mode: "100644" }));
+    const expected = ["libmedia/media.h", "libmedia/render.h"];
+    expect(
+      moduleCodePaths(paths, ["render media"], []).map((f) => f.path),
+    ).toEqual(expected);
+    expect(
+      moduleCodePaths(
+        paths,
+        ["render media", "render render render media"],
+        [],
+      ).map((f) => f.path),
+    ).toEqual(expected);
+    expect(
+      moduleCodePaths(
+        [
+          { path: "include/brender.h", type: "blob" },
+          { path: "include/render.h", type: "blob" },
+          { path: "include/unrelated.h", type: "blob" },
+        ],
+        ["render"],
+        [],
+      ).map((f) => f.path)[0],
+    ).toBe("include/render.h");
+  });
   it("recognizes CommonJS/UMD public assignments and Go exports instead of losing non-ESM module APIs", () => {
     const facts = moduleFileFacts(
       "parser.js",

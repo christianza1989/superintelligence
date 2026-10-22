@@ -2,8 +2,13 @@
 import { z } from "zod";
 export const ZERO_GITHUB_LIMITS = Object.freeze({
   queries: 3,
+  searchRequests: 6,
+  searchTimeoutMs: 2500,
+  moduleTreeReads: 3,
+  moduleTreeTimeoutMs: 2500,
   resultsPerQuery: 10,
   inspectedRepositories: 5,
+  inspectionConcurrency: 3,
   requests: 32,
   responseBytes: 1048576,
   totalBytes: 33554432,
@@ -21,12 +26,13 @@ export const githubQueriesSchema = z
       .min(2)
       .max(80)
       .regex(/^[\p{L}\p{N}\s.,+#_"-]+$/u)
-      .refine(
-        (value) => value.split(/\s+/u).length <= 5,
-        "Use at most five searchable words per phrase; put full constraints in goal and query separate capabilities separately.",
+      .refine((value) =>
+        (value.match(/[\p{L}\p{N}][\p{L}\p{N}+#_.-]*/gu) ?? []).some(
+          (term) => !/^(?:AND|OR|NOT)$/i.test(term),
+        ),
       )
       .describe(
-        "A focused repository search phrase of 1–5 words, such as one component need. Never a requirements sentence: GitHub combines terms restrictively. Full requirements belong in goal.",
+        "A focused repository search phrase for one component need. Search starts with a recognizable project name or at most five keywords, then at most one alternative; full fit constraints belong in goal and module.",
       ),
   )
   .min(1)

@@ -319,7 +319,7 @@ describe("operator-bound module reuse MCP", () => {
       contentBase64: "e30=",
     });
   });
-  it("rejects requirements sentences before creating a source job or paid dispatch", async () => {
+  it("retains a longer natural search phrase for bounded backend query planning", async () => {
     const result = await client.callTool({
       name: "zero_discover",
       arguments: {
@@ -328,8 +328,14 @@ describe("operator-bound module reuse MCP", () => {
         ...controls(),
       },
     });
-    expect(result.isError).toBe(true);
-    expect(api.execute).not.toHaveBeenCalled();
+    expect(result.isError).not.toBe(true);
+    expect(api.execute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "discover-source",
+        queries: ["local desktop application import export users roles"],
+        goal: "Assess a focused component with the full platform constraints here",
+      }),
+    );
   });
   it("accepts only the pinned virtual root without granting a host filesystem root", async () => {
     const read = await client.callTool({

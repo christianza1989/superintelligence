@@ -1,6 +1,6 @@
 # Konkretaus modulio planavimas per MCP
 
-0.11.1 / schema 1.12.1 papildo esamą `zero_discover` kelią. API, PostgreSQL, Graphile worker, operatoriaus grant ir baigtinis Jev biudžetas lieka tie patys. Tai šaltinių pasiūlymai planui, ne universalus paruošimas ar runtime kvalifikacija.
+0.12.1 / schema 1.13.1 papildo esamą `zero_discover` kelią. API, PostgreSQL, Graphile worker, operatoriaus grant ir baigtinis Jev biudžetas lieka tie patys. Tai šaltinių pasiūlymai planui, ne universalus paruošimas ar runtime kvalifikacija.
 
 ## Vienas poreikis — vienas pasirinkimas
 
@@ -10,7 +10,11 @@ Darbininkas surenka ribotus GitHub faktus, tikslius commit/hash, manifestus, tik
 
 Jev gauna konkrečius šaltinio vienetus ir vieną sąsajos poreikį. Visas repo neprivalo įgyvendinti visos programos. Be peržiūrėtos modulio sąsajos mokamas dispatch neatliekamas. No-fit, abstention, nepakankama aprėptis ir nežinomas suderinamumas išlieka galimi rezultatai.
 
-Kai paieška grąžina nulį ir frazėje yra bendri diegimo žodžiai, pvz. `library` ar `offline`, leidžiamas vienas jų pašalinimo bandymas. `searches.relaxedFrom` išsaugo originalą, o tinkamumo apribojimai lieka poreikyje. Iki trijų originalių frazių, iki vieno papildomo bandymo kiekvienai; bendri request/byte/time limitai lieka. Tai ne globaliai geriausio modulio ar išsamios GitHub aprėpties garantija. `incomplete` ir tyrimo deadline rezultatuose išsaugomi.
+GitHub paieška atskirta nuo tinkamumo vertinimo. Iki trijų originalių frazių išsaugomos `requestedQueries`. Atpažintas akronimas / mišraus registro projekto vardas pirmiausia ieškomas repo pavadinime; kitoms frazėms naudojami iki penkių raktažodžių. Tuščiam, nutrūkusiam ar `incomplete` rezultatui leidžiamas vienas alternatyvus bandymas su dviem prasminiais žodžiais. Vienodos faktinės užklausos sujungiamos, išsaugant visų pradinių frazių kilmę. Nėra konkrečios užduoties projektų sąrašo. `searches` registruoja originalią ir faktinę užklausą, laukus, strategiją bei `relaxedFrom`; visi tinkamumo apribojimai lieka poreikyje.
+
+Dviejuose ratuose vyksta iki trijų lygiagrečių paieškų, kiekvienai skiriama 2,5 s; daugiausia šeši HTTP search kvietimai. Bendras 12 s tyrimo, request ir byte limitas lieka. Modulio režimas pradeda nuo pinned šakninio medžio ir perskaito iki trijų aktualių submedžių, kiekvienam skiriant iki 2,5 s. Tai dalinis source grafas, ne viso repo peržiūra. Po manifestų kodo ir dokumentų failai skaitomi lygiagrečiai; daliniai rezultatai ir nesėkmės išsaugomi.
+
+Vardo sutapimas yra retrieval signalas, ne tinkamumo procentas. Viešo įėjimo taško ir native bibliotekos bendros antraštės keliams teikiama pirmenybė prieš formatų pagalbinius failus; žodžiai lyginami kaip atskiri tokenai. C/C++ antraščių prototipai ir viešos klasės metodai pateikiami kaip statinės deklaracijos; antraštė viena nėra realizuotas gebėjimas, būtina matching implementacija ir dependency closure. Penkių Jev kandidatų riboje pirmiausia pateikiamas vienas tinkamas vienetas iš kiekvieno peržiūrėto repo, tada antri vienetai. Tai ne globaliai geriausio modulio ar išsamios GitHub aprėpties garantija.
 
 ## Trumpas atsakymas ir tęsiamas darbas
 
