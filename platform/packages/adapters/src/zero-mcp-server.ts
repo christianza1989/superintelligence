@@ -29,8 +29,8 @@ import {
 } from "./zero-repository-tools.js";
 import { ZERO_SOURCE_DEADLINE_ERROR } from "./zero-jev-limits.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.12.1";
-export const ZERO_MCP_SCHEMA_VERSION = "1.13.1";
+export const ZERO_MCP_SERVER_VERSION = "0.12.2";
+export const ZERO_MCP_SCHEMA_VERSION = "1.13.2";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,

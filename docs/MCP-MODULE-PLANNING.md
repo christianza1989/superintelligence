@@ -1,6 +1,6 @@
 # Konkretaus modulio planavimas per MCP
 
-0.12.1 / schema 1.13.1 papildo esamą `zero_discover` kelią. API, PostgreSQL, Graphile worker, operatoriaus grant ir baigtinis Jev biudžetas lieka tie patys. Tai šaltinių pasiūlymai planui, ne universalus paruošimas ar runtime kvalifikacija.
+0.12.2 / schema 1.13.2 papildo esamą `zero_discover` kelią. API, PostgreSQL, Graphile worker, operatoriaus grant ir baigtinis Jev biudžetas lieka tie patys. Tai šaltinių pasiūlymai planui, ne universalus paruošimas ar runtime kvalifikacija.
 
 ## Vienas poreikis — vienas pasirinkimas
 
@@ -15,6 +15,8 @@ GitHub paieška atskirta nuo tinkamumo vertinimo. Iki trijų originalių frazių
 Dviejuose ratuose vyksta iki trijų lygiagrečių paieškų, kiekvienai skiriama 2,5 s; daugiausia šeši HTTP search kvietimai. Bendras 12 s tyrimo, request ir byte limitas lieka. Modulio režimas pradeda nuo pinned šakninio medžio ir perskaito iki trijų aktualių submedžių, kiekvienam skiriant iki 2,5 s. Tai dalinis source grafas, ne viso repo peržiūra. Po manifestų kodo ir dokumentų failai skaitomi lygiagrečiai; daliniai rezultatai ir nesėkmės išsaugomi.
 
 Vardo sutapimas yra retrieval signalas, ne tinkamumo procentas. Viešo įėjimo taško ir native bibliotekos bendros antraštės keliams teikiama pirmenybė prieš formatų pagalbinius failus; žodžiai lyginami kaip atskiri tokenai. C/C++ antraščių prototipai ir viešos klasės metodai pateikiami kaip statinės deklaracijos; antraštė viena nėra realizuotas gebėjimas, būtina matching implementacija ir dependency closure. Penkių Jev kandidatų riboje pirmiausia pateikiamas vienas tinkamas vienetas iš kiekvieno peržiūrėto repo, tada antri vienetai. Tai ne globaliai geriausio modulio ar išsamios GitHub aprėpties garantija.
+
+Failų rikiavimas ir API ištraukos gauna ne tik paieškos frazę, bet ir tikrą `module.inputs/outputs`. Bendras žodžių normalizavimas ir iki 64 stebimų native parašų imtis leidžia parodyti 12 poreikiui artimesnių parašų, išlaikant tikslius source fragmentus. Jei bendroje antraštėje nėra kviečiamų deklaracijų, sekami iki dviejų jos faktiškai perskaitytų santykinių importų, tik kai tikslai yra jau stebimame pinned medyje, nėra symlink ir neišeina iš repo. Tai pakeičia atsitiktinį abėcėlinį antrą failą; bendri laiko/request limitai lieka. Nėra mokamo papildomo Jev navigacijos etapo ar konkrečių projektų sinonimų lentelės.
 
 ## Trumpas atsakymas ir tęsiamas darbas
 

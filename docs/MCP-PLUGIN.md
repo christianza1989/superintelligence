@@ -1,6 +1,6 @@
 # Vietinis MCP papildinio paketas
 
-**Dabartinis source ir įdiegtas paketas: 0.12.1 / schema 1.13.1.** [GitHub ir native modulių paieškos pataisa](experiments/GITHUB-MODULE-RETRIEVAL-2026-10-22.md) turi 137 offline, 36 API/PG ir Linux/Windows paketo patikras. Ji atkuria vardų paiešką, ribotą source katalogų peržiūrą ir C/C++ API įrodymus. Tikras Jev pasirinkimas ir nauja natūrali planų pora registruojami atskirai nuo šių kontrolinių patikrų.
+**Dabartinis source ir įdiegtas paketas: 0.12.2 / schema 1.13.2.** [GitHub ir native modulių paieškos pataisa](experiments/GITHUB-MODULE-RETRIEVAL-2026-10-22.md) turi 141 offline, 36 API/PG ir Linux/Windows paketo patikras. Ji atkuria vardų paiešką, ribotą source katalogų peržiūrą ir C/C++ API įrodymus. Tikras Jev pasirinkimas ir nauja natūrali planų pora registruojami atskirai nuo šių kontrolinių patikrų.
 
 **0.11.1 / schema 1.12.1** prideda [konkrečių modulių planavimą](MCP-MODULE-PLANNING.md): vieno gebėjimo įvestį/išvestį, pinned deklaracijų/importų/manifestų įrodymus, Jev pasirinkimą ir integravimo pasiūlymą. Ribotas laukimas gali grąžinti hash patikrintą trumpą sprendimą tame pačiame kvietime. Skill vykdymo detalės atskirtos nuo pagrindinio planavimo teksto. [123 offline, 36 API/PG ir atskiras vieno MCP gyvas kelias PASS](experiments/MODULE-PLANNING-2026-10-22.md); tai nepaverčia pasiūlymo paruoštu ar runtime patikrintu komponentu. Naudos palyginimas atskiras.
 

@@ -1,5 +1,6 @@
 /** Bounded public GitHub discovery. Source text is evidence, never authority to execute. */
 import { createHash } from "node:crypto";
+import path from "node:path";
 import { z } from "zod";
 import { fetchSafeWebBytes, withAbort } from "./web-ssrf.js";
 import type { SafeWebFetchOptions } from "./web-ssrf.js";
@@ -123,7 +124,7 @@ async function fileEvidence(
   repo: string,
   pin: string,
   file: { path: string; sha: string },
-  analyzeModule = false,
+  moduleNeed?: GithubModuleNeed,
 ) {
   const blob = z
     .object({
@@ -148,7 +149,9 @@ async function fileEvidence(
   )
     throw new Error("github_blob_integrity_failed");
   const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
-  const facts = analyzeModule ? moduleFileFacts(file.path, text) : undefined;
+  const facts = moduleNeed
+    ? moduleFileFacts(file.path, text, moduleNeed)
+    : undefined;
   const firstDeclaration = facts?.declarations[0];
   const declarationOffset = firstDeclaration
     ? text.indexOf(firstDeclaration)
@@ -198,7 +201,44 @@ export type GithubSourceCandidate = {
     treeComplete: boolean;
     inspectedCodePaths: string[];
   };
+  sourceLinks?: { from: string; to: string; import: string }[];
 };
+function observedRelativeImports(
+  file: FileEvidence,
+  tree: z.infer<typeof treeSchema>["tree"],
+) {
+  const paths = new Map(tree.map((entry) => [entry.path, entry]));
+  const linked = new Map<
+    string,
+    { entry: z.infer<typeof treeSchema>["tree"][number]; import: string }
+  >();
+  const native = /\.(?:c(?:c|pp|xx)?|h(?:h|pp|xx)?)$/i.test(file.path);
+  for (const specifier of file.moduleFacts?.imports ?? []) {
+    if (
+      !specifier.startsWith("./") &&
+      !specifier.startsWith("../") &&
+      !(native && /\.h(?:h|pp|xx)?$/i.test(specifier))
+    )
+      continue;
+    if (
+      /[\\:\u0000-\u001f\u007f]/u.test(specifier) ||
+      path.posix.isAbsolute(specifier)
+    )
+      continue;
+    const target = path.posix.normalize(
+      path.posix.join(path.posix.dirname(file.path), specifier),
+    );
+    if (
+      !githubSourcePathSchema.safeParse(target).success ||
+      target === file.path
+    )
+      continue;
+    const entry = paths.get(target);
+    if (entry?.type === "blob" && entry.mode !== "120000")
+      linked.set(target, { entry, import: specifier });
+  }
+  return linked;
+}
 export function githubSourceFailureReason(error: unknown) {
   const message = error instanceof Error ? error.message : "";
   return /HTTP (403|429)|github_rate_or_access_limit/.test(message)
@@ -473,7 +513,8 @@ export async function discoverGithubSources(
           if (
             researchSignal.aborted ||
             (read > 0 &&
-              moduleCodePaths(branchEntries, queries, []).length >= 1)
+              moduleCodePaths(branchEntries, queries, [], moduleNeed).length >=
+                1)
           )
             break;
           const directory = frontier.find((item) => !visited.has(item.path));
@@ -557,33 +598,40 @@ export async function discoverGithubSources(
             )
             .slice(0, 2)
         : [];
-      const documentReads = await Promise.allSettled(
-        manifests
-          .filter((file) => /(?:^|\/)package\.json$/.test(file.path))
-          .map(async (file) => {
+      const appendReads = async (
+        reads: { file: { path: string; sha: string }; stage: string }[],
+      ) => {
+        const results = await Promise.allSettled(
+          reads.map(async ({ file, stage }) => {
             try {
               return await fileEvidence(
                 api,
                 repo,
                 commit.sha,
                 file,
-                !!moduleNeed,
+                moduleNeed,
               );
             } catch (error) {
               boundary.signal.throwIfAborted();
               failures.push({
                 repository: repo,
-                stage: "document",
+                stage,
                 reason: reason(error),
               });
               return undefined;
             }
           }),
+        );
+        for (const read of results) {
+          if (read.status === "rejected") throw read.reason;
+          if (read.value) files.push(read.value);
+        }
+      };
+      await appendReads(
+        manifests
+          .filter((file) => /(?:^|\/)package\.json$/.test(file.path))
+          .map((file) => ({ file, stage: "document" })),
       );
-      for (const read of documentReads) {
-        if (read.status === "rejected") throw read.reason;
-        if (read.value) files.push(read.value);
-      }
       const terms = queries
         .join(" ")
         .toLowerCase()
@@ -612,40 +660,47 @@ export async function discoverGithubSources(
         implementationFiles.some((item) => item.path === file.path),
       );
       const codePaths = moduleNeed
-        ? moduleCodePaths(tree.tree, queries, files)
+        ? moduleCodePaths(tree.tree, queries, files, moduleNeed)
         : legacyCode
           ? [legacyCode]
           : [];
-      const remainingReads = await Promise.allSettled(
-        [
-          ...codePaths.map((file) => ({ file, stage: "code" })),
-          ...manifests
-            .filter((file) => !/(?:^|\/)package\.json$/.test(file.path))
-            .map((file) => ({ file, stage: "document" })),
-          ...documents.map((file) => ({ file, stage: "document" })),
-        ].map(async ({ file, stage }) => {
-          try {
-            return await fileEvidence(
-              api,
-              repo,
-              commit.sha,
-              file,
-              !!moduleNeed,
-            );
-          } catch (error) {
-            boundary.signal.throwIfAborted();
-            failures.push({ repository: repo, stage, reason: reason(error) });
-            return undefined;
-          }
-        }),
-      );
-      for (const read of remainingReads) {
-        if (read.status === "rejected") throw read.reason;
-        if (read.value) files.push(read.value);
-      }
-      const evidenceOrder = [...manifests, ...documents, ...codePaths].map(
-        (file) => file.path,
-      );
+      await appendReads([
+        ...codePaths.slice(0, 1).map((file) => ({ file, stage: "code" })),
+        ...manifests
+          .filter((file) => !/(?:^|\/)package\.json$/.test(file.path))
+          .map((file) => ({ file, stage: "document" })),
+        ...documents.map((file) => ({ file, stage: "document" })),
+      ]);
+      const primary = files.find((file) => file.path === codePaths[0]?.path);
+      const linked: ReturnType<typeof observedRelativeImports> =
+        moduleNeed && primary?.moduleFacts?.declarations.length === 0
+          ? observedRelativeImports(primary, tree.tree)
+          : new Map();
+      const linkedPaths = moduleNeed
+        ? moduleCodePaths(
+            [...linked.values()].map((link) => link.entry),
+            queries,
+            files,
+            moduleNeed,
+          )
+            .filter(
+              (file) => !files.some((existing) => existing.path === file.path),
+            )
+            .slice(0, ZERO_GITHUB_LIMITS.moduleLinkedFiles)
+        : [];
+      const sourceLinks = linkedPaths.map((file) => ({
+        from: primary!.path,
+        to: file.path,
+        import: linked.get(file.path)!.import,
+      }));
+      const follow = linkedPaths.length ? linkedPaths : codePaths.slice(1);
+      await appendReads(follow.map((file) => ({ file, stage: "code" })));
+      const evidenceOrder = [
+        ...manifests,
+        ...documents,
+        ...codePaths,
+        ...follow,
+      ].map((file) => file.path);
       files.sort(
         (a, b) => evidenceOrder.indexOf(a.path) - evidenceOrder.indexOf(b.path),
       );
@@ -675,6 +730,7 @@ export async function discoverGithubSources(
             )
             .map((file) => file.path),
         },
+        ...(sourceLinks.length ? { sourceLinks } : {}),
       };
     } catch (error) {
       boundary.signal.throwIfAborted();

@@ -34,12 +34,85 @@ type SourceCandidate = {
 const codeExtension =
   /\.(?:[cm]?[jt]sx?|py|rs|go|c(?:c|pp|xx)?|h(?:h|pp|xx)?|java|swift|cs|vue|svelte)$/i;
 const infrastructure =
-  /(?:^|\/)(?:node_modules|vendor|third_party|third-party|dist|build|generated|\.git|\.vs|fixtures?|__tests__|tests?|examples?|docs?)(?:\/|$)|(?:^|\/)(?:layout|page|config|setup|conftest)\.[^/]+$/i;
+  /(?:^|\/)(?:node_modules|vendor|third_party|third-party|dist|build|generated|\.git|\.vs|fixtures?|__tests__|tests?|examples?|docs?)(?:\/|$)|(?:^|\/)(?:layout|page|config|setup|conftest)\.[^/]+$|(?:^|\/)[^/]+\.(?:config|setup)\.[^/]+$/i;
 const declaration =
   /^\s*(?:(?:export\s+(?:default\s+)?)|(?:pub\s+(?:\([^)]*\)\s*)?)|(?:async\s+)?(?:def|class)\s+|(?:[A-Z][A-Z_]+_API\s+)|(?:module\.exports|exports\.[A-Za-z_$][\w$]*)\s*=|[A-Z][\w$]*\.[A-Za-z_$][\w$]*\s*=\s*(?:function\b|[A-Za-z_$][\w$]*\s*;)|func\s+(?:\([^)]*\)\s*)?[A-Z]\w*\s*\()/;
 
+function sourceTokens(value: string): string[] {
+  const normalize = (word: string) => {
+    if (word.length > 4 && /ies$/.test(word)) return word.slice(0, -3) + "y";
+    if (word.length > 4 && /(?:sh|ch|x|z|ss)es$/.test(word))
+      return word.slice(0, -2);
+    if (word.length > 3 && /s$/.test(word) && !/(?:ss|us|is)$/.test(word))
+      return word.slice(0, -1);
+    if (word.length > 5 && /ing$/.test(word)) return word.slice(0, -3);
+    return word;
+  };
+  return value
+    .replace(/([a-z\d])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean)
+    .flatMap((word) => {
+      const normalized = normalize(word);
+      return /^multi[a-z]{3,}$/.test(normalized)
+        ? [normalized, normalize(normalized.slice(5))]
+        : [normalized];
+    });
+}
+function moduleFocusTerms(need?: GithubModuleNeed) {
+  return [
+    ...new Set(need ? sourceTokens(`${need.inputs} ${need.outputs}`) : []),
+  ].filter(
+    (term) =>
+      term.length > 2 &&
+      !/^(?:the|and|for|with|from|into|host|owned|reference|parameter|explicit|api|dependency|boundary|module|input|output|native|local|offline)$/.test(
+        term,
+      ),
+  );
+}
+type ObservedDeclaration = { offset: number; text: string };
+function selectedDeclarations(
+  observed: ObservedDeclaration[],
+  text: string,
+  need?: GithubModuleNeed,
+) {
+  const terms = moduleFocusTerms(need);
+  if (terms.length === 0) return observed.slice(0, 12).map((d) => d.text);
+  const score = (declaration: ObservedDeclaration) => {
+    const signature = sourceTokens(declaration.text);
+    const before = text.slice(
+      Math.max(0, declaration.offset - 1600),
+      declaration.offset,
+    );
+    const end = before.lastIndexOf("*/");
+    const start = end >= 0 ? before.lastIndexOf("/*", end) : -1;
+    const doc =
+      start >= 0 && !/[;{}]/.test(before.slice(end + 2))
+        ? sourceTokens(before.slice(start, end + 2))
+        : [];
+    return terms.reduce(
+      (n, term) =>
+        n + (signature.includes(term) ? 8 : doc.includes(term) ? 1 : 0),
+      0,
+    );
+  };
+  return observed
+    .map((declaration, index) => ({
+      declaration,
+      index,
+      score: score(declaration),
+    }))
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .slice(0, 12)
+    .map(({ declaration }) => declaration.text);
+}
+
 /** Header signatures are source observations, not proof of a linkable public API. */
-function nativeHeaderDeclarations(text: string): string[] {
+function nativeHeaderDeclarations(
+  text: string,
+  need?: GithubModuleNeed,
+): string[] {
   // Keep offsets/newlines so each returned signature is an exact source span.
   const masked = text.replace(
     /\/\*[\s\S]*?\*\/|\/\/[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g,
@@ -57,7 +130,7 @@ function nativeHeaderDeclarations(text: string): string[] {
     public: boolean;
     name: string | null;
   }[] = [];
-  const signatures: string[] = [];
+  const signatures: ObservedDeclaration[] = [];
   let boundary = 0;
   let matchedThrough = -1;
   let continuedDirective = false;
@@ -115,12 +188,13 @@ function nativeHeaderDeclarations(text: string): string[] {
         ) {
           const leading = match[0].length - match[0].trimStart().length;
           const sourceStart = start + leading;
-          signatures.push(
-            text
+          signatures.push({
+            offset: sourceStart,
+            text: text
               .slice(sourceStart, start + match[0].length)
               .trim()
               .slice(0, 240),
-          );
+          });
           matchedThrough = end;
         }
       }
@@ -152,13 +226,17 @@ function nativeHeaderDeclarations(text: string): string[] {
         boundary = index + 1;
       } else if (line[j] === ";") boundary = index + 1;
     }
-    if (signatures.length >= 12) break;
+    if (signatures.length >= 64) break;
   }
-  return signatures;
+  return selectedDeclarations(signatures, text, need);
 }
 
 /** Text observations, explicitly not a parser/conformance claim. Never inspect README as code. */
-export function moduleFileFacts(file: string, text: string): ModuleFileFacts {
+export function moduleFileFacts(
+  file: string,
+  text: string,
+  need?: GithubModuleNeed,
+): ModuleFileFacts {
   const facts: ModuleFileFacts = { declarations: [], imports: [] };
   if (path.posix.basename(file) === "package.json") {
     try {
@@ -214,12 +292,28 @@ export function moduleFileFacts(file: string, text: string): ModuleFileFacts {
   }
   if (!codeExtension.test(file)) return facts;
   const lines = text.split(/\r?\n/u);
+  let lineOffset = 0;
   facts.declarations = /\.(?:h|hh|hpp|hxx)$/i.test(file)
-    ? nativeHeaderDeclarations(text)
-    : lines
-        .filter((line) => declaration.test(line))
-        .slice(0, 12)
-        .map((line) => line.trim().slice(0, 240));
+    ? nativeHeaderDeclarations(text, need)
+    : selectedDeclarations(
+        lines
+          .flatMap((line) => {
+            const offset = lineOffset;
+            lineOffset +=
+              line.length + (text[offset + line.length] === "\r" ? 2 : 1);
+            return declaration.test(line)
+              ? [
+                  {
+                    offset: offset + line.length - line.trimStart().length,
+                    text: line.trim().slice(0, 240),
+                  },
+                ]
+              : [];
+          })
+          .slice(0, 64),
+        text,
+        need,
+      );
   // Follow observed public alias assignments to their actual function definitions.
   const aliases = facts.declarations.flatMap((line) => {
     const match = line.match(/=\s*([A-Za-z_$][\w$]*)\s*;$/);
@@ -263,16 +357,12 @@ export function moduleCodePaths<
   paths: readonly T[],
   queries: readonly string[],
   manifests: readonly SourceFile[],
+  need?: GithubModuleNeed,
 ) {
-  const tokens = (value: string) =>
-    value
-      .replace(/([a-z\d])([A-Z])/g, "$1 $2")
-      .toLowerCase()
-      .split(/[^\p{L}\p{N}]+/u)
-      .filter(Boolean);
   const terms = [
-    ...new Set(queries.flatMap(tokens).filter((s) => s.length > 2)),
+    ...new Set(queries.flatMap(sourceTokens).filter((s) => s.length > 2)),
   ];
+  const focus = moduleFocusTerms(need);
   const publicPaths = manifests.flatMap((file) =>
     (file.moduleFacts?.manifest?.entrypoints ?? []).map((p) =>
       path.posix.join(path.posix.dirname(file.path), p),
@@ -280,8 +370,8 @@ export function moduleCodePaths<
   );
   const score = (p: string) => {
     const stem = path.posix.basename(p, path.posix.extname(p));
-    const basenameTokens = tokens(stem);
-    const pathTokens = tokens(p);
+    const basenameTokens = sourceTokens(stem);
+    const pathTokens = sourceTokens(p);
     const parent = path.posix.basename(path.posix.dirname(p)).toLowerCase();
     const withoutLib = (name: string) => name.replace(/^lib(?=[a-z\d])/, "");
     const header = /\.(?:h|hh|hpp|hxx)$/i.test(p);
@@ -291,23 +381,31 @@ export function moduleCodePaths<
       header &&
       !/^(?:src|include|api|core|lib)$/.test(parent) &&
       withoutLib(stem.toLowerCase()) === withoutLib(parent);
-    return (
-      (publicPaths.includes(p) ? 50 : 0) +
-      terms.reduce(
-        (n, t) =>
-          n + (basenameTokens.includes(t) ? 8 : pathTokens.includes(t) ? 2 : 0),
-        0,
-      ) +
-      (facade ? 24 : 0) +
-      (/(?:^|\/)(?:index|lib|__init__)\.[^/]+$/.test(p) ? 5 : 0) +
-      (/(?:^|\/)(?:include|core|lib|api)\//.test(p) ? 3 : 0) +
-      (header ? 5 : 0) -
-      (/(?:^|\/)(?:internal|private|detail)(?:\/|\.)|(?:^|\/)(?:version|exports?|macros?|config|types|fwd)(?:[._-]|$)/i.test(
+    const implementationDetail =
+      /(?:^|\/)(?:internal|private|detail)(?:\/|\.)|(?:^|\/)(?:version|exports?|macros?|config|types|fwd)(?:[._-]|$)/i.test(
         p,
-      )
-        ? 10
-        : 0)
-    );
+      );
+    return [
+      publicPaths.includes(p) ? 1 : 0,
+      implementationDetail
+        ? 0
+        : focus.reduce(
+            (n, term) => n + (basenameTokens.includes(term) ? 1 : 0),
+            0,
+          ),
+      (publicPaths.includes(p) ? 50 : 0) +
+        terms.reduce(
+          (n, t) =>
+            n +
+            (basenameTokens.includes(t) ? 8 : pathTokens.includes(t) ? 2 : 0),
+          0,
+        ) +
+        (facade ? 24 : 0) +
+        (/(?:^|\/)(?:index|lib|__init__)\.[^/]+$/.test(p) ? 5 : 0) +
+        (/(?:^|\/)(?:include|core|lib|api)\//.test(p) ? 3 : 0) +
+        (header ? 5 : 0) -
+        (implementationDetail ? 10 : 0),
+    ];
   };
   return paths
     .filter(
@@ -319,10 +417,18 @@ export function moduleCodePaths<
         !f.path.split("/").some((part) => part.startsWith(".")) &&
         !infrastructure.test(f.path),
     )
-    .sort(
-      (a, b) => score(b.path) - score(a.path) || a.path.localeCompare(b.path),
-    )
-    .slice(0, 2);
+    .map((file) => ({ file, rank: score(file.path) }))
+    .sort((a, b) => {
+      const first = a.rank;
+      const second = b.rank;
+      for (let index = 0; index < first.length; index++) {
+        const difference = second[index]! - first[index]!;
+        if (difference) return difference;
+      }
+      return a.file.path.localeCompare(b.file.path);
+    })
+    .slice(0, 2)
+    .map(({ file }) => file);
 }
 
 export function sourceModuleOptions(

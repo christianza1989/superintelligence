@@ -1,6 +1,6 @@
 {
   "name": "repositoryzero",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "RepositoryZero source discovery by default; optional operator-bound Linux CSV, PDF and approved URL research jobs through the existing Zero backend.",
   "author": {
     "name": "RepositoryZero contributors"

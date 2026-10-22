@@ -187,6 +187,73 @@ describe("concrete source module planning", () => {
       ).map((f) => f.path)[0],
     ).toBe("include/render.h");
   });
+  it("excludes named build configuration exports from callable module candidates", () => {
+    const paths = [
+      "app/webpack.config.js",
+      "vite.config.ts",
+      "src/render.ts",
+    ].map((path) => ({ path, type: "blob" }));
+    expect(
+      moduleCodePaths(paths, ["render configuration"], []).map((f) => f.path),
+    ).toEqual(["src/render.ts"]);
+  });
+  it("uses the actual input/output need to find matching native components before generic facade or alphabetical helpers", () => {
+    const paths = [
+      "src/libedit/edit.h",
+      "src/libedit/MediaAnimation.h",
+      "src/libedit/MediaMultitrack.h",
+      "src/libedit/MediaTransition.h",
+    ].map((path) => ({ path, type: "blob", mode: "100644" }));
+    const focusedNeed = {
+      inputs: "Clip references, track ordering and transition parameters",
+      outputs: "Preview frames",
+      runtime: "Offline native",
+    };
+    expect(
+      moduleCodePaths(paths, ["Media rendering engine"], [], focusedNeed).map(
+        (f) => f.path,
+      ),
+    ).toEqual([
+      "src/libedit/MediaMultitrack.h",
+      "src/libedit/MediaTransition.h",
+    ]);
+    expect(
+      moduleCodePaths(paths, ["Media rendering engine"], []).map(
+        (f) => f.path,
+      )[0],
+    ).toBe("src/libedit/edit.h");
+  });
+  it("samples matching observed API signatures and adjacent source documentation beyond the first helpers without inventing declarations", () => {
+    const source = [
+      ...Array.from(
+        { length: 14 },
+        (_, index) => `unsigned library_version_${index}(void);`,
+      ),
+      "/** Yield the next decoded frame from the input clips. */",
+      "int media_receive(MediaContext *context, void *result);",
+      "int media_render_frame(MediaContext *context, Frame *frame);",
+    ].join("\r\n");
+    const focus = {
+      inputs: "Clip references",
+      outputs: "Rendered frames",
+      runtime: "Offline",
+    };
+    const declarations = moduleFileFacts(
+      "include/media.h",
+      source,
+      focus,
+    ).declarations;
+    expect(declarations).toHaveLength(12);
+    expect(declarations.slice(0, 2)).toEqual([
+      "int media_render_frame(MediaContext *context, Frame *frame);",
+      "int media_receive(MediaContext *context, void *result);",
+    ]);
+    expect(
+      moduleFileFacts("include/media.h", source).declarations,
+    ).not.toContain(declarations[0]);
+    for (const declaration of declarations)
+      expect(source).toContain(declaration);
+  });
   it("recognizes CommonJS/UMD public assignments and Go exports instead of losing non-ESM module APIs", () => {
     const facts = moduleFileFacts(
       "parser.js",

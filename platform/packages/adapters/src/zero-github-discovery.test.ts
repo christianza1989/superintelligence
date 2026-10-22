@@ -481,6 +481,98 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       reason: "source_read_failed",
     });
   });
+  it("follows actual pinned umbrella includes instead of an unlinked alphabetical fallback", async () => {
+    const fixture = githubFixture();
+    const original = fixture.fetch.getMockImplementation()!;
+    const docs = [
+      ...fixture.docs.slice(0, 2).map(({ path, text }) => ({ path, text })),
+      {
+        path: "include/widget/widget.h",
+        text: '#include "operationA.h"\n#include "operationB.h"\n#include "missing.h"\n#include "symlink.h"\n#include "../../../private.h"\n',
+      },
+      {
+        path: "include/widget/aaa.h",
+        text: "int unrelated_private_api(void);\n",
+      },
+      {
+        path: "include/widget/operationA.h",
+        text: "int transform_values(int value);\n",
+      },
+      {
+        path: "include/widget/operationB.h",
+        text: "int measure_values(int value);\n",
+      },
+      {
+        path: "include/widget/symlink.h",
+        text: "int unavailable_api(void);\n",
+      },
+    ].map((file) => ({
+      ...file,
+      sha: createHash("sha1")
+        .update(`blob ${Buffer.byteLength(file.text)}\0`)
+        .update(file.text)
+        .digest("hex"),
+    }));
+    fixture.fetch.mockImplementation(async (input, options) => {
+      const url = new URL(String(input));
+      if (url.pathname.includes("/git/trees/"))
+        return Response.json({
+          sha: fixture.tree,
+          truncated: false,
+          tree: docs.map(({ path, sha }) => ({
+            path,
+            sha,
+            type: "blob",
+            mode: path.endsWith("symlink.h") ? "120000" : "100644",
+          })),
+        });
+      if (url.pathname.includes("/git/blobs/")) {
+        const file = docs.find((file) => url.pathname.endsWith(file.sha));
+        expect(file?.path).not.toMatch(/(?:aaa|symlink)\.h$/);
+        if (file)
+          return Response.json({
+            sha: file.sha,
+            size: Buffer.byteLength(file.text),
+            encoding: "base64",
+            content: Buffer.from(file.text).toString("base64"),
+          });
+      }
+      return original(input, options);
+    });
+    const result = await discoverGithubSources(
+      ["widget library"],
+      fixture.boundary,
+      {
+        inputs: "incoming values",
+        outputs: "transformed values",
+        runtime: "native local host",
+      },
+    );
+    const candidate = result.candidates[0]!;
+    expect(candidate.sourceRevision).toBe(fixture.pin);
+    expect(candidate.implementationEvidence.inspectedCodePaths).toEqual([
+      "include/widget/widget.h",
+      "include/widget/operationA.h",
+      "include/widget/operationB.h",
+    ]);
+    expect(candidate.sourceLinks).toEqual([
+      {
+        from: "include/widget/widget.h",
+        to: "include/widget/operationA.h",
+        import: "operationA.h",
+      },
+      {
+        from: "include/widget/widget.h",
+        to: "include/widget/operationB.h",
+        import: "operationB.h",
+      },
+    ]);
+    expect(
+      candidate.files.find((file) => file.path.endsWith("operationA.h"))
+        ?.moduleFacts?.declarations,
+    ).toEqual(["int transform_values(int value);"]);
+    expect(result.failures).toEqual([]);
+  });
   it("denies private DNS and changed grants before any public request", async () => {
     const fixture = githubFixture();
     await discoverGithubSources(["inventory"], {
