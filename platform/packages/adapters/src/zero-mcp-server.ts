@@ -20,7 +20,7 @@ import {
   repositorySearchFromTool,
 } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.8.0";
+export const ZERO_MCP_SERVER_VERSION = "0.8.1";
 export const ZERO_MCP_SCHEMA_VERSION = "1.8.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,

@@ -20,6 +20,20 @@ Hook reikia atskiro dabartinės jo definicijos naudotojo trust. Įdiegimas ar pl
 
 Testas paleidžia tikrą proceso transportą iš atskiro tuščio katalogo pagal portable ir compatibility MCP konfigūraciją. Tikrina initialize, tool sąrašą, nonce, versijas, search/inspect faktus ir švarų stderr. Linux teste papildomai naudojamas nukopijuotas paketas be .git ir tikras STDIO klientas su vietiniu HTTP fixture: opt-in, 22 tools, URL task submit / PDF CSV page, atskirų profilių statusai, private binding reread/restart/revocation, neteisingo binding bei package/export katalogo atmetimas ir redacted klaidos. Tai transporto conformance; fixture nevykdo Graphile worker ir nėra native host plugin įdiegimo PASS.
 
+## Automatinis planavimo naudojimas projekte
+
+0.8.1 paketas turi pasirenkamą, operatoriaus paleidžiamą projekto prijungimą. Vien įdiegtas skill nėra garantija, kad host jį pasirinks: ankstesniuose natūraliuose bandymuose B turėjo įrankius, bet jų nekvietė. Oficialūs Codex dokumentai rekomenduoja trumpą [AGENTS.md taisyklę patikimam MCP naudojimui](https://developers.openai.com/learn/docs-mcp); [projekto instrukcijos](https://learn.chatgpt.com/docs/agent-configuration/agents-md) įkeliamos naujos sesijos pradžioje.
+
+```bash
+node /absolute/generated/package/setup/project-guidance.mjs apply /absolute/project
+node /absolute/generated/package/setup/project-guidance.mjs status /absolute/project
+node /absolute/generated/package/setup/project-guidance.mjs remove /absolute/project
+```
+
+Setup prideda vieną bendrą, pažymėtą `AGENTS.md` bloką tik aiškiai nurodytame projekte. Jis nukreipia programos planavimą į įdiegtą skill ir read-only status/search/inspect; neturi konkrečios užduoties ar komponento atsakymo. Plan-only prašymas lieka plan-only: prepare/verify ir mokami darbai neleidžiami. Esamos instrukcijos išsaugomos baitais, pakartotas apply nieko nekeičia, remove pašalina tik nepakeistą savo bloką. Redaguotas blokas, keli blokai, susietas failas ar `AGENTS.override.md` šešėlis sustabdo keitimą. Globalios instrukcijos, MCP config, credentials ir hook trust nekeičiami. Šį veiksmą turi pasirinkti naudotojas/operatorius kaip prijungimo dalį; MCP ar modelis negali jo tyliai įjungti svetimame projekte.
+
+Pagalbinis skriptas įtrauktas į `BUILD.json` hash sąrašą. Windows ir Linux grįžtamumo / konfliktų kontrolės PASS; native planavimo naudojimas turi būti įrodytas atskira nauja sesija. Tai papildomas projekto prijungimo profilis, ne įrodymas, kad ankstesnis skill-only bandymas automatiškai veikia. Natūraliame palyginime abi sesijos gauna identišką vartotojo užduotį, A neturi Zero projekto taisyklės, o visas B setup ir jo apimtis užfiksuojami prieš bandymą. Nepridėti užduoties atsakymų ar papildomų reikalavimų tik B.
+
 ## Codex vietinis marketplace
 
 Sugeneruoto paketo `.agents/plugins/marketplace.json` naudoja tikrą `repositoryzero-local-preview` vardą ir vietinį repositoryzero paketą. Įtraukti jau sukurtą katalogą oficialia komanda:

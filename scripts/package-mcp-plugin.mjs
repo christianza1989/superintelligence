@@ -35,6 +35,7 @@ for (const name of [
   ".claude-plugin",
   "skills",
   "hooks",
+  "setup",
 ]) {
   await cp(join(source, name), join(output, name), {
     recursive: true,
@@ -157,9 +158,14 @@ for (const file of [
   "hooks/session-start.cjs",
   "skills/repositoryzero-reuse/SKILL.md",
   "skills/repositoryzero-reuse/agents/openai.yaml",
+  "setup/project-guidance.mjs",
 ]) {
   const bytes = await readFile(join(output, file));
-  activationFiles.push({ file, sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.byteLength });
+  activationFiles.push({
+    file,
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+    bytes: bytes.byteLength,
+  });
 }
 await writeFile(
   join(output, "BUILD.json"),
@@ -177,9 +183,12 @@ await writeFile(
       },
       bundles,
       planningActivation: {
-        mode: "trusted-session-start-context",
+        mode: "optional-project-guidance-or-trusted-session-start",
         requiresUserHookTrust: true,
-        modelToolUse: "host-managed; confirm actual calls in a fresh native chat",
+        projectSetup:
+          "operator-run setup/project-guidance.mjs; AGENTS.md only; no hook trust required",
+        modelToolUse:
+          "host-managed; confirm actual calls in a fresh native chat",
         files: activationFiles,
       },
       runtime: "Node >=24; no node_modules required",

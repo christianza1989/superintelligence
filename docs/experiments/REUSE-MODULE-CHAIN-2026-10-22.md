@@ -51,8 +51,24 @@ The failed preflight transcripts and scoped diagnostics are retained privately. 
 
 After the user restored disk space and restarted Codex, fresh preflights produced complete durable turns with the same `gpt-6-luna`/high and native core 0.163.0-alpha.11. A had no Zero skill or tool metadata; B actually called `zero_status` and reported 0.8.0/schema 1.8.0, reuse available and backend available. No preparation was requested by those preflights. The [new two-task native protocol](../../benchmarks/native-full-chain-pilot/v1/README.md) fixes whole-application and actual-use checks before generation; application outcomes remain separate.
 
+## Interrupted native application epoch
+
+Three subsequent native turns completed with the same `gpt-6-luna`/high and identical task prompts within each task. They were started before the requested plan review. The user restored the plan-first requirement and stopped the cohort before StockDesk A and before independent StockDesk B grading. All generated workspaces, transcripts, frozen pins and failures are preserved; this is a partial exploratory epoch, not a completed full-chain comparison.
+
+| Task / side | Native turn time | Input / cached input / output tokens | Independent result | Zero calls |
+|---|---|---|---|---|
+| Inventory A | 175.303 s | 1,044,471 / 1,007,616 / 19,904 | 59/60 functional, 6/6 browser; malformed double BOM accepted | 0 |
+| Inventory B | 126.730 s | 625,558 / 597,248 / 13,750 | 60/60 functional, 6/6 browser | 0 |
+| StockDesk B | 285.023 s | 1,768,910 / 1,670,016 / 27,739 | Author checks only; independent grade NOT_RUN | 0 |
+
+Input counters include cached input; do not add the cache column again. Reasoning-output counters are subsets of output, not extra tokens. These are cumulative host counters, not unique-context size or subscription invoice costs. The Inventory export-boundary observer recorded no calls because the implementations used internal parser bindings; that observer result is inconclusive and does not negate the separate functional checks.
+
+B did not load the reuse skill or invoke the available Zero tools in the Inventory turn. StockDesk B also made no Zero calls. Its lower or higher timings cannot establish Zero benefit, and neither native task exercised Jev. The owned backend was stopped cleanly with grants revoked and no paid dispatches. The earlier two controlled qualification calls and their budget holds remain unchanged.
+
+After this epoch was stopped, 0.8.1 added a separately disclosed, operator-selected [project guidance setup](../MCP-PLUGIN.md). Six Linux and six Windows setup controls passed, as did forty MCP server tests and the package's Linux discovery/execution-transport controls. The initial Windows test invocation could not resolve a UNC test entrypoint; the same fresh helper/test bytes ran from a local Windows fixture and passed. No executable hook trust was bypassed. The new project guidance is a different intervention from the earlier skill-only profile; it must be frozen before new plan-only chats, with the same natural user request on both sides.
+
 ## Limits and next gate
 
 The selected Node Docker profile is read-only, network-disabled and bounded to 128 MiB, one CPU and ten seconds. Evidence concerns the component snapshot and exercised calls. It is not hostile-code isolation, a whole-application verdict, a hidden holdout, or proof of benefit. Later edits require a new verification. Packaging these worker-side source assets into a relocated runtime is a separate qualification.
 
-The newly authorized live API allocation is capped at USD 3 for integration and both application tasks. It is separate from the fully held historical USD 1 allocation. Reservations are retained across fixture/database restarts; unknown costs are not refunded. Native host subscription usage and its cache counters remain separate from provider cost. A successful fresh native connection/history preflight and identical-prompt easy/harder application comparisons are still pending at this checkpoint. No MVP or repeated-benefit gate is closed here.
+The newly authorized live API allocation is capped at USD 3 for integration and both application tasks. It is separate from the fully held historical USD 1 allocation. Reservations are retained across fixture/database restarts; unknown costs are not refunded. Native host subscription usage and its cache counters remain separate from provider cost. Next is a clean, identical-prompt plan-only comparison and human review before application generation. No MVP or repeated-benefit gate is closed here.
