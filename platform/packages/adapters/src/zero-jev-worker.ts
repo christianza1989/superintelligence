@@ -43,6 +43,13 @@ import {
 } from "./zero-jev-contract.js";
 import { sourceSelectionOptions } from "./zero-source-selection.js";
 import { selectRepositoryWithJev } from "./zero-repository-selector.js";
+import type { RepositorySelection } from "./zero-repository-selector.js";
+import {
+  discoverGithubSources,
+  githubRepositoryOptions,
+  inspectGithubSource,
+} from "./zero-github-discovery.js";
+import type { SafeWebFetchOptions } from "./web-ssrf.js";
 
 export { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 const instant = z
@@ -89,6 +96,8 @@ export interface ZeroJevWorkerDependencies {
   resolve?: ZeroJevResolver;
   /** Offline boundary injection; production omits it and uses the fixed SystemOne transport. */
   fetch?: typeof fetch;
+  /** Offline public-source transport injection. Production always uses checked public DNS/HTTPS. */
+  githubTestTransport?: Pick<SafeWebFetchOptions, "fetch" | "resolveHostname">;
   resolveReuseVerifier?: (
     principal: ZeroCsvPrincipal,
   ) => Promise<ZeroReuseVerifierConfig | undefined>;
@@ -423,6 +432,9 @@ export async function getZeroJevAvailability(
     ...(resolved.profile.sourceRepositories
       ? { sourceRepositories: resolved.profile.sourceRepositories }
       : {}),
+    ...(resolved.profile.allowPublicGithubDiscovery
+      ? { allowPublicGithubDiscovery: true as const }
+      : {}),
     limits: ZERO_JEV_LIMITS,
   };
 }
@@ -487,6 +499,12 @@ export function createZeroJevToolService(
     async submit(input: unknown) {
       const resolved = await connection(deps, principal);
       const { idempotencyKey, ...params } = inputSchema.parse(input);
+      if (
+        (params.mode === "discover-source" ||
+          params.mode === "inspect-source") &&
+        !resolved.profile.allowPublicGithubDiscovery
+      )
+        throw new IsolationError();
       const remaining = Date.parse(params.deadline) - Date.now();
       if (
         Buffer.byteLength(params.data) > ZERO_JEV_LIMITS.inputBytes ||
@@ -702,10 +720,72 @@ export async function runZeroJevTool(
   let priorInvocation = false;
   let reservationUncertain = false;
   let toolExecuted: string | null = null;
+  let discoveryEvidence:
+    Awaited<ReturnType<typeof discoverGithubSources>> | undefined;
+  let advisorySelection: RepositorySelection | undefined;
   try {
     const pool = deps.pool;
     if (!pool) throw new Error("Routing budget unavailable");
     const resolved = await recheck(deps, request);
+    if (request.input.mode === "inspect-source") {
+      if (!request.profile.allowPublicGithubDiscovery)
+        throw new IsolationError();
+      const source = await readReceipt(
+        deps,
+        request.principal,
+        request.input.data,
+      );
+      const body = JSON.parse(source.content);
+      if (
+        body.phase !== "selected" ||
+        body.discovery?.kind !== "public-github-source-discovery-v1"
+      )
+        throw new IsolationError();
+      const candidate = z
+        .object({
+          repository: z
+            .string()
+            .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/),
+          sourceRevision: z.string().regex(/^[a-f0-9]{40}$/),
+        })
+        .parse(
+          body.discovery.candidates.find(
+            (candidate: { repository: string }) =>
+              candidate.repository === request.input.repository,
+          ),
+        );
+      const inspection = await inspectGithubSource(
+        candidate,
+        request.input.paths!,
+        {
+          signal: AbortSignal.timeout(
+            Math.min(
+              20000,
+              Math.max(1, Date.parse(request.input.deadline) - Date.now()),
+            ),
+          ),
+          authorize: async () => {
+            await recheck(deps, request);
+          },
+          testOnlyTransport: deps.githubTestTransport,
+        },
+      );
+      await publish(deps, request, id, {
+        state: "succeeded",
+        phase: "inspected",
+        discoveryJobId: request.input.data,
+        discoverySha256: source.sha256,
+        inspection,
+        prepared: false,
+        verified: false,
+        tool: null,
+        dispatchAttempts: 0,
+        usage: null,
+        startedAt: new Date(startedAt).toISOString(),
+        elapsedMs: Date.now() - startedAt,
+      });
+      return;
+    }
     if (request.input.mode === "verify-component") {
       const artifact = await readReceipt(
         deps,
@@ -767,7 +847,7 @@ export async function runZeroJevTool(
     }
     const signal = AbortSignal.timeout(
       Math.min(
-        request.profile.timeoutMs,
+        ZERO_JEV_LIMITS.runtimeMs,
         Math.max(1, Date.parse(request.input.deadline) - Date.now()),
       ),
     );
@@ -829,11 +909,32 @@ export async function runZeroJevTool(
       startedAt: new Date(startedAt).toISOString(),
       elapsedMs: Date.now() - startedAt,
     });
-    if (request.input.mode === "select-source") {
-      const candidates = sourceSelectionOptions(
-        request.input.candidateIds!,
-        request.profile.sourceRepositories ?? [],
-      );
+    if (
+      request.input.mode === "select-source" ||
+      request.input.mode === "discover-source"
+    ) {
+      if (
+        request.input.mode === "discover-source" &&
+        !request.profile.allowPublicGithubDiscovery
+      )
+        throw new IsolationError();
+      const discovery =
+        request.input.mode === "discover-source"
+          ? await discoverGithubSources(request.input.queries!, {
+              signal: AbortSignal.any([signal, AbortSignal.timeout(20000)]),
+              authorize: async () => {
+                await recheck(deps, request);
+              },
+              testOnlyTransport: deps.githubTestTransport,
+            })
+          : undefined;
+      const candidates = discovery
+        ? githubRepositoryOptions(discovery.candidates)
+        : sourceSelectionOptions(
+            request.input.candidateIds!,
+            request.profile.sourceRepositories ?? [],
+          );
+      discoveryEvidence = discovery;
       const selection = await selectRepositoryWithJev(
         config,
         {
@@ -856,6 +957,7 @@ export async function runZeroJevTool(
           assessSingle: true,
         },
       );
+      advisorySelection = selection;
       await publish(deps, request, id, {
         state:
           priorInvocation || reservationUncertain
@@ -866,6 +968,7 @@ export async function runZeroJevTool(
                 ? "abstained"
                 : selection.status,
         phase: "selected",
+        ...(discovery ? { discovery } : {}),
         selection,
         candidates: candidates.map(({ repository, sourceRevision }) => ({
           repository,
@@ -989,6 +1092,15 @@ export async function runZeroJevTool(
           ? "unknown"
           : "blocked",
       reason: "profile_tool_or_receipt_unavailable",
+      ...(discoveryEvidence ? { discovery: discoveryEvidence } : {}),
+      ...(advisorySelection
+        ? {
+            selection: advisorySelection,
+            phase: "selected",
+            prepared: false,
+            verified: false,
+          }
+        : {}),
       toolExecuted,
       startedAt: new Date(startedAt).toISOString(),
       dispatchAttempts: usage

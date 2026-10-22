@@ -48,11 +48,15 @@ export const zeroJevProfileSchema = z
       .max(5)
       .refine((ids) => new Set(ids).size === ids.length)
       .optional(),
+    /** Public GitHub queries and pinned file reads; source-only, never execution. */
+    allowPublicGithubDiscovery: z.literal(true).optional(),
   })
   .strict()
   .refine(
     (profile) =>
-      profile.tools.length > 0 || !!profile.sourceRepositories?.length,
+      profile.tools.length > 0 ||
+      !!profile.sourceRepositories?.length ||
+      profile.allowPublicGithubDiscovery === true,
   );
 export type ZeroJevProfile = z.infer<typeof zeroJevProfileSchema>;
 export interface ZeroJevConnection {

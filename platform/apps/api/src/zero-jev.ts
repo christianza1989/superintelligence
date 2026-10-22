@@ -132,7 +132,7 @@ export function mountZeroJevRoutes(
         input &&
         typeof input === "object" &&
         "mode" in input &&
-        input.mode === "verify-component"
+          (input.mode === "verify-component" || input.mode === "inspect-source")
       ))
         await getZeroJevAvailability(worker, principal);
       return c.json(await service(principal).submit(input), 202);

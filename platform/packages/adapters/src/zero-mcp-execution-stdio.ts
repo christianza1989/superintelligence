@@ -46,6 +46,11 @@ try {
     }
   };
   const server = createZeroMcpServer({
+    sourcePlanningStatus: async () => {
+      const status = await reuse.status();
+      return { publicGithubResearch: status.allowPublicGithubDiscovery === true,
+        reviewedSourceSelection: !!status.sourceRepositories?.length, paidSelectionAuthorized: true };
+    },
     componentStatus: {
       pdf: () => extractionStatus(pdf),
       browser: () => extractionStatus(browser),

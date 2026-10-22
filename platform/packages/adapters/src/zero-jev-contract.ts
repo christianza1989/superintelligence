@@ -1,6 +1,11 @@
 /** Shared paid-job input contract; no worker, secrets or database imports. */
 import { z } from "zod";
 import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
+import {
+  githubQueriesSchema,
+  githubSourcePathSchema,
+  ZERO_GITHUB_DISCOVERY_MARKER,
+} from "./zero-github-contract.js";
 
 export const ZERO_SOURCE_SELECTION_MARKER = "source-selection-v1";
 const fields = {
@@ -11,8 +16,20 @@ const fields = {
     .datetime({ offset: true })
     .refine((value) => Number.isFinite(Date.parse(value))),
   mode: z
-    .enum(["prepare-component", "verify-component", "select-source"])
+    .enum([
+      "prepare-component",
+      "verify-component",
+      "select-source",
+      "discover-source",
+      "inspect-source",
+    ])
     .optional(),
+  queries: githubQueriesSchema.optional(),
+  repository: z
+    .string()
+    .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/)
+    .optional(),
+  paths: z.array(githubSourcePathSchema).min(1).max(4).optional(),
   candidateIds: z
     .array(z.string().regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/))
     .min(1)
@@ -24,7 +41,32 @@ function validMode(input: {
   mode?: string;
   candidateIds?: string[];
   data: string;
+  queries?: string[];
+  repository?: string;
+  paths?: string[];
 }) {
+  if (input.mode === "discover-source")
+    return (
+      !!input.queries?.length &&
+      input.data === ZERO_GITHUB_DISCOVERY_MARKER &&
+      input.candidateIds === undefined &&
+      input.repository === undefined &&
+      input.paths === undefined
+    );
+  if (input.mode === "inspect-source")
+    return (
+      !!input.repository &&
+      !!input.paths?.length &&
+      z.uuid().safeParse(input.data).success &&
+      input.candidateIds === undefined &&
+      input.queries === undefined
+    );
+  if (
+    input.queries !== undefined ||
+    input.repository !== undefined ||
+    input.paths !== undefined
+  )
+    return false;
   return input.mode === "select-source"
     ? !!input.candidateIds?.length &&
         input.data === ZERO_SOURCE_SELECTION_MARKER
@@ -32,16 +74,10 @@ function validMode(input: {
 }
 export const zeroJevStoredInputSchema = z
   .strictObject(fields)
-  .refine(
-    validMode,
-    "Source selection requires canonical IDs and the fixed source-only marker",
-  );
+  .refine(validMode, "Source research fields must match the selected mode");
 export const zeroJevExecuteInputSchema = z
   .strictObject({
     ...fields,
     idempotencyKey: z.string().min(1).max(128),
   })
-  .refine(
-    validMode,
-    "Source selection requires canonical IDs and the fixed source-only marker",
-  );
+  .refine(validMode, "Source research fields must match the selected mode");

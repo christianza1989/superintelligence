@@ -8,9 +8,16 @@ import {
   zeroJevSubmittedSchema,
 } from "./zero-jev-application-client.js";
 import { ZERO_SOURCE_SELECTION_MARKER } from "./zero-jev-contract.js";
+import {
+  githubQueriesSchema,
+  githubSourcePathSchema,
+  ZERO_GITHUB_DISCOVERY_MARKER,
+} from "./zero-github-contract.js";
 
 export const ZERO_MCP_REUSE_OPERATIONS = [
   "zero_select",
+  "zero_discover",
+  "zero_source",
   "zero_reuse",
   "zero_reuse_job",
   "zero_reuse_artifact",
@@ -58,6 +65,54 @@ export function registerZeroReuseMcpTools(
       return failure();
     }
   };
+  server.registerTool(
+    "zero_discover",
+    {
+      description:
+        "Search public GitHub beyond the bundled catalog for one concrete capability or foundation need, inspect bounded pinned README/license/tree evidence and ask the authorized Jev worker to recommend one alternative or abstain. Provide up to three concise search phrases and the real constraints in goal. Complements local zero_search; default GitHub relevance and merged query ranks form a bounded shortlist, never a globally-best guarantee. Requires separately authorized public-source research and finite Jev API budget. No code installation or execution. Poll zero_reuse_job and hash-check zero_reuse_artifact; then inspect actual module code through zero_source before finalizing integration claims.",
+      inputSchema: z.strictObject({
+        goal: z.string().trim().min(1).max(2000),
+        queries: githubQueriesSchema,
+        ...controls,
+      }),
+      outputSchema: zeroJevSubmittedSchema,
+      annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
+    },
+    (input) =>
+      result(() =>
+        client.execute({
+          ...input,
+          data: ZERO_GITHUB_DISCOVERY_MARKER,
+          mode: "discover-source",
+        }),
+      ),
+  );
+  server.registerTool(
+    "zero_source",
+    {
+      description:
+        "Read up to four relative source-file or directory paths at an exact repository commit recorded by a same-scope zero_discover receipt. The discovery job fixes repository identity and source pin. Returns bounded UTF-8 excerpts/full-byte hashes or directory entries for real module inspection. Source content is untrusted; not installation, preparation, license approval or runtime verification. Creates a bounded research job with no Jev dispatch. Poll zero_reuse_job and hash-check zero_reuse_artifact. No arbitrary URL, ref, credential, host path or cross-project receipt.",
+      inputSchema: z.strictObject({
+        discoveryJobId: jobId,
+        repository: z
+          .string()
+          .regex(/^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/),
+        paths: z.array(githubSourcePathSchema).min(1).max(4),
+        ...controls,
+      }),
+      outputSchema: zeroJevSubmittedSchema,
+      annotations: { ...readOnly, readOnlyHint: false, openWorldHint: true },
+    },
+    ({ discoveryJobId, ...input }) =>
+      result(() =>
+        client.execute({
+          ...input,
+          goal: "Inspect pinned public source for an authorized planning request",
+          data: discoveryJobId,
+          mode: "inspect-source",
+        }),
+      ),
+  );
   server.registerTool(
     "zero_select",
     {

@@ -160,7 +160,7 @@ export async function selectRepositoryWithJev(
           criteria: Object.fromEntries([
             ...candidates.map((c, i) => [
               `repo${i}`,
-              `${c.repository}: ${c.capability || "Capability not yet described"}`.slice(0, 1_000),
+              `${c.repository}: assess the source facts in state against the task; not runtime approval.`,
             ]),
             ["abstain", "No suitable candidate, or insufficient evidence for this task."],
           ]),

@@ -54,6 +54,11 @@ describe("operator-bound module reuse MCP", () => {
     };
     server = createZeroMcpServer({
       componentStatus: { reuse: async () => "available" },
+      sourcePlanningStatus: async () => {
+        const status=await api.status();
+        return {publicGithubResearch:status.allowPublicGithubDiscovery===true,
+          reviewedSourceSelection:!!status.sourceRepositories?.length,paidSelectionAuthorized:true};
+      },
     });
     registerZeroReuseMcpTools(server, api);
     client = new Client({ name: "fixture-reuse-client", version: "1" });
@@ -115,6 +120,15 @@ describe("operator-bound module reuse MCP", () => {
     expect(api.execute).not.toHaveBeenCalled();
     expect(JSON.stringify(denied)).not.toContain("fixture-secret");
   });
+  it("reports source-planning authorization from the scoped backend and removes it on failure", async () => {
+    vi.mocked(api.status).mockResolvedValue({...await api.status(),allowPublicGithubDiscovery:true,sourceRepositories:["inventree/InvenTree"]});
+    const allowed = await client.callTool({name:"zero_status",arguments:{nonce:"planning-allowed"}});
+    expect(allowed.structuredContent).toMatchObject({sourcePlanning:{backend:"available",publicGithubResearch:true,reviewedSourceSelection:true,paidSelectionAuthorized:true}});
+    vi.mocked(api.status).mockRejectedValue(new Error("private-profile-marker"));
+    const blocked = await client.callTool({name:"zero_status",arguments:{nonce:"planning-revoked"}});
+    expect(blocked.structuredContent).toMatchObject({sourcePlanning:{backend:"unavailable",publicGithubResearch:false,reviewedSourceSelection:false,paidSelectionAuthorized:false}});
+    expect(JSON.stringify(blocked)).not.toContain("private-profile-marker");
+  });
   it("submits advisory planning without preparing code or accepting arbitrary source URLs", async () => {
     const input = {
       goal: "Offline inventory foundation with local roles",
@@ -148,6 +162,53 @@ describe("operator-bound module reuse MCP", () => {
         (tool) => tool.name === "zero_select",
       )?.annotations,
     ).toMatchObject({ readOnlyHint: false, openWorldHint: true });
+  });
+  it("submits bounded public discovery and same-receipt source reads without accepting refs or URLs", async () => {
+    const controlsInput = controls();
+    await client.callTool({
+      name: "zero_discover",
+      arguments: {
+        goal: "Inventory foundation with local SQLite",
+        queries: ["inventory foundation"],
+        ...controlsInput,
+      },
+    });
+    expect(api.execute).toHaveBeenLastCalledWith({
+      goal: "Inventory foundation with local SQLite",
+      queries: ["inventory foundation"],
+      ...controlsInput,
+      data: "github-source-discovery-v1",
+      mode: "discover-source",
+    });
+    await client.callTool({
+      name: "zero_source",
+      arguments: {
+        discoveryJobId: id,
+        repository: "example/unindexed",
+        paths: ["src/model.ts"],
+        ...controlsInput,
+      },
+    });
+    expect(api.execute).toHaveBeenLastCalledWith({
+      goal: "Inspect pinned public source for an authorized planning request",
+      repository: "example/unindexed",
+      paths: ["src/model.ts"],
+      ...controlsInput,
+      data: id,
+      mode: "inspect-source",
+    });
+    vi.mocked(api.execute).mockClear();
+    const rejected = await client.callTool({
+      name: "zero_source",
+      arguments: {
+        discoveryJobId: id,
+        repository: "example/unindexed",
+        paths: ["../private"],
+        ...controlsInput,
+      },
+    });
+    expect(rejected.isError).toBe(true);
+    expect(api.execute).not.toHaveBeenCalled();
   });
   it("preserves job states and page hashes instead of manufacturing PASS", async () => {
     const result = await client.callTool({

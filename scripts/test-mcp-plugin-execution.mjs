@@ -83,7 +83,14 @@ export async function testExecutionPackage(
     } else if (family === "jev" && request.url.endsWith("/execute")) {
       let raw = ""; for await (const chunk of request) raw += chunk;
       const input = JSON.parse(raw);
-      if (input.mode === "select-source") {
+      if (input.mode === "discover-source") {
+        assert.equal(input.data, "github-source-discovery-v1");
+        assert.deepEqual(input.queries, ["inventory foundation"]);
+      } else if (input.mode === "inspect-source") {
+        assert.equal(input.data, jobId);
+        assert.equal(input.repository, "example/unindexed");
+        assert.deepEqual(input.paths, ["src/model.ts"]);
+      } else if (input.mode === "select-source") {
         assert.equal(input.data, "source-selection-v1");
         assert.deepEqual(input.candidateIds, ["inventree/InvenTree"]);
       } else assert.equal(input.mode, "prepare-component");
@@ -224,6 +231,8 @@ export async function testExecutionPackage(
           "zero_browser_job",
           "zero_cancel",
           "zero_freshness",
+          "zero_discover",
+          "zero_source",
           "zero_inspect",
           "zero_job",
           "zero_pdf_artifact",
@@ -252,6 +261,13 @@ export async function testExecutionPackage(
       const selectedSource = await run.client.callTool({ name: "zero_select", arguments: { goal: "Offline inventory foundation", candidateIds: ["inventree/InvenTree"], idempotencyKey: "fixture-plan", deadline: new Date(Date.now() + 30000).toISOString() } });
       cleanResult(selectedSource);
       assert.equal(selectedSource.structuredContent.callId, jobId);
+      for (const [name, input] of [
+        ["zero_discover", { goal: "Inventory with local SQLite", queries: ["inventory foundation"] }],
+        ["zero_source", { discoveryJobId: jobId, repository: "example/unindexed", paths: ["src/model.ts"] }],
+      ]) {
+        const researched = await run.client.callTool({ name, arguments: { ...input, idempotencyKey: `fixture-${name}`, deadline: new Date(Date.now() + 30000).toISOString() } });
+        cleanResult(researched); assert.equal(researched.structuredContent.callId, jobId);
+      }
       const preparedModule = await run.client.callTool({ name: "zero_reuse", arguments: { goal: "Strict CSV parser", idempotencyKey: "fixture-reuse", deadline: new Date(Date.now() + 30000).toISOString() } });
       cleanResult(preparedModule);
       assert.equal(preparedModule.structuredContent.callId, jobId);

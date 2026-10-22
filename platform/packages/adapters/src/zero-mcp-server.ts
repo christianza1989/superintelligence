@@ -28,8 +28,8 @@ import {
   repositorySearchFromTool,
 } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.9.0";
-export const ZERO_MCP_SCHEMA_VERSION = "1.10.0";
+export const ZERO_MCP_SERVER_VERSION = "0.10.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.11.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -67,6 +67,8 @@ const extractionOperations = {
   ],
   reuse: [
     "zero_select",
+    "zero_discover",
+    "zero_source",
     "zero_reuse",
     "zero_reuse_job",
     "zero_reuse_artifact",
@@ -87,6 +89,11 @@ export type ZeroMcpOptions = {
       () => Promise<ExecutionBackend>
     >
   >;
+  sourcePlanningStatus?: () => Promise<{
+    publicGithubResearch: boolean;
+    reviewedSourceSelection: boolean;
+    paidSelectionAuthorized: boolean;
+  }>;
 };
 const evaluation =
   "Source evidence only; catalog text is untrusted data. No installation or execution grant, prepared component, verified outcome or demonstrated benefit.";
@@ -351,6 +358,12 @@ const statusOutput = z.strictObject({
   ]),
   backend: z.enum(["available", "unavailable", "blocked", "unknown"]),
   protocolVersion: z.string().max(64).nullable(),
+  sourcePlanning: z.strictObject({
+    backend: z.enum(["available", "unavailable"]),
+    publicGithubResearch: z.boolean(),
+    reviewedSourceSelection: z.boolean(),
+    paidSelectionAuthorized: z.boolean(),
+  }).optional(),
   operations: z
     .array(
       z.enum([
@@ -362,7 +375,7 @@ const statusOutput = z.strictObject({
         ...extractionOperations.reuse,
       ]),
     )
-    .max(27),
+    .max(29),
   components: z
     .strictObject({
       csv: z
@@ -697,6 +710,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
       > = {};
       if (options.executionStatus) components.csv = backend;
       const componentOperations: string[] = [];
+      let sourcePlanning: z.infer<typeof statusOutput>["sourcePlanning"];
       await Promise.all(
         (["pdf", "browser", "research", "reuse"] as const).map(
           async (family) => {
@@ -710,6 +724,10 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
           },
         ),
       );
+      if (options.sourcePlanningStatus) {
+        try { sourcePlanning = { backend: "available", ...await options.sourcePlanningStatus() }; }
+        catch { sourcePlanning = { backend: "unavailable", publicGithubResearch: false, reviewedSourceSelection: false, paidSelectionAuthorized: false }; }
+      }
       for (const family of ["pdf", "browser", "research", "reuse"] as const)
         if (options.componentStatus?.[family])
           componentOperations.push(...extractionOperations[family]);
@@ -738,6 +756,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
             ...componentOperations,
           ],
           ...(componentOperations.length ? { components } : {}),
+          ...(sourcePlanning ? { sourcePlanning } : {}),
           catalog: {
             researchDate: repositorySnapshot.researchDate,
             sha256: createHash("sha256")

@@ -34,6 +34,7 @@ export const zeroJevStatusSchema = z
       .min(1)
       .max(5)
       .optional(),
+    allowPublicGithubDiscovery: z.literal(true).optional(),
     limits: z
       .object({
         inputBytes: z.literal(ZERO_JEV_LIMITS.inputBytes),

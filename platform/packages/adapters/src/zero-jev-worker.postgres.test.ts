@@ -15,6 +15,7 @@ import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import type { ZeroJevProfile } from "./zero-jev-profile.js";
 import { createStoredZeroJevResolver } from "./zero-jev-profile.js";
 import { createZeroJevToolService, runZeroJevTool } from "./zero-jev-worker.js";
+import { githubFixture } from "./zero-github-discovery.test-fixture.js";
 
 const url = process.env.ZERO_JEV_TEST_DATABASE_URL;
 const postgres =
@@ -37,6 +38,7 @@ postgres(
     let profile: ZeroJevProfile;
     let allowed = true;
     let mode = "csv.parse";
+    const github = githubFixture();
     const dispatch = vi.fn<typeof fetch>(async (_url, options) => {
       expect(String(_url)).toBe("https://openrouter.ai/api/v1/systemone");
       const body = JSON.parse(String(options?.body));
@@ -117,6 +119,7 @@ postgres(
       artifacts,
       resolve: resolve(),
       fetch: dispatch,
+      githubTestTransport: github.boundary.testOnlyTransport,
     });
     const stop = async () => {
       await host?.stop();
@@ -137,6 +140,7 @@ postgres(
             pool: db.pool,
             resolve: configured ? resolve() : undefined,
             fetch: dispatch,
+            githubTestTransport: github.boundary.testOnlyTransport,
           },
           executor: { continueRun: modelRun },
           runtime: { run: modelRun },
@@ -179,6 +183,7 @@ postgres(
       allowed = true;
       mode = "csv.parse";
       dispatch.mockClear();
+      github.fetch.mockClear();
       profile = {
         revision: "fixture-profile-v1",
         credentialId: `credential-${suffix}`,
@@ -417,6 +422,85 @@ postgres(
       await runZeroJevTool(deps(), submitted.jobId);
       expect(dispatch).toHaveBeenCalledOnce();
       expect(modelRun).not.toHaveBeenCalled();
+    });
+    it("discovers outside the catalog, uses Jev and inspects pinned code through the same Graphile worker without execution", async () => {
+      await configure();
+      profile.tools = [];
+      profile.allowPublicGithubDiscovery = true;
+      mode = "source-recommend";
+      const submitted = await service.submit({
+        ...input("github-source-discovery-v1"),
+        mode: "discover-source",
+        goal: sourceInput().goal,
+        queries: ["inventory foundation"],
+      });
+      await start();
+      const selected = await terminal(submitted.jobId);
+      expect(selected).toMatchObject({
+        state: "succeeded",
+        phase: "selected",
+        tool: null,
+        selection: {
+          repository: "example/unindexed",
+          engine: "jev",
+          evidence: "source_only",
+        },
+        discovery: {
+          kind: "public-github-source-discovery-v1",
+          matchedRepositories: 1,
+        },
+      });
+      expect(selected.discovery.candidates[0].sourceRevision).toBe(github.pin);
+      expect(profile.sourceRepositories).toBeUndefined();
+      const inspected = await service.submit({
+        ...input(submitted.jobId),
+        mode: "inspect-source",
+        repository: "example/unindexed",
+        paths: ["src/model.ts"],
+        goal: "Inspect pinned code without executing it",
+      });
+      const result = await terminal(inspected.jobId);
+      expect(result).toMatchObject({
+        state: "succeeded",
+        phase: "inspected",
+        tool: null,
+        prepared: false,
+        verified: false,
+        dispatchAttempts: 0,
+        usage: null,
+        inspection: {
+          repository: "example/unindexed",
+          sourceRevision: github.pin,
+        },
+      });
+      expect(result.inspection.entries[0].excerpt).toBe(github.docs[2]!.text);
+      expect(dispatch).toHaveBeenCalledOnce();
+      expect(modelRun).not.toHaveBeenCalled();
+      const foreign = await service.submit({
+        ...input(submitted.jobId),
+        mode: "inspect-source",
+        repository: "foreign/outside",
+        paths: ["src/model.ts"],
+        goal: "Foreign source must be rejected",
+      });
+      const reads = github.fetch.mock.calls.length;
+      expect(await terminal(foreign.jobId)).toMatchObject({
+        state: "blocked",
+        dispatchAttempts: 0,
+      });
+      expect(github.fetch.mock.calls.length).toBe(reads);
+    });
+    it("does not infer public-source research permission from a Jev module profile", async () => {
+      await configure();
+      await expect(
+        service.submit({
+          ...input("github-source-discovery-v1"),
+          mode: "discover-source",
+          queries: ["inventory"],
+        }),
+      ).rejects.toThrow();
+      expect(github.fetch).not.toHaveBeenCalled();
+      expect(dispatch).not.toHaveBeenCalled();
     });
     it("assesses and can reject the only eligible source instead of assuming it fits", async () => {
       await configure();
