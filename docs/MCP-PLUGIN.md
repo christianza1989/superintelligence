@@ -55,8 +55,8 @@ Nauja proceso sesija be binding grįžta prie discovery. Atnaujinant paketą tik
 ## Dabartiniai įrodymai ir išjungimas
 
 - Portable ir compatibility konfigūracijų tikri Linux proceso testai PASS.
-- Ankstesnis 0.4 paketas su Windows Node 24.19.0 praėjo initialize/status/search/inspect be workspace dependency resolution; 0.7 Windows priėmimas atskiras.
-- Skill frontmatter/naming validator PASS; papildinio skill nėra nepriklausomo kūrimo benchmark rezultatas.
+- Ankstesnis 0.4 paketas su Windows Node 24.19.0 praėjo initialize/status/search/inspect be workspace dependency resolution. 0.7.1 atskiras Windows standalone paketo/hook testas ir native direct MCP bridge status/search PASS; bundled MCP preflight ryšio nepatvirtino. [Naujos patikros, nesėkmės ir natūralaus planavimo rezultatas](experiments/NATIVE-VALUE-PILOT-2026-10-22.md).
+- Ankstesnio skill frontmatter/naming validator PASS nepersiduoda naujai versijai: dabartinėje aplinkoje pats validator nepasileido dėl trūkstamo PyYAML. 0.7.1 įgūdį native host pateikė ir modelis perskaitė; tai nėra nepriklausomo kūrimo benchmark rezultatas.
 - Native Codex direct MCP PASS yra [atskiras įrodymas](experiments/MCP-PREVIEW-2026-10-17.md); jis savaime nepatvirtina plugin cache/install kelio.
 
 Išjungti arba pašalinti tik šį papildinį per host Plugins valdymą arba `codex plugin remove repositoryzero@repositoryzero-local-preview --json`. Windows veikiantis MCP procesas gali laikyti cache failus: pirmiausia uždaryti jį naudojančius pokalbius/procesus, tada kartoti oficialų remove; nenaikinti kitų procesų ar cache katalogų rankomis. Naujoje sesijoje patikrinti, kad jo tools ir skill metadata neįkelti; kitų plugin/config nekeisti. Sugeneruoto katalogo pašalinimas nėra host cache uninstall. Ši eiga patikrinta 0.4 Codex Windows discovery profiliui; grants/backend sesijos atšaukiamos atskirai. P1X.12 platesnis execution lifecycle lieka atviras.

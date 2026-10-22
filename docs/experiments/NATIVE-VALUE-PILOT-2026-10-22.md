@@ -73,3 +73,30 @@ The official CLI installed 0.7.1 into its native plugin cache. Two separate fres
 No hook trust was created or bypassed. Installation does not trust a plugin hook; the [official host rule](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) requires review of its current definition. Any repeat using ordinary implicit skill selection must record the absent hook context rather than claim the SessionStart route is active. Actual automatic tool use remains unproven until a new natural trial records it. The exact shared natural prompt stays unchanged; no coding trial or grader was started.
 
 This planning stage exercises local source discovery and component facts only. **Jev, API/Graphile preparation and verification, application integration and functional quality are outside this stage.** Jev's earlier three live worker conformance cases do not establish a native MCP selection path or additional product benefit. A full value comparison still needs the relevant execution chain and independently checked applications; a planning-only result cannot decide the whole product's value.
+
+## Natural planning v3 — automatic discovery observed, no reuse benefit
+
+After those preflights, a new epoch froze source `4b6e93d56db883dbe74d03bf16f8191dbcadad53`, the installed 0.7.1 package/skill hashes, the direct discovery bridge and the unchanged SPEC/starter/grader. Random order was A then B. A fresh isolation preflight saw no Zero skill, tools or hook context. B's separate connection preflight reached server 0.7.1/schema 1.7.0, discovery-only/backend unavailable and found the prepared CSV profile for the earlier failing query. These explicit preflights are excluded from trial counters. No hook trust was changed or SessionStart context observed.
+
+Both new unforked native chats again used `gpt-6-luna` / `high` and exactly the same natural application request. Sent-input SHA-256 remains `85e44d29201fd2dae92a68a0800d7f1218227cb4f198030a0aaab4cc12afe1c9`; each entity-decoded delegation input matches. Both returned a complete plan and stopped, preserving all three starter files byte-for-byte. No application, installation, preparation, verification job or paid model API dispatch occurred.
+
+| Host-reported planning metric | A without Zero | B with 0.7.1 skill/direct MCP |
+|---|---:|---:|
+| Native turn duration | 35.799 s | 48.652 s |
+| Cumulative input tokens | 136,828 | 293,423 |
+| Cached input subset | 110,208 | 275,840 |
+| Input excluding cached subset | 26,620 | 17,583 |
+| Cache-write input | 0 | 0 |
+| Output tokens | 2,272 | 3,333 |
+| Reported reasoning output | 681 | 1,435 |
+| Reported total tokens | 139,100 | 296,756 |
+| Native orchestration calls | 3 | 7 |
+| Actual Zero MCP calls | 0 | 2 |
+
+B automatically selected and read the installed skill, then called `zero_status` and `zero_search`; neither user prompt mentioned Zero, source search or reusable modules. This is one observed automatic invocation with ordinary implicit skill selection, not a reliability estimate or a trusted-hook acceptance. The first attempted skill-file lookup used nonexistent guessed paths before reading the correct supplied cache path; those failures and extra host work remain in its transcript and counters. A also had unsuccessful repository-origin reads in the starter with no remote. No failed read was removed from elapsed time or usage.
+
+B's actual search was broader than the successful preflight: `Strict bounded CSV parser that returns rectangular rows, supports quoted multiline fields, and can be used synchronously by a Node.js local inventory import application. Need exact RFC-like validation, malformed quote rejection, byte-size limits.` Category was `data`, which matches the prepared profile. The response was `missing`, with empty `preparedProfiles` and `candidates`. The current closed matcher does not decompose that request into a focused parser need and separate application duties. This retained no-fit is a search/integration limitation; adding a few observed phrases does not make retrieval robust for arbitrary application descriptions. Do not discard hard constraints or claim that the profile satisfies every requirement just to produce a result.
+
+Both plans cover the requested local HTTP/SQLite import, transaction/key ledger, strict input handling, accessible UI and tests, and both propose writing the parser. B inspected no candidate and proposed no concrete reused module. Plan text alone establishes neither code quality nor functional correctness. B took **35.9% longer** and reported **113.3% more total tokens** in this single pair, while its uncached-input subset was smaller. These counters measure repeated model requests over warm shared context; total tokens are not unique prompt size or dollar cost. Subscription price attribution remains unknown. **Automatic invocation is observed; component reuse, better code and a speed/cost benefit are not demonstrated.**
+
+The next integration work is useful need decomposition and candidate/profile evidence, followed by the relevant prepared-component execution and independent application checks. A Jev-assisted selector must be connected and measured separately under its existing authorization/budget rules; this pair neither invokes Jev nor proves it would improve selection. The broader runtime/MVP gates stay open.
