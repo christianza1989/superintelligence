@@ -1,10 +1,10 @@
 # Istorinių eksperimentų ataskaitos
 
-Naujausia [StudioDesk 0.11.1 planų pora](NATIVE-STUDIODESK-MODULE-PLANS-2026-10-22.md): mažiau host valdymo ciklų, bet kandidatų ir Jev kvietimų 0; modulių atrankos ir kūrimo nauda nepatvirtinta.
+Naujausia [StudioDesk 0.12.2 pakartota planų pora](NATIVE-STUDIODESK-MODULE-REPEAT-2026-10-22.md): A 82.184 s / 204 441 host tokenas, B 139.420 s / 559 717. GitHub paieška iš 21 atitikties pateikė tris pinned repo, bet modulio API vieneto nepateikė; Jev nebuvo kviestas, todėl tai nėra Jev atmetimas. Modulių atranka, kodo kokybė ir kūrimo nauda šia planų pora nepatvirtintos.
 
-Nauja [konkretaus modulio planavimo kvalifikacija](MODULE-PLANNING-2026-10-22.md) atskiria source pasiūlymą, įdiegimą ir būsimo native palyginimo naudą.
+Atskira [konkretaus modulio planavimo kvalifikacija](GITHUB-MODULE-RETRIEVAL-2026-10-22.md#gyvas-0122-modulio-pasirinkimas) turi teigiamą MLT ir tikro Jev kontrolę; ji atskiria source pasiūlymą, įdiegimą ir native palyginimo naudą.
 
-Naujausia papildoma analizė: [StudioDesk planavimo sąnaudos ir konkrečių modulių atrankos spragos](STUDIODESK-PLANNING-DIAGNOSIS-2026-10-22.md). Tai diagnozė, ne naujas gyvas bandymas ar įgyvendinta pataisa.
+Istorinė diagnozė: [StudioDesk planavimo sąnaudos ir konkrečių modulių atrankos spragos](STUDIODESK-PLANNING-DIAGNOSIS-2026-10-22.md). Tai diagnozė, ne naujas gyvas bandymas ar įgyvendinta pataisa.
 
 Šios ataskaitos išsaugo konkrečias modelio/CLI/prompt/grader epochas ir nesėkmes. Jos nėra nurodymas tęsti seną „aktyvią“ kohortą. Aktualus [kalibravimo metodas](../CALIBRATION.md), [produkto būsena](../IMPLEMENTATION.md).
 
@@ -12,7 +12,9 @@ Naujausia papildoma analizė: [StudioDesk planavimo sąnaudos ir konkrečių mod
 - [Native Codex value pilot preparation and preserved preflight failures](NATIVE-VALUE-PILOT-2026-10-22.md).
 - [Jev-selected source modules and full scoped development-chain controls](REUSE-MODULE-CHAIN-2026-10-22.md).
 - [RepairDesk native plan comparisons, preserved deadline failure and repaired live GitHub/Jev repeat](NATIVE-REPAIRDESK-PLANS-2026-10-22.md).
-- [StudioDesk 0.10.5 native plan pair: real GitHub/Jev/pinned file reads, full cost comparison and preserved earlier failures](NATIVE-STUDIODESK-PLANS-2026-10-22.md).
+- [StudioDesk 0.12.2 repeated native plan pair: three pinned repositories, no inspected API unit, no Jev dispatch; preserved invalid attempts](NATIVE-STUDIODESK-MODULE-REPEAT-2026-10-22.md).
+- [Historical StudioDesk 0.11.1 native plan pair: preserved retrieval failure and no Jev dispatch](NATIVE-STUDIODESK-MODULE-PLANS-2026-10-22.md).
+- [Historical StudioDesk 0.10.5 native plan pair: real GitHub/Jev/pinned file reads, full cost comparison and preserved earlier failures](NATIVE-STUDIODESK-PLANS-2026-10-22.md).
 - [Scoped research, PDF CSV and MCP 0.7 development checks](SCOPED-RESEARCH-AND-PDF-CSV-2026-10-21.md).
 - [Captured original-URL document profile and preserved Chromium limit failure](URL-DOCUMENT-PROFILE-2026-10-21.md).
 - [Relocated runtime failures, repairs and fixed expense application checks](RUNTIME-AND-APPLICATION-2026-10-21.md).
