@@ -1,6 +1,6 @@
 # GitHub ir native modulių atrankos pataisa
 
-2026-10-22, source / įdiegtas plugin **0.12.1, schema 1.13.1**. Tai development kvalifikacija prieš naują StudioDesk planų porą; ne programos integravimo ar kūrimo naudos įrodymas.
+2026-10-22, dabartinis source / įdiegtas plugin **0.12.2, schema 1.13.2**. Įrašas išlaiko ankstesnius 0.12.1 rezultatus ir vėlesnę kvalifikaciją prieš naują StudioDesk planų porą; tai ne programos integravimo ar kūrimo naudos įrodymas.
 
 ## Priežastis ir pakeitimas
 
@@ -48,3 +48,11 @@ Kontrolinis backend sustabdytas ir grant atšauktas. Natūrali pora pradedama at
 Pirma po šios kvalifikacijos pradėta native A sesija netiko palyginimui: išjungtas plugin ir švari startup metadata neapsaugojo nuo modelio `Get-ChildItem .. -Recurse`. Jis perskaitė gretimo B projekto AGENTS ir vėliau įdiegtą Zero skill. A galutinis planas netgi minėjo išjungtą Zero. Originalas išsaugotas kaip užterštas bandymas; B main nepradėtas, neskaičiuojamas laimėtojas. Modelis Luna/high, 139,040 s, 756 745 host tokenai; Zero/Jev kvietimų 0. Backend sustabdytas ir grant atšauktas.
 
 Kartojimo izoliacijos protokolas: A neturi Zero vardų ar komandų savo projekto konfigūracijoje; tik šio plugin globalus enabled laikinai išjungiamas, o B turi atskirą aiškų projekto opt-in. B frozen pradinis katalogas fiziškai neprieinamas A tėvinio medžio peržiūrai, kol A baigia; tie patys B failų baitai atkuriami prieš naują B sesiją. Konfigūracijos būsena, slėpimo/atkūrimo momentai ir hash įtraukiami į private freeze. Po poros atkuriamas tik pakeistas globalus plugin enabled, išsaugant kitus nustatymus. Tai bandymo kontrolė, ne bendras OS sandbox ar garantija prieš tyčinį viso disko skaitymą. Vartotojo promptas, SPEC, modelis ir source kodas nekeičiami.
+
+## Išsaugotas kontrolerio sekos gedimas
+
+Kitas kartojimas taip pat **negalioja**. Po A plano pasikeitė bendro Codex konfigūracijos failo hash; Zero globali išjungimo būsena liko teisinga, bet visas failas buvo užšaldytas kaip nekintamas. A capture ir B katalogo atkūrimas grąžino klaidą. Kontroleris vis tiek per anksti sukūrė B sesiją. Jos projekto katalogas dar buvo izoliuotas, todėl B neturėjo numatytos Zero aplinkos. Originalūs abiejų planų transcript, patikros klaidos ir tuščio mokamų kvietimų skaitiklio įrodymai išsaugoti; laimėtojas neskaičiuojamas.
+
+Backend sustabdytas ir grant atšauktas. B atkurta su tiksliais pradiniais failais atskira negaliojančio bandymo atkūrimo procedūra. Ji neužskaito poros: leidžia tik patvirtintą sustabdyto runtime policy pakeitimą į tuščius grant ir užfiksuoja pasikeitusį globalų failą. Kiti source, paketo ir helper hash privalo sutapti.
+
+Naujo kartojimo kontroleris privalo sustoti po kiekvieno nenulinio išėjimo kodo. Globali konfigūracija bus tikrinama pagal kanoniškai išparsintus modelio, įrankių ir instrukcijų nustatymus, o visas failo hash liks diagnostikai. Pirminiai modelio ir įrankių duomenys, source ir paketo hash, bendri SPEC / prompto baitai bei B slėpimo ir atkūrimo seka lieka privalomi. Tai naujas stebėjimo protokolas; ankstesnis bandymas retrospektyviai nepaverčiamas tinkamu.
