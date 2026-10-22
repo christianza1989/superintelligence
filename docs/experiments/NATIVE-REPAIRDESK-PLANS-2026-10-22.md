@@ -1,4 +1,6 @@
-# RepairDesk native plans: source 0.10.0
+# RepairDesk native plan comparisons
+
+## Source 0.10.0 pair: v2
 
 This is one plan-only development pair, not a whole-application race or a benefit acceptance result. Both fresh chats received identical natural Lithuanian task/specification bytes, without GitHub, reuse or Zero hints. The existing [RepairDesk fixture](../../benchmarks/native-repairdesk-plans/v1/README.md) was unchanged. It permits technology choice: SQLite was a model choice, not a benchmark requirement.
 
@@ -28,7 +30,37 @@ The isolated backend had zero jobs, artifacts, budget reservations and usage rec
 
 Source 0.10.1 / schema 1.11.1 makes deadlines optional on `zero_discover`, `zero_select` and `zero_source`: the server supplies a deadline from its clock within the unchanged transport bound. Explicit expired or distant deadlines fail before dispatch with a fixed, bounded instruction to omit/correct the field. No input, private error or path is reflected. Replaying the same keyed source request with a fresh transport deadline retains the original signed deadline, job and digest; it cannot extend work or pay twice. Changed request content still conflicts. Other execution profiles retain their existing controls; backend authorization and budget checks are unchanged.
 
-The four affected transport/client suites passed 84 tests; adapter TypeScript passed. Tests exercise omitted deadlines for all three tools, explicit expired/distant deadlines, no submission on rejection, error redaction and the real STDIO launcher. All 35 API/PostgreSQL/Graphile controls passed without skips using offline GitHub/Jev boundaries, including source replay across reconnect with the original deadline and exactly one dispatch. Linux package planning/STDIO/HTTP controls and Windows portable discovery/planning controls passed. The first 0.10.1 package check failed because the compatibility manifests still declared 0.10.0; that package is retained, all three source manifests were corrected, and a newly generated package passed. This repair was made after capture/closure, never inside the frozen pair. It is not yet a new native pair or a joint live GitHub/Jev qualification.
+The four affected transport/client suites passed 84 tests; adapter TypeScript passed. Tests exercise omitted deadlines for all three tools, explicit expired/distant deadlines, no submission on rejection, error redaction and the real STDIO launcher. All 35 API/PostgreSQL/Graphile controls passed without skips using offline GitHub/Jev boundaries, including source replay across reconnect with the original deadline and exactly one dispatch. Linux package planning/STDIO/HTTP controls and Windows portable discovery/planning controls passed. The first 0.10.1 package check failed because the compatibility manifests still declared 0.10.0; that package is retained, all three source manifests were corrected, and a newly generated package passed. This repair was made after capture/closure, never inside the frozen pair. Its subsequent live qualification and native repetition are recorded separately below.
+
+## Installed 0.10.1 and joint qualification
+
+The clean-source package from `ac6e16931ff56d0a956893a04097e219d9b511ca` passed Linux planning/STDIO/HTTP controls and was installed through the official native plugin CLI. A separate explicit live qualification called discovery without a model-supplied deadline: ten public GitHub results, five pinned repositories, a real Jev recommendation and a successful pinned source read. Provider-reported USD was 0.000245700; this setup control is excluded from native plan measurements. Its owned runtime was stopped before creating a fresh isolated backend for the native pair.
+
+## Source 0.10.1 pair: v3
+
+Fresh independent preflights and plan chats used the same original prompt/SPEC, Luna/high and core 0.163.0-alpha.11.1. The fixed order was B then A. Both preflights and actual turn contexts confirmed model/effort and Zero isolation; B status reported 0.10.1/schema 1.11.1 with public-source/Jev planning available. Source, package, backend, collector and root hashes matched through capture; no application file changed.
+
+| Measure | A: without Zero | B: with Zero |
+|---|---:|---:|
+| Native planning turn | 55.436 s | 171.395 s |
+| Codex input tokens | 135,197 | 1,334,634 |
+| Cached input, already included above | 111,488 | 1,255,296 |
+| Codex output tokens | 5,737 | 15,716 |
+| Codex total tokens | 140,934 | 1,350,350 |
+| Jev calls | 0 | 2 |
+| Jev provider-reported USD | 0 | 0.000186606 |
+
+At the user's request Jev input is audit-only and excluded from the primary token comparison; complete usage receipts remain preserved. Cache remains uncontrolled and host subscription invoice cost unknown. This is a plan comparison, not an implementation-speed result.
+
+A proposed ASP.NET Core/SQLite; B proposed Django/SQLite with standard Python CSV/ZIP facilities. Both described the main domain, transactional stock, immutable document versions, import/restore checks and local roles. B made LAN/TLS phone access and local asset assumptions more explicit. A described compensating stock movements, returns and coordinated DB/attachment restore more explicitly, but retained a non-Lithuanian fragment. Neither picked an exact PDF library/version. No code-quality winner is established.
+
+B made 37 actual MCP calls, including 23 artifact-page reads; two were rejected for requesting 32,768-byte pages instead of the maximum 8,192. Repeated decoding/hash attempts encountered unavailable JavaScript globals, incorrect concatenation of independently encoded base64 pages and PowerShell/.NET incompatibilities. Twenty-one successful page reads returned 148,214 bytes with repeated pages. The observer separately reassembled and SHA-256 checked both receipts; that does not erase host failures. No native `zero_source` call occurred.
+
+Public discovery found nineteen distinct results and inspected five pins using twenty-two HTTPS requests. The shortlist consisted of broad guides/link collections: Self-Hosting-Guide, awesome-selfhosted, awesome-dsh-plugin, awesome-mcp-servers and awesome-grok-bot. Some document reads failed or reached resource limits. Jev recommended the awesome-selfhosted directory as source-only; it did not deliver an implementable workshop foundation. A separate Jev evaluation of Frappe/InvenTree abstained. Worker times were 18,060 and 893 ms, not pure provider latency or total host planning time. The final B plan reported the abstention but omitted the earlier directory recommendation. Both outcomes remain in the backend evidence.
+
+The repaired transport reached GitHub and Jev naturally, but useful foundation/module reuse remains unproven. B was slower and used more Codex tokens in this pair. Observed next gaps are separating implementable code from link directories, targeted capability queries and reliable compact receipt consumption. No code/prompt/checker was changed inside the pair. Grants were revoked and owned API/worker/PostgreSQL stopped. The cumulative USD 3 allocation retains USD 0.60 across six prior/control/native invocations; this pair accounts for USD 0.20 held, distinct from reported actual cost. The exhausted historical USD 1 allocation is untouched.
+
+After this pair the user requested a larger task. The separate [StudioDesk plan-only fixture](../../benchmarks/native-studiodesk-plans/v1/README.md) covers several complementary media/AI capabilities. Its results must not be merged with RepairDesk or represented as evidence that the observed retrieval problems are fixed. Application generation remains behind human plan review.
 
 ## Whole-task comparison
 
