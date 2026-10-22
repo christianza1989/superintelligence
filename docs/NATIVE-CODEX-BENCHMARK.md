@@ -1,5 +1,7 @@
 # Native Codex: tas pats promptas su Zero ir be Zero
 
+2026-10-22 konkreti dviejų programų epocha aprašyta [užšaldomame native full-chain protokole](../benchmarks/native-full-chain-pilot/v1/README.md). Jo B yra visas įjungtas Zero + realus Jev, ne žemiau istoriniame bendrame metode atskirtas deterministic B. Inventory ir StockDesk naudoja konkrečias 16 KiB specifikacijas; žemiau esantis 5 MiB tekstas lieka ankstesnis draft, ne vykdomo bandymo promptas. Atskirai išsaugoti [paruošimo ir preflight faktai](experiments/REUSE-MODULE-CHAIN-2026-10-22.md); įgyvendinimo ir palyginimo baigtys dar nesuplakamos.
+
 **Priimtas būsimo piloto metodas · 2026-10-17 · NOT_RUN.** P1E.10–P1E.12 dar atviri. Reikia [MCP vertikalės ir profilio priėmimo](MCP-INTEGRATION.md), ne vien paieškos serverio. Šis dokumentas nepaleidžia modelių ir nenustato numanomo naujo API biudžeto.
 
 Naudojamas tikras Codex desktop ir naudotojo host paskyra. Atidėtas Codex CLI OAuth nėra šio profilio prerequisite; auth neeksportuojamas ir klientas tyliai nekeičiamas į CLI. Promptas žemiau yra draft, ne užšaldytas fixture. Protokolas/modelio profilis/laiko ribos ir vieša užduoties semantika galutinai fiksuojami iki bandymo.

@@ -49,6 +49,8 @@ The tested 0.8 package was installed through the official Codex plugin CLI. The 
 
 The failed preflight transcripts and scoped diagnostics are retained privately. No history database, authentication, hook trust or unrelated process was modified. The owned API/worker/PostgreSQL fixture was stopped and grants revoked. A Codex application restart and new durable-history/connection preflight are required before freezing an application comparison. This is an observed host storage failure, not an application-quality result or a Zero benefit result.
 
+After the user restored disk space and restarted Codex, fresh preflights produced complete durable turns with the same `gpt-6-luna`/high and native core 0.163.0-alpha.11. A had no Zero skill or tool metadata; B actually called `zero_status` and reported 0.8.0/schema 1.8.0, reuse available and backend available. No preparation was requested by those preflights. The [new two-task native protocol](../../benchmarks/native-full-chain-pilot/v1/README.md) fixes whole-application and actual-use checks before generation; application outcomes remain separate.
+
 ## Limits and next gate
 
 The selected Node Docker profile is read-only, network-disabled and bounded to 128 MiB, one CPU and ten seconds. Evidence concerns the component snapshot and exercised calls. It is not hostile-code isolation, a whole-application verdict, a hidden holdout, or proof of benefit. Later edits require a new verification. Packaging these worker-side source assets into a relocated runtime is a separate qualification.
