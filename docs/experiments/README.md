@@ -1,5 +1,7 @@
 # Istorinių eksperimentų ataskaitos
 
+Naujausia [StudioDesk 0.11.1 planų pora](NATIVE-STUDIODESK-MODULE-PLANS-2026-10-22.md): mažiau host valdymo ciklų, bet kandidatų ir Jev kvietimų 0; modulių atrankos ir kūrimo nauda nepatvirtinta.
+
 Nauja [konkretaus modulio planavimo kvalifikacija](MODULE-PLANNING-2026-10-22.md) atskiria source pasiūlymą, įdiegimą ir būsimo native palyginimo naudą.
 
 Naujausia papildoma analizė: [StudioDesk planavimo sąnaudos ir konkrečių modulių atrankos spragos](STUDIODESK-PLANNING-DIAGNOSIS-2026-10-22.md). Tai diagnozė, ne naujas gyvas bandymas ar įgyvendinta pataisa.

@@ -1,5 +1,7 @@
 # Native Codex: tas pats promptas su Zero ir be Zero
 
+Naujausia [StudioDesk 0.11.1 planų pora](experiments/NATIVE-STUDIODESK-MODULE-PLANS-2026-10-22.md) turi 4 MCP bandymus ir 13 B modelio atsakymų, tačiau kandidatų/Jev/modulių pasiūlymų 0. Tai ne pilnos source atrankos ar kūrimo naudos PASS; [atskira modulio kvalifikacija](experiments/MODULE-PLANNING-2026-10-22.md) nepakeičia native rezultato.
+
 2026-10-22 konkreti dviejų programų epocha aprašyta [užšaldomame native full-chain protokole](../benchmarks/native-full-chain-pilot/v1/README.md). Jo B yra visas įjungtas Zero + realus Jev, ne žemiau istoriniame bendrame metode atskirtas deterministic B. Inventory ir StockDesk naudoja konkrečias 16 KiB specifikacijas; žemiau esantis 5 MiB tekstas lieka ankstesnis draft, ne vykdomo bandymo promptas. Atskirai išsaugoti [paruošimo ir preflight faktai](experiments/REUSE-MODULE-CHAIN-2026-10-22.md); įgyvendinimo ir palyginimo baigtys dar nesuplakamos.
 
 **Dabartinis planavimo pilotas — [StudioDesk 0.10.5](experiments/NATIVE-STUDIODESK-PLANS-2026-10-22.md#galutinė-0105-planų-pora): nauji Luna/high pokalbiai, identiškas promptas/SPEC, eilė B → A. GitHub/Jev/source read veikė, B galutinai pasirinko rastus repo tik kaip nuorodas. A 78.994 s / 238,301 host tokenų; B 221.097 s / 2,005,791. B Jev provider USD 0.000343434 atskirai. Kūrimas, kokybės testai ir pakartojama nauda NOT_RUN; cache nekontroliuotas.**
