@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "researchDate": "2026-10-22",
+  "modules": [
+    {
+      "name": "d3-dsv",
+      "version": "3.0.1",
+      "repo": "d3/d3-dsv",
+      "license": "ISC",
+      "toolId": "module.csv.d3",
+      "capability": "csv",
+      "files": [
+        "src/csv.js",
+        "src/dsv.js",
+        "LICENSE"
+      ],
+      "source": "https://github.com/d3/d3-dsv",
+      "sourceRevision": "344677983ac44e7bbf0e2527ad7f0223d66a2f38",
+      "npmIntegrity": "sha512-UG6OvdI5afDIFP9w4G0mNq50dSOsXHJaRE8arAS5o9ApWnIElp8GZw1Dun8vP8OyHOZ/QJUKUJwxiiCCnUwm+Q==",
+      "sourceFiles": [
+        {
+          "path": "src/csv.js",
+          "sha256": "b5dcb2a30eb68c069b7e058771a445add9bd9ab006ab74fa7fa939c1ed7c3fc2",
+          "bytes": 331
+        },
+        {
+          "path": "src/dsv.js",
+          "sha256": "955def3fd0dfcb744c7ad3d4f7f071f368aa2021e68ac44eeb73952e25625947",
+          "bytes": 4838
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "7842a82012622e5a37bfe4f6c1b67cd3bae6350716b5bf87f36cea0bdc1319dc",
+          "bytes": 731
+        }
+      ],
+      "sourceDirectory": "d3-dsv-3.0.1"
+    },
+    {
+      "name": "papaparse",
+      "version": "5.5.3",
+      "repo": "mholt/PapaParse",
+      "license": "MIT",
+      "toolId": "module.csv.papaparse",
+      "capability": "csv",
+      "files": [
+        "papaparse.min.js",
+        "LICENSE"
+      ],
+      "source": "https://github.com/mholt/PapaParse",
+      "sourceRevision": "a4f8b0f1e30bf08e44da96ff5575ffdae7aa9b12",
+      "npmIntegrity": "sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==",
+      "sourceFiles": [
+        {
+          "path": "papaparse.min.js",
+          "sha256": "3553fb8bdf5b8004ce5531e6827e81c8b34e7b3992677967754544064e97b016",
+          "bytes": 19419
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "99aa68e4b42758b09828a46515f70369e5463458ab7a990189f641af2b8d9b4e",
+          "bytes": 1079
+        }
+      ],
+      "sourceDirectory": "papaparse-5.5.3"
+    },
+    {
+      "name": "fflate",
+      "version": "0.8.2",
+      "repo": "101arrowz/fflate",
+      "license": "MIT",
+      "toolId": "module.zip.fflate",
+      "capability": "zip",
+      "files": [
+        "umd/index.js",
+        "LICENSE"
+      ],
+      "source": "https://github.com/101arrowz/fflate",
+      "sourceRevision": "d3243651cb142e3e04f3e4bc037b9e985878f444",
+      "npmIntegrity": "sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==",
+      "sourceFiles": [
+        {
+          "path": "umd/index.js",
+          "sha256": "c3b34f2e9f5e74d4d7d64e01cac7a0c01954c6c406414d42185c7b53d6875ddf",
+          "bytes": 32665
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "805f6cb28bb8b6d3a0badd83c93bccd9671fa01a3b4b92b7042b0743325ac243",
+          "bytes": 1069
+        }
+      ],
+      "sourceDirectory": "fflate-0.8.2"
+    }
+  ]
+}

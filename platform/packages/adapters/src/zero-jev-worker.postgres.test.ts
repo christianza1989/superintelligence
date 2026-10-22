@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { createBudgetAllocation, createDb, reserveBudgetInvocation } from "@rakazo/db";
+import {
+  createBudgetAllocation,
+  createDb,
+  reserveBudgetInvocation,
+} from "@rakazo/db";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { LocalArtifactStore } from "./artifacts.js";
 import { createBackgroundJobHandlers } from "./background-job-handlers.js";
@@ -14,7 +18,9 @@ import { createZeroJevToolService, runZeroJevTool } from "./zero-jev-worker.js";
 
 const url = process.env.ZERO_JEV_TEST_DATABASE_URL;
 const postgres =
-  process.env.VERIFY_ZERO_JEV_DATABASE === "1" && url ? describe.sequential : describe.skip;
+  process.env.VERIFY_ZERO_JEV_DATABASE === "1" && url
+    ? describe.sequential
+    : describe.skip;
 postgres(
   "selected Jev profile through existing Graphile queue (PostgreSQL, offline provider)",
   () => {
@@ -35,7 +41,11 @@ postgres(
       expect(String(_url)).toBe("https://openrouter.ai/api/v1/systemone");
       const body = JSON.parse(String(options?.body));
       expect(body.state).toEqual({
-        task: mode === "abstain" ? "Explain a photograph" : "Fixture tool task",
+        task: mode.startsWith("module.csv.")
+          ? "Strict bounded CSV parser"
+          : mode === "abstain"
+            ? "Explain a photograph"
+            : "Fixture tool task",
       });
       expect(JSON.stringify(body)).not.toContain("PRIVATE_LOCAL_DATA");
       if (mode === "timeout") return new Promise(() => {});
@@ -49,7 +59,9 @@ postgres(
         answers: {
           tool: {
             type: "choice",
-            choice: ["revoked-after", "csv-unknown-usage"].includes(mode) ? "csv.parse" : mode,
+            choice: ["revoked-after", "csv-unknown-usage"].includes(mode)
+              ? "csv.parse"
+              : mode,
           },
         },
         id: "fixture-provider-request",
@@ -94,7 +106,11 @@ postgres(
           prisma: db.prisma,
           artifacts,
           jobs,
-          zeroJev: { pool: db.pool, resolve: configured ? resolve() : undefined, fetch: dispatch },
+          zeroJev: {
+            pool: db.pool,
+            resolve: configured ? resolve() : undefined,
+            fetch: dispatch,
+          },
           executor: { continueRun: modelRun },
           runtime: { run: modelRun },
           workerId: "jev-fixture-worker",
@@ -120,7 +136,9 @@ postgres(
           { timeout: 10000, interval: 25 },
         )
         .toBe(1);
-      const row = await db.prisma.artifact.findFirstOrThrow({ where: { rootArtifactId: jobId } });
+      const row = await db.prisma.artifact.findFirstOrThrow({
+        where: { rootArtifactId: jobId },
+      });
       const bytes = await artifacts.get(row.storageKey, {
         ...principal,
         operationId: jobId,
@@ -171,16 +189,31 @@ postgres(
         expiresAt: new Date(Date.now() + 10 * 60000).toISOString(),
       };
       await db.prisma.user.create({
-        data: { id: userId, name: "Fixture", email: `${suffix}@fixture.invalid` },
+        data: {
+          id: userId,
+          name: "Fixture",
+          email: `${suffix}@fixture.invalid`,
+        },
       });
       await db.prisma.organization.create({
-        data: { id: spaceId, name: "Fixture", slug: spaceId, createdAt: new Date() },
+        data: {
+          id: spaceId,
+          name: "Fixture",
+          slug: spaceId,
+          createdAt: new Date(),
+        },
       });
       await db.prisma.space.create({
         data: { id: spaceId, organizationId: spaceId, name: "Fixture" },
       });
       await db.prisma.member.create({
-        data: { id: suffix, organizationId: spaceId, userId, role: "owner", createdAt: new Date() },
+        data: {
+          id: suffix,
+          organizationId: spaceId,
+          userId,
+          role: "owner",
+          createdAt: new Date(),
+        },
       });
       await db.prisma.spaceMember.create({
         data: {
@@ -193,7 +226,12 @@ postgres(
         },
       });
       await db.prisma.secret.create({
-        data: { id: `secret-${suffix}`, userId, kind: "model", ciphertext: "fixture-ref" },
+        data: {
+          id: `secret-${suffix}`,
+          userId,
+          kind: "model",
+          ciphertext: "fixture-ref",
+        },
       });
       await db.prisma.userModelCredential.create({
         data: {
@@ -205,7 +243,12 @@ postgres(
         },
       });
       await db.prisma.spaceModelPreference.create({
-        data: { spaceId, userId, credentialId: `credential-${suffix}`, modelId: "fixture/jev" },
+        data: {
+          spaceId,
+          userId,
+          credentialId: `credential-${suffix}`,
+          modelId: "fixture/jev",
+        },
       });
       await start();
       await stop();
@@ -228,9 +271,9 @@ postgres(
       const submitted = await service.submit(params);
       service = createZeroJevToolService({ ...deps(), jobs }, principal);
       expect(await service.submit(params)).toEqual(submitted);
-      await expect(service.submit({ ...params, data: "different" })).rejects.toThrow(
-        "idempotency_key_conflict",
-      );
+      await expect(
+        service.submit({ ...params, data: "different" }),
+      ).rejects.toThrow("idempotency_key_conflict");
       await start();
       const result = await terminal(submitted.jobId);
       expect(result).toMatchObject({
@@ -248,8 +291,12 @@ postgres(
           },
         },
       });
-      expect(result.source.files).toContainEqual(expect.objectContaining({ path: "src/csv.js" }));
-      const usage = await db.prisma.usageRecord.findMany({ where: { callId: submitted.callId } });
+      expect(result.source.files).toContainEqual(
+        expect.objectContaining({ path: "src/csv.js" }),
+      );
+      const usage = await db.prisma.usageRecord.findMany({
+        where: { callId: submitted.callId },
+      });
       expect(usage).toHaveLength(1);
       expect(usage[0]).toMatchObject({
         userId,
@@ -273,6 +320,30 @@ postgres(
       await runZeroJevTool(deps(), submitted.jobId);
       expect(dispatch).toHaveBeenCalledOnce();
       expect((await service.get(submitted.jobId)).state).toBe("succeeded");
+      expect(modelRun).not.toHaveBeenCalled();
+    });
+    it("preserves request integrity for module preparation across submit and worker reload", async () => {
+      await configure();
+      profile.tools = ["module.csv.d3", "module.csv.papaparse"];
+      mode = "module.csv.d3";
+      const params = {
+        ...input("module-request-v1"),
+        goal: "Strict bounded CSV parser",
+        mode: "prepare-component" as const,
+      };
+      const submitted = await service.submit(params);
+      service = createZeroJevToolService({ ...deps(), jobs }, principal);
+      expect(await service.submit(params)).toEqual(submitted);
+      await start();
+      expect(await terminal(submitted.jobId)).toMatchObject({
+        state: "succeeded",
+        phase: "prepared",
+        dispatchAttempts: 1,
+        selection: { toolId: "module.csv.d3" },
+        component: { capability: "csv" },
+      });
+      await runZeroJevTool(deps(), submitted.jobId);
+      expect(dispatch).toHaveBeenCalledOnce();
       expect(modelRun).not.toHaveBeenCalled();
     });
     it("executes the permitted JSON alternative and abstains on a meaningful no-fit", async () => {
@@ -347,7 +418,9 @@ postgres(
         expect(result.tool).toBeNull();
         expect(result.dispatchAttempts).toBe(1);
         expect(dispatch).toHaveBeenCalledOnce();
-        expect(await db.prisma.usageRecord.count({ where: { callId: job.callId } })).toBe(1);
+        expect(
+          await db.prisma.usageRecord.count({ where: { callId: job.callId } }),
+        ).toBe(1);
         expect(
           (
             await db.pool.query(
@@ -407,7 +480,12 @@ postgres(
       expect(await terminal(job.jobId)).toMatchObject({
         state: "succeeded",
         dispatchAttempts: 1,
-        usage: { inputTokens: null, outputTokens: null, costUsd: null, usageSource: "unknown" },
+        usage: {
+          inputTokens: null,
+          outputTokens: null,
+          costUsd: null,
+          usageSource: "unknown",
+        },
       });
       const record = await db.prisma.usageRecord.findFirstOrThrow({
         where: { callId: job.callId },
@@ -457,11 +535,13 @@ postgres(
       await configure();
       const job = await service.submit(input());
       const put = artifacts.put.bind(artifacts);
-      const staging = vi.spyOn(artifacts, "put").mockImplementation(async (input, context) => {
-        const result = await put(input, context);
-        if (input.name === "zero-jev-receipt.json") allowed = false;
-        return result;
-      });
+      const staging = vi
+        .spyOn(artifacts, "put")
+        .mockImplementation(async (input, context) => {
+          const result = await put(input, context);
+          if (input.name === "zero-jev-receipt.json") allowed = false;
+          return result;
+        });
       try {
         await start();
         expect(await terminal(job.jobId)).toMatchObject({
@@ -470,7 +550,11 @@ postgres(
           toolExecuted: "csv.parse",
           dispatchAttempts: 1,
         });
-        expect(await db.prisma.artifact.count({ where: { rootArtifactId: job.jobId } })).toBe(1);
+        expect(
+          await db.prisma.artifact.count({
+            where: { rootArtifactId: job.jobId },
+          }),
+        ).toBe(1);
       } finally {
         staging.mockRestore();
       }
@@ -497,16 +581,25 @@ postgres(
 
     it("shares one account cap across concurrent submitted jobs", async () => {
       await configure(1);
-      const submitted = await Promise.all([service.submit(input()), service.submit(input())]);
+      const submitted = await Promise.all([
+        service.submit(input()),
+        service.submit(input()),
+      ]);
       await start(true, 2);
-      const results = await Promise.all(submitted.map((job) => terminal(job.jobId)));
-      expect(results.map((result) => result.state).sort()).toEqual(["blocked", "succeeded"]);
+      const results = await Promise.all(
+        submitted.map((job) => terminal(job.jobId)),
+      );
+      expect(results.map((result) => result.state).sort()).toEqual([
+        "blocked",
+        "succeeded",
+      ]);
       expect(dispatch).toHaveBeenCalledOnce();
       expect(
         (
-          await db.pool.query('SELECT "reservedCalls" FROM zero_budget_accounts WHERE id = $1', [
-            profile.payerAccountId,
-          ])
+          await db.pool.query(
+            'SELECT "reservedCalls" FROM zero_budget_accounts WHERE id = $1',
+            [profile.payerAccountId],
+          )
         ).rows[0].reservedCalls,
       ).toBe(1);
     });

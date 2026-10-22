@@ -6,6 +6,8 @@ import {
 } from "./zero-csv-application-client.js";
 import { registerZeroComponentMcpTools } from "./zero-mcp-component-tools.js";
 import { registerZeroCsvMcpTools } from "./zero-mcp-csv-tools.js";
+import { registerZeroReuseMcpTools } from "./zero-mcp-reuse-tools.js";
+import { createZeroJevApplicationClientFromFile } from "./zero-jev-application-client.js";
 import { connectZeroMcpStdio } from "./zero-mcp-process.js";
 import { createZeroMcpServer } from "./zero-mcp-server.js";
 
@@ -19,8 +21,14 @@ try {
   const client = createZeroCsvApplicationClientFromFile(file);
   const pdf = createZeroComponentApplicationClientFromFile("pdf", file);
   const browser = createZeroComponentApplicationClientFromFile("browser", file);
-  const research = createZeroComponentApplicationClientFromFile("research", file);
-  const extractionStatus = async (component: typeof pdf) => {
+  const research = createZeroComponentApplicationClientFromFile(
+    "research",
+    file,
+  );
+  const reuse = createZeroJevApplicationClientFromFile(file);
+  const extractionStatus = async (component: {
+    status(): Promise<unknown>;
+  }) => {
     try {
       await component.status();
       return "available" as const;
@@ -42,6 +50,7 @@ try {
       pdf: () => extractionStatus(pdf),
       browser: () => extractionStatus(browser),
       research: () => extractionStatus(research),
+      reuse: () => extractionStatus(reuse),
     },
     executionStatus: async () => {
       try {
@@ -62,6 +71,7 @@ try {
     },
   });
   registerZeroCsvMcpTools(server, client);
+  registerZeroReuseMcpTools(server, reuse);
   registerZeroComponentMcpTools(server, pdf);
   registerZeroComponentMcpTools(server, browser);
   registerZeroComponentMcpTools(server, research);

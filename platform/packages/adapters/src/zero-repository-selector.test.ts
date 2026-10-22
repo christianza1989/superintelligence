@@ -39,6 +39,14 @@ function setup(choice = "repo0") {
   return { fetch, reserve, authorizeDispatch, stillEligible, hold };
 }
 describe("bounded source-only repository advice (offline)", () => {
+  it("forwards the real provider usage event to the caller's awaited observer", async () => {
+    const s = setup();
+    const onUsage = vi.fn(async () => undefined);
+    const result = await selectRepositoryWithJev(config, { ...s, onUsage }, input());
+    expect(result.status).toBe("recommended");
+    expect(onUsage).toHaveBeenCalledOnce();
+    expect(onUsage).toHaveBeenCalledWith(expect.objectContaining({ callId: "repo-fixture" }));
+  });
   it("uses the existing transport, preserves source pin and actual receipt without promoting quality", async () => {
     const s = setup();
     const result = await selectRepositoryWithJev(config, s, input());

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ZERO_REUSE_TOOL_IDS } from "@rakazo/core/zero-reuse-modules";
 import type {
   ZeroApplicationBinding,
   ZeroApplicationTransportOptions,
@@ -8,7 +9,7 @@ import {
   ZeroApplicationTransportError,
 } from "./zero-application-transport.js";
 import { zeroCsvArtifactPageSchema } from "./zero-csv-application-client.js";
-import { ZERO_JEV_LIMITS } from "./zero-jev-worker.js";
+import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 import { readZeroOperatorFile } from "./zero-operator-file.js";
 
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
@@ -23,6 +24,7 @@ export const zeroJevExecuteInputSchema = z
       .datetime({ offset: true })
       .refine((value) => Number.isFinite(Date.parse(value))),
     idempotencyKey: z.string().min(1).max(128),
+    mode: z.enum(["prepare-component", "verify-component"]).optional(),
   })
   .strict();
 export const zeroJevStatusSchema = z
@@ -34,15 +36,17 @@ export const zeroJevStatusSchema = z
     profileRevision: z.string().min(1).max(128),
     model: z.string().min(1).max(200),
     tools: z
-      .array(z.enum(["csv.parse", "json.normalize"]))
+      .array(z.enum(["csv.parse", "json.normalize", ...ZERO_REUSE_TOOL_IDS]))
       .min(1)
-      .max(2),
+      .max(5),
     limits: z
       .object({
         inputBytes: z.literal(ZERO_JEV_LIMITS.inputBytes),
         goalChars: z.literal(ZERO_JEV_LIMITS.goalChars),
         artifactBytes: z.literal(ZERO_JEV_LIMITS.artifactBytes),
-        outstandingJobsPerScope: z.literal(ZERO_JEV_LIMITS.outstandingJobsPerScope),
+        outstandingJobsPerScope: z.literal(
+          ZERO_JEV_LIMITS.outstandingJobsPerScope,
+        ),
         deadlineMs: z.literal(ZERO_JEV_LIMITS.deadlineMs),
         runtimeMs: z.literal(ZERO_JEV_LIMITS.runtimeMs),
       })
@@ -90,7 +94,9 @@ export interface ZeroJevApplicationClient {
     page?: { offset?: number; limit?: number },
   ): Promise<ZeroJevArtifactPage>;
 }
-function fail(code: "invalid_request" | "invalid_response" | "invalid_binding"): never {
+function fail(
+  code: "invalid_request" | "invalid_response" | "invalid_binding",
+): never {
   throw new ZeroApplicationTransportError(code);
 }
 export function createZeroJevApplicationClient(
@@ -114,7 +120,8 @@ export function createZeroJevApplicationClient(
       )
         fail("invalid_request");
       const remaining = Date.parse(checked.data.deadline) - Date.now();
-      if (remaining <= 0 || remaining > ZERO_JEV_LIMITS.deadlineMs) fail("invalid_request");
+      if (remaining <= 0 || remaining > ZERO_JEV_LIMITS.deadlineMs)
+        fail("invalid_request");
       return request("/execute", zeroJevSubmittedSchema, checked.data, 202);
     },
     async get(value) {
@@ -127,7 +134,12 @@ export function createZeroJevApplicationClient(
       const job = checkedJob(value);
       const checked = z
         .object({
-          offset: z.number().int().min(0).max(ZERO_JEV_LIMITS.artifactBytes).default(0),
+          offset: z
+            .number()
+            .int()
+            .min(0)
+            .max(ZERO_JEV_LIMITS.artifactBytes)
+            .default(0),
           limit: z.number().int().min(1).max(16384).default(8192),
         })
         .strict()

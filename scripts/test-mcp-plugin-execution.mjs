@@ -35,7 +35,7 @@ export async function testExecutionPackage(
     calls++;
     assert.equal(request.headers.authorization, `Bearer ${expectedToken}`);
     assert.equal(request.headers["x-rakazo-space-id"], "fixture-space");
-    const route = /^\/api\/zero\/(csv|pdf|browser|research)\/scopes\/fixture-scope\//.exec(request.url);
+    const route = /^\/api\/zero\/(csv|pdf|browser|research|jev)\/scopes\/fixture-scope\//.exec(request.url);
     assert.ok(route);
     const family = route[1];
     response.setHeader("content-type", "application/json");
@@ -46,6 +46,10 @@ export async function testExecutionPackage(
       return;
     }
     if (request.url.endsWith("/status")) {
+      if (family === "jev") {
+        response.end(JSON.stringify({ profile: "jev-tool-selector-v1", backend: "available", execution: "jev-tool-selection", paidModelCalls: 0, profileRevision: "fixture-module-v1", model: "fixture-jev", tools: ["module.csv.d3", "module.csv.papaparse", "module.zip.fflate"], limits: { inputBytes: 16384, goalChars: 2000, artifactBytes: 98304, outstandingJobsPerScope: 4, deadlineMs: 120000, runtimeMs: 30000 } }));
+        return;
+      }
       if (family !== "csv") {
         const pdf = family === "pdf";
         const research = family === "research";
@@ -76,6 +80,10 @@ export async function testExecutionPackage(
           },
         }),
       );
+    } else if (family === "jev" && request.url.endsWith("/execute")) {
+      let raw = ""; for await (const chunk of request) raw += chunk;
+      assert.equal(JSON.parse(raw).mode, "prepare-component");
+      response.writeHead(202).end(JSON.stringify({ jobId, callId: jobId, requestDigest: "a".repeat(64) }));
     } else if (request.url.endsWith("/prepare") || (family !== "csv" && request.url.endsWith("/extract"))) {
       let body = "";
       for await (const chunk of request) body += chunk;
@@ -224,6 +232,10 @@ export async function testExecutionPackage(
           "zero_research_job",
           "zero_research_artifact",
           "zero_research_cancel",
+          "zero_reuse",
+          "zero_reuse_job",
+          "zero_reuse_artifact",
+          "zero_reuse_verify",
           "zero_search",
           "zero_status",
           "zero_verify",
@@ -231,7 +243,10 @@ export async function testExecutionPackage(
       );
       const available = await status(run.client, "available");
       assert.equal(available.profile, "scoped-component-jobs");
-      assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available", research: "available" });
+      assert.deepEqual(available.components, { csv: "available", pdf: "available", browser: "available", research: "available", reuse: "available" });
+      const preparedModule = await run.client.callTool({ name: "zero_reuse", arguments: { goal: "Strict CSV parser", idempotencyKey: "fixture-reuse", deadline: new Date(Date.now() + 30000).toISOString() } });
+      cleanResult(preparedModule);
+      assert.equal(preparedModule.structuredContent.callId, jobId);
       for (const family of ["pdf", "browser", "research"]) {
         const extracted = await run.client.callTool({ name: `zero_${family}_extract`, arguments: {
           ...(family === "research" ? { taskId: "approved-fixture" } : { fileId: "approved-fixture" }), idempotencyKey: `fixture-${family}`,

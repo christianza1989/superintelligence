@@ -133,6 +133,7 @@ export async function selectRepositoryWithJev(
     {
       fetch: dependencies.fetch,
       reserve: dependencies.reserve,
+      onUsage: dependencies.onUsage,
       authorizeDispatch: async (invocationId, generation) => {
         if (!(await dependencies.authorizeDispatch(invocationId, generation))) return false;
         for (const c of candidates) if (!(await fresh(c))) return false;

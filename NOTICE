@@ -6,3 +6,13 @@ Upstream copyright notices and component licenses are retained.
 Modified areas: RepositoryZero UI branding/theme, discovery catalog and
 search, official website, and a server-only Jev selector prototype.
 This notice does not imply upstream endorsement.
+
+Reviewed file-level reuse source snapshots are retained under
+platform/packages/adapters/reuse-sources with their original licenses:
+- d3-dsv 3.0.1, d3/d3-dsv, ISC.
+- Papa Parse 5.5.3, mholt/PapaParse, MIT.
+- fflate 0.8.2, 101arrowz/fflate, MIT.
+Exact source revisions, npm archive integrity and individual file hashes are
+recorded in platform/packages/core/src/zero-reuse-modules.data.json.
+Source availability and a license notice do not imply endorsement, general
+compatibility, host integration or independently demonstrated benefit.

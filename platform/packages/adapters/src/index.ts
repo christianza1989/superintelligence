@@ -222,3 +222,4 @@ export {
   ZERO_CSV_APPLICATION_LIMITS,
   ZERO_CSV_APPLICATION_PROFILE,
 } from "./zero-csv-application-contract.js";
+export type { ZeroReuseVerifierConfig } from "./zero-reuse-verifier.js";

@@ -1,26 +1,44 @@
 /** One selected-profile job on the existing queue. No default paid activation or retry. */
 import { randomUUID } from "node:crypto";
-import type { AdapterContext, ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
+import type {
+  AdapterContext,
+  ArtifactStore,
+  JobPublisher,
+} from "@rakazo/adapter-kit";
 import type { Artifact, PrismaClient } from "@rakazo/db";
-import { IsolationError, Prisma, recordUsage, reserveBudgetInvocation } from "@rakazo/db";
+import {
+  IsolationError,
+  Prisma,
+  recordUsage,
+  reserveBudgetInvocation,
+} from "@rakazo/db";
 import type { Pool } from "pg";
 import { z } from "zod";
+import {
+  eligibleZeroReuseModules,
+  zeroReuseModules,
+} from "@rakazo/core/zero-reuse-modules";
+import type { ZeroReuseToolId } from "@rakazo/core/zero-reuse-modules";
 import { withAbort } from "./web-ssrf.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
-import { executeZeroCsv, prepareZeroCsvComponent, zeroCsvHash } from "./zero-csv-profile.js";
+import {
+  executeZeroCsv,
+  prepareZeroCsvComponent,
+  zeroCsvHash,
+} from "./zero-csv-profile.js";
 import type { ZeroJevResolver } from "./zero-jev-profile.js";
-import { zeroJevPrincipalSchema, zeroJevProfileSchema } from "./zero-jev-profile.js";
+import {
+  zeroJevPrincipalSchema,
+  zeroJevProfileSchema,
+} from "./zero-jev-profile.js";
 import type { SystemOneUsageEvent } from "./zero-systemone.js";
 import { selectToolWithJev } from "./zero-tool-selector.js";
+import { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
+import { prepareZeroReuseModule } from "./zero-reuse-module.js";
+import type { ZeroReuseVerifierConfig } from "./zero-reuse-verifier.js";
+import { verifyZeroReuseModule } from "./zero-reuse-verifier.js";
 
-export const ZERO_JEV_LIMITS = Object.freeze({
-  inputBytes: 16384,
-  goalChars: 2000,
-  artifactBytes: 98304,
-  outstandingJobsPerScope: 4,
-  deadlineMs: 120000,
-  runtimeMs: 30000,
-});
+export { ZERO_JEV_LIMITS } from "./zero-jev-limits.js";
 const instant = z
   .string()
   .datetime({ offset: true })
@@ -31,6 +49,7 @@ const inputSchema = z
     data: z.string().min(1).max(ZERO_JEV_LIMITS.inputBytes),
     deadline: instant,
     idempotencyKey: z.string().min(1).max(128),
+    mode: z.enum(["prepare-component", "verify-component"]).optional(),
   })
   .strict();
 const requestSchema = z
@@ -41,6 +60,11 @@ const requestSchema = z
     connectionDigest: z.string().regex(/^[a-f0-9]{64}$/),
     callId: z.string().uuid(),
     input: inputSchema.omit({ idempotencyKey: true }),
+    // Zod preserves schema order. Keep signed optional fields after input, as in submit().
+    moduleCatalogDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     digest: z.string().regex(/^[a-f0-9]{64}$/),
   })
   .strict();
@@ -63,6 +87,11 @@ export interface ZeroJevWorkerDependencies {
   resolve?: ZeroJevResolver;
   /** Offline boundary injection; production omits it and uses the fixed SystemOne transport. */
   fetch?: typeof fetch;
+  resolveReuseVerifier?: (
+    principal: ZeroCsvPrincipal,
+  ) => Promise<ZeroReuseVerifierConfig | undefined>;
+  /** Optional cumulative allocation outside this DB; failure retains the DB hold and denies dispatch. */
+  reserveExternalBudget?: (invocationId: string) => Promise<boolean>;
 }
 const key = (id: string) => `zero.jev-tool.execute:${id}`;
 const receiptNonce = (id: string) => `zero.jev.receipt:${id}`;
@@ -72,31 +101,43 @@ const context = (principal: ZeroCsvPrincipal, id: string): AdapterContext => ({
   traceId: id,
   signal: AbortSignal.timeout(30000),
 });
-const descriptions = {
+const descriptions: Record<string, string> = {
   "csv.parse":
     "Parse a rectangular comma-separated CSV table into rows. Strict quoting, LF/CRLF, no BOM. Does not run code.",
   "json.normalize":
     "Normalize valid JSON to deterministic sorted object keys and compact formatting. Native JSON number and duplicate-key semantics. Does not run code.",
+  ...Object.fromEntries(
+    zeroReuseModules.map((module) => [module.toolId, module.description]),
+  ),
 };
 
 /** Native JSON semantics: bounded depth/nodes/collections; object keys sort recursively. */
 export function normalizeZeroJson(text: string) {
-  if (Buffer.byteLength(text) > ZERO_JEV_LIMITS.inputBytes) throw new Error("input_limit_exceeded");
+  if (Buffer.byteLength(text) > ZERO_JEV_LIMITS.inputBytes)
+    throw new Error("input_limit_exceeded");
   let nodes = 1024;
   const normalize = (value: unknown, depth = 0): unknown => {
-    if (--nodes < 0 || depth > 8) throw new Error("json_structure_limit_exceeded");
-    if (value === null || typeof value === "boolean" || typeof value === "string") return value;
+    if (--nodes < 0 || depth > 8)
+      throw new Error("json_structure_limit_exceeded");
+    if (
+      value === null ||
+      typeof value === "boolean" ||
+      typeof value === "string"
+    )
+      return value;
     if (typeof value === "number" && Number.isFinite(value)) return value;
     if (Array.isArray(value)) {
       if (value.length > 128) throw new Error("json_structure_limit_exceeded");
       return value.map((item) => normalize(item, depth + 1));
     }
-    if (!value || typeof value !== "object") throw new Error("invalid_json_value");
+    if (!value || typeof value !== "object")
+      throw new Error("invalid_json_value");
     const keys = Object.keys(value).sort();
     if (keys.length > 128 || keys.some((k) => k.length > 128))
       throw new Error("json_structure_limit_exceeded");
     const result: Record<string, unknown> = Object.create(null);
-    for (const k of keys) result[k] = normalize((value as Record<string, unknown>)[k], depth + 1);
+    for (const k of keys)
+      result[k] = normalize((value as Record<string, unknown>)[k], depth + 1);
     return result;
   };
   const normalized = normalize(JSON.parse(text));
@@ -104,18 +145,26 @@ export function normalizeZeroJson(text: string) {
   nodes = 1024;
   if (JSON.stringify(normalize(JSON.parse(output))) !== output)
     throw new Error("json_verification_failed");
-  return { output, verification: { outcome: "pass", verifier: "bounded-json-roundtrip-v1" } };
+  return {
+    output,
+    verification: { outcome: "pass", verifier: "bounded-json-roundtrip-v1" },
+  };
 }
 
-async function connection(deps: ZeroJevWorkerDependencies, principal: ZeroCsvPrincipal) {
+async function connection(
+  deps: ZeroJevWorkerDependencies,
+  principal: ZeroCsvPrincipal,
+) {
   zeroJevPrincipalSchema.parse(principal);
-  if (!deps.resolve || Date.parse(principal.expiresAt) <= Date.now()) throw new IsolationError();
+  if (!deps.resolve || Date.parse(principal.expiresAt) <= Date.now())
+    throw new IsolationError();
   const pending = deps.resolve({ ...principal });
   void pending.catch(() => undefined);
   const result = await withAbort(pending, AbortSignal.timeout(5000));
   const profile = zeroJevProfileSchema.parse(result.profile);
   if (
-    Math.min(Date.parse(principal.expiresAt), Date.parse(profile.expiresAt)) <= Date.now() ||
+    Math.min(Date.parse(principal.expiresAt), Date.parse(profile.expiresAt)) <=
+      Date.now() ||
     !/^[a-f0-9]{64}$/.test(result.connectionDigest) ||
     !result.apiKey
   )
@@ -123,12 +172,16 @@ async function connection(deps: ZeroJevWorkerDependencies, principal: ZeroCsvPri
   return { ...result, profile };
 }
 async function recheck(deps: ZeroJevWorkerDependencies, request: Request) {
-  if (Date.parse(request.input.deadline) <= Date.now()) throw new IsolationError();
+  if (Date.parse(request.input.deadline) <= Date.now())
+    throw new IsolationError();
   const current = await connection(deps, request.principal);
   if (
     Date.parse(request.input.deadline) <= Date.now() ||
     JSON.stringify(current.profile) !== JSON.stringify(request.profile) ||
-    current.connectionDigest !== request.connectionDigest
+    current.connectionDigest !== request.connectionDigest ||
+    (request.input.mode === "prepare-component" &&
+      request.moduleCatalogDigest !==
+        zeroCsvHash(JSON.stringify(zeroReuseModules)))
   )
     throw new IsolationError();
   return current;
@@ -158,10 +211,13 @@ async function loadHeader(
     where: {
       id,
       name: "zero-jev-request.json",
-      ...(principal ? { spaceId: principal.spaceId, userId: principal.userId } : {}),
+      ...(principal
+        ? { spaceId: principal.spaceId, userId: principal.userId }
+        : {}),
     },
   });
-  if (!row || row.size > ZERO_JEV_LIMITS.artifactBytes) throw new IsolationError();
+  if (!row || row.size > ZERO_JEV_LIMITS.artifactBytes)
+    throw new IsolationError();
   const metadata = z
     .object({
       principal: zeroJevPrincipalSchema,
@@ -252,14 +308,20 @@ async function publish(
       jobId: id,
       callId: request.callId,
       requestDigest: request.digest,
-      ...("input" in request ? { inputSha256: zeroCsvHash(request.input.data) } : {}),
+      ...("input" in request
+        ? { inputSha256: zeroCsvHash(request.input.data) }
+        : {}),
       model: "profile" in request ? request.profile.model : request.model,
-      profileRevision: "profile" in request ? request.profile.revision : request.profileRevision,
+      profileRevision:
+        "profile" in request
+          ? request.profile.revision
+          : request.profileRevision,
       ...details,
       finishedAt: new Date().toISOString(),
     }),
   );
-  if (bytes.byteLength > ZERO_JEV_LIMITS.artifactBytes) throw new Error("receipt_limit_exceeded");
+  if (bytes.byteLength > ZERO_JEV_LIMITS.artifactBytes)
+    throw new Error("receipt_limit_exceeded");
   const ctx = context(request.principal, id);
   const staged = await deps.artifacts.put(
     { name: "zero-jev-receipt.json", mimeType: "application/json", bytes },
@@ -269,7 +331,9 @@ async function publish(
   try {
     return await deps.prisma.$transaction(
       async (tx) => {
-        await tx.$queryRaw(Prisma.sql`SELECT id FROM artifacts WHERE id = ${id} FOR UPDATE`);
+        await tx.$queryRaw(
+          Prisma.sql`SELECT id FROM artifacts WHERE id = ${id} FOR UPDATE`,
+        );
         const existing = await tx.artifact.findUnique({
           where: {
             spaceId_userId_clientNonce: {
@@ -283,7 +347,10 @@ async function publish(
         if (details.state === "succeeded") {
           if (!("input" in request)) throw new IsolationError();
           await recheck(deps, request);
-          if (Date.now() - Date.parse(String(details.startedAt)) >= ZERO_JEV_LIMITS.runtimeMs)
+          if (
+            Date.now() - Date.parse(String(details.startedAt)) >=
+            ZERO_JEV_LIMITS.runtimeMs
+          )
             throw new Error("job_runtime_exceeded");
         }
         const created = await tx.artifact.create({
@@ -311,7 +378,8 @@ async function publish(
       { timeout: 10000 },
     );
   } finally {
-    if (!committed) await deps.artifacts.remove(staged.id, ctx).catch(() => undefined);
+    if (!committed)
+      await deps.artifacts.remove(staged.id, ctx).catch(() => undefined);
   }
 }
 
@@ -372,14 +440,26 @@ async function readReceipt(
   if (!row) throw new IsolationError();
   // Receipt bytes may contain task output: authorize immediately before reading them too.
   await connection(deps, principal);
-  const bytes = await deps.artifacts.get(row.storageKey, context(principal, id));
+  const bytes = await deps.artifacts.get(
+    row.storageKey,
+    context(principal, id),
+  );
   if (bytes.byteLength !== row.size || zeroCsvHash(bytes) !== row.hash)
     throw new Error("receipt_integrity_failed");
   const content = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
   const body = JSON.parse(content);
-  if (body.jobId !== id || body.requestDigest !== header.digest || body.callId !== header.callId)
+  if (
+    body.jobId !== id ||
+    body.requestDigest !== header.digest ||
+    body.callId !== header.callId
+  )
     throw new Error("receipt_binding_failed");
-  return { artifactId: row.id, revision: 2 as const, sha256: row.hash, content };
+  return {
+    artifactId: row.id,
+    revision: 2 as const,
+    sha256: row.hash,
+    content,
+  };
 }
 
 /** Application supplies its authenticated principal; no public identity fields exist here. */
@@ -398,7 +478,10 @@ export function createZeroJevToolService(
         remaining <= 0 ||
         remaining > ZERO_JEV_LIMITS.deadlineMs ||
         Date.parse(params.deadline) >
-          Math.min(Date.parse(principal.expiresAt), Date.parse(resolved.profile.expiresAt))
+          Math.min(
+            Date.parse(principal.expiresAt),
+            Date.parse(resolved.profile.expiresAt),
+          )
       )
         throw new Error("invalid_job_bounds");
       const binding = {
@@ -407,11 +490,24 @@ export function createZeroJevToolService(
         profile: resolved.profile,
         connectionDigest: resolved.connectionDigest,
         input: params,
+        ...(params.mode === "prepare-component"
+          ? {
+              moduleCatalogDigest: zeroCsvHash(
+                JSON.stringify(zeroReuseModules),
+              ),
+            }
+          : {}),
       };
       const digest = zeroCsvHash(JSON.stringify(binding));
       const prefix =
         "zero.jev.request:" +
-        zeroCsvHash(JSON.stringify([principal.spaceId, principal.userId, principal.scopeId])) +
+        zeroCsvHash(
+          JSON.stringify([
+            principal.spaceId,
+            principal.userId,
+            principal.scopeId,
+          ]),
+        ) +
         ":";
       const nonce = prefix + zeroCsvHash(idempotencyKey);
       const identity = {
@@ -485,7 +581,8 @@ export function createZeroJevToolService(
           { timeout: 10000 },
         );
       } finally {
-        if (!committed) await deps.artifacts.remove(staged.id, ctx).catch(() => undefined);
+        if (!committed)
+          await deps.artifacts.remove(staged.id, ctx).catch(() => undefined);
       }
       const request = await load(deps, row.id, principal);
       if (!(await receipt(deps, request, row.id)))
@@ -496,7 +593,11 @@ export function createZeroJevToolService(
           keepExisting: true,
           maxAttempts: 1,
         });
-      return { jobId: row.id, callId: request.callId, requestDigest: request.digest };
+      return {
+        jobId: row.id,
+        callId: request.callId,
+        requestDigest: request.digest,
+      };
     },
     async job(id: string) {
       const { header, row } = await lookupReceipt(deps, principal, id);
@@ -509,15 +610,30 @@ export function createZeroJevToolService(
         };
       const metadata = z
         .object({
-          state: z.enum(["succeeded", "failed", "blocked", "abstained", "unknown"]),
+          state: z.enum([
+            "succeeded",
+            "failed",
+            "blocked",
+            "abstained",
+            "unknown",
+          ]),
           callId: z.string().uuid().nullable(),
           requestDigest: z.string().regex(/^[a-f0-9]{64}$/),
         })
         .strict()
         .parse(JSON.parse(row.description ?? "null"));
-      if (metadata.callId !== header.callId || metadata.requestDigest !== header.digest)
+      if (
+        metadata.callId !== header.callId ||
+        metadata.requestDigest !== header.digest
+      )
         throw new IsolationError();
-      return { jobId: id, ...metadata, artifactId: row.id, revision: 2 as const, sha256: row.hash };
+      return {
+        jobId: id,
+        ...metadata,
+        artifactId: row.id,
+        revision: 2 as const,
+        sha256: row.hash,
+      };
     },
     artifact: (id: string) => readReceipt(deps, principal, id),
     async get(id: string) {
@@ -534,7 +650,10 @@ export function createZeroJevToolService(
   };
 }
 
-export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string) {
+export async function runZeroJevTool(
+  deps: ZeroJevWorkerDependencies,
+  id: string,
+) {
   const header = await loadHeader(deps, id);
   if (await receipt(deps, header, id)) return;
   let request: Request;
@@ -560,6 +679,65 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
     const pool = deps.pool;
     if (!pool) throw new Error("Routing budget unavailable");
     const resolved = await recheck(deps, request);
+    if (request.input.mode === "verify-component") {
+      const artifact = await readReceipt(
+        deps,
+        request.principal,
+        request.input.data,
+      );
+      const preparation = JSON.parse(artifact.content);
+      const toolId = preparation.selection?.toolId;
+      if (
+        preparation.state !== "succeeded" ||
+        preparation.phase !== "prepared" ||
+        !zeroReuseModules.some((module) => module.toolId === toolId) ||
+        !request.profile.tools.includes(toolId)
+      )
+        throw new IsolationError();
+      const component = await prepareZeroReuseModule(toolId);
+      if (JSON.stringify(component) !== JSON.stringify(preparation.component))
+        throw new Error("prepared_module_changed");
+      const config = await deps.resolveReuseVerifier?.(request.principal);
+      if (!config) throw new IsolationError();
+      const verification = await verifyZeroReuseModule(
+        config,
+        component,
+        request.principal.scopeId,
+        AbortSignal.timeout(
+          Math.min(
+            20000,
+            Math.max(1, Date.parse(request.input.deadline) - Date.now()),
+          ),
+        ),
+        async () => {
+          await recheck(deps, request);
+          if (
+            JSON.stringify(
+              await deps.resolveReuseVerifier?.(request.principal),
+            ) !== JSON.stringify(config)
+          )
+            throw new IsolationError();
+        },
+      );
+      await recheck(deps, request);
+      if (
+        JSON.stringify(await deps.resolveReuseVerifier?.(request.principal)) !==
+        JSON.stringify(config)
+      )
+        throw new IsolationError();
+      await publish(deps, request, id, {
+        state: verification.outcome === "pass" ? "succeeded" : "failed",
+        phase: "verified",
+        preparationJobId: request.input.data,
+        preparationSha256: artifact.sha256,
+        verification,
+        dispatchAttempts: 0,
+        usage: null,
+        startedAt: new Date(startedAt).toISOString(),
+        elapsedMs: Date.now() - startedAt,
+      });
+      return;
+    }
     const signal = AbortSignal.timeout(
       Math.min(
         request.profile.timeoutMs,
@@ -592,6 +770,12 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
             priorInvocation = prior.rowCount === 1;
           }
           reservationUncertain = false;
+          if (
+            admitted &&
+            deps.reserveExternalBudget &&
+            !(await deps.reserveExternalBudget(invocationId))
+          )
+            return null;
           return admitted;
         },
         authorizeDispatch: async () => {
@@ -601,7 +785,7 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
         stillEligible: async (toolId, revision) => {
           await recheck(deps, request);
           return (
-            request.profile.tools.includes(toolId as "csv.parse" | "json.normalize") &&
+            request.profile.tools.some((id) => id === toolId) &&
             revision === request.profile.revision
           );
         },
@@ -620,25 +804,42 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
         generation: 0,
         goal: request.input.goal,
         signal,
-        tools: request.profile.tools.map((toolId) => ({
-          id: toolId,
-          revision: request.profile.revision,
-          description: descriptions[toolId],
-          enabled: true,
-          authorized: true,
-        })),
+        tools: request.profile.tools
+          .filter((toolId) =>
+            request.input.mode === "prepare-component"
+              ? eligibleZeroReuseModules(request.input.goal).some(
+                  (module) => module.toolId === toolId,
+                )
+              : !toolId.startsWith("module."),
+          )
+          .map((toolId) => ({
+            id: toolId,
+            revision: request.profile.revision,
+            description: descriptions[toolId]!,
+            enabled: true,
+            authorized: true,
+          })),
       },
     );
     const accounting = () => ({
       usage,
-      dispatchAttempts: usage ? 1 : priorInvocation || reservationUncertain ? null : 0,
+      dispatchAttempts: usage
+        ? 1
+        : priorInvocation || reservationUncertain
+          ? null
+          : 0,
       priorInvocation,
       startedAt: new Date(startedAt).toISOString(),
       elapsedMs: Date.now() - startedAt,
     });
     if (selection.status !== "selected") {
       await publish(deps, request, id, {
-        state: priorInvocation || reservationUncertain ? "unknown" : selection.status,
+        state:
+          priorInvocation || reservationUncertain
+            ? "unknown"
+            : selection.status === "missing"
+              ? "abstained"
+              : selection.status,
         selection,
         tool: null,
         ...accounting(),
@@ -649,11 +850,37 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
     await recheck(deps, request);
     let result: unknown;
     let source: unknown;
-    if (selection.toolId === "csv.parse") {
+    if (request.input.mode === "prepare-component") {
+      const component = await prepareZeroReuseModule(
+        selection.toolId as ZeroReuseToolId,
+      );
+      const integration = await deps.resolveReuseVerifier?.(request.principal);
+      signal.throwIfAborted();
+      await recheck(deps, request);
+      await publish(deps, request, id, {
+        state: "succeeded",
+        phase: "prepared",
+        selection,
+        component,
+        integration:
+          integration?.projectRelativeRoot &&
+          integration.entrypoints[component.capability]
+            ? {
+                directory: integration.projectRelativeRoot,
+                entrypoint: integration.entrypoints[component.capability],
+              }
+            : null,
+        ...accounting(),
+      });
+      return;
+    } else if (selection.toolId === "csv.parse") {
       const component = await prepareZeroCsvComponent();
       source = {
         profile: component.profile,
-        files: component.files.map((file) => ({ path: file.path, sha256: file.sha256 })),
+        files: component.files.map((file) => ({
+          path: file.path,
+          sha256: file.sha256,
+        })),
       };
       result = executeZeroCsv(request.input.data);
     } else if (selection.toolId === "json.normalize") {
@@ -677,11 +904,18 @@ export async function runZeroJevTool(deps: ZeroJevWorkerDependencies, id: string
     });
   } catch {
     await publish(deps, request, id, {
-      state: usage || priorInvocation || reservationUncertain ? "unknown" : "blocked",
+      state:
+        usage || priorInvocation || reservationUncertain
+          ? "unknown"
+          : "blocked",
       reason: "profile_tool_or_receipt_unavailable",
       toolExecuted,
       startedAt: new Date(startedAt).toISOString(),
-      dispatchAttempts: usage ? 1 : priorInvocation || reservationUncertain ? null : 0,
+      dispatchAttempts: usage
+        ? 1
+        : priorInvocation || reservationUncertain
+          ? null
+          : 0,
       usage,
       tool: null,
       elapsedMs: Date.now() - startedAt,

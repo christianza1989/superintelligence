@@ -11,10 +11,17 @@ import {
   repositorySourceUrl,
 } from "@rakazo/core/repositoryzero";
 import { z } from "zod";
-import { REPOSITORY_SEARCH_EVALUATION, repositorySearchFromTool } from "./zero-repository-tools.js";
+import {
+  discoverZeroReuseModules,
+  ZERO_REUSE_TOOL_IDS,
+} from "@rakazo/core/zero-reuse-modules";
+import {
+  REPOSITORY_SEARCH_EVALUATION,
+  repositorySearchFromTool,
+} from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.7.1";
-export const ZERO_MCP_SCHEMA_VERSION = "1.7.0";
+export const ZERO_MCP_SERVER_VERSION = "0.8.0";
+export const ZERO_MCP_SCHEMA_VERSION = "1.8.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -31,7 +38,13 @@ const csvOperations = [
   "zero_freshness",
 ] as const;
 const extractionOperations = {
-  pdf: ["zero_pdf_extract", "zero_pdf_job", "zero_pdf_artifact", "zero_pdf_cancel", "zero_pdf_csv"],
+  pdf: [
+    "zero_pdf_extract",
+    "zero_pdf_job",
+    "zero_pdf_artifact",
+    "zero_pdf_cancel",
+    "zero_pdf_csv",
+  ],
   browser: [
     "zero_browser_extract",
     "zero_browser_job",
@@ -44,16 +57,26 @@ const extractionOperations = {
     "zero_research_artifact",
     "zero_research_cancel",
   ],
+  reuse: [
+    "zero_reuse",
+    "zero_reuse_job",
+    "zero_reuse_artifact",
+    "zero_reuse_verify",
+  ],
 } as const;
 type ExecutionBackend = "available" | "unavailable" | "blocked" | "unknown";
-type ExecutionProfile = "csv-preparation-only" | "csv-preparation-and-verification";
+type ExecutionProfile =
+  "csv-preparation-only" | "csv-preparation-and-verification";
 export type ZeroMcpOptions = {
   /** Supplied only by the trusted execution composition root. No credentials in status. */
   executionStatus?: () => Promise<
     ExecutionBackend | { backend: ExecutionBackend; profile: ExecutionProfile }
   >;
   componentStatus?: Partial<
-    Record<"pdf" | "browser" | "research", () => Promise<ExecutionBackend>>
+    Record<
+      "pdf" | "browser" | "research" | "reuse",
+      () => Promise<ExecutionBackend>
+    >
   >;
 };
 const evaluation =
@@ -102,7 +125,13 @@ const metadataSchema = z.strictObject({
   resolvedRepository: candidateId.optional(),
   githubSource: z.string().max(512).optional(),
   sourcePin: z.strictObject({
-    status: z.enum(["present", "absent", "unavailable", "not-recorded", "not-checked"]),
+    status: z.enum([
+      "present",
+      "absent",
+      "unavailable",
+      "not-recorded",
+      "not-checked",
+    ]),
     observedAt: z.iso.datetime({ offset: true }).optional(),
     revision: z.string().max(128).optional(),
     reason: z.string().max(256).optional(),
@@ -131,7 +160,9 @@ const preparedProfileSchema = z.strictObject({
     cellChars: z.literal(csvProfile.limits.cellChars),
     artifactBytes: z.literal(csvProfile.limits.artifactBytes),
     runtimeMs: z.literal(csvProfile.limits.runtimeMs),
-    outstandingJobsPerScope: z.literal(csvProfile.limits.outstandingJobsPerScope),
+    outstandingJobsPerScope: z.literal(
+      csvProfile.limits.outstandingJobsPerScope,
+    ),
   }),
   conformance: z.strictObject({
     status: z.literal(csvProfile.conformance.status),
@@ -146,9 +177,30 @@ const preparedProfileSchema = z.strictObject({
 const searchOutput = z.strictObject({
   ...commonOutput,
   evaluation: z.literal(REPOSITORY_SEARCH_EVALUATION),
-  status: z.enum(["prepared_profiles", "source_candidates", "missing"]),
+  status: z.enum([
+    "prepared_profiles",
+    "source_candidates",
+    "module_candidates",
+    "missing",
+  ]),
   preparedProfiles: z.array(preparedProfileSchema).max(1),
   candidates: z.array(candidateSchema).max(5),
+  moduleCandidates: z
+    .array(
+      z.strictObject({
+        toolId: z.enum(ZERO_REUSE_TOOL_IDS),
+        profileId: z.string().max(128),
+        repository: candidateId,
+        version: z.string().max(32),
+        sourceRevision: z.string().regex(/^[a-f0-9]{40}$/),
+        capability: z.enum(["csv", "zip"]),
+        description: z.string().max(1000),
+        licenseSource: z.string().max(64),
+        entrypoint: z.string().max(128),
+        fit: z.literal("candidate; task constraints unverified"),
+      }),
+    )
+    .max(3),
 });
 const inspectOutput = z.strictObject({
   ...commonOutput,
@@ -180,15 +232,27 @@ const statusOutput = z.strictObject({
         ...extractionOperations.pdf,
         ...extractionOperations.browser,
         ...extractionOperations.research,
+        ...extractionOperations.reuse,
       ]),
     )
-    .max(22),
+    .max(26),
   components: z
     .strictObject({
-      csv: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
-      pdf: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
-      browser: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
-      research: z.enum(["available", "unavailable", "blocked", "unknown"]).optional(),
+      csv: z
+        .enum(["available", "unavailable", "blocked", "unknown"])
+        .optional(),
+      pdf: z
+        .enum(["available", "unavailable", "blocked", "unknown"])
+        .optional(),
+      browser: z
+        .enum(["available", "unavailable", "blocked", "unknown"])
+        .optional(),
+      research: z
+        .enum(["available", "unavailable", "blocked", "unknown"])
+        .optional(),
+      reuse: z
+        .enum(["available", "unavailable", "blocked", "unknown"])
+        .optional(),
     })
     .optional(),
   catalog: z.strictObject({
@@ -220,13 +284,22 @@ class DiscoveryMcpServer extends McpServer {
   override async connect(transport: Transport): Promise<void> {
     const send = transport.send.bind(transport);
     transport.send = (message, options) => {
-      if ("result" in message && typeof message.result.protocolVersion === "string") {
+      if (
+        "result" in message &&
+        typeof message.result.protocolVersion === "string"
+      ) {
         this.protocolVersion = message.result.protocolVersion;
       }
       if ("result" in message && message.result.isError === true) {
-        for (const code of ["source_data_unavailable", "output_limit_exceeded"] as const) {
+        for (const code of [
+          "source_data_unavailable",
+          "output_limit_exceeded",
+        ] as const) {
           const result = outputError(code);
-          if (JSON.stringify(message.result.content) === JSON.stringify(result.content)) {
+          if (
+            JSON.stringify(message.result.content) ===
+            JSON.stringify(result.content)
+          ) {
             return send({ ...message, result }, options);
           }
         }
@@ -248,7 +321,13 @@ class DiscoveryMcpServer extends McpServer {
       }
       if ("error" in message) {
         return send(
-          { ...message, error: { code: message.error.code, message: "Invalid MCP request." } },
+          {
+            ...message,
+            error: {
+              code: message.error.code,
+              message: "Invalid MCP request.",
+            },
+          },
           options,
         );
       }
@@ -264,7 +343,8 @@ function boundedResult(
   data: Record<string, unknown>,
   maxBytes: number,
 ): CallToolResult {
-  if (!schema.safeParse(data).success) return outputError("source_data_unavailable");
+  if (!schema.safeParse(data).success)
+    return outputError("source_data_unavailable");
   const result: CallToolResult = {
     content: [{ type: "text", text: JSON.stringify(data) }],
     structuredContent: data,
@@ -275,7 +355,9 @@ function boundedResult(
   return result;
 }
 
-function outputError(code: "source_data_unavailable" | "output_limit_exceeded"): CallToolResult {
+function outputError(
+  code: "source_data_unavailable" | "output_limit_exceeded",
+): CallToolResult {
   return {
     isError: true,
     content: [{ type: "text", text: JSON.stringify({ error: code }) }],
@@ -298,15 +380,20 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_search",
     {
       description:
-        "Search one bounded prepared CSV profile before the bundled source catalog. Returns scoped development-conformance facts separately from up to five source candidates. An empty result means no local match. No install or execution grant, host integration or benefit is established.",
+        "Discover focused reusable modules within an application request, then search the fixed prepared CSV profile and source catalog. moduleCandidates are pinned module alternatives with explicit limits, not an assertion that the entire request fits. In an authorized reuse backend, zero_reuse can select/prepare one focused module with Jev; the host integrates and verifies it separately. No installation or execution grant follows from discovery.",
       inputSchema: z.strictObject(
         {
           query: z
             .string()
             .min(1)
             .max(256)
-            .refine((query) => query.trim().length > 0, "query must not be blank"),
-          category: z.enum(repositoryCategories as [string, ...string[]]).optional(),
+            .refine(
+              (query) => query.trim().length > 0,
+              "query must not be blank",
+            ),
+          category: z
+            .enum(repositoryCategories as [string, ...string[]])
+            .optional(),
         },
         { error: "Invalid discovery arguments" },
       ),
@@ -318,17 +405,34 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
         query,
         ...(category === undefined ? {} : { category }),
       });
+      const modules =
+        !category || category === "data" ? discoverZeroReuseModules(query) : [];
       return boundedResult(
         searchOutput,
         {
           schemaVersion: ZERO_MCP_SCHEMA_VERSION,
           researchDate: repositorySnapshot.researchDate,
           evaluation: REPOSITORY_SEARCH_EVALUATION,
-          status: result.status,
+          status:
+            result.status === "missing" && modules.length
+              ? "module_candidates"
+              : result.status,
           preparedProfiles: result.preparedProfiles,
           candidates: result.candidates?.map((candidate) => ({
             candidateId: candidate.repository,
             ...candidate,
+          })),
+          moduleCandidates: modules.map((module) => ({
+            toolId: module.toolId,
+            profileId: module.profileId,
+            repository: module.repo,
+            version: module.version,
+            sourceRevision: module.sourceRevision,
+            capability: module.capability,
+            description: module.description,
+            licenseSource: module.license,
+            entrypoint: module.entrypoint,
+            fit: "candidate; task constraints unverified",
           })),
         },
         ZERO_MCP_OUTPUT_LIMITS.search,
@@ -341,12 +445,17 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     {
       description:
         "Inspect one canonical candidateId returned by zero_search. Returns bundled source, pin and license facts, plus separate dated GitHub metadata. A found pin object is not a runtime test. No URL fetch, filesystem read, install or execution.",
-      inputSchema: z.strictObject({ candidateId }, { error: "Invalid discovery arguments" }),
+      inputSchema: z.strictObject(
+        { candidateId },
+        { error: "Invalid discovery arguments" },
+      ),
       outputSchema: inspectOutput,
       annotations,
     },
     ({ candidateId: id }) => {
-      const entry = repositorySnapshot.records.find((candidate) => candidate.repository === id);
+      const entry = repositorySnapshot.records.find(
+        (candidate) => candidate.repository === id,
+      );
       return boundedResult(
         inspectOutput,
         {
@@ -392,7 +501,8 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     },
     async ({ nonce }) => {
       let backend: ExecutionBackend = "unavailable";
-      let profile: "discovery-only" | "scoped-component-jobs" | ExecutionProfile =
+      let profile:
+        "discovery-only" | "scoped-component-jobs" | ExecutionProfile =
         options.executionStatus ? "csv-preparation-only" : "discovery-only";
       if (options.executionStatus) {
         try {
@@ -403,22 +513,28 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
           backend = "unavailable";
         }
       }
-      const components: Partial<Record<"csv" | "pdf" | "browser" | "research", ExecutionBackend>> =
-        {};
+      const components: Partial<
+        Record<
+          "csv" | "pdf" | "browser" | "research" | "reuse",
+          ExecutionBackend
+        >
+      > = {};
       if (options.executionStatus) components.csv = backend;
       const componentOperations: string[] = [];
       await Promise.all(
-        (["pdf", "browser", "research"] as const).map(async (family) => {
-          const probe = options.componentStatus?.[family];
-          if (!probe) return;
-          try {
-            components[family] = await probe();
-          } catch {
-            components[family] = "unavailable";
-          }
-        }),
+        (["pdf", "browser", "research", "reuse"] as const).map(
+          async (family) => {
+            const probe = options.componentStatus?.[family];
+            if (!probe) return;
+            try {
+              components[family] = await probe();
+            } catch {
+              components[family] = "unavailable";
+            }
+          },
+        ),
       );
-      for (const family of ["pdf", "browser", "research"] as const)
+      for (const family of ["pdf", "browser", "research", "reuse"] as const)
         if (options.componentStatus?.[family])
           componentOperations.push(...extractionOperations[family]);
       if (componentOperations.length) {
@@ -448,7 +564,9 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
           ...(componentOperations.length ? { components } : {}),
           catalog: {
             researchDate: repositorySnapshot.researchDate,
-            sha256: createHash("sha256").update(JSON.stringify(repositorySnapshot)).digest("hex"),
+            sha256: createHash("sha256")
+              .update(JSON.stringify(repositorySnapshot))
+              .digest("hex"),
             records: repositorySnapshot.records.length,
           },
           metadata: {

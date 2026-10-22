@@ -3,6 +3,7 @@ import type { SecretStore } from "@rakazo/adapter-kit";
 import type { PrismaClient } from "@rakazo/db";
 import { IsolationError } from "@rakazo/db";
 import { z } from "zod";
+import { ZERO_REUSE_TOOL_IDS } from "@rakazo/core/zero-reuse-modules";
 import { parseModelSecret } from "./pi-oauth.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import { zeroCsvHash } from "./zero-csv-profile.js";
@@ -36,9 +37,9 @@ export const zeroJevProfileSchema = z
     enabled: z.literal(true),
     allowTaskDataToOpenRouter: z.literal(true),
     tools: z
-      .array(z.enum(["csv.parse", "json.normalize"]))
+      .array(z.enum(["csv.parse", "json.normalize", ...ZERO_REUSE_TOOL_IDS]))
       .min(1)
-      .max(2)
+      .max(5)
       .refine((tools) => new Set(tools).size === tools.length),
   })
   .strict();
@@ -48,7 +49,9 @@ export interface ZeroJevConnection {
   connectionDigest: string;
   apiKey: string;
 }
-export type ZeroJevResolver = (principal: ZeroCsvPrincipal) => Promise<ZeroJevConnection>;
+export type ZeroJevResolver = (
+  principal: ZeroCsvPrincipal,
+) => Promise<ZeroJevConnection>;
 
 /** Policy is trusted operator composition; a model request cannot choose a payer or credential. */
 export function createStoredZeroJevResolver(deps: {
@@ -60,10 +63,20 @@ export function createStoredZeroJevResolver(deps: {
     try {
       const principal = zeroJevPrincipalSchema.parse(trustedPrincipal);
       const profile = zeroJevProfileSchema.parse(await deps.policy(principal));
-      if (Math.min(Date.parse(principal.expiresAt), Date.parse(profile.expiresAt)) <= Date.now())
+      if (
+        Math.min(
+          Date.parse(principal.expiresAt),
+          Date.parse(profile.expiresAt),
+        ) <= Date.now()
+      )
         throw new IsolationError();
       const member = await deps.prisma.spaceMember.findUnique({
-        where: { spaceId_userId: { spaceId: principal.spaceId, userId: principal.userId } },
+        where: {
+          spaceId_userId: {
+            spaceId: principal.spaceId,
+            userId: principal.userId,
+          },
+        },
         select: { id: true },
       });
       const preference = await deps.prisma.spaceModelPreference.findUnique({
@@ -85,11 +98,17 @@ export function createStoredZeroJevResolver(deps: {
       )
         throw new IsolationError();
       const secret = await deps.prisma.secret.findFirst({
-        where: { id: preference.credential.secretId, userId: principal.userId, spaceId: null },
+        where: {
+          id: preference.credential.secretId,
+          userId: principal.userId,
+          spaceId: null,
+        },
         select: { id: true, ciphertext: true },
       });
       if (!secret) throw new IsolationError();
-      const auth = parseModelSecret(await deps.secretStore.load(secret.ciphertext, secret.id));
+      const auth = parseModelSecret(
+        await deps.secretStore.load(secret.ciphertext, secret.id),
+      );
       if (
         auth.kind !== "api_key" ||
         !auth.key.trim() ||

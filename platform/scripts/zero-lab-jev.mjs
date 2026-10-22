@@ -17,15 +17,17 @@ const root = new URL("../../", import.meta.url);
 const canonical = value => JSON.stringify(value);
 
 /** Nonrenewing local operator ledger, not enforcement over unrelated account clients. */
-export async function withJevLabBudget(file, operation) {
+export async function withJevLabBudget(file, operation, { authorizedLimitUsdMicros = 1000000 } = {}) {
+  if (!Number.isSafeInteger(authorizedLimitUsdMicros) || authorizedLimitUsdMicros < 100000 || authorizedLimitUsdMicros > 100000000)
+    throw new Error("A finite trusted allocation is required.");
   if (typeof file !== "string" || !path.isAbsolute(file)) throw new Error("An absolute shared budget ledger is required.");
   const lock = await open(file + ".lock", "wx", 0o600);
   try {
     const info = await lstat(file);
     if (!info.isFile() || info.isSymbolicLink() || info.size > 32768 || (info.mode & 0o077)) throw new Error("Invalid private budget ledger.");
     const ledger = JSON.parse(await readFile(file, "utf8"));
-    if (ledger.limitUsdMicros !== 1000000 || !Number.isSafeInteger(ledger.reservedUsdMicros) || ledger.reservedUsdMicros < 0 ||
-        ledger.reservedUsdMicros > ledger.limitUsdMicros || !Array.isArray(ledger.invocations) || ledger.invocations.length > 10 ||
+    if (ledger.limitUsdMicros !== authorizedLimitUsdMicros || !Number.isSafeInteger(ledger.reservedUsdMicros) || ledger.reservedUsdMicros < 0 ||
+        ledger.reservedUsdMicros > ledger.limitUsdMicros || !Array.isArray(ledger.invocations) || ledger.invocations.length > Math.floor(authorizedLimitUsdMicros / 100000) ||
         ledger.invocations.reduce((n, row) => n + row.reservedUsdMicros, 0) !== ledger.reservedUsdMicros)
       throw new Error("Invalid shared budget state.");
     let reserved = false;

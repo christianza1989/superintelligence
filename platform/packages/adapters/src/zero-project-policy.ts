@@ -4,14 +4,21 @@ import { IsolationError } from "@rakazo/db";
 import { z } from "zod";
 import { ZERO_BROWSER_STATIC_PROFILE } from "./zero-browser-contract.js";
 import { ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS } from "./zero-component-input.js";
-import type { ZeroBrowserBinding, ZeroPdfBinding } from "./zero-component-services.js";
+import type {
+  ZeroBrowserBinding,
+  ZeroPdfBinding,
+} from "./zero-component-services.js";
 import { loadZeroCsvApplicationAttribution } from "./zero-csv-application-attribution.js";
 import type { ZeroCsvApplicationBinding } from "./zero-csv-application-service-contract.js";
 import { zeroCsvApplicationBindingSchema } from "./zero-csv-application-service-contract.js";
 import type { ZeroCsvPrincipal } from "./zero-csv-preparation.js";
 import type { ZeroCsvProjectVerifierConfig } from "./zero-csv-project-verifier.js";
-import { ZERO_CSV_PROJECT_FILES, ZERO_CSV_PROJECT_LIMITS } from "./zero-csv-project-verifier.js";
+import {
+  ZERO_CSV_PROJECT_FILES,
+  ZERO_CSV_PROJECT_LIMITS,
+} from "./zero-csv-project-verifier.js";
 import { zeroJevProfileSchema } from "./zero-jev-profile.js";
+import type { ZeroReuseVerifierConfig } from "./zero-reuse-verifier.js";
 import { readZeroOperatorFile as readOperatorFile } from "./zero-operator-file.js";
 import { ZERO_PDF_PROFILE } from "./zero-pdf-contract.js";
 import type { ZeroUrlResearchBinding } from "./zero-url-research-contract.js";
@@ -21,7 +28,10 @@ import {
   zeroUrlResearchRuntimeSchema,
 } from "./zero-url-research-contract.js";
 
-export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({ bytes: 65_536, grants: 64 });
+export const ZERO_PROJECT_POLICY_LIMITS = Object.freeze({
+  bytes: 65_536,
+  grants: 64,
+});
 const principalSchema = z
   .object({
     spaceId: z.string().min(1).max(128),
@@ -59,7 +69,11 @@ const verificationSchema = z
       .object({
         maxFiles: z.literal(5),
         maxFileBytes: z.number().int().min(1).max(131_072),
-        maxTotalBytes: z.number().int().min(1).max(ZERO_CSV_PROJECT_LIMITS.sourceBytes),
+        maxTotalBytes: z
+          .number()
+          .int()
+          .min(1)
+          .max(ZERO_CSV_PROJECT_LIMITS.sourceBytes),
       })
       .strict(),
   })
@@ -69,6 +83,46 @@ const fileId = z
   .min(1)
   .max(128)
   .regex(/^[A-Za-z0-9_-]+$/u);
+const reuseVerificationSchema = z
+  .object({
+    profile: z.literal("zero-reuse-modules-v1"),
+    projectRelativeRoot: z
+      .string()
+      .regex(
+        /^[A-Za-z0-9][A-Za-z0-9_.-]*(?:\/[A-Za-z0-9][A-Za-z0-9_.-]*){0,7}$/u,
+      )
+      .max(256),
+    projectRoot: operatorPath,
+    stagingRoot: operatorPath,
+    dockerExecutable: operatorPath,
+    imageId: z.string().regex(/^sha256:[a-f0-9]{64}$/u),
+    entrypoints: z
+      .object({
+        csv: z
+          .string()
+          .regex(
+            /^[A-Za-z0-9][A-Za-z0-9_.-]*(?:\/[A-Za-z0-9][A-Za-z0-9_.-]*){0,7}$/u,
+          )
+          .max(256)
+          .optional(),
+        zip: z
+          .string()
+          .regex(
+            /^[A-Za-z0-9][A-Za-z0-9_.-]*(?:\/[A-Za-z0-9][A-Za-z0-9_.-]*){0,7}$/u,
+          )
+          .max(256)
+          .optional(),
+      })
+      .strict(),
+    limits: z
+      .object({
+        maxFiles: z.number().int().min(1).max(16),
+        maxFileBytes: z.number().int().min(1).max(131072),
+        maxTotalBytes: z.number().int().min(1).max(524288),
+      })
+      .strict(),
+  })
+  .strict();
 const files = z
   .array(
     z
@@ -82,10 +136,14 @@ const files = z
             (value) =>
               !path.posix.isAbsolute(value) &&
               !/[\\:%]/u.test(value) &&
-              value.split("/").length <= ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS &&
+              value.split("/").length <=
+                ZERO_COMPONENT_INPUT_MAX_PATH_SEGMENTS &&
               value
                 .split("/")
-                .every((segment) => segment !== "" && segment !== "." && segment !== ".."),
+                .every(
+                  (segment) =>
+                    segment !== "" && segment !== "." && segment !== "..",
+                ),
           ),
         sha256: z.string().regex(/^[a-f0-9]{64}$/u),
       })
@@ -93,7 +151,9 @@ const files = z
   )
   .min(1)
   .max(10)
-  .refine((items) => new Set(items.map((item) => item.fileId)).size === items.length);
+  .refine(
+    (items) => new Set(items.map((item) => item.fileId)).size === items.length,
+  );
 const pdfSchema = z
   .object({
     profile: z.literal(ZERO_PDF_PROFILE),
@@ -122,12 +182,16 @@ const grantSchema = principalSchema
       .extend({
         runtime: zeroCsvApplicationBindingSchema.shape.runtime
           .omit({ attribution: true })
-          .extend({ dockerExecutable: operatorPath, dockerConfigDirectory: operatorPath })
+          .extend({
+            dockerExecutable: operatorPath,
+            dockerConfigDirectory: operatorPath,
+          })
           .strict(),
       })
       .strict()
       .optional(),
     jev: zeroJevProfileSchema.optional(),
+    reuseVerification: reuseVerificationSchema.optional(),
     pdf: pdfSchema.optional(),
     browser: browserSchema.optional(),
     urlResearch: z
@@ -155,7 +219,13 @@ const policySchema = z
     grants: z.array(grantSchema).max(ZERO_PROJECT_POLICY_LIMITS.grants),
   })
   .strict();
-const fields = ["spaceId", "userId", "scopeId", "policyRevision", "expiresAt"] as const;
+const fields = [
+  "spaceId",
+  "userId",
+  "scopeId",
+  "policyRevision",
+  "expiresAt",
+] as const;
 
 /** Intentionally redacted: neither operator paths nor policy identities cross this boundary. */
 export class ZeroProjectPolicyError extends IsolationError {
@@ -185,7 +255,11 @@ async function readPolicy(file: string) {
     );
     const bindings = new Set<string>();
     for (const grant of parsed.grants) {
-      const binding = JSON.stringify([grant.spaceId, grant.userId, grant.scopeId]);
+      const binding = JSON.stringify([
+        grant.spaceId,
+        grant.userId,
+        grant.scopeId,
+      ]);
       if (bindings.has(binding)) throw new ZeroProjectPolicyError();
       bindings.add(binding);
     }
@@ -197,7 +271,9 @@ async function readPolicy(file: string) {
 
 /** No cached policy or successful authorization survives a call. Operator writes may fail closed. */
 export function createZeroProjectPolicy(file: string) {
-  const find = async (identity: Pick<ZeroCsvPrincipal, "spaceId" | "userId" | "scopeId">) => {
+  const find = async (
+    identity: Pick<ZeroCsvPrincipal, "spaceId" | "userId" | "scopeId">,
+  ) => {
     const policy = await readPolicy(file);
     const grant = policy.grants.find(
       (item) =>
@@ -205,7 +281,8 @@ export function createZeroProjectPolicy(file: string) {
         item.userId === identity.userId &&
         item.scopeId === identity.scopeId,
     );
-    if (!grant || Date.parse(grant.expiresAt) <= Date.now()) throw new ZeroProjectPolicyError();
+    if (!grant || Date.parse(grant.expiresAt) <= Date.now())
+      throw new ZeroProjectPolicyError();
     return grant;
   };
   const checkedGrant = async (principal: ZeroCsvPrincipal) => {
@@ -222,7 +299,11 @@ export function createZeroProjectPolicy(file: string) {
       actor: Pick<Actor, "spaceId" | "userId">,
       scopeId: string,
     ): Promise<ZeroCsvPrincipal> {
-      const current = await find({ spaceId: actor.spaceId, userId: actor.userId, scopeId });
+      const current = await find({
+        spaceId: actor.spaceId,
+        userId: actor.userId,
+        scopeId,
+      });
       return principalSchema.parse(
         Object.fromEntries(fields.map((field) => [field, current[field]])),
       );
@@ -254,11 +335,24 @@ export function createZeroProjectPolicy(file: string) {
         throw new ZeroProjectPolicyError();
       return grant.jev;
     },
-    async resolvePdf(principal: ZeroCsvPrincipal): Promise<ZeroPdfBinding | undefined> {
+    async resolveReuseVerifier(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroReuseVerifierConfig | undefined> {
+      const grant = await checkedGrant(principal);
+      if (!grant.reuseVerification) return undefined;
+      const { profile: _, ...config } = grant.reuseVerification;
+      return config;
+    },
+    async resolvePdf(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroPdfBinding | undefined> {
       const grant = await checkedGrant(principal);
       return grant.pdf
         ? {
-            snapshot: { projectRoot: grant.pdf.projectRoot, stagingRoot: grant.pdf.stagingRoot },
+            snapshot: {
+              projectRoot: grant.pdf.projectRoot,
+              stagingRoot: grant.pdf.stagingRoot,
+            },
             files: grant.pdf.files,
             runtime: { bundleDirectory: grant.pdf.bundleDirectory },
           }
@@ -283,7 +377,9 @@ export function createZeroProjectPolicy(file: string) {
       const grant = await checkedGrant(principal);
       return grant.urlResearch;
     },
-    async resolveBrowser(principal: ZeroCsvPrincipal): Promise<ZeroBrowserBinding | undefined> {
+    async resolveBrowser(
+      principal: ZeroCsvPrincipal,
+    ): Promise<ZeroBrowserBinding | undefined> {
       const grant = await checkedGrant(principal);
       return grant.browser
         ? {
@@ -305,7 +401,9 @@ export function createZeroProjectPolicy(file: string) {
 }
 
 /** Unset stays disabled. An invalid configured file fails closed when an operation checks it. */
-export function zeroProjectPolicyFromEnv(env: { ZERO_PROJECT_POLICY_FILE?: string } = process.env) {
+export function zeroProjectPolicyFromEnv(
+  env: { ZERO_PROJECT_POLICY_FILE?: string } = process.env,
+) {
   return env.ZERO_PROJECT_POLICY_FILE
     ? createZeroProjectPolicy(env.ZERO_PROJECT_POLICY_FILE)
     : undefined;

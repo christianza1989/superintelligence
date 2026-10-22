@@ -1,6 +1,14 @@
 import type { ArtifactStore, JobPublisher } from "@rakazo/adapter-kit";
-import type { ZeroCsvPrincipal, ZeroJevProfile, ZeroJevResolver } from "@rakazo/adapters";
-import { createZeroJevToolService, getZeroJevAvailability } from "@rakazo/adapters";
+import type {
+  ZeroCsvPrincipal,
+  ZeroJevProfile,
+  ZeroJevResolver,
+  ZeroReuseVerifierConfig,
+} from "@rakazo/adapters";
+import {
+  createZeroJevToolService,
+  getZeroJevAvailability,
+} from "@rakazo/adapters";
 import type { Actor } from "@rakazo/contracts";
 import type { Pool, PrismaClient } from "@rakazo/db";
 import { IsolationError } from "@rakazo/db";
@@ -10,6 +18,9 @@ import type { ZeroCsvScopePolicy } from "./zero-csv.js";
 
 export interface ZeroJevScopePolicy extends ZeroCsvScopePolicy {
   resolveJev(principal: ZeroCsvPrincipal): Promise<ZeroJevProfile>;
+  resolveReuseVerifier?(
+    principal: ZeroCsvPrincipal,
+  ): Promise<ZeroReuseVerifierConfig | undefined>;
 }
 export const ZERO_JEV_API_PREFIX = "/api/zero/jev/scopes";
 export function mountZeroJevRoutes(
@@ -30,8 +41,12 @@ export function mountZeroJevRoutes(
     pool: deps.pool,
     artifacts: deps.artifacts,
     resolve: deps.resolve,
+    resolveReuseVerifier: deps.policy?.resolveReuseVerifier?.bind(deps.policy),
   };
-  const scoped = async (c: Context, action: (principal: ZeroCsvPrincipal) => Promise<Response>) => {
+  const scoped = async (
+    c: Context,
+    action: (principal: ZeroCsvPrincipal) => Promise<Response>,
+  ) => {
     c.header("cache-control", "no-store");
     try {
       const actor = await deps.authenticate(c.req.raw);
@@ -59,19 +74,29 @@ export function mountZeroJevRoutes(
       await deps.policy.authorize(principal);
       return await action(principal);
     } catch (error) {
-      if (error instanceof IsolationError) return c.json({ error: "project_scope_rejected" }, 403);
+      if (error instanceof IsolationError)
+        return c.json({ error: "project_scope_rejected" }, 403);
       if (error instanceof Error && error.name === "ZodError")
         return c.json({ error: "invalid_request" }, 400);
-      if (error instanceof Error && error.message === "idempotency_key_conflict")
+      if (
+        error instanceof Error &&
+        error.message === "idempotency_key_conflict"
+      )
         return c.json({ error: error.message }, 409);
-      if (error instanceof Error && error.message === "scope_job_limit_exceeded")
+      if (
+        error instanceof Error &&
+        error.message === "scope_job_limit_exceeded"
+      )
         return c.json({ error: error.message }, 429);
       if (
         error instanceof Error &&
         ["invalid_job_bounds", "request_limit_exceeded"].includes(error.message)
       )
         return c.json({ error: error.message }, 400);
-      if (error instanceof Error && error.message === "routing_budget_unavailable")
+      if (
+        error instanceof Error &&
+        error.message === "routing_budget_unavailable"
+      )
         return c.json({ error: error.message }, 503);
       return c.json({ error: "routing_backend_unavailable" }, 503);
     }
@@ -79,13 +104,17 @@ export function mountZeroJevRoutes(
   const service = (principal: ZeroCsvPrincipal) =>
     createZeroJevToolService({ ...worker, jobs: deps.jobs }, principal);
   app.get(`${ZERO_JEV_API_PREFIX}/:scopeId/status`, (c) =>
-    scoped(c, async (principal) => c.json(await getZeroJevAvailability(worker, principal))),
+    scoped(c, async (principal) =>
+      c.json(await getZeroJevAvailability(worker, principal)),
+    ),
   );
   app.post(`${ZERO_JEV_API_PREFIX}/:scopeId/execute`, (c) =>
     scoped(c, async (principal) => {
       // A status read never reserves. The worker makes the authoritative atomic admission later.
-      await getZeroJevAvailability(worker, principal);
-      if (c.req.header("content-type")?.split(";")[0]?.trim().toLowerCase() !== "application/json")
+      if (
+        c.req.header("content-type")?.split(";")[0]?.trim().toLowerCase() !==
+        "application/json"
+      )
         return c.json({ error: "json_required" }, 415);
       const raw = await readBoundedBody(c.req.raw, 36 * 1024);
       if (raw === null) return c.json({ error: "request_too_large" }, 413);
@@ -95,11 +124,20 @@ export function mountZeroJevRoutes(
       } catch {
         return c.json({ error: "invalid_json" }, 400);
       }
+      if (!(
+        input &&
+        typeof input === "object" &&
+        "mode" in input &&
+        input.mode === "verify-component"
+      ))
+        await getZeroJevAvailability(worker, principal);
       return c.json(await service(principal).submit(input), 202);
     }),
   );
   app.get(`${ZERO_JEV_API_PREFIX}/:scopeId/jobs/:jobId`, (c) =>
-    scoped(c, async (principal) => c.json(await service(principal).job(c.req.param("jobId")))),
+    scoped(c, async (principal) =>
+      c.json(await service(principal).job(c.req.param("jobId"))),
+    ),
   );
   app.get(`${ZERO_JEV_API_PREFIX}/:scopeId/jobs/:jobId/artifact`, (c) =>
     scoped(c, async (principal) => {
@@ -122,7 +160,8 @@ export function mountZeroJevRoutes(
         return c.json({ error: "invalid_page" }, 400);
       const artifact = await service(principal).artifact(c.req.param("jobId"));
       const bytes = Buffer.from(artifact.content);
-      if (offset > bytes.byteLength) return c.json({ error: "invalid_page" }, 400);
+      if (offset > bytes.byteLength)
+        return c.json({ error: "invalid_page" }, 400);
       const end = Math.min(offset + limit, bytes.byteLength);
       return c.json({
         artifactId: artifact.artifactId,

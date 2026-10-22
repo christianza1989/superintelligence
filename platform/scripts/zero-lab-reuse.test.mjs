@@ -142,11 +142,23 @@ test("library execution failure survives successful cleanup, and unverified clea
     if (args[0] === "run") return {}; if (args[0] === "rm") throw new Error("Controlled removal failed"); return {};
   } }), /cleanup failed/);
 });
-async function budgetFile(t, reserved = 0) {
+async function budgetFile(t, reserved = 0, limit = 1000000) {
   const dir = await mkdtemp(path.join(tmpdir(), "zero-jev-budget-test-")); t.after(() => rm(dir, { recursive: true, force: true }));
   const file = path.join(dir, "ledger.json"), invocations = Array.from({ length: reserved / 100000 }, (_, i) => ({ id: "controlled-" + i, reservedUsdMicros: 100000, status: "held" }));
-  await writeFile(file, JSON.stringify({ limitUsdMicros: 1000000, reservedUsdMicros: reserved, invocations }), { mode: 0o600 }); return file;
+  await writeFile(file, JSON.stringify({ limitUsdMicros: limit, reservedUsdMicros: reserved, invocations }), { mode: 0o600 }); return file;
 }
+
+test("an explicit additional allocation preserves the earlier ledger and stops at its separate finite cap", async t => {
+  const earlier = await budgetFile(t, 1000000), before = await readFile(earlier, "utf8");
+  const additional = await budgetFile(t, 0, 3000000);
+  await assert.rejects(withJevLabBudget(additional, async () => assert.fail("Default one-dollar policy must not admit a different allocation")));
+  for (let index = 0; index < 30; index++) await withJevLabBudget(additional, async reserve => {
+    const permit = await reserve("additional-" + index); assert.ok(permit); await permit.hold();
+  }, { authorizedLimitUsdMicros: 3000000 });
+  await withJevLabBudget(additional, async reserve => assert.equal(await reserve("over-cap"), null), { authorizedLimitUsdMicros: 3000000 });
+  assert.equal(JSON.parse(await readFile(additional)).reservedUsdMicros, 3000000);
+  assert.equal(await readFile(earlier, "utf8"), before);
+});
 test("shared one-dollar ledger persists a reservation before dispatch and never refunds an uncertain call", async t => {
   const file = await budgetFile(t);
   await assert.rejects(withJevLabBudget(file, async reserve => { const receipt = await reserve("controlled"); assert.ok(receipt); assert.equal(await reserve("another"), null); throw new Error("Controlled interrupted call"); }));
