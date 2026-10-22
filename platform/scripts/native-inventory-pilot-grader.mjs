@@ -479,7 +479,13 @@ async function browserCases(candidate, options, record, report) {
           assert.ok(await commit.isDisabled(), 'invalid preview enabled Commit');
           const text = await page.locator('body').innerText();
           assert.match(text, /quantity/i, 'field error not visible');
-          assert.match(text, /(?:row\s*[:#]?\s*2\b|2\s*[:·/-])/i, 'row number not visible');
+          let semanticErrorRow = false;
+          for (const row of await page.getByRole('row').all()) {
+            if (await row.getByRole('cell', { name: '2', exact: true }).count()
+                && await row.getByRole('cell', { name: 'quantity', exact: true }).count()
+                && await row.isVisible()) semanticErrorRow = true;
+          }
+          assert.ok(semanticErrorRow || /(?:row\s*[:#]?\s*2\b|2\s*[:·/-])/i.test(text), 'row/field error not visible as text or semantic table cells');
           assert.deepEqual(await candidate.items(), before);
         });
         await caseRecord('keyboard-navigation', async () => {
@@ -551,7 +557,7 @@ export async function gradeInventory(input) {
     limits: { startupMs: 6000, requestMs: 2500, totalMs: input.totalMs ?? 180000, nodeHeapMiB: 512, logBytes: 65536 },
     environment: { node: process.version, platform: process.platform, arch: process.arch, chromium: input.chromium ?? '/usr/bin/chromium' },
     functional: [], browser: [], observedUse: {}, evidence: [],
-    limitations: ['Development cases, not a true hidden holdout.', 'Same-user processes and instrumentation are not hostile-code isolation.', 'Wrapper traces prove calls crossing the observed export boundary; internal module calls may remain unobserved.', 'Vendored d3 pin/use evidence is distinct from generic parser use and any separate Zero component verification receipt.', 'Browser traffic is limited to the candidate loopback origin; candidate server network isolation is not claimed.', 'No general benefit verdict follows from a single development pair.'],
+    limitations: ['Development cases, not a true hidden holdout.', 'Same-user processes and instrumentation are not hostile-code isolation.', 'Import-effect checks observe selected instrumented filesystem, server-listen, socket-connect, HTTP, datagram and fetch entry points during import. Node permission flags alone do not establish no-network purity; deferred effects and uninstrumented paths remain unknown.', 'Wrapper traces prove calls crossing the observed export boundary; internal module calls may remain unobserved.', 'Vendored d3 pin/use evidence is distinct from generic parser use and any separate Zero component verification receipt.', 'Browser traffic is limited to the candidate loopback origin; candidate server network isolation is not claimed.', 'No general benefit verdict follows from a single development pair.'],
   };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(new Error('grader runtime exceeded')), report.limits.totalMs);
@@ -570,7 +576,7 @@ export async function gradeInventory(input) {
     before = await sourceManifest(options.workspace);
     report.sourceBefore = before;
     report.graderSha256 = digest(await readFile(fileURLToPath(import.meta.url)));
-    await functional('component-export-contract-and-import-purity', async () => {
+    await functional('component-export-contract-and-observed-import-effects', async () => {
       const results = await runParserContract(options, controller.signal);
       report.parserContract = results;
       assert.deepEqual(results.sideEffects, [], 'module import attempted side effects');

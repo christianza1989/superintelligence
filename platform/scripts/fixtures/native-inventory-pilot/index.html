@@ -43,7 +43,19 @@ preview.addEventListener('click', async () => {
   const response = await fetch('/api/preview', { method: 'POST', headers: { 'Content-Type': 'text/csv' }, body: selectedBytes });
   const result = await response.json();
   if (current !== version) return;
-  errors.textContent = (result.errors ?? []).map((e) => `Row ${e.row} ${e.field}: ${e.message}`).join('\n');
+  errors.replaceChildren();
+  if (mode === 'browser-accessible-table' && result.errors?.length) {
+    const table = document.createElement('table');
+    const header = document.createElement('tr');
+    for (const text of ['Row', 'Field', 'Message']) { const th = document.createElement('th'); th.scope = 'col'; th.textContent = text; header.append(th); }
+    table.append(header);
+    for (const error of result.errors) {
+      const tr = document.createElement('tr');
+      for (const value of [error.row, error.field, error.message]) { const td = document.createElement('td'); td.textContent = String(value); tr.append(td); }
+      table.append(tr);
+    }
+    errors.append(table);
+  } else errors.textContent = (result.errors ?? []).map((e) => `Row ${e.row} ${e.field}: ${e.message}`).join('\n');
   table(document.querySelector('#rows'), result.rows ?? []);
   if (result.valid) { bytes = selectedBytes; key = crypto.randomUUID(); commit.disabled = false; }
 });

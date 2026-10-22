@@ -48,7 +48,9 @@ const server = createServer(async (request, response) => {
     if (request.method === 'GET' && request.url === '/api/items') return respond(response, 200, { items: items() });
     if (request.method === 'GET' && request.url === '/') {
       response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      return response.end(readFileSync(new URL('./index.html', import.meta.url), 'utf8').replace('__CONTROL_MODE__', JSON.stringify(mode)));
+      let html = readFileSync(new URL('./index.html', import.meta.url), 'utf8').replace('__CONTROL_MODE__', JSON.stringify(mode));
+      if (mode === 'browser-accessible-table') html = html.replace('<button id="preview">Preview</button>', '<button id="preview" aria-label="Preview">⇢</button>').replace('<button id="commit" disabled>Commit</button>', '<button id="commit" aria-label="Commit" disabled>✓</button>');
+      return response.end(html);
     }
     if (request.method !== 'POST' || !['/api/preview', '/api/commit'].includes(request.url)) return respond(response, 404, { error: 'Not found' });
     const commit = request.url === '/api/commit';

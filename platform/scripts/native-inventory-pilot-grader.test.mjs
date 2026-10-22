@@ -55,16 +55,18 @@ test('reference passes HTTP, standalone parser, restart and storage cases', { ti
 test('permissive parser starts normally and fails malformed-quote behavior', { timeout: 130000 }, async () => {
   const report = await qualify('permissive-parser');
   assert.equal(report.functional.find((item) => item.id === 'startup-ephemeral-loopback')?.status, 'pass');
-  failure(report, 'component-export-contract-and-import-purity');
+  failure(report, 'component-export-contract-and-observed-import-effects');
   failure(report, 'invalid-after-quote');
 });
 
-test('import-side-effect control starts normally and fails import purity', { timeout: 130000 }, async () => {
-  const report = await qualify('impure-import');
-  assert.equal(report.functional.find((item) => item.id === 'startup-ephemeral-loopback')?.status, 'pass');
-  failure(report, 'component-export-contract-and-import-purity');
-  assert.ok(report.parserContract.sideEffects.includes('fs.mkdirSync'));
-});
+for (const [mode, effect] of [['impure-import', 'fs.mkdirSync'], ['import-network', 'socket.connect'], ['import-server', 'server.listen']]) {
+  test(`${mode} control starts normally and exposes the observed import effect`, { timeout: 130000 }, async () => {
+    const report = await qualify(mode);
+    assert.equal(report.functional.find((item) => item.id === 'startup-ephemeral-loopback')?.status, 'pass');
+    failure(report, 'component-export-contract-and-observed-import-effects');
+    assert.ok(report.parserContract.sideEffects.includes(effect));
+  });
+}
 
 for (const [mode, caseId] of [
   ['invalid-mutation', 'invalid-header-order'],
@@ -97,6 +99,11 @@ test('reference completes real file upload, commit, errors and keyboard on deskt
   const report = await qualify('reference', true);
   assert.equal(report.outcome, 'pass', JSON.stringify([...report.functional, ...report.browser].filter((entry) => entry.status !== 'pass'), null, 2));
   assert.equal(report.browser.length, 6);
+});
+
+test('accessible icon buttons and semantic Row/Field/Message error table are accepted', { skip: !playwrightModule, timeout: 130000 }, async () => {
+  const report = await qualify('browser-accessible-table', true);
+  assert.equal(report.outcome, 'pass', JSON.stringify([...report.functional, ...report.browser].filter((entry) => entry.status !== 'pass'), null, 2));
 });
 
 for (const [mode, failedCase] of [

@@ -1,4 +1,5 @@
-// An offline child with write/process permissions denied and import-side-effect traps.
+// A development child with write/process permissions denied and selected import-effect traps.
+// Permission flags do not deny all network operations. This is not a purity proof.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -57,4 +58,9 @@ try {
     } catch (error) { results.push({ id: item.id, status: 'fail', error: String(error.message).slice(0, 1500) }); }
   }
 } catch (error) { importError = String(error.stack ?? error).slice(0, 2000); }
-emit(1, JSON.stringify({ sideEffects, cases: results, ...(importError ? { importError } : {}) }));
+emit(1, JSON.stringify({
+  sideEffects, cases: results,
+  observedImportEffectCoverage: ['instrumented fs writes/open-for-write', 'server.listen', 'socket.connect', 'http/https request/get', 'datagram bind/send', 'global fetch', 'child_process creation'],
+  unknowns: ['deferred effects after import completion', 'uninstrumented or bypassed entry points', 'hostile same-user interference'],
+  ...(importError ? { importError } : {}),
+}));
