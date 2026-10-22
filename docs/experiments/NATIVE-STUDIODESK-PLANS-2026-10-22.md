@@ -1,5 +1,7 @@
 # Native StudioDesk plans: larger media/AI task
 
+**Naujausia: [galutinė 0.10.5 pora](#galutinė-0105-planų-pora), A 78.994 s / 238,301 host tokenų; B 221.097 s / 2,005,791 host tokenas. GitHub/Jev ir pinned source skaitymas veikė; kūrimo nauda ir kodas NOT_RUN. Žemiau esantis 0.10.1 aprašas yra originali istorija, vėlesni atskiri bandymai pateikti pabaigoje.**
+
 The user requested a much larger application after the completed RepairDesk repeat. The separate [frozen StudioDesk fixture](../../benchmarks/native-studiodesk-plans/v1/README.md) covers layered images, video/audio editing, real exports, subtitles, local image/speech AI, project recovery and resource-limited background work. Both fresh native chats received identical natural prompt/SPEC bytes without GitHub, reuse or Zero hints and stopped after complete plans. No program code, dependencies or AI models were installed/generated/executed.
 
 Model/effort was `gpt-6-luna`/high, core 0.163.0-alpha.11.1, fixed order A then B. Source checkpoint was `9aff393c00523218803cbd2c73405bbd098f0b7a`; the installed 0.10.1 package was built from `ac6e16931ff56d0a956893a04097e219d9b511ca`, with no intervening platform/plugin/script source changes. Exact source/plugin/backend/collector and initial workspace hashes matched through capture. A had no Zero metadata/guidance; B had the skill/MCP, disclosed generic operator-selected AGENTS guidance and a separately authorized source-only GitHub/Jev backend. Connection preflights were separate chats. An initial setup attempt observed the previous stopped runtime while a fresh backend was starting; the guard stopped before workspace archival, and setup succeeded after readiness. This did not enter the frozen pair.
@@ -55,3 +57,35 @@ Reprodukuota priežastis: atskiras GitHub tyrimo abort buvo perduotas kaip viso 
 B atliko 5 tikrus Jev pasirinkimus: 3 rekomendacijos ir 2 abstain, provider USD 0.000478380; Jev input iš headline host tokenų išimtas. Penki GitHub tyrimai išsaugojo 8 unikalius pins ir 5 hash patikrintus kodo failų pavyzdžius. Visi pažymėjo pasibaigusį ribotą tyrimo biudžetą; tai nėra viso GitHub ar viso repo peržiūra. Rekomenduoti MartinDelophy/ai-video-editor, igorski/bitmappery ir EitanWong/com.eitan.sherpa-onnx-unity liko source-only.
 
 Dvi papildomos modulių apžiūros grąžino source_unavailable. Host pateikė numanomus kelius; pirmas HTTP 404 užbaigė visą kelių grupę. Kiti pateikti keliai nebuvo kvalifikuoti. B teisingai nepaskelbė šių kandidatų paruoštomis priklausomybėmis, tačiau tai neuždaro modulio apžiūros kelio native priėmimo. Plane taip pat yra nelietuviškos kalbos fragmentas. Visas planas, pradiniai receipt ir nesėkmės išsaugoti. 0.10.5 virtualaus repo šakninio katalogo ir per-path rezultatų pataisa vykdoma tik po šios poros.
+
+## Galutinė 0.10.5 planų pora
+
+Abu nauji pokalbiai: gpt-6-luna / high, Codex 0.163.0-alpha.11.1; identiškas SPEC ir promptas, eilė B → A. Šaltinis ee501edf7d38cdb32f2f372a7673461cfe6e0169; 226 source failai ir paketas/backend užfiksuoti prieš porą. A Zero nematė, B turėjo įdiegtą skill, bendras operatoriaus AGENTS gaires ir scoped GitHub/Jev source-only profilį. B preflight statuso kvietimas nepraėjo dėl nonce >64 simbolių; išsaugotas kaip klaida. Tikro pagrindinio B pokalbio zero_status patvirtino 0.10.5 / 1.11.5 ir aktyvų backend. Promptas nekeistas.
+
+| Rodiklis | A be Zero | B su Zero |
+|---|---:|---:|
+| Laikas | 78.994 s | 221.097 s |
+| Host input (įskaitant cache) | 231 919 | 1 992 421 |
+| Iš jų cached input | 167 552 | 1 896 064 |
+| Input be cache | 64 367 | 96 357 |
+| Host output (reasoning yra poaibis) | 6 382 | 13 370 |
+| Iš jų reasoning | 1 649 | 4 621 |
+| Host total | 238 301 | 2 005 791 |
+| Jev API kvietimai | 0 | 3 |
+| Jev provider USD | 0 | 0.000343434 |
+
+Jev input 8177 ir output 129 saugomi atskirai; į host total neįtraukti. Cached input yra input dalis, reasoning — output dalis. Host USD iš prenumeratos nežinomas. Tai vienos poros planavimo duomenys, ne kūrimo lenktynės: B truko 2.80× ilgiau ir turėjo 8.42× daugiau bendrų host tokenų; input be cache buvo tik 1.50× didesnis. Šie santykiai nėra USD kainos santykis. Cache nebuvo valomas ar kontroliuotas.
+
+### Ką Zero tikrai atliko
+
+3 GitHub/Jev tyrimai, 6 unikalūs pins, 4 hash patikrinti kodo failų pavyzdžiai discovery metu. 11 papildomų source skaitymo darbų baigėsi sėkmingai, per-path klaidų 0. Modelis iki plano finalo perskaitė 6 inspection receipt; kitų 5 rezultatus vėliau perskaitė tik read-only stebėtojas — jų nepriskiriame modelio panaudotiems įrodymams. 57 tikri MCP kvietimai, klaidų 0; modelio artifact kvietimų 9, be base64 dekodavimo ciklų. Visi 14 terminaliniai originalai atskirai SHA-256 patikrinti.
+
+Jev rekomendacijos: Cutnora, OpenScene ir TTS Audio Suite. Modelis iš exact-pin README, priklausomybių manifestų ir katalogų nustatė naršyklės/debesijos/ComfyUI neatitikimus bei paliko juos architektūros nuorodomis. Tai teisėtas atsisakymas kopijuoti netinkamą priklausomybę, bet ne įrodymas, kad Zero rado geriausius galimus modulius ar sumažino kūrimo darbą. Visi discovery tyrimai pažymėjo riboto laiko pabaigą; aprėptis dalinė.
+
+### Planų kokybės peržiūra
+
+Abu siūlo Tauri/React/TypeScript/Rust, FFmpeg, SQLite, pasirenkamus vietinius AI ir etapinius scenarijus. A turi konkretų konservatyvų SQLite/WAL bei proceso argumentų valdymą ir aiškesnį CPU atskaitos rendererį. B papildomai pateikia tris konkrečius source pasiūlymus su commitais ir tikrais priklausomybių/architektūros neatitikimais. B projekte JSON manifestas yra atkuriama tiesa, SQLite — indeksas; A redagavimo duomenis daugiausia saugotų projekto SQLite.
+
+Abiejuose dar neparinktas konkretus sluoksnių kompozitorius, neužfiksuoti kvalifikuoti AI modeliai/balsai, neįrodyta preview/export atitiktis ir faktinis resursų biudžetų vykdymas. B turi nelietuvišką fragmentą etapo antraštėje; originalas netaisytas. B nukelia dalį autosave/undo-recovery sutvirtinimo į vėlyvą etapą, nors tai turėtų lemti ankstyvą duomenų modelį. Nė viename nėra realiai integruoto modulių kodo ar vykdytų StudioDesk testų. Negalima skelbti kodo kokybės ar viso kūrimo naudos laimėtojo.
+
+Visi ankstesni v1–v4 rezultatai ir nesėkmės išsaugoti atskirai. Pataisos nedarytos porų viduje. Bandymo API/worker/PostgreSQL sustabdyti, grant atšauktas. USD3 kumuliacinis ledger išlaiko USD1.80 hold per 18 kvietimų; tai nėra provider nurašyta suma, rezervai negrąžinti. Istorinis USD1 nepakeistas. Programos nekurtos; sustota žmogaus planų peržiūrai.
