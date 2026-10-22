@@ -1,8 +1,10 @@
 # Istorinių eksperimentų ataskaitos
 
-Naujausia [tikslinė Zero ASR kvalifikacija](WHISPER-MODULE-QUALIFICATION-2026-10-22.md): source ir atskirai sugeneruotas 0.12.3 / schema 1.13.3 paketas su nepakeistais v9 atrankos argumentais per 13.632 s gavo tikrą Jev rekomendaciją `ggml-org/whisper.cpp`, `include/whisper.h`. Vienas Jev kvietimas: 6 304 input auditui, 51 output, 0.000264768 USD; 149 offline, tipai bei Linux/Windows paketo patikros PASS. Tai atskira source modulio kontrolė: native įdiegtas paketas lieka 0.12.2, komponento įdiegimas, ASR vykdymas ir nauda netikrinti; naujų A/B ar native pokalbių nebuvo.
+Naujausias [tik B StudioDesk pakartojimas](NATIVE-STUDIODESK-B-REPEAT-2026-10-22.md) naudojo native įdiegtą 0.12.3 / schema 1.13.3: B 109.874 s / 431 273 host tokenai, 10 atsakymo ciklų. A nepakartotas; istorinis A 82.184 s / 204 441. B laikas 33,7 % ilgesnis, tokenų 2,1095 karto daugiau, bet cache, eilė ir versijos nekontroliuoti — tai nėra nauja suderinta pora. Vienas tikras Jev kvietimas atsisakė rinktis dėl nepakankamų dviejų kandidatų tinkamumo įrodymų, pasiūlymo negauta; viena MCP užklausa atmesta dėl >80 simbolių frazės. Integracija, kodo kokybė ir nauda netikrinti.
 
-Naujausia natūrali native [StudioDesk 0.12.2 pakartota planų pora](NATIVE-STUDIODESK-MODULE-REPEAT-2026-10-22.md): A 82.184 s / 204 441 host tokenas, B 139.420 s / 559 717. GitHub paieška iš 21 atitikties pateikė tris pinned repo, bet modulio API vieneto nepateikė; Jev nebuvo kviestas, todėl tai nėra Jev atmetimas. Modulių atranka, kodo kokybė ir kūrimo nauda šia planų pora nepatvirtintos.
+Ankstesnė atskira [tikslinė Zero ASR kvalifikacija](WHISPER-MODULE-QUALIFICATION-2026-10-22.md): atskirai sugeneruotas 0.12.3 / schema 1.13.3 paketas su nepakeistais v9 atrankos argumentais per 13.632 s gavo tikrą Jev rekomendaciją `ggml-org/whisper.cpp`, `include/whisper.h`. Vienas Jev kvietimas: 6 304 input auditui, 51 output, 0.000264768 USD; 149 offline, tipai bei Linux/Windows paketo patikros PASS. Ši source modulio kontrolė nėra vėlesnis native B pakartojimas; komponento įdiegimas, ASR vykdymas ir nauda netikrinti.
+
+Ankstesnė native [StudioDesk 0.12.2 v9 planų pora](NATIVE-STUDIODESK-MODULE-REPEAT-2026-10-22.md): A 82.184 s / 204 441 host tokenas, B 139.420 s / 559 717. GitHub paieška iš 21 atitikties pateikė tris pinned repo, bet modulio API vieneto nepateikė; Jev nebuvo kviestas, todėl tai nėra Jev atmetimas. Modulių atranka, kodo kokybė ir kūrimo nauda šia planų pora nepatvirtintos.
 
 Atskira [konkretaus modulio planavimo kvalifikacija](GITHUB-MODULE-RETRIEVAL-2026-10-22.md#gyvas-0122-modulio-pasirinkimas) turi teigiamą MLT ir tikro Jev kontrolę; ji atskiria source pasiūlymą, įdiegimą ir native palyginimo naudą.
 
@@ -14,6 +16,7 @@ Istorinė diagnozė: [StudioDesk planavimo sąnaudos ir konkrečių modulių atr
 - [Native Codex value pilot preparation and preserved preflight failures](NATIVE-VALUE-PILOT-2026-10-22.md).
 - [Jev-selected source modules and full scoped development-chain controls](REUSE-MODULE-CHAIN-2026-10-22.md).
 - [RepairDesk native plan comparisons, preserved deadline failure and repaired live GitHub/Jev repeat](NATIVE-REPAIRDESK-PLANS-2026-10-22.md).
+- [StudioDesk native B-only 0.12.3 repeat against historical A: actual Jev abstention, no module proposal, uncontrolled comparison](NATIVE-STUDIODESK-B-REPEAT-2026-10-22.md).
 - [Targeted Zero-only ASR 0.12.3 qualification: actual Jev selected a pinned canonical Whisper header; no native upgrade, integration or runtime claim](WHISPER-MODULE-QUALIFICATION-2026-10-22.md).
 - [StudioDesk 0.12.2 repeated native plan pair: three pinned repositories, no inspected API unit, no Jev dispatch; preserved invalid attempts](NATIVE-STUDIODESK-MODULE-REPEAT-2026-10-22.md).
 - [Historical StudioDesk 0.11.1 native plan pair: preserved retrieval failure and no Jev dispatch](NATIVE-STUDIODESK-MODULE-PLANS-2026-10-22.md).
