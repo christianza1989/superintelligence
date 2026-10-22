@@ -27,7 +27,7 @@ describe("need normalization and independent suitability constraints", () => {
   });
   it("bounds raw text before normalization and never truncates a trailing constraint", () => {
     for (const query of [
-      "image editor" + " ".repeat(245) + "Windows",
+      "image editor" + " ".repeat(2045) + "Windows",
       "a ".repeat(65),
       "x".repeat(65),
       "\uFDFA".repeat(128),
@@ -40,6 +40,11 @@ describe("need normalization and independent suitability constraints", () => {
     ).toEqual([]);
     for (const query of ["tool please", "---", "with and ir su"])
       expect(searchRepositories({ query })).toEqual([]);
+  });
+  it("retains hard requirements after a longer focused request instead of truncating them", () => {
+    const query = "image editor" + " ".repeat(300) + "Windows";
+    expect(normalizeRepositoryNeed(query)?.requirements).toMatchObject({ operatingSystem: "windows" });
+    expect(searchRepositories({ query })).toEqual([]);
   });
   it("recognizes explicit runtime/license phrases while retaining other terms", () => {
     expect(

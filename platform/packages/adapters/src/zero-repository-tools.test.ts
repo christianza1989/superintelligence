@@ -53,4 +53,9 @@ describe("agent reuse discovery", () => {
       candidates: [],
     });
   });
+  it("accepts longer focused queries at the shared boundary and rejects an oversized request", () => {
+    expect(repositorySearchFromTool({ query: " ".repeat(2045) + "CSV" }).preparedProfiles).toEqual(preparedProfiles);
+    expect(repositorySearchFromTool({ query: "x".repeat(2049) })).toHaveProperty("error");
+    expect(repositorySearchTool.inputSchema).toMatchObject({ properties: { query: { maxLength: 2048 } } });
+  });
 });

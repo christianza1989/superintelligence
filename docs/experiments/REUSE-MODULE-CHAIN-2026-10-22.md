@@ -67,6 +67,19 @@ B did not load the reuse skill or invoke the available Zero tools in the Invento
 
 After this epoch was stopped, 0.8.1 added a separately disclosed, operator-selected [project guidance setup](../MCP-PLUGIN.md). Six Linux and six Windows setup controls passed, as did forty MCP server tests and the package's Linux discovery/execution-transport controls. The initial Windows test invocation could not resolve a UNC test entrypoint; the same fresh helper/test bytes ran from a local Windows fixture and passed. No executable hook trust was bypassed. The new project guidance is a different intervention from the earlier skill-only profile; it must be frozen before new plan-only chats, with the same natural user request on both sides.
 
+## First restored plan-only pair
+
+The first clean plan-only pair used the same StockDesk specification, identical Lithuanian prompt, `gpt-6-luna`/high, and native core 0.163.0-alpha.11.1. The frozen order was B then A. Both workspaces were byte-unchanged afterward, and the separate live-API allocation was unchanged. Source discovery was the only active backend profile; this was not a Jev trial.
+
+| Side | Native planning time | Input / cached input / output tokens | Discovery behavior |
+|---|---|---|---|
+| A | 29.843 s | 101,118 / 88,320 / 2,864 | No Zero metadata or calls |
+| B | 67.816 s | 349,804 / 319,104 / 4,667 | Read the skill; five Zero calls in four orchestration groups |
+
+Automatic activation occurred with the disclosed project guidance. One overlong search and two inspect calls using module IDs were rejected; the shorter search returned d3-dsv and Papa Parse. B ultimately proposed a custom parser, interpreting the no-external-npm-dependencies requirement as a reason against those candidates. Both plans proposed comparable Node/SQLite architectures. This pair does not demonstrate planning speed or implementation benefit.
+
+The subsequent 0.8.2/schema 1.9.0 repair makes returned module candidate IDs directly inspectable with pinned file hashes, original license, exact module limits and source-vendoring facts. The shared raw-query limit is now 2,048 characters rather than 256, with no truncation of trailing hard requirements. A first regression exposed a second core-normalization limit after the adapter limit was extended; that failure is retained and both boundaries now share one constant. The final focused suite passed 158 tests across seven files. A [harder RepairDesk plan-only task](../../benchmarks/native-repairdesk-plans/v1/README.md), allowing ordinary libraries, is a separate frozen epoch; no prompt or checker was changed inside the completed StockDesk pair.
+
 ## Limits and next gate
 
 The selected Node Docker profile is read-only, network-disabled and bounded to 128 MiB, one CPU and ten seconds. Evidence concerns the component snapshot and exercised calls. It is not hostile-code isolation, a whole-application verdict, a hidden holdout, or proof of benefit. Later edits require a new verification. Packaging these worker-side source assets into a relocated runtime is a separate qualification.

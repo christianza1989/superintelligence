@@ -10,6 +10,7 @@ import {
 import { searchPreparedProfiles } from "./zero-prepared-profiles.js";
 
 export type { RepositoryRequirements } from "./zero-need-normalization.js";
+export { ZERO_REPOSITORY_QUERY_MAX_CHARS } from "./zero-need-normalization.js";
 
 export type RepositoryCandidate = (typeof snapshot.records)[number];
 export const repositorySnapshot = snapshot;

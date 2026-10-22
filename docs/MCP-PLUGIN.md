@@ -36,6 +36,8 @@ Pagalbinis skriptas įtrauktas į `BUILD.json` hash sąrašą. Windows ir Linux 
 
 ## Codex vietinis marketplace
 
+0.8.2 / schema 1.9.0 discovery priima iki 2 048 simbolių konkretaus gebėjimo užklausą. `moduleCandidates` turi savo `candidateId`, tiesiogiai tinkamą `zero_inspect`; modulių apžiūra grąžina pasirinktų failų SHA-256, licenciją, ribas ir source-vendoring būdą. Repo katalogo inspect ir source-only būsena išlieka atskiri. Šie read-only faktai nesuteikia prepare/verify ar projekto integravimo leidimo. Pradinis natūralus 0.8.1 planų bandymas su ilgų užklausų / modulio ID klaidomis išsaugotas [ataskaitoje](experiments/REUSE-MODULE-CHAIN-2026-10-22.md); nauja versija jo retrospektyviai nepaverčia sėkminga integracija.
+
 Sugeneruoto paketo `.agents/plugins/marketplace.json` naudoja tikrą `repositoryzero-local-preview` vardą ir vietinį repositoryzero paketą. Įtraukti jau sukurtą katalogą oficialia komanda:
 
 ```bash

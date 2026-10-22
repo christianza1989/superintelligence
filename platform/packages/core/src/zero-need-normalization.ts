@@ -1,3 +1,5 @@
+export const ZERO_REPOSITORY_QUERY_MAX_CHARS = 2048;
+
 export type RepositoryRequirements = {
   /** Dated primary language, not all languages or execution support. */
   primaryLanguage?: string;
@@ -158,12 +160,12 @@ export function normalizeRepositoryNeed(
 ) {
   if (
     typeof query !== "string" ||
-    query.length > 256 ||
+    query.length > ZERO_REPOSITORY_QUERY_MAX_CHARS ||
     !validRequirements(required)
   )
     return null;
   const normalized = normalizeRepositoryText(query.trim());
-  if (normalized.length > 1024) return null;
+  if (normalized.length > ZERO_REPOSITORY_QUERY_MAX_CHARS * 4) return null;
   const identityText = normalized.replace(/\s*\/\s*/gu, "/");
   const identity = /^[a-z0-9_.-]+\/[a-z0-9_.-]+$/u.test(identityText)
     ? identityText

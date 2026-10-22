@@ -14,14 +14,17 @@ import { z } from "zod";
 import {
   discoverZeroReuseModules,
   ZERO_REUSE_TOOL_IDS,
+  ZERO_REUSE_MODULE_LIMITS,
+  zeroReuseModules,
 } from "@rakazo/core/zero-reuse-modules";
 import {
   REPOSITORY_SEARCH_EVALUATION,
+  ZERO_REPOSITORY_QUERY_MAX_CHARS,
   repositorySearchFromTool,
 } from "./zero-repository-tools.js";
 
-export const ZERO_MCP_SERVER_VERSION = "0.8.1";
-export const ZERO_MCP_SCHEMA_VERSION = "1.8.0";
+export const ZERO_MCP_SERVER_VERSION = "0.8.2";
+export const ZERO_MCP_SCHEMA_VERSION = "1.9.0";
 export const ZERO_MCP_OUTPUT_LIMITS = {
   search: 16 * 1024,
   inspect: 32 * 1024,
@@ -99,6 +102,45 @@ const candidateSchema = z.strictObject({
   runtimeTested: z.boolean(),
   archived: z.boolean(),
 });
+const moduleCandidateSchema = z.strictObject({
+  candidateId: z.enum(ZERO_REUSE_TOOL_IDS),
+  toolId: z.enum(ZERO_REUSE_TOOL_IDS),
+  profileId: z.string().max(128),
+  repository: candidateId,
+  version: z.string().max(32),
+  sourceRevision: z.string().regex(/^[a-f0-9]{40}$/u),
+  capability: z.enum(["csv", "zip"]),
+  description: z.string().max(1000),
+  licenseSource: z.string().max(64),
+  entrypoint: z.string().max(128),
+  fit: z.literal("candidate; task constraints unverified"),
+});
+const moduleInspectionSchema = moduleCandidateSchema.extend({
+  source: z.string().max(512),
+  npmIntegrity: z.string().max(256),
+  sourceFiles: z.array(z.strictObject({
+    path: z.string().max(128),
+    sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+    bytes: z.number().int().nonnegative().max(131072),
+  })).max(8),
+  limits: z.record(z.string().max(40), z.number().int().nonnegative().max(1048576)),
+  delivery: z.literal("Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution."),
+});
+function moduleFacts(module: (typeof zeroReuseModules)[number]) {
+  return {
+    candidateId: module.toolId,
+    toolId: module.toolId,
+    profileId: module.profileId,
+    repository: module.repo,
+    version: module.version,
+    sourceRevision: module.sourceRevision,
+    capability: module.capability,
+    description: module.description,
+    licenseSource: module.license,
+    entrypoint: module.entrypoint,
+    fit: "candidate; task constraints unverified" as const,
+  };
+}
 const commonOutput = {
   schemaVersion: z.literal(ZERO_MCP_SCHEMA_VERSION),
   researchDate: z.string().max(32),
@@ -185,29 +227,15 @@ const searchOutput = z.strictObject({
   ]),
   preparedProfiles: z.array(preparedProfileSchema).max(1),
   candidates: z.array(candidateSchema).max(5),
-  moduleCandidates: z
-    .array(
-      z.strictObject({
-        toolId: z.enum(ZERO_REUSE_TOOL_IDS),
-        profileId: z.string().max(128),
-        repository: candidateId,
-        version: z.string().max(32),
-        sourceRevision: z.string().regex(/^[a-f0-9]{40}$/),
-        capability: z.enum(["csv", "zip"]),
-        description: z.string().max(1000),
-        licenseSource: z.string().max(64),
-        entrypoint: z.string().max(128),
-        fit: z.literal("candidate; task constraints unverified"),
-      }),
-    )
-    .max(3),
+  moduleCandidates: z.array(moduleCandidateSchema).max(3),
 });
 const inspectOutput = z.strictObject({
   ...commonOutput,
-  status: z.enum(["source_candidate", "missing"]),
+  status: z.enum(["source_candidate", "module_candidate", "missing"]),
   candidate: candidateSchema
     .extend({ note: z.string().max(8192), metadata: metadataSchema.optional() })
     .nullable(),
+  module: moduleInspectionSchema.optional(),
   readiness: z.literal("source-only"),
 });
 const statusOutput = z.strictObject({
@@ -380,13 +408,13 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_search",
     {
       description:
-        "Discover focused reusable modules within an application request, then search the fixed prepared CSV profile and source catalog. moduleCandidates are pinned module alternatives with explicit limits, not an assertion that the entire request fits. In an authorized reuse backend, zero_reuse can select/prepare one focused module with Jev; the host integrates and verifies it separately. No installation or execution grant follows from discovery.",
+        "Discover focused reusable modules within an application request, then search the fixed prepared CSV profile and source catalog. Query limit: 2048 characters; use one focused capability per query. Each moduleCandidates.candidateId can be passed unchanged to zero_inspect for source hashes, licenses, bounds and vendoring facts. Candidates do not assert that the entire request fits. In an authorized backend, zero_reuse may select/prepare a focused module with Jev; the host integrates and verifies separately. Discovery grants no installation or execution permission.",
       inputSchema: z.strictObject(
         {
           query: z
             .string()
             .min(1)
-            .max(256)
+            .max(ZERO_REPOSITORY_QUERY_MAX_CHARS)
             .refine(
               (query) => query.trim().length > 0,
               "query must not be blank",
@@ -422,18 +450,7 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
             candidateId: candidate.repository,
             ...candidate,
           })),
-          moduleCandidates: modules.map((module) => ({
-            toolId: module.toolId,
-            profileId: module.profileId,
-            repository: module.repo,
-            version: module.version,
-            sourceRevision: module.sourceRevision,
-            capability: module.capability,
-            description: module.description,
-            licenseSource: module.license,
-            entrypoint: module.entrypoint,
-            fit: "candidate; task constraints unverified",
-          })),
+          moduleCandidates: modules.map(moduleFacts),
         },
         ZERO_MCP_OUTPUT_LIMITS.search,
       );
@@ -444,15 +461,41 @@ export function createZeroMcpServer(options: ZeroMcpOptions = {}): McpServer {
     "zero_inspect",
     {
       description:
-        "Inspect one canonical candidateId returned by zero_search. Returns bundled source, pin and license facts, plus separate dated GitHub metadata. A found pin object is not a runtime test. No URL fetch, filesystem read, install or execution.",
+        "Inspect a candidateId returned by zero_search, unchanged: owner/repository for a catalog source, or module.csv.d3, module.csv.papaparse, module.zip.fflate for a focused module. Module inspection includes pinned file hashes, license, exact limits and source-vendoring facts. Catalog inspection includes separate dated GitHub metadata. A source pin is not a runtime test or approval. No URL fetch, project read, install or execution.",
       inputSchema: z.strictObject(
-        { candidateId },
+        { candidateId: z.string().min(3).max(256).regex(/^(?:[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+|module\.[a-z0-9_.-]+)$/u) },
         { error: "Invalid discovery arguments" },
       ),
       outputSchema: inspectOutput,
       annotations,
     },
     ({ candidateId: id }) => {
+      const module = zeroReuseModules.find((candidate) => candidate.toolId === id);
+      if (module) return boundedResult(inspectOutput, {
+        schemaVersion: ZERO_MCP_SCHEMA_VERSION,
+        researchDate: repositorySnapshot.researchDate,
+        evaluation,
+        status: "module_candidate",
+        readiness: "source-only",
+        candidate: null,
+        module: {
+          ...moduleFacts(module),
+          source: module.source,
+          npmIntegrity: module.npmIntegrity,
+          sourceFiles: module.sourceFiles,
+          limits: module.capability === "csv" ? {
+            inputBytes: ZERO_REUSE_MODULE_LIMITS.csvBytes,
+            rows: ZERO_REUSE_MODULE_LIMITS.csvRows,
+            columns: ZERO_REUSE_MODULE_LIMITS.csvColumns,
+            cellChars: ZERO_REUSE_MODULE_LIMITS.csvCellChars,
+          } : {
+            files: ZERO_REUSE_MODULE_LIMITS.zipFiles,
+            inputBytes: ZERO_REUSE_MODULE_LIMITS.zipInputBytes,
+            outputBytes: ZERO_REUSE_MODULE_LIMITS.zipOutputBytes,
+          },
+          delivery: "Authorized preparation returns self-contained vendorable source and original licenses; no runtime npm package installation. Copying third-party source still requires task permission and preserved attribution.",
+        },
+      }, ZERO_MCP_OUTPUT_LIMITS.inspect);
       const entry = repositorySnapshot.records.find(
         (candidate) => candidate.repository === id,
       );

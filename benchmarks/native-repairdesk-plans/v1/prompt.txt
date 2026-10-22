@@ -1,0 +1,1 @@
+Noriu remonto dirbtuvės valdymo programos pagal SPEC.md. Pirmiausia pateik pilną įgyvendinimo planą: architektūrą, duomenų modelį, svarbiausius darbo srautus, kūrimo etapus ir patikrinimus. Kol kas nieko nekurk, nekeisk failų, neįdiek priklausomybių ir nepaleisk programos. Sustok po plano mano peržiūrai.

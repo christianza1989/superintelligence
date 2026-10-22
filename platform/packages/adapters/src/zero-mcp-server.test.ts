@@ -77,7 +77,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
       });
     }
     expect(tools[0]?.inputSchema.properties?.query).toMatchObject({
-      maxLength: 256,
+      maxLength: 2048,
       minLength: 1,
     });
     expect(tools[0]?.outputSchema?.properties?.candidates).toMatchObject({
@@ -129,7 +129,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
       status: "prepared_profiles",
       candidates: [],
       preparedProfiles,
-      schemaVersion: "1.8.0",
+      schemaVersion: "1.9.0",
     });
     expect(searchRepositories({ query: "CSV parser" })).toEqual([]);
     const profile = (result.preparedProfiles as Array<Record<string, unknown>>)[0]!;
@@ -147,7 +147,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
     expect(result.evaluation).toMatch(/scoped.*development conformance.*untrusted data/u);
     expect((await client.listTools()).tools).toHaveLength(3);
     expect(content(await call("zero_status"), ZERO_MCP_OUTPUT_LIMITS.status)).toMatchObject({
-      server: { version: "0.8.1" },
+      server: { version: "0.8.2" },
       profile: "discovery-only",
       backend: "unavailable",
     });
@@ -201,6 +201,47 @@ describe("RepositoryZero discovery MCP protocol", () => {
     } finally {
       entry.capability = original;
     }
+  });
+
+  it("accepts a focused capability beyond the old query limit without truncating it", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network forbidden"));
+    const query = " ".repeat(2045) + "CSV";
+    const result = content(await call("zero_search", { query }), ZERO_MCP_OUTPUT_LIMITS.search);
+    expect(result.moduleCandidates).toEqual(expect.arrayContaining([
+      expect.objectContaining({ candidateId: "module.csv.d3", capability: "csv" }),
+      expect.objectContaining({ candidateId: "module.csv.papaparse", capability: "csv" }),
+    ]));
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("round-trips every discovered module ID through read-only pinned inspection", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network forbidden"));
+    const result = content(await call("zero_search", { query: "CSV parsing and ZIP creation" }), ZERO_MCP_OUTPUT_LIMITS.search);
+    const modules = result.moduleCandidates as Array<{ candidateId: string; toolId: string; sourceRevision: string }>;
+    expect(modules).toHaveLength(3);
+    for (const candidate of modules) {
+      expect(candidate.candidateId).toBe(candidate.toolId);
+      const inspected = content(await call("zero_inspect", { candidateId: candidate.candidateId }), ZERO_MCP_OUTPUT_LIMITS.inspect);
+      expect(inspected).toMatchObject({ status: "module_candidate", readiness: "source-only", candidate: null,
+        module: { candidateId: candidate.candidateId, sourceRevision: candidate.sourceRevision,
+          delivery: expect.stringContaining("vendorable") },
+      });
+      const module = inspected.module as Record<string, unknown>;
+      expect(module.sourceFiles).toEqual(expect.arrayContaining([expect.objectContaining({
+        path: "LICENSE", sha256: expect.stringMatching(/^[a-f0-9]{64}$/u), bytes: expect.any(Number),
+      })]));
+      expect(module.limits).toHaveProperty("inputBytes");
+      for (const claim of ["prepared", "verified", "licenseApproved", "runtimeTested", "grant"])
+        expect(module).not.toHaveProperty(claim);
+    }
+    expect(fetch).not.toHaveBeenCalled();
+    expect((await client.listTools()).tools).toHaveLength(3);
+  });
+
+  it("keeps unknown module IDs honest without fetching or guessing a replacement", async () => {
+    const result = content(await call("zero_inspect", { candidateId: "module.csv.unknown" }), ZERO_MCP_OUTPUT_LIMITS.inspect);
+    expect(result).toMatchObject({ status: "missing", candidate: null, readiness: "source-only" });
+    expect(result).not.toHaveProperty("module");
   });
 
   it("caps broad queries at five and respects the catalog category filter", async () => {
@@ -369,7 +410,7 @@ describe("RepositoryZero discovery MCP protocol", () => {
     ["zero_search", {}],
     ["zero_search", { query: "" }],
     ["zero_search", { query: " \n\t " }],
-    ["zero_search", { query: "x".repeat(257) }],
+    ["zero_search", { query: "x".repeat(2049) }],
     ["zero_search", { query: 7 }],
     ["zero_search", { query: "agent", category: "admin-access" }],
     ["zero_search", { query: "agent", limit: 100 }],
