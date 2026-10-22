@@ -197,7 +197,15 @@ export async function discoverGithubSources(
   boundary: Boundary,
 ) {
   queries = githubQueriesSchema.parse(queries);
-  const api = transport(boundary);
+  // Research has its own smaller budget. Expiry preserves completed evidence;
+  // cancellation/revocation of the enclosing job still fails closed.
+  const researchSignal = AbortSignal.timeout(ZERO_GITHUB_LIMITS.runtimeMs);
+  const api = transport({
+    ...boundary,
+    signal: AbortSignal.any([boundary.signal, researchSignal]),
+  });
+  const reason = (error: unknown) =>
+    researchSignal.aborted ? "research_deadline" : failureReason(error);
   const failures: {
     repository?: string;
     query?: string;
@@ -215,6 +223,7 @@ export async function discoverGithubSources(
     returned: number;
   }[] = [];
   for (const query of queries) {
+    if (researchSignal.aborted) break;
     try {
       const q = `${query} in:name,description is:public archived:false fork:true`;
       const response = z
@@ -242,7 +251,7 @@ export async function discoverGithubSources(
       });
     } catch (error) {
       boundary.signal.throwIfAborted();
-      failures.push({ query, stage: "search", reason: failureReason(error) });
+      failures.push({ query, stage: "search", reason: reason(error) });
     }
   }
   const candidates: GithubSourceCandidate[] = [];
@@ -250,7 +259,11 @@ export async function discoverGithubSources(
     (a, b) =>
       b.score - a.score || a.entry.full_name.localeCompare(b.entry.full_name),
   )) {
-    if (candidates.length >= ZERO_GITHUB_LIMITS.inspectedRepositories) break;
+    if (
+      researchSignal.aborted ||
+      candidates.length >= ZERO_GITHUB_LIMITS.inspectedRepositories
+    )
+      break;
     const repo = entry.full_name;
     try {
       // An authenticated token must never widen the public-only discovery grant.
@@ -306,7 +319,7 @@ export async function discoverGithubSources(
           failures.push({
             repository: repo,
             stage: "document",
-            reason: failureReason(error),
+            reason: reason(error),
           });
         }
       }
@@ -345,7 +358,7 @@ export async function discoverGithubSources(
           failures.push({
             repository: repo,
             stage: "code",
-            reason: failureReason(error),
+            reason: reason(error),
           });
         }
       }
@@ -381,11 +394,13 @@ export async function discoverGithubSources(
       failures.push({
         repository: repo,
         stage: "inspect",
-        reason: failureReason(error),
+        reason: reason(error),
       });
       if (api.stats.requests >= ZERO_GITHUB_LIMITS.requests) break;
     }
   }
+  boundary.signal.throwIfAborted();
+  await withAbort(boundary.authorize(), boundary.signal);
   const result = {
     kind: "public-github-source-discovery-v1" as const,
     searches,
@@ -393,7 +408,7 @@ export async function discoverGithubSources(
     candidates,
     failures,
     limits: ZERO_GITHUB_LIMITS,
-    network: api.stats,
+    network: { ...api.stats, researchDeadlineReached: researchSignal.aborted },
     evaluation:
       "Bounded GitHub search and source inspection, not exhaustive search, license approval or runtime verification",
   };

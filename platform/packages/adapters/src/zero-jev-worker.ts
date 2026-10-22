@@ -941,7 +941,7 @@ export async function runZeroJevTool(
       const discovery =
         request.input.mode === "discover-source"
           ? await discoverGithubSources(request.input.queries!, {
-              signal: AbortSignal.any([signal, AbortSignal.timeout(20000)]),
+              signal,
               authorize: async () => {
                 await recheck(deps, request);
               },

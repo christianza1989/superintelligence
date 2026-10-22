@@ -10,7 +10,7 @@ export const ZERO_GITHUB_LIMITS = Object.freeze({
   fileBytes: 524288,
   excerptChars: 1800,
   paths: 60,
-  runtimeMs: 20000,
+  runtimeMs: 12000,
   receiptBytes: 65536,
 });
 export const githubQueriesSchema = z

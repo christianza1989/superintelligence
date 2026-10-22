@@ -75,7 +75,7 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
       createHash("sha256").update(fixture.docs[0]!.text).digest("hex"),
     );
     expect(result.network.requests).toBe(7);
-    expect(fixture.authorize).toHaveBeenCalledTimes(14);
+    expect(fixture.authorize).toHaveBeenCalledTimes(15);
     expect(
       result.candidates[0]!.implementationEvidence.inspectedCodePaths,
     ).toEqual(["src/model.ts"]);
@@ -138,8 +138,9 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
     });
     expect(fixture.fetch).not.toHaveBeenCalled();
     fixture.authorize.mockRejectedValue(new Error("fixture denied"));
-    const result = await discoverGithubSources(["inventory"], fixture.boundary);
-    expect(result.candidates).toEqual([]);
+    await expect(
+      discoverGithubSources(["inventory"], fixture.boundary),
+    ).rejects.toThrow("fixture denied");
     expect(fixture.fetch).not.toHaveBeenCalled();
   });
   it("keeps rate limits and incomplete search visible without retries or fabricated candidates", async () => {
@@ -153,6 +154,59 @@ describe("bounded live public GitHub discovery (offline transport)", () => {
     expect(result.failures[0]?.reason).toBe("rate_or_access_limit");
     expect(result.network.rateLimited).toBe(true);
     expect(fixture.fetch).toHaveBeenCalledOnce();
+  });
+  it("preserves finished source evidence when its research budget expires, but propagates parent cancellation", async () => {
+    const fixture = githubFixture();
+    const research = new AbortController();
+    const parent = new AbortController();
+    const timeout = AbortSignal.timeout.bind(AbortSignal);
+    const spy = vi
+      .spyOn(AbortSignal, "timeout")
+      .mockImplementation((ms) =>
+        ms === 12000 ? research.signal : timeout(ms),
+      );
+    const original = fixture.fetch.getMockImplementation()!;
+    fixture.fetch.mockImplementation(async (input, options) => {
+      const url = String(input);
+      if (url.includes("/repos/example/second/")) {
+        research.abort(
+          new DOMException("Research budget expired", "TimeoutError"),
+        );
+        return new Response(null, { status: 404 });
+      }
+      const response = await original(input, options);
+      if (url.includes("/search/repositories"))
+        return Response.json({
+          total_count: 2,
+          incomplete_results: false,
+          items: [
+            fixture.entry,
+            { ...fixture.entry, full_name: "example/second" },
+          ],
+        });
+      return response;
+    });
+    try {
+      const result = await discoverGithubSources(["inventory"], {
+        ...fixture.boundary,
+        signal: parent.signal,
+      });
+      expect(result.candidates).toHaveLength(1);
+      expect(result.candidates[0]!.files).toHaveLength(3);
+      expect(result.network.researchDeadlineReached).toBe(true);
+      expect(result.failures).toContainEqual(
+        expect.objectContaining({ reason: "research_deadline" }),
+      );
+      parent.abort();
+      await expect(
+        discoverGithubSources(["inventory"], {
+          ...fixture.boundary,
+          signal: parent.signal,
+        }),
+      ).rejects.toThrow();
+    } finally {
+      spy.mockRestore();
+    }
   });
   it("does not follow a public API redirect to another address", async () => {
     const fixture = githubFixture();
