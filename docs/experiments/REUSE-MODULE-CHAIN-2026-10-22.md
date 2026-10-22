@@ -32,8 +32,25 @@ The subsequent PostgreSQL worker regression suite passed 15/15 without skips, in
 
 The first live-profile preparation attempt abstained before dispatch: its phrase “no streaming” was incorrectly treated as a streaming requirement. The failure is retained with zero provider calls. Eligibility now distinguishes explicit exclusions of known unsupported capabilities while retaining separate positive or ambiguous requirements; the original goal still reaches Jev unchanged. Nine module regressions passed after this repair, including conflicting positive requirements and byte caps.
 
+## Actual Jev qualification
+
+Two subsequent live calls used the authorized stored `typesafe/jev-1.13` profile; both reported `typesafe/jev-1.13-20260917` from TypeSafe. The CSV request selected Papa Parse and the archive request selected fflate. Both selected modules were prepared, hash-checked, integrated into a controlled fixture and successfully verified through Docker. These were controlled integration checks, not native host coding trials.
+
+| Need | Jev-selected module | Input / output tokens | Provider-reported USD | Worker preparation / verification |
+|---|---|---|---|---|
+| Strict bounded CSV | Papa Parse 5.5.3 | 605 / 53 | 0.000025410 | 1,887 / 5,662 ms |
+| ZIP creation | fflate 0.8.2 | 459 / 39 | 0.000019278 | 1,539 / 2,308 ms |
+
+Total provider usage: 1,064 input and 92 output tokens, USD 0.000044688. Phase timings are worker measurements, not the entire MCP/client workflow or pure provider latency. Both verification jobs dispatched zero model calls. The cumulative allocation conservatively retains two USD 0.10 reservations: USD 0.20 held, at most USD 2.80 unreserved. Reported actual cost and held authorization are different quantities; the historical USD 1 allocation is unchanged.
+
+## Native preflight interruption
+
+The tested 0.8 package was installed through the official Codex plugin CLI. The selected project configuration enables its skill and a Windows-to-WSL execution bridge; the baseline configuration continues to disable Zero. Before application generation, the host disk filled. After space was restored, a new baseline preflight still had no durable turn despite token-bearing model log spans. Read-only diagnostics for the newly created preflight threads showed `failed to access thread history: attempted to call begin_with at non-zero transaction depth` in Codex's history writer. No application trial was started and absent durable messages must not be recorded as zero subscription usage.
+
+The failed preflight transcripts and scoped diagnostics are retained privately. No history database, authentication, hook trust or unrelated process was modified. The owned API/worker/PostgreSQL fixture was stopped and grants revoked. A Codex application restart and new durable-history/connection preflight are required before freezing an application comparison. This is an observed host storage failure, not an application-quality result or a Zero benefit result.
+
 ## Limits and next gate
 
 The selected Node Docker profile is read-only, network-disabled and bounded to 128 MiB, one CPU and ten seconds. Evidence concerns the component snapshot and exercised calls. It is not hostile-code isolation, a whole-application verdict, a hidden holdout, or proof of benefit. Later edits require a new verification. Packaging these worker-side source assets into a relocated runtime is a separate qualification.
 
-The newly authorized live API allocation is capped at USD 3 for integration and both application tasks. It is separate from the fully held historical USD 1 allocation. Reservations are retained across fixture/database restarts; unknown costs are not refunded. Native host subscription usage and its cache counters remain separate from provider cost. A real Jev run, fresh native connection preflight and identical-prompt application comparisons are still pending at this checkpoint. No MVP or repeated-benefit gate is closed here.
+The newly authorized live API allocation is capped at USD 3 for integration and both application tasks. It is separate from the fully held historical USD 1 allocation. Reservations are retained across fixture/database restarts; unknown costs are not refunded. Native host subscription usage and its cache counters remain separate from provider cost. A successful fresh native connection/history preflight and identical-prompt easy/harder application comparisons are still pending at this checkpoint. No MVP or repeated-benefit gate is closed here.

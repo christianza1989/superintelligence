@@ -32,6 +32,7 @@ Astra šiame source snapshot pakartojo:
 
 147 testų PASS neuždaro ankstesnės **53/54 history/context kvalifikacijos** nesėkmės ir neįrodo gyvo produkto kokybės. Ankstesnės DB/budget/UI/build patikros pažymėtos istoriniuose įrašuose, šiame audite jos nepaleistos iš naujo. Naujausių dokumentų/build patikrų rezultatai įrašomi [sutvarkymo ataskaitoje](DOCS-CLEANUP.md).
 
+Nauja [Jev modulių grandinės epocha](experiments/REUSE-MODULE-CHAIN-2026-10-22.md): du tikri Jev pasirinkimai (Papa Parse ir fflate), pinned failų perdavimas, kontrolinė integracija ir Docker actual-use verify PASS. Provider usage 1 064 input / 92 output tokenai, 0.000044688 USD; atskirame naujame 3 USD allocation konservatyviai laikoma 0.20 USD. Tai ne native coding A/B. Po pilno host disko Codex istorijos rašytojas neišsaugo naujų turnų; bandymui būtinas programos restart ir naujas preflight. Visos mūsų bandymo API/worker/PG tarnybos sustabdytos, grants revoked; programų poros dar NOT_RUN.
 ## Eksperimentų būklė
 
 Claude prenumerata pasirinkta vietiniam coding Lab. Naujausi StockDesk bandymai naudojo oficialų CLI **2.1.301, Haiku 5.5/high** abiem pusėms; senesni Sonnet ir CLI 2.1.292 rezultatai turi atskirus profilius. Codex CLI auth ir pagrindinio coding modelio OpenRouter lenktynės atidėtos. Native Codex desktop MCP discovery ir ribotas 0.4 CSV execution profilis jau patikrinti su host paskyra, neperkeliant CLI auth. Formalus A/B bandymas dar NOT_RUN. Jev API turi atskirą anksčiau suteiktą bendrą 1 USD cap; ledger nėra atstatomas.
