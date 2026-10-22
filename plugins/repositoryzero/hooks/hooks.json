@@ -1,0 +1,18 @@
+{
+  "description": "Load the enabled Zero software-planning workflow without changing the user's prompt.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node --input-type=commonjs -e \"require(require('node:path').join(process.env.PLUGIN_ROOT || process.env.CLAUDE_PLUGIN_ROOT, 'hooks/session-start.cjs'))\"",
+            "timeout": 5,
+            "additionalContextLimit": 768,
+            "statusMessage": "Loading Zero planning workflow"
+          }
+        ]
+      }
+    ]
+  }
+}

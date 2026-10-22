@@ -1,9 +1,13 @@
 ---
 name: repositoryzero-reuse
-description: Find and inspect reusable source components with RepositoryZero when building software or when the user asks to use RepositoryZero. Use discovery first; scoped execution requires the matching tools and backend authorization.
+description: Plan or build software with RepositoryZero source discovery. Use before drafting a new application's implementation plan, including plan-only requests, or when the user asks to use RepositoryZero. Scoped execution needs separate authorization.
 ---
 
 Use RepositoryZero to find a suitable existing foundation or focused component for the user's actual task. Keep the host's conversation, model authentication and coding workflow in the host.
+
+Before finalizing a software implementation plan, perform read-only discovery with `zero_status` and `zero_search` for the task's concrete capabilities. This also applies when the user asks for a plan and a stop before coding: discovery does not install a component, run application code or submit a preparation/verification job. Honor explicit user restrictions on tools or reuse. Ordinary conversation and unrelated non-software work do not need discovery.
+
+Use the returned source facts to explain which specific components or modules could be reused, the integration work and remaining gaps. Do not force a dependency into a small task. An honest no-fit is valid. If an execution backend is unavailable, the local discovery tools can still be used; do not mistake backend availability for the availability of source search.
 
 Call `zero_status` with a fresh nonce before relying on a newly connected server. Report the returned profile and backend state. If the tools are absent or unavailable, state that connection has not been verified; do not infer connection from plugin installation.
 

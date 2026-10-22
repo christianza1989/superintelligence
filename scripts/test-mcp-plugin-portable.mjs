@@ -4,11 +4,13 @@ import { mkdtemp, rmdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createInterface } from "node:readline";
+import { testPlanningActivation } from "./test-mcp-plugin-planning.mjs";
 
 // Node built-ins only, so a Windows runtime can probe a Linux-built package
 // without resolving SDK dependencies through workspace symlinks.
 if (process.argv.length !== 3)
   throw new Error("Pass the generated plugin directory.");
+await testPlanningActivation(resolve(process.argv[2]));
 const entry = join(resolve(process.argv[2]), "server/index.mjs");
 const cwd = await mkdtemp(join(tmpdir(), "zero-plugin-portable-"));
 const env = {

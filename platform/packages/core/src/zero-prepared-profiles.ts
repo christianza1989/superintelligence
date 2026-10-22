@@ -72,12 +72,24 @@ const supported = new Set([
   "rectangular",
   "table",
   "comma",
+  "commas",
   "separated",
   "string",
   "rows",
+  "field",
+  "fields",
+  "quoted",
+  "quotes",
+  "escaped",
+  "multiline",
+  "javascript",
+  "js",
   "d3",
   "dsv",
 ]);
+// These words describe the request, not an additional parser capability.
+// Keep this local to the prepared overlay; unknown constraints remain mandatory.
+const parserRequestWords = new Set(["into", "in", "using", "support", "supports"]);
 
 /** Deterministic discovery facts only. The backend still authorizes every job. */
 export function searchPreparedProfiles(
@@ -91,7 +103,7 @@ export function searchPreparedProfiles(
   if (options.category && options.category !== preparedProfiles[0]!.category) return [];
   if (need.identity)
     return need.identity === preparedProfiles[0]!.repository ? [...preparedProfiles] : [];
-  const terms = need.terms.map(concept);
+  const terms = need.terms.filter((term) => !parserRequestWords.has(term)).map(concept);
   if (!terms.every((term) => supported.has(term))) return [];
   // A generic parser/table request does not establish a CSV parsing need.
   if (!need.empty && !terms.includes("csv") && !(terms.includes("d3") && terms.includes("dsv")))

@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
+import { testPlanningActivation } from "./test-mcp-plugin-planning.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 if (process.argv.length !== 3)
@@ -53,6 +54,7 @@ for (const host of [".codex-plugin", ".claude-plugin"]) {
   assert.equal(hostManifest.name, manifest.name);
   assert.equal(hostManifest.version, manifest.version);
 }
+await testPlanningActivation(directory);
 const require = createRequire(
   join(root, "platform/packages/adapters/package.json"),
 );

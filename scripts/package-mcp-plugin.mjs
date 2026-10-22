@@ -34,6 +34,7 @@ for (const name of [
   ".codex-plugin",
   ".claude-plugin",
   "skills",
+  "hooks",
 ]) {
   await cp(join(source, name), join(output, name), {
     recursive: true,
@@ -150,6 +151,16 @@ for (const name of ["index", "discovery", "execution"]) {
     bytes: bytes.byteLength,
   });
 }
+const activationFiles = [];
+for (const file of [
+  "hooks/hooks.json",
+  "hooks/session-start.cjs",
+  "skills/repositoryzero-reuse/SKILL.md",
+  "skills/repositoryzero-reuse/agents/openai.yaml",
+]) {
+  const bytes = await readFile(join(output, file));
+  activationFiles.push({ file, sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.byteLength });
+}
 await writeFile(
   join(output, "BUILD.json"),
   `${JSON.stringify(
@@ -165,6 +176,12 @@ await writeFile(
           "outside Git and package; current UID; exact0600; single link",
       },
       bundles,
+      planningActivation: {
+        mode: "trusted-session-start-context",
+        requiresUserHookTrust: true,
+        modelToolUse: "host-managed; confirm actual calls in a fresh native chat",
+        files: activationFiles,
+      },
       runtime: "Node >=24; no node_modules required",
       serverSha256: createHash("sha256").update(server).digest("hex"),
       serverBytes: server.byteLength,
